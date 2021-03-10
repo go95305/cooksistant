@@ -21,3 +21,5 @@
 
 
 
+### 데이터 분석
+크롤링 페이지(만개의 레시피): https://www.10000recipe.com/recipe/list.html
