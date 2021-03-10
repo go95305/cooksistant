@@ -23,3 +23,4 @@
 
 ### 데이터 분석
 크롤링 페이지(만개의 레시피): https://www.10000recipe.com/recipe/list.html
+Bootstrap Sampling : https://m.blog.naver.com/PostView.nhn?blogId=mathnstat&logNo=221404758083&proxyReferer=https:%2F%2Fwww.google.com%2F
