@@ -20,7 +20,6 @@
 - __요구사항정의__ : https://docs.google.com/document/d/1Bkhzf-KjG0XCGEeLpWBcVIxRqQZ3psmlEWlFFhw9OOE/edit
 
 
-
 ### 데이터 분석
 크롤링 페이지(만개의 레시피): 'https://www.10000recipe.com/recipe/list.html?q=%EC%9E%90%EC%B7%A8&order=reco&page='
 Bootstrap Sampling : https://m.blog.naver.com/PostView.nhn?blogId=mathnstat&logNo=221404758083&proxyReferer=https:%2F%2Fwww.google.com%2F
