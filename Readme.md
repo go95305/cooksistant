@@ -27,3 +27,4 @@ Bootstrap Sampling : https://m.blog.naver.com/PostView.nhn?blogId=mathnstat&logN
 
 
 
+
