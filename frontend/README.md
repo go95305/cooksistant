@@ -3,7 +3,7 @@
 
 ```sh
 > cd frontend
-> npm intall -g expo-cli
+> npm install -g expo-cli
 > yarn add expo
 > yarn start
 ```
