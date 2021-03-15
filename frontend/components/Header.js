@@ -56,19 +56,15 @@ const Button3 = ({ isWhite, style, navigation }) => (
 );
 
 class Header extends React.Component {
+  // 메뉴바
   handleLeftPress = () => {
     const { back, navigation } = this.props;
     return back ? navigation.goBack() : navigation.openDrawer();
   };
+
+  // 오른쪽 상단의 헤더 : 마이페이지(프로필)에만 존재
   renderRight = () => {
     const { white, title, navigation } = this.props;
-
-    if (title === 'Title') {
-      return [
-        <Button1 key="chat-title" navigation={navigation} isWhite={white} />,
-        <Button2 key="basket-title" navigation={navigation} isWhite={white} />,
-      ];
-    }
 
     switch (title) {
       case '프로필':
@@ -81,6 +77,8 @@ class Header extends React.Component {
         break;
     }
   };
+
+  // 검색창 
   renderSearch = () => {
     const { navigation } = this.props;
     return (
@@ -96,6 +94,8 @@ class Header extends React.Component {
       />
     );
   };
+
+  // 인기 | 트랜드 옵션 
   renderOptions = () => {
     const { navigation, optionLeft, optionRight } = this.props;
 
