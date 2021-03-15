@@ -1,7 +1,9 @@
 package com.project.cooksistant.controller;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -10,10 +12,11 @@ import java.util.Map;
 @RestController
 public class RecipeController {
 
-//    @GetMapping("/recommendation")
-//    public ResponseEntity<Map<String,Object>> recommend(){
-//        ResponseEntity<Map<String, Object>> resEntity = null;
-//        Map<String, Object> map = new HashMap<String, Object>();
+    @ApiOperation(value = "취향 기반 레시피 리스트 제공")
+    @GetMapping("recipe/recommendation")
+    public ResponseEntity<Map<String,Object>> recommend(){
+        ResponseEntity<Map<String, Object>> resEntity = null;
+        Map<String, Object> map = new HashMap<String, Object>();
 //        try {
 //            memberService.deleteMember(userid);
 //            map.put("msg", "success");
@@ -25,6 +28,50 @@ public class RecipeController {
 //            resEntity = new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 //            System.out.println("삭제실패");
 //        }
-//        return resEntity;
-//    }
+        return resEntity;
+    }
+
+    @ApiOperation(value = "레시피 평가하기")
+    @PostMapping("/recipe/evaluation")
+    public ResponseEntity<Map<String,Object>> evaluation(){
+        ResponseEntity<Map<String, Object>> resEntity = null;
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        return resEntity;
+    }
+
+    @ApiOperation(value = "특정 레시피 평가내용 보기")
+    @GetMapping("/recipe/evaluation")
+    public ResponseEntity<Map<String,Object>> specificEvaluation(){
+        ResponseEntity<Map<String, Object>> resEntity = null;
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        return resEntity;
+    }
+
+    @ApiOperation(value = "트렌디한 레시피 보기",notes = "네이버 데이터랩에서 가져오기")
+    @GetMapping("/recipe/trend")
+    public ResponseEntity<Map<String,Object>> trendRecipe(){
+        ResponseEntity<Map<String, Object>> resEntity = null;
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        return resEntity;
+    }
+    @ApiOperation(value = "레시피 등록")
+    @PostMapping("/recipe")
+    public ResponseEntity<Map<String,Object>> insertRecipe(){
+        ResponseEntity<Map<String, Object>> resEntity = null;
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        return resEntity;
+    }
+
+    @ApiOperation(value = "내가 리뷰한 혹은 리뷰하지 않은 레시피 리스트")
+    @PostMapping("/recipe/review")
+    public ResponseEntity<Map<String,Object>> viewRecipe(){
+        ResponseEntity<Map<String, Object>> resEntity = null;
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        return resEntity;
+    }
 }
