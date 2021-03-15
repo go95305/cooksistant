@@ -14,7 +14,8 @@ class Home extends React.Component {
         contentContainerStyle={styles.articles}
       >
         <Block flex>
-        <Card item={articles[0]} horizontal />
+        <Card item={articles[0]} horizontal
+              onPress={() => navigation.navigate('RecipeInfo')} />
           <Block flex row>
             <Card
               item={articles[1]}

@@ -30,7 +30,7 @@ class DrawerItem extends React.Component {
             style={{ opacity: 0.5 }}
           />
         );
-      case "Articles":
+      case "레시피 리스트":
         return (
           <Icon
             name="paper"
@@ -40,7 +40,7 @@ class DrawerItem extends React.Component {
             style={{ opacity: 0.5 }}
           />
         );
-      case "Profile":
+      case "프로필":
         return (
           <Icon
             name="profile-circle"
@@ -50,7 +50,8 @@ class DrawerItem extends React.Component {
             style={{ opacity: 0.5 }}
           />
         );
-      case "Account":
+      case "재료":
+      case "영수증":
         return (
           <Icon
             name="badge2x"
@@ -60,6 +61,7 @@ class DrawerItem extends React.Component {
             style={{ opacity: 0.5 }}
           />
         );
+        
       case "Settings":
         return (
           <Icon

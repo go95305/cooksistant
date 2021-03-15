@@ -12,10 +12,10 @@ const { height, width } = Dimensions.get('window');
 const iPhoneX = () =>
   Platform.OS === 'ios' && (height === 812 || width === 812 || height === 896 || width === 896);
 
-const BellButton = ({ isWhite, style, navigation }) => (
+const Button1 = ({ isWhite, style, navigation }) => (
   <TouchableOpacity
     style={[styles.button, style]}
-    onPress={() => navigation.navigate('Pro')}
+    onPress={() => navigation.navigate('RecipeRegister')}
   >
     <Icon
       family="NowExtra"
@@ -27,8 +27,21 @@ const BellButton = ({ isWhite, style, navigation }) => (
   </TouchableOpacity>
 );
 
-const BasketButton = ({ isWhite, style, navigation }) => (
-  <TouchableOpacity style={[styles.button, style]} onPress={() => navigation.navigate('Pro')}>
+const Button2 = ({ isWhite, style, navigation }) => (
+  <TouchableOpacity 
+    style={[styles.button, style]} 
+    onPress={() => navigation.navigate('TasteRegister')}>
+    <Icon
+      family="NowExtra"
+      size={16}
+      name="basket2x"
+      color={nowTheme.COLORS[isWhite ? 'WHITE' : 'ICON']}
+    />
+  </TouchableOpacity>
+);
+
+const Button3 = ({ isWhite, style, navigation }) => (
+  <TouchableOpacity style={[styles.button, style]} onPress={() => navigation.navigate('EvaluList')}>
     <Icon
       family="NowExtra"
       size={16}
@@ -51,21 +64,17 @@ class Header extends React.Component {
 
     if (title === 'Title') {
       return [
-        <BellButton key="chat-title" navigation={navigation} isWhite={white} />,
-        <BasketButton key="basket-title" navigation={navigation} isWhite={white} />
+        <Button1 key="chat-title" navigation={navigation} isWhite={white} />,
+        <Button2 key="basket-title" navigation={navigation} isWhite={white} />
       ];
     }
 
     switch (title) {
-      case 'Profile':
+      case '프로필':
         return [
-          <BellButton key="chat-profile" navigation={navigation} isWhite={white} />,
-          <BasketButton key="basket-deals" navigation={navigation} isWhite={white} />
-        ];
-      case 'Search':
-        return [
-          <BellButton key="chat-search" navigation={navigation} isWhite={white} />,
-          <BasketButton key="basket-search" navigation={navigation} isWhite={white} />
+            <Button1 key="recipe-register" navigation={navigation} isWhite={white} />,
+            <Button2 key="taste-register" navigation={navigation} isWhite={white} />,
+            <Button3 key="evalu-list" navigation={navigation} isWhite={white} />
         ];
       default:
         break;
@@ -80,7 +89,6 @@ class Header extends React.Component {
         style={styles.search}
         placeholder="음식 검색"
         placeholderTextColor={'#8898AA'}
-        onFocus={() => {Keyboard.dismiss(); navigation.navigate('Pro')}}
         iconContent={
           <Icon size={16} color={theme.COLORS.MUTED} name="zoom-bold2x" family="NowExtra" />
         }
@@ -165,7 +173,7 @@ class Header extends React.Component {
       ...props
     } = this.props;
 
-    const noShadow = ['Search', 'Categories', 'Deals', 'Pro', 'Profile'].includes(title);
+    const noShadow = ['Search', 'Categories', 'Deals', 'Profile'].includes(title);
     const headerStyles = [
       !noShadow ? styles.shadow : null,
       transparent ? { backgroundColor: 'rgba(0,0,0,0)' } : null

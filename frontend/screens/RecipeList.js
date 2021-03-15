@@ -1,19 +1,21 @@
 import React from 'react';
+import { withNavigation } from '@react-navigation/compat';
 import { ScrollView, StyleSheet } from 'react-native';
 //galio
 import { Block, Text, theme } from 'galio-framework';
 
-import { articles, nowTheme } from '../constants/';
-import { Card } from '../components/';
+import { articles, nowTheme } from '../constants';
+import { Card } from '../components';
 
-class Articles extends React.Component {
+class RecipeList extends React.Component {
   renderCards = () => {
     return (
       <Block style={styles.container}>
       <Text size={16} style={styles.title}>
         Cards
       </Text>
-        <Card item={articles[0]} horizontal />
+        <Card item={articles[0]} horizontal
+              onPress={() => navigation.navigate('RecipeInfo')} />
         <Block flex row>
           <Card item={articles[1]} style={{ marginRight: theme.SIZES.BASE }} />
           <Card item={articles[2]} />
@@ -48,4 +50,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Articles;
+export default RecipeList;

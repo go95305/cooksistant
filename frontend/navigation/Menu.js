@@ -28,9 +28,10 @@ function CustomDrawerContent({
   const screens = [
     "Home",
     "Components",
-    "Articles",
-    "Profile",
-    "Account",
+    "레시피 리스트",
+    "프로필",
+    "재료",
+    "영수증"
   ];
   return (
     <Block
@@ -45,6 +46,7 @@ function CustomDrawerContent({
             family="NowExtra"
             size={15}
             color={"white"}
+            onPress={() => navigation.goBack()}
           />
         </Block>
       </Block>
