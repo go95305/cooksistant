@@ -23,14 +23,18 @@ const Button1 = ({ isWhite, style, navigation }) => (
       name="bulb"
       color={nowTheme.COLORS[isWhite ? 'WHITE' : 'ICON']}
     />
-    <Block middle style={[styles.notify, { backgroundColor: nowTheme.COLORS[isWhite ? 'WHITE' : 'PRIMARY'] }]} />
+    <Block
+      middle
+      style={[styles.notify, { backgroundColor: nowTheme.COLORS[isWhite ? 'WHITE' : 'PRIMARY'] }]}
+    />
   </TouchableOpacity>
 );
 
 const Button2 = ({ isWhite, style, navigation }) => (
-  <TouchableOpacity 
-    style={[styles.button, style]} 
-    onPress={() => navigation.navigate('TasteRegister')}>
+  <TouchableOpacity
+    style={[styles.button, style]}
+    onPress={() => navigation.navigate('TasteRegister')}
+  >
     <Icon
       family="NowExtra"
       size={16}
@@ -51,8 +55,6 @@ const Button3 = ({ isWhite, style, navigation }) => (
   </TouchableOpacity>
 );
 
-
-
 class Header extends React.Component {
   handleLeftPress = () => {
     const { back, navigation } = this.props;
@@ -60,21 +62,20 @@ class Header extends React.Component {
   };
   renderRight = () => {
     const { white, title, navigation } = this.props;
-    
 
     if (title === 'Title') {
       return [
         <Button1 key="chat-title" navigation={navigation} isWhite={white} />,
-        <Button2 key="basket-title" navigation={navigation} isWhite={white} />
+        <Button2 key="basket-title" navigation={navigation} isWhite={white} />,
       ];
     }
 
     switch (title) {
       case '프로필':
         return [
-            <Button1 key="recipe-register" navigation={navigation} isWhite={white} />,
-            <Button2 key="taste-register" navigation={navigation} isWhite={white} />,
-            <Button3 key="evalu-list" navigation={navigation} isWhite={white} />
+          <Button1 key="recipe-register" navigation={navigation} isWhite={white} />,
+          <Button2 key="taste-register" navigation={navigation} isWhite={white} />,
+          <Button3 key="evalu-list" navigation={navigation} isWhite={white} />,
         ];
       default:
         break;
@@ -102,7 +103,9 @@ class Header extends React.Component {
       <Block row style={styles.options}>
         <Button
           shadowless
-          style={[styles.tab, styles.divider]} onPress={() => console.log(navigation.navigate('Home'))}>
+          style={[styles.tab, styles.divider]}
+          onPress={() => console.log(navigation.navigate('Home'))}
+        >
           <Block row middle>
             <Icon
               name="bulb"
@@ -125,7 +128,12 @@ class Header extends React.Component {
               style={{ paddingRight: 8 }}
               color={nowTheme.COLORS.HEADER}
             />
-            <Text style={{ fontFamily: 'montserrat-regular' }} size={16} style={styles.tabTitle}>
+            <Text
+              style={{ fontFamily: 'montserrat-regular' }}
+              size={16}
+              style={styles.tabTitle}
+              onPress={() => console.log(navigation.navigate('TrendyList'))}
+            >
               {optionRight || '트랜디'}
             </Text>
           </Block>
@@ -144,7 +152,7 @@ class Header extends React.Component {
       <Tabs
         data={tabs || []}
         initialIndex={tabIndex || defaultTab}
-        onChange={id => navigation.setParams({ tabId: id })}
+        onChange={(id) => navigation.setParams({ tabId: id })}
       />
     );
   };
@@ -176,7 +184,7 @@ class Header extends React.Component {
     const noShadow = ['Search', 'Categories', 'Deals', 'Profile'].includes(title);
     const headerStyles = [
       !noShadow ? styles.shadow : null,
-      transparent ? { backgroundColor: 'rgba(0,0,0,0)' } : null
+      transparent ? { backgroundColor: 'rgba(0,0,0,0)' } : null,
     ];
 
     const navbarStyles = [styles.navbar, bgColor && { backgroundColor: bgColor }];
@@ -203,7 +211,7 @@ class Header extends React.Component {
           titleStyle={[
             styles.title,
             { color: nowTheme.COLORS[white ? 'WHITE' : 'HEADER'] },
-            titleColor && { color: titleColor }
+            titleColor && { color: titleColor },
           ]}
           {...props}
         />
@@ -216,19 +224,19 @@ class Header extends React.Component {
 const styles = StyleSheet.create({
   button: {
     padding: 12,
-    position: 'relative'
+    position: 'relative',
   },
   title: {
     width: '100%',
     fontSize: 16,
     fontWeight: 'bold',
-    fontFamily: 'montserrat-regular'
+    fontFamily: 'montserrat-regular',
   },
   navbar: {
     paddingVertical: 0,
     paddingBottom: theme.SIZES.BASE * 1.5,
     paddingTop: iPhoneX ? theme.SIZES.BASE * 4 : theme.SIZES.BASE,
-    zIndex: 5
+    zIndex: 5,
   },
   shadow: {
     backgroundColor: theme.COLORS.WHITE,
@@ -236,7 +244,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 6,
     shadowOpacity: 0.2,
-    elevation: 3
+    elevation: 3,
   },
   notify: {
     backgroundColor: nowTheme.COLORS.SUCCESS,
@@ -245,14 +253,14 @@ const styles = StyleSheet.create({
     width: theme.SIZES.BASE / 2,
     position: 'absolute',
     top: 9,
-    right: 12
+    right: 12,
   },
   header: {
-    backgroundColor: theme.COLORS.WHITE
+    backgroundColor: theme.COLORS.WHITE,
   },
   divider: {
     borderRightWidth: 0.3,
-    borderRightColor: theme.COLORS.ICON
+    borderRightColor: theme.COLORS.ICON,
   },
   search: {
     height: 48,
@@ -260,12 +268,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     borderWidth: 1,
     borderRadius: 30,
-    borderColor: nowTheme.COLORS.BORDER
+    borderColor: nowTheme.COLORS.BORDER,
   },
   options: {
     marginBottom: 24,
     marginTop: 10,
-    elevation: 4
+    elevation: 4,
   },
   tab: {
     backgroundColor: theme.COLORS.TRANSPARENT,
@@ -273,18 +281,18 @@ const styles = StyleSheet.create({
     borderRadius: 0,
     borderWidth: 0,
     height: 24,
-    elevation: 0
+    elevation: 0,
   },
   tabTitle: {
     lineHeight: 19,
     fontWeight: '400',
-    color: nowTheme.COLORS.HEADER
+    color: nowTheme.COLORS.HEADER,
   },
   social: {
     width: theme.SIZES.BASE * 3.5,
     height: theme.SIZES.BASE * 3.5,
     borderRadius: theme.SIZES.BASE * 1.75,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
 });
 

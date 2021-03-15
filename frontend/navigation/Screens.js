@@ -1,9 +1,9 @@
 import React from 'react';
-import { Block } from "galio-framework";
-import { Easing, Animated, Dimensions } from "react-native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Block } from 'galio-framework';
+import { Easing, Animated, Dimensions } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // screens
 import Start from '../screens/Start';
 import Home from '../screens/Home';
@@ -15,15 +15,16 @@ import Components from '../screens/Components';
 import RecipeList from '../screens/RecipeList';
 import RecipeInfo from '../screens/RecipeInfo';
 import Ingredient from '../screens/Ingredient';
+import TrendyList from '../screens/TrendyList';
 import Receipt from '../screens/Receipt';
 import SettingsScreen from '../screens/Settings';
 // drawer
-import CustomDrawerContent from "./Menu";
+import CustomDrawerContent from './Menu';
 // header for screens
-import { Header, Icon} from '../components';
-import { nowTheme, tabs } from "../constants";
+import { Header, Icon } from '../components';
+import { nowTheme, tabs } from '../constants';
 
-const { width } = Dimensions.get("screen");
+const { width } = Dimensions.get('screen');
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -31,10 +32,16 @@ const Drawer = createDrawerNavigator();
 function ComponentsStack(props) {
   return (
     <Stack.Navigator initialRouteName="Components" mode="card" headerMode="screen">
-      <Stack.Screen name="Components" component={Components} options={{
-        header:({ navigation, scene }) => (<Header title="Components" navigation={navigation} scene={scene} />),
-        backgroundColor: "#FFFFFF"
-      }}/>
+      <Stack.Screen
+        name="Components"
+        component={Components}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header title="Components" navigation={navigation} scene={scene} />
+          ),
+          backgroundColor: '#FFFFFF',
+        }}
+      />
     </Stack.Navigator>
   );
 }
@@ -42,10 +49,16 @@ function ComponentsStack(props) {
 function RecipeListStack(props) {
   return (
     <Stack.Navigator initialRouteName="RecipeList" mode="card" headerMode="screen">
-      <Stack.Screen name="RecipeList" component={RecipeList} options={{
-        header: ({ navigation, scene }) => (<Header title="레시피 리스트" navigation={navigation} scene={scene} />),
-        backgroundColor: '#FFFFFF'
-      }} />
+      <Stack.Screen
+        name="RecipeList"
+        component={RecipeList}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header title="레시피 리스트" navigation={navigation} scene={scene} />
+          ),
+          backgroundColor: '#FFFFFF',
+        }}
+      />
       <Stack.Screen
         name="Pro"
         component={RecipeInfo}
@@ -60,7 +73,7 @@ function RecipeListStack(props) {
               scene={scene}
             />
           ),
-          headerTransparent: true
+          headerTransparent: true,
         }}
       />
     </Stack.Navigator>
@@ -75,16 +88,10 @@ function ProfileStack(props) {
         component={Profile}
         options={{
           header: ({ navigation, scene }) => (
-            <Header
-              transparent
-              white
-              title="프로필"
-              navigation={navigation}
-              scene={scene}
-            />
+            <Header transparent white title="프로필" navigation={navigation} scene={scene} />
           ),
-          cardStyle: { backgroundColor: "#FFFFFF" },
-          headerTransparent: true
+          cardStyle: { backgroundColor: '#FFFFFF' },
+          headerTransparent: true,
         }}
       />
       <Stack.Screen
@@ -101,7 +108,7 @@ function ProfileStack(props) {
               scene={scene}
             />
           ),
-          headerTransparent: true
+          headerTransparent: true,
         }}
       />
       <Stack.Screen
@@ -118,7 +125,7 @@ function ProfileStack(props) {
               scene={scene}
             />
           ),
-          headerTransparent: true
+          headerTransparent: true,
         }}
       />
       <Stack.Screen
@@ -135,11 +142,10 @@ function ProfileStack(props) {
               scene={scene}
             />
           ),
-          headerTransparent: true
+          headerTransparent: true,
         }}
       />
     </Stack.Navigator>
-    
   );
 }
 
@@ -151,18 +157,12 @@ function HomeStack(props) {
         component={Home}
         options={{
           header: ({ navigation, scene }) => (
-            <Header
-              title="Home"
-              search
-              options
-              navigation={navigation}
-              scene={scene}
-            />
+            <Header title="Home" search options navigation={navigation} scene={scene} />
           ),
-          cardStyle: { backgroundColor: "#FFFFFF" }
+          cardStyle: { backgroundColor: '#FFFFFF' },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="Pro"
         component={RecipeInfo}
         options={{
@@ -176,7 +176,17 @@ function HomeStack(props) {
               scene={scene}
             />
           ),
-          headerTransparent: true
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        name="TrendyList"
+        component={TrendyList}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header title="TrendyList" search options navigation={navigation} scene={scene} />
+          ),
+          cardStyle: { backgroundColor: '#FFFFFF' },
         }}
       />
     </Stack.Navigator>
@@ -191,14 +201,9 @@ function IngredientStack(props) {
         component={Ingredient}
         options={{
           header: ({ navigation, scene }) => (
-            <Header 
-              transparent
-              title="재료 등록"
-              navigation={navigation}
-              scene={scene}
-            />
+            <Header transparent title="재료 등록" navigation={navigation} scene={scene} />
           ),
-          headerTransparent: true
+          headerTransparent: true,
         }}
       />
     </Stack.Navigator>
@@ -213,14 +218,9 @@ function ReceiptStack(props) {
         component={Receipt}
         options={{
           header: ({ navigation, scene }) => (
-            <Header 
-              transparent
-              title="영수증"
-              navigation={navigation}
-              scene={scene}
-            />
+            <Header transparent title="영수증" navigation={navigation} scene={scene} />
           ),
-          headerTransparent: true
+          headerTransparent: true,
         }}
       />
     </Stack.Navigator>
@@ -231,30 +231,30 @@ function AppStack(props) {
   return (
     <Drawer.Navigator
       style={{ flex: 1 }}
-      drawerContent={props => <CustomDrawerContent {...props} />}
+      drawerContent={(props) => <CustomDrawerContent {...props} />}
       drawerStyle={{
         backgroundColor: nowTheme.COLORS.PRIMARY,
-        width: width * 0.8
+        width: width * 0.8,
       }}
       drawerContentOptions={{
         activeTintcolor: nowTheme.COLORS.WHITE,
         inactiveTintColor: nowTheme.COLORS.WHITE,
-        activeBackgroundColor: "transparent",
+        activeBackgroundColor: 'transparent',
         itemStyle: {
           width: width * 0.75,
-          backgroundColor: "transparent",
+          backgroundColor: 'transparent',
           paddingVertical: 16,
           paddingHorizonal: 12,
-          justifyContent: "center",
-          alignContent: "center",
-          alignItems: "center",
-          overflow: "hidden"
+          justifyContent: 'center',
+          alignContent: 'center',
+          alignItems: 'center',
+          overflow: 'hidden',
         },
         labelStyle: {
           fontSize: 18,
           marginLeft: 12,
-          fontWeight: "normal"
-        }
+          fontWeight: 'normal',
+        },
       }}
       initialRouteName="Home"
     >
@@ -275,11 +275,10 @@ export default function StartStack(props) {
         name="Start"
         component={Start}
         option={{
-          headerTransparent: true
+          headerTransparent: true,
         }}
       />
       <Stack.Screen name="App" component={AppStack} />
     </Stack.Navigator>
   );
 }
-
