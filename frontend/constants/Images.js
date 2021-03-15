@@ -16,12 +16,12 @@ const Viewed = [
   require('../assets/imgs/food3.png'),
   require('../assets/imgs/food4.png'),
   require('../assets/imgs/food5.png'),
-  require('../assets/imgs/food6.png')
+  require('../assets/imgs/food6.png'),
 ];
 
 const Products = {
   text: 'View article',
-  path: require('../assets/imgs/bg15.jpg')
+  path: require('../assets/imgs/bg15.jpg'),
 };
 
 export default {
@@ -36,5 +36,5 @@ export default {
   NowLogo: CookLogo,
   iOSLogo,
   androidLogo,
-  InvisionLogo
+  InvisionLogo,
 };
