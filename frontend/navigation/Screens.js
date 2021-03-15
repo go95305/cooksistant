@@ -7,11 +7,15 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // screens
 import Start from '../screens/Start';
 import Home from '../screens/Home';
-import Pro from '../screens/Pro';
 import Profile from '../screens/Profile';
 import RecipeRegister from '../screens/RecipeRegister';
+import TasteRegister from '../screens/TasteRegister';
+import EvaluList from '../screens/EvaluList';
 import Components from '../screens/Components';
-import Articles from '../screens/Articles';
+import RecipeList from '../screens/RecipeList';
+import RecipeInfo from '../screens/RecipeInfo';
+import Ingredient from '../screens/Ingredient';
+import Receipt from '../screens/Receipt';
 import SettingsScreen from '../screens/Settings';
 // drawer
 import CustomDrawerContent from "./Menu";
@@ -35,28 +39,23 @@ function ComponentsStack(props) {
   );
 }
 
-function ArticlesStack(props) {
+function RecipeListStack(props) {
   return (
-    <Stack.Navigator initialRouteName="Articles" mode="card" headerMode="screen">
-      <Stack.Screen name="Articles" component={Articles} options={{
-        header: ({ navigation, scene }) => (<Header title="Articles" navigation={navigation} scene={scene} />),
+    <Stack.Navigator initialRouteName="RecipeList" mode="card" headerMode="screen">
+      <Stack.Screen name="RecipeList" component={RecipeList} options={{
+        header: ({ navigation, scene }) => (<Header title="레시피 리스트" navigation={navigation} scene={scene} />),
         backgroundColor: '#FFFFFF'
       }} />
-    </Stack.Navigator>
-  );
-}
-
-function AccountStack(props) {
-  return (
-    <Stack.Navigator initialRouteName="Account" mode="card" headerMode="screen">
       <Stack.Screen
-        name="Account"
-        component={RecipeRegister}
+        name="Pro"
+        component={RecipeInfo}
         options={{
           header: ({ navigation, scene }) => (
-            <Header 
+            <Header
+              title="레시피 상세정보"
+              back
+              white
               transparent
-              title="레시피 등록"
               navigation={navigation}
               scene={scene}
             />
@@ -72,7 +71,7 @@ function ProfileStack(props) {
   return (
     <Stack.Navigator initialRouteName="Profile" mode="card" headerMode="screen">
       <Stack.Screen
-        name="Profile"
+        name="프로필"
         component={Profile}
         options={{
           header: ({ navigation, scene }) => (
@@ -89,14 +88,48 @@ function ProfileStack(props) {
         }}
       />
       <Stack.Screen
-        name="Pro"
-        component={Pro}
+        name="RecipeRegister"
+        component={RecipeRegister}
         options={{
           header: ({ navigation, scene }) => (
             <Header
-              title=""
+              title="레시피 등록"
               back
-              white
+              black
+              transparent
+              navigation={navigation}
+              scene={scene}
+            />
+          ),
+          headerTransparent: true
+        }}
+      />
+      <Stack.Screen
+        name="TasteRegister"
+        component={TasteRegister}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header
+              title="취향 등록"
+              back
+              black
+              transparent
+              navigation={navigation}
+              scene={scene}
+            />
+          ),
+          headerTransparent: true
+        }}
+      />
+      <Stack.Screen
+        name="EvaluList"
+        component={EvaluList}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header
+              title="레시피 평가 리스트"
+              back
+              black
               transparent
               navigation={navigation}
               scene={scene}
@@ -106,6 +139,7 @@ function ProfileStack(props) {
         }}
       />
     </Stack.Navigator>
+    
   );
 }
 
@@ -128,16 +162,60 @@ function HomeStack(props) {
           cardStyle: { backgroundColor: "#FFFFFF" }
         }}
       />
-      <Stack.Screen
+       <Stack.Screen
         name="Pro"
-        component={Pro}
+        component={RecipeInfo}
         options={{
           header: ({ navigation, scene }) => (
             <Header
-              title=""
+              title="레시피 상세정보"
               back
               white
               transparent
+              navigation={navigation}
+              scene={scene}
+            />
+          ),
+          headerTransparent: true
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function IngredientStack(props) {
+  return (
+    <Stack.Navigator initialRouteName="Ingredient" mode="card" headerMode="screen">
+      <Stack.Screen
+        name="Ingredient"
+        component={Ingredient}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header 
+              transparent
+              title="재료 등록"
+              navigation={navigation}
+              scene={scene}
+            />
+          ),
+          headerTransparent: true
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function ReceiptStack(props) {
+  return (
+    <Stack.Navigator initialRouteName="Receipt" mode="card" headerMode="screen">
+      <Stack.Screen
+        name="Receipt"
+        component={Receipt}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header 
+              transparent
+              title="영수증"
               navigation={navigation}
               scene={scene}
             />
@@ -182,9 +260,10 @@ function AppStack(props) {
     >
       <Drawer.Screen name="Home" component={HomeStack} />
       <Drawer.Screen name="Components" component={ComponentsStack} />
-      <Drawer.Screen name="Articles" component={ArticlesStack} />
-      <Drawer.Screen name="Profile" component={ProfileStack} />
-      <Drawer.Screen name="Account" component={AccountStack} />
+      <Drawer.Screen name="레시피 리스트" component={RecipeListStack} />
+      <Drawer.Screen name="프로필" component={ProfileStack} />
+      <Drawer.Screen name="재료" component={IngredientStack} />
+      <Drawer.Screen name="영수증" component={ReceiptStack} />
     </Drawer.Navigator>
   );
 }
