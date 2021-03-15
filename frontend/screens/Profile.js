@@ -1,13 +1,72 @@
-import React, {Component} from 'react';
+import React from 'react';
 import { StyleSheet, Dimensions, ScrollView, Image, ImageBackground, Platform, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { Block, Text, theme, Button as GaButton } from 'galio-framework';
 import { Button } from '../components';
 import { Images, nowTheme } from '../constants';
 import { HeaderHeight } from '../constants/utils';
 
+function TasteScreen() {
+  return (
+    <View style={{justifyContent: 'center', alignItems: 'center' }}>
+      <Text>내 취향!</Text>
+    </View>
+  );
+}
+
+function RecipeScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>내가 등록한 레시피!</Text>
+    </View>
+  );
+}
+
+function ScrapScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>내가 스크랩한 레시피!</Text>
+    </View>
+  );
+}
+
+
+const Tab = createMaterialTopTabNavigator();
+
 const { width, height } = Dimensions.get('screen');
 
 const ImgSize = (width - 48 - 32) / 3;
+
+function MyTabs() {
+  return (
+    <Tab.Navigator
+      initialRouteName="Taste"
+      tabBarOptions={{
+        activeTintColor: 'white',
+        labelStyle: { fontSize: 15, fontFamily: 'montserrat-regular'},
+        style: { backgroundColor: '#f18d46' },
+      }}
+    >
+      <Tab.Screen
+        Button
+        name="Taste"
+        component={TasteScreen}
+        options={{ tabBarLabel: 'Taste' }}
+      />
+      <Tab.Screen
+        name="Recipe"
+        component={RecipeScreen}
+        options={{ tabBarLabel: 'Recipe' }}
+      />
+      <Tab.Screen
+        name="Scrap"
+        component={ScrapScreen}
+        options={{ tabBarLabel: 'Scrap' }}
+      />
+    </Tab.Navigator>
+  );
+}
 
 const Profile = () => {
   return (
@@ -99,7 +158,7 @@ const Profile = () => {
       <Block flex={0.55} style={{ padding: theme.SIZES.BASE, marginTop: 90}}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <Block flex style={{ marginTop: 20 }}>
-            
+              <MyTabs/>
           </Block>
         </ScrollView>
       </Block>
