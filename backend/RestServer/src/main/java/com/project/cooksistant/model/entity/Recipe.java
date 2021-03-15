@@ -34,7 +34,7 @@ public class Recipe {
     private String cookingTime;
 
     @OneToMany(mappedBy = "recipe")
-    private List<Recipe_has_ingredient> hasIngredients = new ArrayList<>();
+    private final List<Recipe_has_ingredient> hasIngredients = new ArrayList<>();
 
 
     private String level;

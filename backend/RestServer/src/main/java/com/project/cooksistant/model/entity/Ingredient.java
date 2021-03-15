@@ -24,5 +24,5 @@ public class Ingredient {
     private String ingredeintName;
 
     @OneToMany(mappedBy = "ingredient")
-    private List<Recipe_has_ingredient> hasIngredients = new ArrayList<>();
+    private final List<Recipe_has_ingredient> hasIngredients = new ArrayList<>();
 }
