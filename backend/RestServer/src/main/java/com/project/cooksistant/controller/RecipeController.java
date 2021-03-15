@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,10 +52,14 @@ public class RecipeController {
 
     @ApiOperation(value = "특정 레시피 평가내용 보기")
     @GetMapping("/recipe/evaluation")
-    public List<User> specificEvaluation(){
+    public List<Long> specificEvaluation(){
 
         List<User> recipename = recipeService.findRecipeName();
-        return recipename;
+        List<Long> list = new ArrayList<>();
+        for(int i=0;i<recipename.size();i++){
+            list.add(recipename.get(i).getBitterness());
+        }
+        return list;
 //        ResponseEntity<Map<String, Object>> resEntity = null;
 //        Map<String, Object> map = new HashMap<String, Object>();
 

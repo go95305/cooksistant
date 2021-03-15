@@ -25,6 +25,7 @@ public class RecipeService {
 
     public List<User> findRecipeName() {
         List<User> list = userRepository.findAll();
+        System.out.println(list);
         return list;
     }
 }
