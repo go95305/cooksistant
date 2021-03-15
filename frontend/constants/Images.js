@@ -9,7 +9,7 @@ const iOSLogo = require('../assets/imgs/ios.png');
 const androidLogo = require('../assets/imgs/android.png');
 const ProfilePicture = require('../assets/imgs/profile-img.jpg');
 const InvisionLogo = require('../assets/imgs/invision-white-slim.png');
-
+const food1 = require('../assets/imgs/food1.png');
 const Viewed = [
   require('../assets/imgs/food1.png'),
   require('../assets/imgs/food2.png'),
@@ -37,4 +37,5 @@ export default {
   iOSLogo,
   androidLogo,
   InvisionLogo,
+  food1,
 };
