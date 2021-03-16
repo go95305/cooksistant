@@ -9,7 +9,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @ToString
-
+@Table
 public class Evaluation {
 
     @Id

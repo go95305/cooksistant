@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @ToString
+@Table
 public class Ingredient {
     @Id
     @GeneratedValue

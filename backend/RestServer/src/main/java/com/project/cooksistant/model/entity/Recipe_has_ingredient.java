@@ -12,6 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @ToString
+@Table
 public class Recipe_has_ingredient {
     @Id
     @GeneratedValue
