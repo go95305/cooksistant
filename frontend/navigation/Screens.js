@@ -17,6 +17,7 @@ import RecipeInfo from '../screens/RecipeInfo';
 import Ingredient from '../screens/Ingredient';
 import TrendyList from '../screens/TrendyList';
 import Receipt from '../screens/Receipt';
+import TTS from '../screens/TTS';
 import SettingsScreen from '../screens/Settings';
 // drawer
 import CustomDrawerContent from './Menu';
@@ -72,6 +73,16 @@ function RecipeListStack(props) {
               navigation={navigation}
               scene={scene}
             />
+          ),
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        name="TTS"
+        component={TTS}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header title="TTS" back white transparent navigation={navigation} scene={scene} />
           ),
           headerTransparent: true,
         }}
@@ -179,6 +190,7 @@ function HomeStack(props) {
           headerTransparent: true,
         }}
       />
+
       <Stack.Screen
         name="TrendyList"
         component={TrendyList}
