@@ -1,28 +1,36 @@
 import React from 'react';
-import { StyleSheet, Dimensions, ScrollView, Image, ImageBackground, Platform } from 'react-native';
+import {
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+  Image,
+  ImageBackground,
+  Platform,
+  ImageButton,
+} from 'react-native';
 import { Block, Text, theme, Button as GaButton } from 'galio-framework';
 import { Button } from '../components';
 import { Images, nowTheme } from '../constants';
 import { HeaderHeight } from '../constants/utils';
 import Hr from 'react-native-hr-component';
 const { width, height } = Dimensions.get('screen');
-
 const thumbMeasure = (width - 48 - 32) / 3;
 
 const RecipeInfo = () => {
+  // const RecipeInfo = () => {
   return (
     <Block>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollContainer}>
         <Block
           style={{
             flex: 1,
-            flexDirection: 'column',
+            flexDirection: 'row',
             justifyContent: 'space-between',
           }}
         >
           <Block flex={0.35}>
             <ImageBackground
-              source={Images.food1}
+              source={Images.eggplant}
               style={styles.profileContainer}
               imageStyle={styles.profileBackground}
             >
@@ -35,38 +43,64 @@ const RecipeInfo = () => {
                   paddingHorizontal: 20,
                 }}
               >
-                <Block left>
-                  <Text
-                    style={{
-                      marginTop: 12,
-                      fontFamily: 'montserrat-bold',
-                      marginBottom: theme.SIZES.BASE / 2,
-                      fontWeight: '900',
-                      fontSize: 26,
-                    }}
-                    color="#ffffff"
-                  >
-                    레시피
-                  </Text>
-                </Block>
                 <Block>
-                  <Block row>
+                  <Block left flex={1}>
                     <Text
+                      style={{
+                        marginTop: 12,
+                        fontFamily: 'montserrat-bold',
+                        marginBottom: theme.SIZES.BASE / 2,
+                        fontWeight: '900',
+                        fontSize: 26,
+                        paddingTop: 100,
+                      }}
                       color="black"
-                      size={15}
-                      style={{ marginBottom: 4, fontFamily: 'montserrat-regular' }}
                     >
-                      2인분
+                      레시피
                     </Text>
-                    <Text> l </Text>
-                    <Text
-                      color="black"
-                      size={15}
-                      style={{ marginBottom: 4, fontFamily: 'montserrat-regular' }}
-                    >
-                      20분
-                    </Text>
+                    <Block row>
+                      <Text
+                        left
+                        color="black"
+                        size={15}
+                        style={{ marginBottom: 4, fontFamily: 'montserrat-regular' }}
+                      >
+                        2인분
+                      </Text>
+                      <Text> l </Text>
+                      <Text
+                        color="black"
+                        size={15}
+                        style={{ marginBottom: 4, fontFamily: 'montserrat-regular' }}
+                      >
+                        20분
+                      </Text>
+
+                      {/* <ImageButton
+                        style={styles.btn}
+                        appearance={{
+                          normal: require('../assets/imgs/bookmark.png'),
+                          highlight: require('../assets/imgs/bookmarkFull.png'),
+                        }}
+                        // onPress={this.onPressButton}
+                      /> */}
+                    </Block>
                   </Block>
+                  <Image
+                    source={Images.bookmark}
+                    style={{ weight: 30, height: 30, flex: 1 }}
+                  ></Image>
+                </Block>
+                <Block right>
+                  <Button
+                    style={{ width: 90, height: 44, marginHorizontal: 10, elevation: 0 }}
+                    textStyle={{ fontSize: 15, color: 'white' }}
+                    color="Primary"
+                    round
+                    // onPress={() => navigation.navigate('TTS')}
+                  >
+                    요리시작
+                  </Button>
                 </Block>
                 <Block middle>
                   <Text
@@ -78,7 +112,7 @@ const RecipeInfo = () => {
                       fontWeight: 'bold',
                       fontSize: 15,
                       paddingHorizontal: 15,
-                      paddingTop: 30,
+                      paddingTop: 10,
                       paddingBottom: 10,
                     }}
                   >
@@ -223,16 +257,6 @@ const RecipeInfo = () => {
                     <Hr />
                   </Block>
                 </Block>
-                <Block right>
-                  <Button
-                    style={{ width: 90, height: 44, marginHorizontal: 10, elevation: 0 }}
-                    textStyle={{ fontSize: 15, color: 'white' }}
-                    color="Primary"
-                    round
-                  >
-                    요리시작
-                  </Button>
-                </Block>
               </Block>
             </ImageBackground>
           </Block>
@@ -243,6 +267,10 @@ const RecipeInfo = () => {
 };
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    width: width,
+    height: height,
+  },
   profileContainer: {
     width,
     height,
