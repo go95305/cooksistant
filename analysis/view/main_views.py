@@ -1,12 +1,12 @@
-from flask import Blueprint
-from flask_restplus import Resource, Api
+from flask_restplus import Resource, Namespace
 from service.UserService import UserService
 
-bp = Blueprint('main', __name__, url_prefix='/')
+ns = Namespace('test', description='레시피 추천 기능 API')
 
-@bp.route('/get/<id>')
-def get(id):
-    return UserService.getUser(id).to_dict()
+@ns.route('/user/<id>')
+class HelloWorld(Resource):
+    def get(self, id):
+         return UserService.getUser(id)
 
 
 

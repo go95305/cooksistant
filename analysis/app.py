@@ -1,8 +1,7 @@
 from flask import Flask
 from config.config import DevelopmentConfig
 from utils.database import db
-from flask_restplus import Resource, Api
-
+from flask_restplus import Api
 
 def create_app(test_config=None) :
     app = Flask(__name__)
@@ -13,10 +12,11 @@ def create_app(test_config=None) :
     with app.app_context():
         db.create_all()
 
-    from view import main_views
-    app.register_blueprint(main_views.bp)
-
     api = Api(app, title='TEST', description='레시피 추천 기능 API')
+
+    from view.main_views import ns
+    api.add_namespace(ns)
+
 
     return app
 
