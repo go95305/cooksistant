@@ -5,5 +5,7 @@
 > cd frontend
 > npm install -g expo-cli
 > yarn add expo
+> yarn add react-native-hr-component
+> yarn add react-native-segment-control
 > yarn start
 ```
