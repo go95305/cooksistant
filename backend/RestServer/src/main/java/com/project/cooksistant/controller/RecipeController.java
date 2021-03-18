@@ -2,6 +2,8 @@ package com.project.cooksistant.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.cooksistant.model.dto.RecipeDTO;
+import com.project.cooksistant.model.dto.UserDTO;
 import com.project.cooksistant.model.entity.Recipe;
 import com.project.cooksistant.model.entity.User;
 import com.project.cooksistant.service.RecipeService;
@@ -15,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
@@ -41,19 +44,6 @@ public class RecipeController {
         ResponseEntity<Map<String, Object>> resEntity = null;
         Map<String, Object> map = new HashMap<String, Object>();
 
-        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-        factory.setConnectTimeout(5000); //타임아웃 설정 5초
-        factory.setReadTimeout(5000);//타임아웃 설정 5초
-        HttpClient httpClient = HttpClientBuilder.create().setMaxConnTotal(100) // connection pool 적용
-                .setMaxConnPerRoute(5) // connection pool 적용
-                .build();
-        factory.setHttpClient(httpClient); // 동기실행에 사용될 HttpClient 세팅
-        RestTemplate restTemplate = new RestTemplate(factory);
-        HttpHeaders header = new HttpHeaders();
-        HttpEntity<?> entity = new HttpEntity<>(header);
-        String url = "http://j4c101.p.ssafy.io:8083/recipe/recommendation";
-//        Object obj = restTemplate.getForObject()
-
         return resEntity;
     }
 
@@ -68,14 +58,12 @@ public class RecipeController {
 
     @ApiOperation(value = "특정 레시피 평가내용 보기")
     @GetMapping("/recipe/evaluation")
-    public List<Long> specificEvaluation() {
+    public List<UserDTO> specificEvaluation() {
 
-        List<User> recipename = recipeService.findRecipeName();
-        List<Long> list = new ArrayList<>();
-        for (int i = 0; i < recipename.size(); i++) {
-            list.add(recipename.get(i).getBitterness());
-        }
-        return list;
+        List<UserDTO> recipename = recipeService.findRecipeName();
+
+        return recipename;
+
 //        ResponseEntity<Map<String, Object>> resEntity = null;
 //        Map<String, Object> map = new HashMap<String, Object>();
 
@@ -92,9 +80,15 @@ public class RecipeController {
 
     @ApiOperation(value = "레시피 등록")
     @PostMapping("/recipe")
-    public ResponseEntity<Map<String, Object>> insertRecipe() {
+    public ResponseEntity<Map<String, Object>> insertRecipe(@RequestBody RecipeDTO recipeDTO) {
         ResponseEntity<Map<String, Object>> resEntity = null;
         Map<String, Object> map = new HashMap<String, Object>();
+        try {
+            RecipeDTO newrecipe = recipeService.insertRecipe(recipeDTO);
+        }catch (Exception e){
+
+        }
+
 
         return resEntity;
     }

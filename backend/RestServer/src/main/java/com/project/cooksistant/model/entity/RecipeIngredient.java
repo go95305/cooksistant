@@ -12,8 +12,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @ToString
-@Table
-public class Recipe_has_ingredient {
+@Table(name = "recipe_has_ingredient")
+public class RecipeIngredient {
     @Id
     @GeneratedValue
     @Column(name = "id")
