@@ -1,120 +1,172 @@
 import React from 'react';
-import { StyleSheet, Dimensions, ScrollView, Image, ImageBackground, Platform, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { StyleSheet, Dimensions, ScrollView, Image, ImageBackground, Platform } from 'react-native';
+import SegmentControl from 'react-native-segment-control';
 import { Block, Text, theme, Button as GaButton } from 'galio-framework';
 import { Button } from '../components';
-import { Images, nowTheme } from '../constants';
+import { Images, nowTheme, tabs } from '../constants';
 import { HeaderHeight } from '../constants/utils';
 
-function TasteScreen() {
-  return (
-    <View style={{justifyContent: 'center', alignItems: 'center' }}>
-      <Text>내 취향!</Text>
-    </View>
-  );
-}
-
-function RecipeScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>내가 등록한 레시피!</Text>
-    </View>
-  );
-}
-
-function ScrapScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>내가 스크랩한 레시피!</Text>
-    </View>
-  );
-}
-
-
-const Tab = createMaterialTopTabNavigator();
-
 const { width, height } = Dimensions.get('screen');
-
+let tmp = 0;
+  if(height < 800){
+    tmp = 35;
+  }
 const ImgSize = (width - 48 - 32) / 3;
+const RecipeImg = (width - 48 - 32) / 2;
 
-function MyTabs() {
+const Taste = () => {
   return (
-    <Tab.Navigator
-      initialRouteName="Taste"
-      tabBarOptions={{
-        activeTintColor: 'white',
-        labelStyle: { fontSize: 15, fontFamily: 'montserrat-regular'},
-        style: { backgroundColor: '#f18d46' },
-      }}
-    >
-      <Tab.Screen
-        Button
-        name="Taste"
-        component={TasteScreen}
-        options={{ tabBarLabel: 'Taste' }}
-      />
-      <Tab.Screen
-        name="Recipe"
-        component={RecipeScreen}
-        options={{ tabBarLabel: 'Recipe' }}
-      />
-      <Tab.Screen
-        name="Scrap"
-        component={ScrapScreen}
-        options={{ tabBarLabel: 'Scrap' }}
-      />
-    </Tab.Navigator>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.segmentContainer}>
+      <Block middle style={{justifyContent: 'flex-start'}}>
+        <Text
+          style={{
+            color: '#2c2c2c',
+            fontWeight: 'bold',
+            fontSize: 19,
+            fontFamily: 'montserrat-bold',
+            marginTop: 20,
+            marginBottom: 30,
+            zIndex: 2,
+          }}
+        >
+          About me
+        </Text>
+        <Text
+          size={16}
+          muted
+          style={{
+            textAlign: 'center',
+            fontFamily: 'montserrat-regular',
+            zIndex: 2,
+            lineHeight: 25,
+            color: '#9A9A9A',
+            paddingHorizontal: 15,
+          }}
+        >
+          An artist of considerable range, named Ryan — the name has taken by Melbourne has raised,
+          Brooklyn-based Nick Murphy — writes, performs and records all of his own music.
+        </Text>
+      </Block>
+    </ScrollView>
   );
-}
+};
+const Recipe = () => {
+  return (
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.segmentContainer}>
+      <Block
+        row
+        style={{paddingVertical: 10, paddingHorizontal: 15}}
+        space="between"
+      >
+        <Text bold size={20} color="#2c2c2c" style={{ marginTop: 5, fontFamily: 'montserrat-bold' }}>
+          Recipe
+        </Text>
+        <Button
+          small
+          color="transparent"
+          textStyle={{ color: nowTheme.COLORS.PRIMARY, fontSize: 15, fontFamily: 'montserrat-regular' }}
+        >
+          View all
+        </Button>
+      </Block>
+
+      <Block style={{ paddingBottom: -HeaderHeight * 2, paddingHorizontal: 15 }}>
+        <Block row space="between" style={{ flexWrap: 'wrap' }}>
+          {Images.Viewed.map((img, imgIndex) => (
+            <Image source={img} key={`viewed-${img}`} resizeMode="cover" style={styles.thumb} />
+          ))}
+        </Block>
+      </Block>
+    </ScrollView>
+  );
+};
+const Scrap = () => {
+  return (
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.segmentContainer}>
+      <Block
+        style={{paddingVertical: 10, paddingHorizontal: 15}}
+        space="between"
+      >
+        <Text bold size={20} color="#2c2c2c" style={{ marginTop: 5,marginBottom: 5, fontFamily: 'montserrat-bold' }}>
+          Scrap
+        </Text>
+      </Block>
+
+      <Block style={{ paddingBottom: -HeaderHeight * 2, paddingHorizontal: 15 }}>
+        <Block row space="between" style={{ flexWrap: 'wrap' }}>
+          {Images.Viewed.map((img, imgIndex) => (
+            <Image source={img} key={`viewed-${img}`} resizeMode="cover" style={styles.thumb} />
+          ))}
+        </Block>
+      </Block>
+    </ScrollView>
+  );
+};
+
+const segments = [
+  {
+    title: '취향',
+    view: Taste,
+  },
+  {
+    title: '레시피',
+    view: Recipe,
+  },
+  {
+    title: '스크랩',
+    view: Scrap,
+  },
+];
 
 const Profile = () => {
+
   return (
-    <Block style={{
-      flex: 1,
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-    }} >
-      <Block flex={0.4} >
+    <Block
+      style={{
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+      }}
+    >
+      <Block flex={2}>
         <ImageBackground
           source={Images.ProfileBackground}
           style={styles.profileContainer}
           imageStyle={styles.profileBackground}
         >
-          <Block flex style={styles.profileCard}>
-            <Block style={{ position: 'absolute', width: width, zIndex: 5, paddingHorizontal: 50 }}>
-              <Block middle style={{ top: height * 0.13 }}>
+          <Block>
+            <Block style={{position: 'absolute', width: width, zIndex: 5, paddingHorizontal: 50 }}>
+              <Block middle style={{ top: height * 0.125 - tmp }}>
                 <Image source={Images.ProfilePicture} style={styles.avatar} />
               </Block>
-              <Block style={{ top: height * 0.13 }}>
-                <Block middle >
+              <Block style={{ top: height * 0.125 -tmp }}>
+                <Block middle>
                   <Text
                     style={{
-                      marginTop: 12,
+                      marginTop: 15,
                       fontFamily: 'montserrat-bold',
                       marginBottom: theme.SIZES.BASE / 2,
                       fontWeight: '900',
-                      fontSize: 26
+                      fontSize: 26,
                     }}
-                    color='#ffffff'
-                    >
+                    color="#ffffff"
+                  >
                     사용자
                   </Text>
                 </Block>
                 <Block style={styles.info}>
                   <Block row space="around">
-
                     <Block middle>
                       <Text
                         color="white"
                         size={18}
-                        style={{marginBottom: 4, fontFamily: 'montserrat-bold' }}
+                        style={{ marginBottom: 4, fontFamily: 'montserrat-bold' }}
                       >
                         26
                       </Text>
                       <Text style={{ fontFamily: 'montserrat-regular' }} size={14} color="white">
                         Recipe
-                        </Text>
+                      </Text>
                     </Block>
 
                     <Block middle>
@@ -129,84 +181,58 @@ const Profile = () => {
                         Scrap
                       </Text>
                     </Block>
-
                   </Block>
                 </Block>
               </Block>
-            </Block>
-
-
-            <Block
-              middle
-              row
-              style={{ position: 'absolute', width: width, top: height * 0.45 - 30, zIndex: 90 }}
-            >
-              <Button style={{ width: 95, height: 44, marginHorizontal: 5, elevation: 0 }} textStyle={{ fontSize: 16 }} round>
-                My
-              </Button>
-              <Button style={{ width: 100, height: 44, marginHorizontal: 5, elevation: 0 }} textStyle={{ fontSize: 16 }} round>
-                Recipe
-              </Button>
-              <Button style={{ width: 100, height: 44, marginHorizontal: 5, elevation: 0 }} textStyle={{ fontSize: 16 }} round>
-                Scrap
-              </Button>
             </Block>
           </Block>
         </ImageBackground>
       </Block>
 
-      <Block flex={0.55} style={{ padding: theme.SIZES.BASE, marginTop: 90}}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <Block flex style={{ marginTop: 20 }}>
-              <MyTabs/>
-          </Block>
-        </ScrollView>
+      <Block flex={3} style={{ padding: theme.SIZES.BASE, marginTop: '15%' }}>
+        <Block>
+          <SegmentControl segments={segments} />
+        </Block>
       </Block>
     </Block>
-
-  )
-}
-
-
-
-
+  );
+};
 
 const styles = StyleSheet.create({
-
   profileContainer: {
     width,
-    height,
+    height: '40%',
     padding: 0,
-    zIndex: 1
+    zIndex: 1,
   },
   profileBackground: {
     width,
-    height: height * 0.4
+    height: height * 0.4,
   },
   info: {
-    marginTop: 20,
+    marginTop: 16,
     paddingHorizontal: 50,
-    height: height * 0.8
+    height: height * 0.8,
   },
   avatarContainer: {
     position: 'relative',
-    marginTop: -80
+    marginTop: -80,
   },
   avatar: {
     width: ImgSize,
     height: ImgSize,
     borderRadius: 50,
-    borderWidth: 0
+    borderWidth: 0,
   },
   nameInfo: {
-    marginTop: 35
+    marginTop: 35,
   },
   thumb: {
-    borderRadius: 4,
-    marginVertical: 4,
+    borderRadius: 3,
+    marginVertical: 6,
     alignSelf: 'center',
-    width: ImgSize,
-    height: ImgSize
+    width: RecipeImg,
+    height: RecipeImg,
   },
   social: {
     width: nowTheme.SIZES.BASE * 3,
@@ -214,8 +240,12 @@ const styles = StyleSheet.create({
     borderRadius: nowTheme.SIZES.BASE * 1.5,
     justifyContent: 'center',
     zIndex: 99,
-    marginHorizontal: 5
-  }
-});
+    marginHorizontal: 5,
+  },
+  segmentContainer: {
+    height: height * 0.42 - tmp,
+    marginTop: 15,
+  },
+})
 
 export default Profile;
