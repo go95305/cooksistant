@@ -1,23 +1,26 @@
 import React from 'react';
 import { StyleSheet, Dimensions, ScrollView, Image, ImageBackground, Platform } from 'react-native';
-import SegmentControl from 'react-native-segment-control';
+import SegmentedControlTab from 'react-native-segmented-control-tab';
 import { Block, Text, theme, Button as GaButton } from 'galio-framework';
 import { Button } from '../components';
 import { Images, nowTheme, tabs } from '../constants';
 import { HeaderHeight } from '../constants/utils';
 
 const { width, height } = Dimensions.get('screen');
-let tmp = 0;
-  if(height < 800){
-    tmp = 35;
-  }
+let and = 0, ios = 0;
+if (height < 800) {
+  and = 35;
+}else{
+  ios = 15;
+}
+
 const ImgSize = (width - 48 - 32) / 3;
 const RecipeImg = (width - 48 - 32) / 2;
 
 const Taste = () => {
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={styles.segmentContainer}>
-      <Block middle style={{justifyContent: 'flex-start'}}>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <Block middle style={{ justifyContent: 'flex-start' }}>
         <Text
           style={{
             color: '#2c2c2c',
@@ -52,22 +55,16 @@ const Taste = () => {
 };
 const Recipe = () => {
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={styles.segmentContainer}>
-      <Block
-        row
-        style={{paddingVertical: 10, paddingHorizontal: 15}}
-        space="between"
-      >
-        <Text bold size={20} color="#2c2c2c" style={{ marginTop: 5, fontFamily: 'montserrat-bold' }}>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <Block row style={{ paddingVertical: 10, paddingHorizontal: 15 }} space="between">
+        <Text
+          bold
+          size={20}
+          color="#2c2c2c"
+          style={{ marginTop: 5, fontFamily: 'montserrat-bold' }}
+        >
           Recipe
         </Text>
-        <Button
-          small
-          color="transparent"
-          textStyle={{ color: nowTheme.COLORS.PRIMARY, fontSize: 15, fontFamily: 'montserrat-regular' }}
-        >
-          View all
-        </Button>
       </Block>
 
       <Block style={{ paddingBottom: -HeaderHeight * 2, paddingHorizontal: 15 }}>
@@ -82,12 +79,14 @@ const Recipe = () => {
 };
 const Scrap = () => {
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={styles.segmentContainer}>
-      <Block
-        style={{paddingVertical: 10, paddingHorizontal: 15}}
-        space="between"
-      >
-        <Text bold size={20} color="#2c2c2c" style={{ marginTop: 5,marginBottom: 5, fontFamily: 'montserrat-bold' }}>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <Block style={{ paddingVertical: 10, paddingHorizontal: 15 }} space="between">
+        <Text
+          bold
+          size={20}
+          color="#2c2c2c"
+          style={{ marginTop: 5, fontFamily: 'montserrat-bold' }}
+        >
           Scrap
         </Text>
       </Block>
@@ -103,100 +102,119 @@ const Scrap = () => {
   );
 };
 
-const segments = [
-  {
-    title: '취향',
-    view: Taste,
-  },
-  {
-    title: '레시피',
-    view: Recipe,
-  },
-  {
-    title: '스크랩',
-    view: Scrap,
-  },
-];
+class Profile extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      selectedIndex: 0,
+    };
+  }
 
-const Profile = () => {
+  handleIndexChange = (index) => {
+    this.setState({
+      ...this.state,
+      selectedIndex: index,
+    });
+  };
 
-  return (
-    <Block
-      style={{
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-      }}
-    >
-      <Block flex={2}>
-        <ImageBackground
-          source={Images.ProfileBackground}
-          style={styles.profileContainer}
-          imageStyle={styles.profileBackground}
-        >
-          <Block>
-            <Block style={{position: 'absolute', width: width, zIndex: 5, paddingHorizontal: 50 }}>
-              <Block middle style={{ top: height * 0.125 - tmp }}>
-                <Image source={Images.ProfilePicture} style={styles.avatar} />
-              </Block>
-              <Block style={{ top: height * 0.125 -tmp }}>
-                <Block middle>
-                  <Text
-                    style={{
-                      marginTop: 15,
-                      fontFamily: 'montserrat-bold',
-                      marginBottom: theme.SIZES.BASE / 2,
-                      fontWeight: '900',
-                      fontSize: 26,
-                    }}
-                    color="#ffffff"
-                  >
-                    사용자
-                  </Text>
+  render() {
+    return (
+      <Block
+        style={{
+          flex: 1,
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Block flex={2}>
+          <ImageBackground
+            source={Images.ProfileBackground}
+            style={styles.profileContainer}
+            imageStyle={styles.profileBackground}
+          >
+            <Block>
+              <Block
+                style={{ position: 'absolute', width: width, zIndex: 5, paddingHorizontal: 50 }}
+              >
+                <Block middle style={{ top: height * 0.125 - and }}>
+                  <Image source={Images.ProfilePicture} style={styles.avatar} />
                 </Block>
-                <Block style={styles.info}>
-                  <Block row space="around">
-                    <Block middle>
-                      <Text
-                        color="white"
-                        size={18}
-                        style={{ marginBottom: 4, fontFamily: 'montserrat-bold' }}
-                      >
-                        26
-                      </Text>
-                      <Text style={{ fontFamily: 'montserrat-regular' }} size={14} color="white">
-                        Recipe
-                      </Text>
-                    </Block>
+                <Block style={{ top: height * 0.125 - and }}>
+                  <Block middle>
+                    <Text
+                      style={{
+                        marginTop: 15,
+                        fontFamily: 'montserrat-bold',
+                        marginBottom: theme.SIZES.BASE / 2,
+                        fontWeight: '900',
+                        fontSize: 26,
+                      }}
+                      color="#ffffff"
+                    >
+                      사용자
+                    </Text>
+                  </Block>
+                  <Block style={styles.info}>
+                    <Block row space="around">
+                      <Block middle>
+                        <Text
+                          color="white"
+                          size={18}
+                          style={{ marginBottom: 4, fontFamily: 'montserrat-bold' }}
+                        >
+                          26
+                        </Text>
+                        <Text style={{ fontFamily: 'montserrat-regular' }} size={14} color="white">
+                          Recipe
+                        </Text>
+                      </Block>
 
-                    <Block middle>
-                      <Text
-                        color="white"
-                        size={18}
-                        style={{ marginBottom: 4, fontFamily: 'montserrat-bold' }}
-                      >
-                        48
-                      </Text>
-                      <Text style={{ fontFamily: 'montserrat-regular' }} size={14} color="white">
-                        Scrap
-                      </Text>
+                      <Block middle>
+                        <Text
+                          color="white"
+                          size={18}
+                          style={{ marginBottom: 4, fontFamily: 'montserrat-bold' }}
+                        >
+                          48
+                        </Text>
+                        <Text style={{ fontFamily: 'montserrat-regular' }} size={14} color="white">
+                          Scrap
+                        </Text>
+                      </Block>
                     </Block>
                   </Block>
                 </Block>
               </Block>
             </Block>
-          </Block>
-        </ImageBackground>
-      </Block>
+          </ImageBackground>
+        </Block>
 
-      <Block flex={3} style={{ padding: theme.SIZES.BASE, marginTop: '15%' }}>
-        <Block>
-          <SegmentControl segments={segments} />
+        <Block flex={3}>
+          <Block style={styles.segmentContainer}>
+            <Block>
+              <SegmentedControlTab
+                values={['취향', '레시피', '스크랩']}
+                selectedIndex={this.state.selectedIndex}
+                onTabPress={this.handleIndexChange}
+                tabsContainerStyle={styles.tabsContainerStyle}
+                tabStyle={styles.tabStyle}
+                activeTabStyle={styles.activeTabStyle}
+                tabTextStyle={{ color: '#444444', fontFamily: 'montserrat-bold' }}
+                borderRadius={15}
+                height={50}
+              />
+            </Block>
+            <Block style={{marginTop: 20}}>
+              {this.state.selectedIndex === 0 && <Taste />}
+              {this.state.selectedIndex === 1 && <Recipe />}
+              {this.state.selectedIndex === 2 && <Scrap />}
+            </Block>
+          </Block>
         </Block>
       </Block>
-    </Block>
-  );
-};
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   profileContainer: {
@@ -234,18 +252,22 @@ const styles = StyleSheet.create({
     width: RecipeImg,
     height: RecipeImg,
   },
-  social: {
-    width: nowTheme.SIZES.BASE * 3,
-    height: nowTheme.SIZES.BASE * 3,
-    borderRadius: nowTheme.SIZES.BASE * 1.5,
-    justifyContent: 'center',
-    zIndex: 99,
-    marginHorizontal: 5,
-  },
+  // segment style
   segmentContainer: {
-    height: height * 0.42 - tmp,
-    marginTop: 15,
+    width,
+    height: height * 0.5 - and,
+    padding: theme.SIZES.BASE,
+    marginTop: and + ios,
   },
-})
+  tabsContainerStyle: {
+    height: 40,
+  },
+  tabStyle: {
+    borderColor: '#f18d46',
+  },
+  activeTabStyle: {
+    backgroundColor: '#f18d46',
+  },
+});
 
 export default Profile;
