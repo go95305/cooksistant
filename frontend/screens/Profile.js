@@ -132,10 +132,10 @@ class Profile extends React.Component {
               <Block
                 style={{ position: 'absolute', width: width, zIndex: 5, paddingHorizontal: 50 }}
               >
-                <Block middle style={{ top: height * 0.125 - and }}>
+                <Block middle style={{ top: height > 800 ? height * 0.12 : height * 0.09 }}>
                   <Image source={Images.ProfilePicture} style={styles.avatar} />
                 </Block>
-                <Block style={{ top: height * 0.125 - and }}>
+                <Block style={{ top: height > 800 ? height * 0.12 : height * 0.09 }}>
                   <Block middle>
                     <Text
                       style={{
@@ -226,9 +226,9 @@ const styles = StyleSheet.create({
   profileBackground: {
     width,
     height: height * 0.4,
-  },
+  }, 
   info: {
-    marginTop: 16,
+    marginTop: height > 800 ? 20 : 0,
     paddingHorizontal: 50,
     height: height * 0.8,
   },
