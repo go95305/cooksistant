@@ -7,10 +7,11 @@ import { Images, nowTheme, tabs } from '../constants';
 import { HeaderHeight } from '../constants/utils';
 
 const { width, height } = Dimensions.get('screen');
-let and = 0, ios = 0;
+let and = 0,
+  ios = 0;
 if (height < 800) {
   and = 35;
-}else{
+} else {
   ios = 15;
 }
 
@@ -118,14 +119,9 @@ class Profile extends React.Component {
   };
 
   render() {
+    const { navigation } = this.props;
     return (
-      <Block
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-        }}
-      >
+      <Block style={styles.container}>
         <Block flex={2}>
           <ImageBackground
             source={Images.ProfileBackground}
@@ -204,7 +200,7 @@ class Profile extends React.Component {
                 height={50}
               />
             </Block>
-            <Block style={{marginTop: 20}}>
+            <Block style={{ marginTop: 20 }}>
               {this.state.selectedIndex === 0 && <Taste />}
               {this.state.selectedIndex === 1 && <Recipe />}
               {this.state.selectedIndex === 2 && <Scrap />}
@@ -217,11 +213,15 @@ class Profile extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
   profileContainer: {
     width,
-    height: '40%',
+    height,
     padding: 0,
-    zIndex: 1,
   },
   profileBackground: {
     width,
