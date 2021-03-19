@@ -82,7 +82,7 @@ function RecipeListStack(props) {
         component={TTS}
         options={{
           header: ({ navigation, scene }) => (
-            <Header title="TTS" back white transparent navigation={navigation} scene={scene} />
+            <Header title="TTS" back black transparent navigation={navigation} scene={scene} />
           ),
           headerTransparent: true,
         }}

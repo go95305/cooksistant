@@ -125,7 +125,7 @@ class Header extends React.Component {
               style={{ fontFamily: 'montserrat-regular' }}
               size={16}
               style={styles.tabTitle}
-              onPress={() => console.log(navigation.navigate('TrendyList'))}
+              onPress={() => navigation.navigate('TrendyList')}
             >
               {optionRight || '트랜디'}
             </Text>
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
     width: width * 0.35,
     borderRadius: 0,
     borderWidth: 0,
-    height: 24,
+    height: 20,
     elevation: 0,
   },
   tabTitle: {
