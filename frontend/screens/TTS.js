@@ -1,168 +1,195 @@
 import React from 'react';
 import {
   StyleSheet,
-  Dimensions,
-  ScrollView,
-  Image,
   ImageBackground,
-  Platform,
-  ImageButton,
+  Dimensions,
+  StatusBar,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
-import { Block, Text, theme, Button as GaButton } from 'galio-framework';
-import { Button } from '../components';
+import { Block, Checkbox, Text, Button as GaButton, theme } from 'galio-framework';
+
+import { Button, Icon, Input } from '../components';
 import { Images, nowTheme } from '../constants';
-import { HeaderHeight } from '../constants/utils';
-import Hr from 'react-native-hr-component';
+
 const { width, height } = Dimensions.get('screen');
 
-const thumbMeasure = (width - 48 - 32) / 3;
+const DismissKeyboard = ({ children }) => (
+  <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
+);
 
-const TTS = () => {
-  return (
-    <Block>
-      <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollContainer}>
-        <Block
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}
-        >
-          <Block flex={0.35}>
-            <ImageBackground
-              source={Images.eggplant}
-              style={styles.profileContainer}
-              imageStyle={styles.profileBackground}
-            >
-              <Block
-                style={{
-                  top: height * 0.22,
-                  position: 'absolute',
-                  width: width,
-                  zIndex: 5,
-                  paddingHorizontal: 20,
-                }}
-              >
-                <Block>
-                  <Block left flex={1}>
+class TTS extends React.Component {
+  render() {
+    return (
+      <DismissKeyboard>
+        <Block flex middle>
+          <ImageBackground
+            source={Images.RegisterBackground}
+            style={styles.imageBackgroundContainer}
+            imageStyle={styles.imageBackground}
+          >
+            <Block flex middle>
+              <Block style={styles.registerContainer}>
+                <Block flex space="evenly">
+                  <Block flex={0.2} middle>
                     <Text
                       style={{
-                        marginTop: 12,
-                        fontFamily: 'montserrat-bold',
-                        marginBottom: theme.SIZES.BASE / 2,
-                        fontWeight: '900',
-                        fontSize: 26,
-                        paddingTop: 100,
+                        fontFamily: 'montserrat-regular',
+                        textAlign: 'center',
                       }}
-                      color="black"
+                      color="#333"
+                      size={18}
                     >
-                      레시피
+                      영수증 사진을 등록해주세요
                     </Text>
-                    <Block row>
-                      <Text
-                        left
-                        color="black"
-                        size={15}
-                        style={{ marginBottom: 4, fontFamily: 'montserrat-regular' }}
-                      >
-                        2인분
-                      </Text>
-                      <Text> l </Text>
-                      <Text
-                        color="black"
-                        size={15}
-                        style={{ marginBottom: 4, fontFamily: 'montserrat-regular' }}
-                      >
-                        25분
-                      </Text>
+                  </Block>
+
+                  <Block flex={1} middle space="between">
+                    <Block center flex={0.9}>
+                      <Block flex space="between">
+                        <Block>
+                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
+                            <Input
+                              placeholder="First Name"
+                              style={styles.inputs}
+                              iconContent={
+                                <Icon
+                                  size={16}
+                                  color="#ADB5BD"
+                                  name="profile-circle"
+                                  family="NowExtra"
+                                  style={styles.inputIcons}
+                                />
+                              }
+                            />
+                          </Block>
+                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
+                            <Input
+                              placeholder="Last Name"
+                              style={styles.inputs}
+                              iconContent={
+                                <Icon
+                                  size={16}
+                                  color="#ADB5BD"
+                                  name="caps-small2x"
+                                  family="NowExtra"
+                                  style={styles.inputIcons}
+                                />
+                              }
+                            />
+                          </Block>
+                          <Block width={width * 0.8}>
+                            <Input
+                              placeholder="Email"
+                              style={styles.inputs}
+                              iconContent={
+                                <Icon
+                                  size={16}
+                                  color="#ADB5BD"
+                                  name="email-852x"
+                                  family="NowExtra"
+                                  style={styles.inputIcons}
+                                />
+                              }
+                            />
+                          </Block>
+                          <Block
+                            style={{ marginVertical: theme.SIZES.BASE, marginLeft: 15 }}
+                            row
+                            width={width * 0.75}
+                          >
+                            <Checkbox
+                              checkboxStyle={{
+                                borderWidth: 1,
+                                borderRadius: 2,
+                                borderColor: '#E3E3E3',
+                              }}
+                              color={nowTheme.COLORS.PRIMARY}
+                              labelStyle={{
+                                color: nowTheme.COLORS.HEADER,
+                                fontFamily: 'montserrat-regular',
+                              }}
+                              label="I agree to the terms and conditions."
+                            />
+                          </Block>
+                        </Block>
+                        <Block center>
+                          <Button color="primary" round style={styles.createButton}>
+                            <Text
+                              style={{ fontFamily: 'montserrat-bold' }}
+                              size={14}
+                              color={nowTheme.COLORS.WHITE}
+                            >
+                              다음 단계
+                            </Text>
+                          </Button>
+                        </Block>
+                      </Block>
                     </Block>
                   </Block>
-                  <Image
-                    source={Images.bookmark}
-                    style={{ weight: 30, height: 30, flex: 1 }}
-                  ></Image>
-                </Block>
-                <Block right>
-                  <Button
-                    style={{ width: 90, height: 44, marginHorizontal: 10, elevation: 0 }}
-                    textStyle={{ fontSize: 15, color: 'white' }}
-                    color="Primary"
-                    round
-                    onPress={() => navigation.navigate('TTS')}
-                  >
-                    요리시작
-                  </Button>
-                </Block>
-                <Block middle>
-                  <Text
-                    size={16}
-                    muted
-                    style={{
-                      textAlign: 'center',
-                      color: '#2c2c2c',
-                      fontWeight: 'bold',
-                      fontSize: 15,
-                      paddingHorizontal: 15,
-                      paddingTop: 10,
-                      paddingBottom: 10,
-                    }}
-                  >
-                    가지는 장도 튼튼하게 해주고, 피로회복에도 효과가 뛰어나다고 해요!! 이렇게 좋은
-                    먹거리인 ‘가지’로 간단하지만 정말 맛있는 가지볶음을 해보아요 :)
-                  </Text>
-                  <Hr />
                 </Block>
               </Block>
-            </ImageBackground>
-          </Block>
+            </Block>
+          </ImageBackground>
         </Block>
-      </ScrollView>
-    </Block>
-  );
-};
+      </DismissKeyboard>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
-  scrollContainer: {
+  imageBackgroundContainer: {
     width: width,
     height: height,
-  },
-  profileContainer: {
-    width,
-    height,
     padding: 0,
     zIndex: 1,
   },
-  profileBackground: {
-    width,
-    height: height * 0.35,
+  imageBackground: {
+    width: width,
+    height: height,
   },
-  avatarContainer: {
-    position: 'relative',
-    marginTop: -80,
-  },
-  avatar: {
-    width: thumbMeasure,
-    height: thumbMeasure,
-    borderRadius: 50,
-    borderWidth: 0,
-  },
-  nameInfo: {
-    marginTop: 35,
-  },
-  thumb: {
+  registerContainer: {
+    marginTop: 55,
+    width: width * 0.9,
+    height: height < 812 ? height * 0.8 : height * 0.8,
+    backgroundColor: nowTheme.COLORS.WHITE,
     borderRadius: 4,
-    marginVertical: 4,
-    alignSelf: 'center',
-    width: thumbMeasure,
-    height: thumbMeasure,
+    shadowColor: nowTheme.COLORS.BLACK,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowRadius: 8,
+    shadowOpacity: 0.1,
+    elevation: 1,
+    overflow: 'hidden',
+  },
+  inputIcons: {
+    marginRight: 12,
+    color: nowTheme.COLORS.ICON_INPUT,
+  },
+  inputs: {
+    borderWidth: 1,
+    borderColor: '#E3E3E3',
+    borderRadius: 21.5,
+  },
+  passwordCheck: {
+    paddingLeft: 2,
+    paddingTop: 6,
+    paddingBottom: 15,
+  },
+  createButton: {
+    width: width * 0.5,
+    marginTop: 25,
+    marginBottom: 40,
   },
   social: {
-    width: nowTheme.SIZES.BASE * 3,
-    height: nowTheme.SIZES.BASE * 3,
-    borderRadius: nowTheme.SIZES.BASE * 1.5,
+    width: theme.SIZES.BASE * 3.5,
+    height: theme.SIZES.BASE * 3.5,
+    borderRadius: theme.SIZES.BASE * 1.75,
     justifyContent: 'center',
-    zIndex: 99,
-    marginHorizontal: 5,
+    marginHorizontal: 10,
   },
 });
+
 export default TTS;

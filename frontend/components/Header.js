@@ -78,7 +78,7 @@ class Header extends React.Component {
     }
   };
 
-  // 검색창 
+  // 검색창
   renderSearch = () => {
     const { navigation } = this.props;
     return (
@@ -95,7 +95,7 @@ class Header extends React.Component {
     );
   };
 
-  // 인기 | 트랜드 옵션 
+  // 인기 | 트랜드 옵션
   renderOptions = () => {
     const { navigation, optionLeft, optionRight } = this.props;
 
@@ -132,7 +132,7 @@ class Header extends React.Component {
               style={{ fontFamily: 'montserrat-regular' }}
               size={16}
               style={styles.tabTitle}
-              onPress={() => console.log(navigation.navigate('TrendyList'))}
+              onPress={() => navigation.navigate('TrendyList')}
             >
               {optionRight || '트랜디'}
             </Text>
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     width: width * 0.35,
     borderRadius: 0,
     borderWidth: 0,
-    height: 24,
+    height: 20,
     elevation: 0,
   },
   tabTitle: {
