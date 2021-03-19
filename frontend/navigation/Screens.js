@@ -201,6 +201,16 @@ function HomeStack(props) {
           cardStyle: { backgroundColor: '#FFFFFF' },
         }}
       />
+      <Stack.Screen
+        name="TTS"
+        component={TTS}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header title="TTS" back white transparent navigation={navigation} scene={scene} />
+          ),
+          headerTransparent: true,
+        }}
+      />
     </Stack.Navigator>
   );
 }
