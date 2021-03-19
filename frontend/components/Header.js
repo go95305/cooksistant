@@ -197,17 +197,17 @@ class Header extends React.Component {
           style={navbarStyles}
           transparent={transparent}
           right={this.renderRight()}
-          rightStyle={{ alignItems: 'center' }}
+          rightStyle={{ alignItems: 'center', paddingRight: 20 }}
           left={
             <Icon
               name={back ? 'minimal-left2x' : 'align-left-22x'}
               family="NowExtra"
-              size={20}
+              size={22}
               onPress={this.handleLeftPress}
               color={iconColor || (white ? nowTheme.COLORS.WHITE : nowTheme.COLORS.ICON)}
             />
           }
-          leftStyle={{ paddingVertical: 12, flex: 0.2 }}
+          leftStyle={{ paddingVertical: 12, flex: 0.3 }}
           titleStyle={[
             styles.title,
             { color: nowTheme.COLORS[white ? 'WHITE' : 'HEADER'] },
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
   navbar: {
     paddingVertical: 0,
     paddingBottom: theme.SIZES.BASE * 1.5,
-    paddingTop: Platform.OS === 'android' ? theme.SIZES.BASE : theme.SIZES.BASE * 4,
+    paddingTop: Platform.OS === 'android' ? theme.SIZES.BASE * 1.8 : theme.SIZES.BASE * 4,
   },
   shadow: {
     backgroundColor: theme.COLORS.WHITE,
