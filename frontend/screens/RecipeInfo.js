@@ -14,6 +14,8 @@ import { Block, Text, theme, Button as GaButton } from 'galio-framework';
 import { Button } from '../components';
 import { Images, nowTheme } from '../constants';
 import Hr from 'react-native-hr-component';
+import { func } from 'prop-types';
+// import ImageButton from 'react-native-img-button';
 const { width, height } = Dimensions.get('screen');
 const thumbMeasure = (width - 48 - 32) / 3;
 
