@@ -21,7 +21,7 @@ const DismissKeyboard = ({ children }) => (
 class TasteRegister extends React.Component {
   render() {
     return (
-      <DismissKeyboard>
+      <Block style={styles.container}>
         <Block flex middle>
           <ImageBackground
             source={Images.RegisterBackground}
@@ -48,70 +48,7 @@ class TasteRegister extends React.Component {
                     <Block center flex={0.9}>
                       <Block flex space="between">
                         <Block>
-                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
-                            <Input
-                              placeholder="First Name"
-                              style={styles.inputs}
-                              iconContent={
-                                <Icon
-                                  size={16}
-                                  color="#ADB5BD"
-                                  name="profile-circle"
-                                  family="NowExtra"
-                                  style={styles.inputIcons}
-                                />
-                              }
-                            />
-                          </Block>
-                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
-                            <Input
-                              placeholder="Last Name"
-                              style={styles.inputs}
-                              iconContent={
-                                <Icon
-                                  size={16}
-                                  color="#ADB5BD"
-                                  name="caps-small2x"
-                                  family="NowExtra"
-                                  style={styles.inputIcons}
-                                />
-                              }
-                            />
-                          </Block>
-                          <Block width={width * 0.8}>
-                            <Input
-                              placeholder="Email"
-                              style={styles.inputs}
-                              iconContent={
-                                <Icon
-                                  size={16}
-                                  color="#ADB5BD"
-                                  name="email-852x"
-                                  family="NowExtra"
-                                  style={styles.inputIcons}
-                                />
-                              }
-                            />
-                          </Block>
-                          <Block
-                            style={{ marginVertical: theme.SIZES.BASE, marginLeft: 15 }}
-                            row
-                            width={width * 0.75}
-                          >
-                            <Checkbox
-                              checkboxStyle={{
-                                borderWidth: 1,
-                                borderRadius: 2,
-                                borderColor: '#E3E3E3',
-                              }}
-                              color={nowTheme.COLORS.PRIMARY}
-                              labelStyle={{
-                                color: nowTheme.COLORS.HEADER,
-                                fontFamily: 'montserrat-regular',
-                              }}
-                              label="I agree to the terms and conditions."
-                            />
-                          </Block>
+                          
                         </Block>
                         <Block center>
                           <Button color="primary" round style={styles.createButton}>
@@ -120,7 +57,7 @@ class TasteRegister extends React.Component {
                               size={14}
                               color={nowTheme.COLORS.WHITE}
                             >
-                              다음 단계
+                              등록하기
                             </Text>
                           </Button>
                         </Block>
@@ -132,17 +69,20 @@ class TasteRegister extends React.Component {
             </Block>
           </ImageBackground>
         </Block>
-      </DismissKeyboard>
+      </Block>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+  },
   imageBackgroundContainer: {
     width: width,
     height: height,
-    padding: 0,
-    zIndex: 1,
+    padding: 0
   },
   imageBackground: {
     width: width,
@@ -182,14 +122,7 @@ const styles = StyleSheet.create({
     width: width * 0.5,
     marginTop: 25,
     marginBottom: 40,
-  },
-  social: {
-    width: theme.SIZES.BASE * 3.5,
-    height: theme.SIZES.BASE * 3.5,
-    borderRadius: theme.SIZES.BASE * 1.75,
-    justifyContent: 'center',
-    marginHorizontal: 10,
-  },
+  }
 });
 
 export default TasteRegister;
