@@ -5,8 +5,8 @@ import {
   Dimensions,
   StatusBar,
   TouchableWithoutFeedback,
-  Keyboard,
 } from 'react-native';
+import SwitchSelector from 'react-native-switch-selector';
 import { Block, Checkbox, Text, Button as GaButton, theme } from 'galio-framework';
 
 import { Button, Icon, Input } from '../components';
@@ -14,117 +14,181 @@ import { Images, nowTheme } from '../constants';
 
 const { width, height } = Dimensions.get('screen');
 
-const DismissKeyboard = ({ children }) => (
-  <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
-);
+const options = [
+  { label: '1', value: 1 },
+  { label: '2', value: 2 },
+  { label: '3', value: 3 },
+  { label: '4', value: 4 },
+  { label: '5', value: 5 },
+];
 
 class TasteRegister extends React.Component {
   render() {
     return (
-      <DismissKeyboard>
+      <Block style={styles.container}>
         <Block flex middle>
           <ImageBackground
             source={Images.RegisterBackground}
             style={styles.imageBackgroundContainer}
             imageStyle={styles.imageBackground}
           >
-            <Block flex middle>
+            <Block flex={1} middle>
               <Block style={styles.registerContainer}>
                 <Block flex space="evenly">
-                  <Block flex={0.2} middle>
+                  <Block flex={1.5} middle>
                     <Text
                       style={{
                         fontFamily: 'montserrat-regular',
                         textAlign: 'center',
+                        marginBottom: 15,
                       }}
                       color="#333"
-                      size={18}
+                      size={19}
                     >
                       사용자의 취향이 궁금해요 :)
                     </Text>
+                    <Block
+                      center
+                      style={{
+                        borderColor: '#f2f2f2',
+                        width: '85%',
+                        borderWidth: StyleSheet.hairlineWidth,
+                      }}
+                    />
                   </Block>
-
+                  <Block flex={6} marginTop={height < 800 ? -10 : -5}>
+                    <Block center style={styles.tasteContainer}>
+                      <Text
+                        style={{
+                          fontFamily: 'montserrat-bold',
+                          textAlign: 'center',
+                          marginBottom:  Platform.OS === 'android' ? 10 : 15,
+                        }}
+                        color="#333"
+                        size={15}
+                      >
+                        매운 맛
+                      </Text>
+                      <SwitchSelector
+                        options={options}
+                        initial={2}
+                        fontSize={17}
+                        textColor='#f18d46'
+                        selectedColor='white'
+                        buttonColor='#f18d46'
+                        borderColor='#f18d46'
+                        hasPadding
+                        onPress={(value) => console.log(`Call onPress with value: ${value}`)}
+                      />
+                    </Block>
+                    <Block center style={styles.tasteContainer}>
+                      <Text
+                        style={{
+                          fontFamily: 'montserrat-bold',
+                          textAlign: 'center',
+                          marginBottom:  Platform.OS === 'android' ? 10 : 15,
+                        }}
+                        color="#333"
+                        size={15}
+                      >
+                        짠 맛
+                      </Text>
+                      <SwitchSelector
+                        options={options}
+                        initial={2}
+                        fontSize={17}
+                        textColor='#f18d46'
+                        selectedColor='white'
+                        buttonColor='#f18d46'
+                        borderColor='#f18d46'
+                        hasPadding
+                        onPress={(value) => console.log(`Call onPress with value: ${value}`)}
+                      />
+                    </Block>
+                    <Block center style={styles.tasteContainer}>
+                      <Text
+                        style={{
+                          fontFamily: 'montserrat-bold',
+                          textAlign: 'center',
+                          marginBottom:  Platform.OS === 'android' ? 10 : 15,
+                        }}
+                        color="#333"
+                        size={15}
+                      >
+                        단 맛
+                      </Text>
+                      <SwitchSelector
+                        options={options}
+                        initial={2}
+                        fontSize={17}
+                        textColor='#f18d46'
+                        selectedColor='white'
+                        buttonColor='#f18d46'
+                        borderColor='#f18d46'
+                        hasPadding
+                        onPress={(value) => console.log(`Call onPress with value: ${value}`)}
+                      />
+                    </Block>
+                    <Block center style={styles.tasteContainer}>
+                      <Text
+                        style={{
+                          fontFamily: 'montserrat-bold',
+                          textAlign: 'center',
+                          marginBottom:  Platform.OS === 'android' ? 10 : 15,
+                        }}
+                        color="#333"
+                        size={15}
+                      >
+                        신 맛
+                      </Text>
+                      <SwitchSelector
+                        options={options}
+                        initial={2}
+                        fontSize={17}
+                        textColor='#f18d46'
+                        selectedColor='white'
+                        buttonColor='#f18d46'
+                        borderColor='#f18d46'
+                        hasPadding
+                        onPress={(value) => console.log(`Call onPress with value: ${value}`)}
+                      />
+                    </Block>
+                    <Block center style={styles.tasteContainer}>
+                      <Text
+                        style={{
+                          fontFamily: 'montserrat-bold',
+                          textAlign: 'center',
+                          marginBottom:  Platform.OS === 'android' ? 10 : 15,
+                        }}
+                        color="#333"
+                        size={15}
+                      >
+                        쓴 맛
+                      </Text>
+                      <SwitchSelector
+                        options={options}
+                        initial={2}
+                        fontSize={17}
+                        textColor='#f18d46'
+                        selectedColor='white'
+                        buttonColor='#f18d46'
+                        borderColor='#f18d46'
+                        hasPadding
+                        onPress={(value) => console.log(`Call onPress with value: ${value}`)}
+                      />
+                    </Block>
+                  </Block>
                   <Block flex={1} middle space="between">
-                    <Block center flex={0.9}>
-                      <Block flex space="between">
-                        <Block>
-                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
-                            <Input
-                              placeholder="First Name"
-                              style={styles.inputs}
-                              iconContent={
-                                <Icon
-                                  size={16}
-                                  color="#ADB5BD"
-                                  name="profile-circle"
-                                  family="NowExtra"
-                                  style={styles.inputIcons}
-                                />
-                              }
-                            />
-                          </Block>
-                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
-                            <Input
-                              placeholder="Last Name"
-                              style={styles.inputs}
-                              iconContent={
-                                <Icon
-                                  size={16}
-                                  color="#ADB5BD"
-                                  name="caps-small2x"
-                                  family="NowExtra"
-                                  style={styles.inputIcons}
-                                />
-                              }
-                            />
-                          </Block>
-                          <Block width={width * 0.8}>
-                            <Input
-                              placeholder="Email"
-                              style={styles.inputs}
-                              iconContent={
-                                <Icon
-                                  size={16}
-                                  color="#ADB5BD"
-                                  name="email-852x"
-                                  family="NowExtra"
-                                  style={styles.inputIcons}
-                                />
-                              }
-                            />
-                          </Block>
-                          <Block
-                            style={{ marginVertical: theme.SIZES.BASE, marginLeft: 15 }}
-                            row
-                            width={width * 0.75}
-                          >
-                            <Checkbox
-                              checkboxStyle={{
-                                borderWidth: 1,
-                                borderRadius: 2,
-                                borderColor: '#E3E3E3',
-                              }}
-                              color={nowTheme.COLORS.PRIMARY}
-                              labelStyle={{
-                                color: nowTheme.COLORS.HEADER,
-                                fontFamily: 'montserrat-regular',
-                              }}
-                              label="I agree to the terms and conditions."
-                            />
-                          </Block>
-                        </Block>
-                        <Block center>
-                          <Button color="primary" round style={styles.createButton}>
-                            <Text
-                              style={{ fontFamily: 'montserrat-bold' }}
-                              size={14}
-                              color={nowTheme.COLORS.WHITE}
-                            >
-                              다음 단계
-                            </Text>
-                          </Button>
-                        </Block>
-                      </Block>
+                    <Block center>
+                      <Button color="primary" round style={styles.createButton}>
+                        <Text
+                          style={{ fontFamily: 'montserrat-bold' }}
+                          size={14}
+                          color={nowTheme.COLORS.WHITE}
+                        >
+                          등록하기
+                        </Text>
+                      </Button>
                     </Block>
                   </Block>
                 </Block>
@@ -132,17 +196,20 @@ class TasteRegister extends React.Component {
             </Block>
           </ImageBackground>
         </Block>
-      </DismissKeyboard>
+      </Block>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+  },
   imageBackgroundContainer: {
     width: width,
     height: height,
     padding: 0,
-    zIndex: 1,
   },
   imageBackground: {
     width: width,
@@ -164,31 +231,12 @@ const styles = StyleSheet.create({
     elevation: 1,
     overflow: 'hidden',
   },
-  inputIcons: {
-    marginRight: 12,
-    color: nowTheme.COLORS.ICON_INPUT,
-  },
-  inputs: {
-    borderWidth: 1,
-    borderColor: '#E3E3E3',
-    borderRadius: 21.5,
-  },
-  passwordCheck: {
-    paddingLeft: 2,
-    paddingTop: 6,
-    paddingBottom: 15,
+  tasteContainer: {
+    width: width * 0.7,
+    marginBottom: Platform.OS === 'android' ? 15 : 20,
   },
   createButton: {
     width: width * 0.5,
-    marginTop: 25,
-    marginBottom: 40,
-  },
-  social: {
-    width: theme.SIZES.BASE * 3.5,
-    height: theme.SIZES.BASE * 3.5,
-    borderRadius: theme.SIZES.BASE * 1.75,
-    justifyContent: 'center',
-    marginHorizontal: 10,
   },
 });
 
