@@ -1,4 +1,4 @@
 Flask
 Flask_restplus
-Flask-SQLAlchemy
+Flask-SQLAlchemy==2.4.4
 werkzeug==0.16.1
