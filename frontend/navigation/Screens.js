@@ -10,7 +10,7 @@ import Home from '../screens/Home';
 import Profile from '../screens/Profile';
 import RecipeRegister from '../screens/RecipeRegister';
 import TasteRegister from '../screens/TasteRegister';
-import EvaluList from '../screens/EvaluList';
+import EvalueList from '../screens/EvalueList';
 import Components from '../screens/Components';
 import RecipeList from '../screens/RecipeList';
 import RecipeInfo from '../screens/RecipeInfo';
@@ -95,7 +95,7 @@ function ProfileStack(props) {
   return (
     <Stack.Navigator initialRouteName="Profile" mode="card" headerMode="screen">
       <Stack.Screen
-        name="프로필"
+        name="Profile"
         component={Profile}
         options={{
           header: ({ navigation, scene }) => (
@@ -140,8 +140,8 @@ function ProfileStack(props) {
         }}
       />
       <Stack.Screen
-        name="EvaluList"
-        component={EvaluList}
+        name="EvalueList"
+        component={EvalueList}
         options={{
           header: ({ navigation, scene }) => (
             <Header

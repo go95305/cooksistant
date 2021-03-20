@@ -42,7 +42,7 @@ const Button3 = ({ isWhite, style, navigation }) => (
     textStyle={{ fontFamily: 'montserrat-bold', color: nowTheme.COLORS.PRIMARY, fontSize: 12 }}
     color="white"
     round
-    onPress={() => navigation.navigate('EvaluList')}
+    onPress={() => navigation.navigate('EvalueList')}
   >
     레시피 평가
   </Button>
