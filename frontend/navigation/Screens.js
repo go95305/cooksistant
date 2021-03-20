@@ -10,7 +10,8 @@ import Home from '../screens/Home';
 import Profile from '../screens/Profile';
 import RecipeRegister from '../screens/RecipeRegister';
 import TasteRegister from '../screens/TasteRegister';
-import EvaluList from '../screens/EvaluList';
+import EvalueList from '../screens/EvalueList';
+import EvalueRegister from '../screens/EvalueRegister';
 import Components from '../screens/Components';
 import RecipeList from '../screens/RecipeList';
 import RecipeInfo from '../screens/RecipeInfo';
@@ -41,6 +42,61 @@ function ComponentsStack(props) {
             <Header title="Components" navigation={navigation} scene={scene} />
           ),
           backgroundColor: '#FFFFFF',
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function HomeStack(props) {
+  return (
+    <Stack.Navigator mode="card" headerMode="screen">
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header title="Home" search options navigation={navigation} scene={scene} />
+          ),
+          cardStyle: { backgroundColor: '#FFFFFF' },
+        }}
+      />
+      <Stack.Screen
+        name="Pro"
+        component={RecipeInfo}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header
+              title="레시피 상세정보"
+              back
+              white
+              transparent
+              navigation={navigation}
+              scene={scene}
+            />
+          ),
+          headerTransparent: true,
+        }}
+      />
+
+      <Stack.Screen
+        name="TrendyList"
+        component={TrendyList}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header title="TrendyList" search options navigation={navigation} scene={scene} />
+          ),
+          cardStyle: { backgroundColor: '#FFFFFF' },
+        }}
+      />
+      <Stack.Screen
+        name="TTS"
+        component={TTS}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header title="TTS" back white transparent navigation={navigation} scene={scene} />
+          ),
+          headerTransparent: true,
         }}
       />
     </Stack.Navigator>
@@ -95,7 +151,7 @@ function ProfileStack(props) {
   return (
     <Stack.Navigator initialRouteName="Profile" mode="card" headerMode="screen">
       <Stack.Screen
-        name="프로필"
+        name="Profile"
         component={Profile}
         options={{
           header: ({ navigation, scene }) => (
@@ -140,8 +196,8 @@ function ProfileStack(props) {
         }}
       />
       <Stack.Screen
-        name="EvaluList"
-        component={EvaluList}
+        name="EvalueList"
+        component={EvalueList}
         options={{
           header: ({ navigation, scene }) => (
             <Header
@@ -156,21 +212,21 @@ function ProfileStack(props) {
           headerTransparent: true,
         }}
       />
-    </Stack.Navigator>
-  );
-}
-
-function HomeStack(props) {
-  return (
-    <Stack.Navigator mode="card" headerMode="screen">
       <Stack.Screen
-        name="Home"
-        component={Home}
+        name="EvalueRegister"
+        component={EvalueRegister}
         options={{
           header: ({ navigation, scene }) => (
-            <Header title="Home" search options navigation={navigation} scene={scene} />
+            <Header
+              title="레시피 평가하기"
+              back
+              black
+              transparent
+              navigation={navigation}
+              scene={scene}
+            />
           ),
-          cardStyle: { backgroundColor: '#FFFFFF' },
+          headerTransparent: true,
         }}
       />
       <Stack.Screen
@@ -186,27 +242,6 @@ function HomeStack(props) {
               navigation={navigation}
               scene={scene}
             />
-          ),
-          headerTransparent: true,
-        }}
-      />
-
-      <Stack.Screen
-        name="TrendyList"
-        component={TrendyList}
-        options={{
-          header: ({ navigation, scene }) => (
-            <Header title="TrendyList" search options navigation={navigation} scene={scene} />
-          ),
-          cardStyle: { backgroundColor: '#FFFFFF' },
-        }}
-      />
-      <Stack.Screen
-        name="TTS"
-        component={TTS}
-        options={{
-          header: ({ navigation, scene }) => (
-            <Header title="TTS" back white transparent navigation={navigation} scene={scene} />
           ),
           headerTransparent: true,
         }}
