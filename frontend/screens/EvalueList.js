@@ -12,18 +12,18 @@ const recipes = [
   {
     title: '빨간맛 떡볶이',
     image: require("../assets/imgs/food1.png"),
-    cta: '레시피 보러가기',
+    isEvalu: false,
     horizontal: true
   },
   {
     title: '감자조림',
     image: require("../assets/imgs/food2.png"),
-    cta: '레시피 보러가기',
+    isEvalu: true,
   },
   {
     title: '나박김치',
     image: require("../assets/imgs/food3.png"),
-    cta: '레시피 보러가기',
+    isEvalu: false,
     horizontal: true
   },
   {
@@ -37,13 +37,13 @@ const recipes = [
   {
     title: '제육볶음',
     image: require("../assets/imgs/food5.png"),
-    cta: '레시피 보러가기',
+    isEvalu: true,
     horizontal: true
   },
   {
     title: '채소듬뿍 김밥',
     image: require("../assets/imgs/food6.png"),
-    cta: '레시피 보러가기',
+    isEvalu: true,
     horizontal: true
   }
 ]
