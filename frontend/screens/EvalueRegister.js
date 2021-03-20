@@ -3,6 +3,7 @@ import {
   StyleSheet,
   ImageBackground,
   Dimensions,
+  Image,
   StatusBar,
   TouchableWithoutFeedback,
 } from 'react-native';
@@ -14,6 +15,12 @@ import { Images, nowTheme } from '../constants';
 
 const { width, height } = Dimensions.get('screen');
 
+const recipe = {
+  title: '빨간맛 떡볶이',
+  image: require('../assets/imgs/food1.png'),
+  isEvalu: false,
+};
+
 const options = [
   { label: '1', value: 1 },
   { label: '2', value: 2 },
@@ -21,6 +28,8 @@ const options = [
   { label: '4', value: 4 },
   { label: '5', value: 5 },
 ];
+
+const result = [];
 
 class TasteRegister extends React.Component {
   render() {
@@ -34,166 +43,66 @@ class TasteRegister extends React.Component {
           >
             <Block flex={1} middle>
               <Block style={styles.registerContainer}>
-                <Block flex space="evenly">
-                  <Block flex={1.5} middle>
+                  <Block>
                     <Text
                       style={{
                         fontFamily: 'montserrat-regular',
                         textAlign: 'center',
+                        marginTop: Platform.OS === 'android' ? 25 : 20,
+                        marginBottom: 10,
+                      }}
+                      color="#333"
+                      size={19}
+                    >
+                      레시피의 맛은 어땠나요?
+                    </Text>
+                  </Block>
+                  <Block
+                    center
+                    style={{
+                      borderColor: '#f2f2f2',
+                      width: '85%',
+                      marginBottom: 10,
+                      borderWidth: StyleSheet.hairlineWidth,
+                    }}
+                  />
+                  <Block center>
+                    <Image
+                      source={recipe.image}
+                      style={{
+                        width: width - theme.SIZES.BASE * 7,
+                        height: 180,
+                      }}
+                    />
+                    <Text
+                      style={{
+                        fontFamily: 'montserrat-bold',
+                        textAlign: 'center',
+                        marginTop: 15,
                         marginBottom: 15,
                       }}
                       color="#333"
                       size={19}
                     >
-                      사용자의 취향이 궁금해요 :)
+                      {recipe.title}
                     </Text>
-                    <Block
-                      center
-                      style={{
-                        borderColor: '#f2f2f2',
-                        width: '85%',
-                        borderWidth: StyleSheet.hairlineWidth,
-                      }}
-                    />
                   </Block>
-                  <Block flex={6} marginTop={height < 800 ? -10 : -5}>
-                    <Block center style={styles.tasteContainer}>
-                      <Text
-                        style={{
-                          fontFamily: 'montserrat-bold',
-                          textAlign: 'center',
-                          marginBottom:  Platform.OS === 'android' ? 10 : 15,
-                        }}
-                        color="#333"
-                        size={15}
-                      >
-                        매운 맛
-                      </Text>
-                      <SwitchSelector
-                        options={options}
-                        initial={2}
-                        fontSize={17}
-                        textColor='#f18d46'
-                        selectedColor='white'
-                        buttonColor='#f18d46'
-                        borderColor='#f18d46'
-                        hasPadding
-                        onPress={(value) => console.log(`Call onPress with value: ${value}`)}
-                      />
-                    </Block>
-                    <Block center style={styles.tasteContainer}>
-                      <Text
-                        style={{
-                          fontFamily: 'montserrat-bold',
-                          textAlign: 'center',
-                          marginBottom:  Platform.OS === 'android' ? 10 : 15,
-                        }}
-                        color="#333"
-                        size={15}
-                      >
-                        짠 맛
-                      </Text>
-                      <SwitchSelector
-                        options={options}
-                        initial={2}
-                        fontSize={17}
-                        textColor='#f18d46'
-                        selectedColor='white'
-                        buttonColor='#f18d46'
-                        borderColor='#f18d46'
-                        hasPadding
-                        onPress={(value) => console.log(`Call onPress with value: ${value}`)}
-                      />
-                    </Block>
-                    <Block center style={styles.tasteContainer}>
-                      <Text
-                        style={{
-                          fontFamily: 'montserrat-bold',
-                          textAlign: 'center',
-                          marginBottom:  Platform.OS === 'android' ? 10 : 15,
-                        }}
-                        color="#333"
-                        size={15}
-                      >
-                        단 맛
-                      </Text>
-                      <SwitchSelector
-                        options={options}
-                        initial={2}
-                        fontSize={17}
-                        textColor='#f18d46'
-                        selectedColor='white'
-                        buttonColor='#f18d46'
-                        borderColor='#f18d46'
-                        hasPadding
-                        onPress={(value) => console.log(`Call onPress with value: ${value}`)}
-                      />
-                    </Block>
-                    <Block center style={styles.tasteContainer}>
-                      <Text
-                        style={{
-                          fontFamily: 'montserrat-bold',
-                          textAlign: 'center',
-                          marginBottom:  Platform.OS === 'android' ? 10 : 15,
-                        }}
-                        color="#333"
-                        size={15}
-                      >
-                        신 맛
-                      </Text>
-                      <SwitchSelector
-                        options={options}
-                        initial={2}
-                        fontSize={17}
-                        textColor='#f18d46'
-                        selectedColor='white'
-                        buttonColor='#f18d46'
-                        borderColor='#f18d46'
-                        hasPadding
-                        onPress={(value) => console.log(`Call onPress with value: ${value}`)}
-                      />
-                    </Block>
-                    <Block center style={styles.tasteContainer}>
-                      <Text
-                        style={{
-                          fontFamily: 'montserrat-bold',
-                          textAlign: 'center',
-                          marginBottom:  Platform.OS === 'android' ? 10 : 15,
-                        }}
-                        color="#333"
-                        size={15}
-                      >
-                        쓴 맛
-                      </Text>
-                      <SwitchSelector
-                        options={options}
-                        initial={2}
-                        fontSize={17}
-                        textColor='#f18d46'
-                        selectedColor='white'
-                        buttonColor='#f18d46'
-                        borderColor='#f18d46'
-                        hasPadding
-                        onPress={(value) => console.log(`Call onPress with value: ${value}`)}
-                      />
-                    </Block>
+                  <Block>
+                      
                   </Block>
-                  <Block flex={1} middle space="between">
-                    <Block center>
+                  <Block flex={1} center >
                       <Button color="primary" round style={styles.createButton}>
                         <Text
                           style={{ fontFamily: 'montserrat-bold' }}
                           size={14}
                           color={nowTheme.COLORS.WHITE}
                         >
-                          등록하기
+                          다음 단계
                         </Text>
                       </Button>
-                    </Block>
                   </Block>
                 </Block>
               </Block>
-            </Block>
           </ImageBackground>
         </Block>
       </Block>
