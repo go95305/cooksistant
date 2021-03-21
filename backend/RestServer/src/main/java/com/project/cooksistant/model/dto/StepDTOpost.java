@@ -5,8 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class StepDTO {
-    private Long id;
+public class StepDTOpost {
     private String stepDescription;
     private String image;
     private Long level;

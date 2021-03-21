@@ -27,7 +27,7 @@ public class RecipeIngredient {
     private Ingredient ingredient;
 
     private String amount;
-    @Column(name = "isType")
+    @Column(name = "type",nullable = false)
     private String type;
 
 }

@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class EvaluationDTO {
+public class EvaluationDTOpost {
     private Long recipeId;
     private Long userId;
     private Long  bitterness;

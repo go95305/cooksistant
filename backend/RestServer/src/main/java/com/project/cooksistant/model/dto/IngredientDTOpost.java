@@ -5,8 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class IngredientDTO {
-    private Long id;
+public class IngredientDTOpost {
     private String ingredientName;
     private String amount;
     private String isType;

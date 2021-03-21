@@ -10,20 +10,21 @@ import javax.persistence.*;
 @Builder
 @ToString
 @Data
+@Table(name = "step")
 public class Step {
     @Id
     @GeneratedValue
-    @Column(name = "id",nullable = false)
+    @Column(name = "id")
     private Long stepId;
 
     @ManyToOne
     @JoinColumn(name = "recipeId",nullable = false)
     private Recipe recipe;
 
-    @Column(name = "description",nullable = false)
+    @Column(name = "description", nullable = false, columnDefinition = "text")
     private String description;
 
-    @Column(name = "level",nullable = false)
-    private Long level;
     private String image;
+    @Column(name = "level", nullable = false)
+    private Long level;
 }

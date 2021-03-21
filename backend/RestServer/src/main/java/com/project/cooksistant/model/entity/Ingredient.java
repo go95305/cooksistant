@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @ToString
-@Table
+@Table(name = "ingredient")
 @Data
 public class Ingredient {
     @Id
@@ -19,7 +19,7 @@ public class Ingredient {
     @Column(name = "id")
     private Long ingredientId;
 
-    @Column(name = "name")
+    @Column(name = "name",nullable = false)
     private String ingredientName;
 
     @OneToMany(mappedBy = "ingredient")

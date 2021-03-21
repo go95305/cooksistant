@@ -17,11 +17,11 @@ public class Scrap {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "uid", nullable = false)
+    @JoinColumn(name = "userId",nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "recipeId", nullable = false)
+    @JoinColumn(name = "recipeId",nullable = false)
     private Recipe recipe;
 
 

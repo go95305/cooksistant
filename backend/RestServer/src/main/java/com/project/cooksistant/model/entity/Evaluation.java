@@ -19,11 +19,11 @@ public class Evaluation {
     private Long evalId;
 
     @ManyToOne
-    @JoinColumn(name = "uid", nullable = false)
+    @JoinColumn(name = "userId",nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "recipeId", nullable = false)
+    @JoinColumn(name = "recipeId",nullable = false)
     private Recipe recipe;
 
     @Column(name = "sweetness")
@@ -41,13 +41,13 @@ public class Evaluation {
     @Column(name = "sourness")
     private Long sourness;
 
-    @Column(name = "favor")
+    @Column(name = "favor",columnDefinition = "TINYINT(1)")
     private boolean favor;
 
-    @Column(name = "is_complete")
+    @Column(name = "is_complete",columnDefinition = "TINYINT(1)")
     private boolean isComplete;
 
-    @Column(name = "is_sampled")
+    @Column(name = "is_sampled",columnDefinition = "TINYINT(1)")
     private boolean isSampled;
 
 

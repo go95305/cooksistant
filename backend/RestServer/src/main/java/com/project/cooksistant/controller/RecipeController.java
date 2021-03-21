@@ -1,28 +1,15 @@
 package com.project.cooksistant.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.cooksistant.model.dto.RecipeDTO;
+import com.project.cooksistant.model.dto.EvaluationDTO;
+import com.project.cooksistant.model.dto.EvaluationDTOpost;
+import com.project.cooksistant.model.dto.RecipeDTOpost;
 import com.project.cooksistant.model.dto.UserDTO;
-import com.project.cooksistant.model.entity.Recipe;
-import com.project.cooksistant.model.entity.User;
+import com.project.cooksistant.model.entity.Evaluation;
 import com.project.cooksistant.service.RecipeService;
 import io.swagger.annotations.ApiOperation;
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.http.*;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,22 +31,21 @@ public class RecipeController {
         return resEntity;
     }
 
-    @ApiOperation(value = "레시피 평가하기")
+    @ApiOperation(value = "레시피 평가하기 (Ok)")
     @PostMapping("/recipe/evaluation")
-    public ResponseEntity<Map<String, Object>> evaluation() {
-        ResponseEntity<Map<String, Object>> resEntity = null;
-        Map<String, Object> map = new HashMap<String, Object>();
-
-        return resEntity;
+    public String evaluation(@RequestBody EvaluationDTOpost evaluationDTOpost) throws Exception {
+        boolean isEvaluation = recipeService.evaluateRecipe(evaluationDTOpost);
+        if (isEvaluation)
+            return "success";
+        else
+            return "fail";
     }
 
-    @ApiOperation(value = "특정 레시피 평가내용 보기")
-    @GetMapping("/recipe/evaluation")
-    public List<UserDTO> specificEvaluation() {
-
-        List<UserDTO> recipename = recipeService.findRecipeName();
-
-        return recipename;
+    @ApiOperation(value = "특정 레시피 평가내용 보기(Ok)")
+    @GetMapping("/recipe/evaluation/{evalId}")
+    public EvaluationDTO specificEvaluation(@PathVariable Long evalId) {
+        EvaluationDTO evaluationDTO = recipeService.findEvaluation(evalId);
+        return evaluationDTO;
 
 //        ResponseEntity<Map<String, Object>> resEntity = null;
 //        Map<String, Object> map = new HashMap<String, Object>();
@@ -77,8 +63,8 @@ public class RecipeController {
 
     @ApiOperation(value = "레시피 등록")
     @PostMapping("/recipe")
-    public String insertRecipe(@RequestBody RecipeDTO recipeDTO) {
-        String isInsert = recipeService.insertRecipe(recipeDTO);
+    public String insertRecipe(@RequestBody RecipeDTOpost recipeDTOpost) {
+        String isInsert = recipeService.insertRecipe(recipeDTOpost);
         if (isInsert.equals("success")) {
             return "success";
         } else {
@@ -87,11 +73,9 @@ public class RecipeController {
     }
 
     @ApiOperation(value = "내가 리뷰한 혹은 리뷰하지 않은 레시피 리스트")
-    @PostMapping("/recipe/review")
-    public ResponseEntity<Map<String, Object>> viewRecipe() {
-        ResponseEntity<Map<String, Object>> resEntity = null;
-        Map<String, Object> map = new HashMap<String, Object>();
-
-        return resEntity;
+    @PostMapping("/recipe/review/{authKey}")
+    public List<EvaluationDTO> viewRecipe(@PathVariable String authKey) {
+        List<EvaluationDTO> evaluationDTOList = recipeService.findAllEvaluation(authKey);
+        return evaluationDTOList;
     }
 }

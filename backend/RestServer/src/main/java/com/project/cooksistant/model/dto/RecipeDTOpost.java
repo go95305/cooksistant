@@ -10,24 +10,14 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class RecipeDTO {
-    private Long recipeId;
-
+public class RecipeDTOpost {
     private String cookingTime;
-
     private String cuisine;
-
     private String description;
-
-    private Long userId;
-
+    private String nickname;
     private String image;
-
     private String level;
-
     private String serving;
-
-    private List<StepDTO> stepDTOList = new ArrayList<>();//레시피의 진행 과정
-
-    private List<IngredientDTO> ingredientDTOList = new ArrayList<>(); //재료 리스트
+    private List<StepDTOpost> stepDTOpostList = new ArrayList<>();//레시피의 진행 과정
+    private List<IngredientDTOpost> ingredientDTOpostList = new ArrayList<>(); //재료 리스트
 }
