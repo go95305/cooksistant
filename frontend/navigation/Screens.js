@@ -246,6 +246,27 @@ function ProfileStack(props) {
           headerTransparent: true,
         }}
       />
+
+      <Stack.Screen
+        name="TrendyList"
+        component={TrendyList}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header title="TrendyList" search options navigation={navigation} scene={scene} />
+          ),
+          cardStyle: { backgroundColor: '#FFFFFF' },
+        }}
+      />
+      <Stack.Screen
+        name="TTS"
+        component={TTS}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header title="TTS" back black transparent navigation={navigation} scene={scene} />
+          ),
+          headerTransparent: true,
+        }}
+      />
     </Stack.Navigator>
   );
 }
