@@ -11,7 +11,7 @@ import lombok.ToString;
 public class ScrapMypageDTO {
     private Long recipeId;
     private String image;
-    private User user;
+    private String nickname;
     private String cuisine;
     private String description;
 }

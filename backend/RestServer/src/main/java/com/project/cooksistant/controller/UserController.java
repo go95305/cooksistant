@@ -32,10 +32,11 @@ public class UserController {
             "                                           - {\n" +
             "                                           - recipeId: 레시피 번호\n" +
             "                                           - image: 레시피 사진 url\n" +
-            "                                           - username: 레시피 소유자의 닉네임\n" +
+            "                                           - nickname: 레시피 소유자의 닉네임\n" +
             "                                           - cuisine: 스크랩한 레시피의 이름\n" +
             "                                           - description: 스크랩한 레시피의 설명\n" +
             "                                           - }\n" +
+            "                                           - recipeList: 내가 작성한 레시피 리스트\n" +
             "                                           - recipeId: 내 레시피 번호\n" +
             "                                           - image: 내 레시피 사진 url\n" +
             "                                           - username: 내 이름\n" +
@@ -48,7 +49,14 @@ public class UserController {
         return personalDTO;
     }
 
-    @ApiOperation(value = "레시피정보를 스크랩하기")
+    @ApiOperation(value = "레시피정보를 스크랩하기", notes = "Request\n" +
+            "                                           - recipeId: 스크랩할 레시피 인덱스\n" +
+            "                                           Response\n" +
+            "                                           - cuisine: 레시피 명\n" +
+            "                                           - description: 레시피 설명\n" +
+            "                                           - image: 레시피 이미지 URL\n" +
+            "                                           - recipeId: 레시피 인덱스\n" +
+            "                                           - nickname: 레시피 주인 닉네임")
     @PostMapping("user/scrap/{recipeId}")
     public ScrapMypageDTO scrapRecipe(@PathVariable Long recipeId) {
         ScrapMypageDTO scrapMypageDTO = userService.scrapRecipe(recipeId);
