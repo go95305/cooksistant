@@ -15,7 +15,7 @@ public class Evaluation {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long evalId;
 
     @ManyToOne

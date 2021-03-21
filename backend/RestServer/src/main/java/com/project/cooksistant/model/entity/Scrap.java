@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Table
 public class Scrap {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne

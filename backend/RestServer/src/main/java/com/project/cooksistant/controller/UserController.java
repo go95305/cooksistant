@@ -1,11 +1,13 @@
 package com.project.cooksistant.controller;
 
 import com.project.cooksistant.model.dto.PersonalDTO;
+import com.project.cooksistant.model.dto.ScrapMypageDTO;
 import com.project.cooksistant.model.dto.UserDTO;
 import com.project.cooksistant.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -44,5 +46,12 @@ public class UserController {
     public PersonalDTO personalData(@PathVariable String authKey) {
         PersonalDTO personalDTO = userService.getUserData(authKey);
         return personalDTO;
+    }
+
+    @ApiOperation(value = "레시피정보를 스크랩하기")
+    @PostMapping("user/scrap/{recipeId}")
+    public ScrapMypageDTO scrapRecipe(@PathVariable Long recipeId) {
+        ScrapMypageDTO scrapMypageDTO = userService.scrapRecipe(recipeId);
+        return scrapMypageDTO;
     }
 }

@@ -19,6 +19,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 
 @Service
 public class UserService {
@@ -62,11 +63,28 @@ public class UserService {
         scrapMypageDTOList = modelMapper.map(scrapList, new TypeToken<List<ScrapMypageDTO>>() {
         }.getType());
         personalDTO.setScrapList(scrapMypageDTOList);
-//        personalDTO.setRecipeList(recipeList);
-//        System.out.println(recipeList);
-//        List<Scrap> scrapList = scrapRepository.findAllByUser(user.get());
-//        personalDTO.setScrapList(scrapList);
         return personalDTO;
     }
 
+    public ScrapMypageDTO scrapRecipe(Long recipeId) {
+        Optional<Recipe> recipe = Optional.ofNullable(recipeRepository.findById(recipeId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 레시피는 존재하지 않는 레시피 입니다.")));
+        //이미 스크랩한 데이터인지 확인
+        Optional<Scrap> isScrap = Optional.ofNullable(scrapRepository.findByRecipeAndUser(recipe, recipe.get().getUser()));
+        if (isScrap.isPresent()) {//이미 스크랩했으면 에러 메시지 리턴
+            throw new RestException(HttpStatus.BAD_REQUEST, "이미 스크랩한 데이터 입니다.");
+        } else {
+            Scrap scrap = new Scrap();
+            scrap.setRecipe(recipe.get());
+            scrap.setUser(recipe.get().getUser());
+            scrapRepository.save(scrap);
+
+            ScrapMypageDTO scrapMypageDTO = new ScrapMypageDTO();
+            scrapMypageDTO.setCuisine(recipe.get().getCuisine());
+            scrapMypageDTO.setDescription(recipe.get().getDescription());
+            scrapMypageDTO.setImage(recipe.get().getImage());
+            scrapMypageDTO.setRecipeId(recipe.get().getRecipeId());
+            scrapMypageDTO.setUser(recipe.get().getUser());
+            return scrapMypageDTO;
+        }
+    }
 }
