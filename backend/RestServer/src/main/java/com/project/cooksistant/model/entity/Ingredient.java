@@ -1,9 +1,6 @@
 package com.project.cooksistant.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,6 +12,7 @@ import java.util.List;
 @Builder
 @ToString
 @Table
+@Data
 public class Ingredient {
     @Id
     @GeneratedValue
@@ -22,7 +20,7 @@ public class Ingredient {
     private Long ingredientId;
 
     @Column(name = "name")
-    private String ingredeintName;
+    private String ingredientName;
 
     @OneToMany(mappedBy = "ingredient")
     private final List<RecipeIngredient> hasIngredients = new ArrayList<>();

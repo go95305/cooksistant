@@ -10,10 +10,7 @@ import com.project.cooksistant.service.RecipeService;
 import io.swagger.annotations.ApiOperation;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -80,17 +77,13 @@ public class RecipeController {
 
     @ApiOperation(value = "레시피 등록")
     @PostMapping("/recipe")
-    public ResponseEntity<Map<String, Object>> insertRecipe(@RequestBody RecipeDTO recipeDTO) {
-        ResponseEntity<Map<String, Object>> resEntity = null;
-        Map<String, Object> map = new HashMap<String, Object>();
-        try {
-            RecipeDTO newrecipe = recipeService.insertRecipe(recipeDTO);
-        }catch (Exception e){
-
+    public String insertRecipe(@RequestBody RecipeDTO recipeDTO) {
+        String isInsert = recipeService.insertRecipe(recipeDTO);
+        if (isInsert.equals("success")) {
+            return "success";
+        } else {
+            return "fail";
         }
-
-
-        return resEntity;
     }
 
     @ApiOperation(value = "내가 리뷰한 혹은 리뷰하지 않은 레시피 리스트")

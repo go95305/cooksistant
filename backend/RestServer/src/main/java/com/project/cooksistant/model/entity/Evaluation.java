@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Builder
 @ToString
 @Table
+@Data
 public class Evaluation {
 
     @Id

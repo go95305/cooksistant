@@ -1,5 +1,10 @@
 package com.project.cooksistant.model.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class EvaluationDTO {
     private Long recipeId;
     private Long uid;

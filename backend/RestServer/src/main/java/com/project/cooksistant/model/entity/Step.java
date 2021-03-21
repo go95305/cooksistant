@@ -1,9 +1,6 @@
 package com.project.cooksistant.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,6 +9,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @ToString
+@Data
 public class Step {
     @Id
     @GeneratedValue
@@ -27,5 +25,5 @@ public class Step {
 
     @Column(name = "level",nullable = false)
     private Long level;
-    private String iamge;
+    private String image;
 }
