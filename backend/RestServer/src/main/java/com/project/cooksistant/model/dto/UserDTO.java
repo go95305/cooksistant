@@ -15,4 +15,5 @@ public class UserDTO {
     private Long sourness;
     private Long spiciness;
     private Long sweetness;
+    private Long bitterness;
 }

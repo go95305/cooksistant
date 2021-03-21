@@ -23,7 +23,6 @@ public class Recipe {
     private Long recipeId;
 
 
-
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
     private User user;
