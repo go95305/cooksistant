@@ -6,6 +6,7 @@ import {
   StatusBar,
   TouchableWithoutFeedback,
   Keyboard,
+  Image,
 } from 'react-native';
 import { Block, Checkbox, Text, Button as GaButton, theme } from 'galio-framework';
 
@@ -38,80 +39,30 @@ class TTS extends React.Component {
                         textAlign: 'center',
                       }}
                       color="#333"
-                      size={18}
+                      size={25}
+                      bold
                     >
-                      영수증 사진을 등록해주세요
+                      가지 볶음
                     </Text>
                   </Block>
 
                   <Block flex={1} middle space="between">
                     <Block center flex={0.9}>
                       <Block flex space="between">
-                        <Block>
-                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
-                            <Input
-                              placeholder="First Name"
-                              style={styles.inputs}
-                              iconContent={
-                                <Icon
-                                  size={16}
-                                  color="#ADB5BD"
-                                  name="profile-circle"
-                                  family="NowExtra"
-                                  style={styles.inputIcons}
-                                />
-                              }
-                            />
-                          </Block>
-                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
-                            <Input
-                              placeholder="Last Name"
-                              style={styles.inputs}
-                              iconContent={
-                                <Icon
-                                  size={16}
-                                  color="#ADB5BD"
-                                  name="caps-small2x"
-                                  family="NowExtra"
-                                  style={styles.inputIcons}
-                                />
-                              }
-                            />
-                          </Block>
-                          <Block width={width * 0.8}>
-                            <Input
-                              placeholder="Email"
-                              style={styles.inputs}
-                              iconContent={
-                                <Icon
-                                  size={16}
-                                  color="#ADB5BD"
-                                  name="email-852x"
-                                  family="NowExtra"
-                                  style={styles.inputIcons}
-                                />
-                              }
-                            />
-                          </Block>
-                          <Block
-                            style={{ marginVertical: theme.SIZES.BASE, marginLeft: 15 }}
-                            row
-                            width={width * 0.75}
+                        <Block middle>
+                          <Image style={styles.photo} source={Images.eggplant} />
+                        </Block>
+                        <Block flex={0.2} middle>
+                          <Text
+                            style={{
+                              fontFamily: 'montserrat-regular',
+                              textAlign: 'center',
+                            }}
+                            color="#333"
+                            size={18}
                           >
-                            <Checkbox
-                              checkboxStyle={{
-                                borderWidth: 1,
-                                borderRadius: 2,
-                                borderColor: '#E3E3E3',
-                              }}
-                              color={nowTheme.COLORS.PRIMARY}
-                              labelStyle={{
-                                color: nowTheme.COLORS.HEADER,
-                                fontFamily: 'montserrat-regular',
-                              }}
-                              label="I agree to the terms and conditions."
-                            />
-                          </Block>
+                            같이 요리해볼까요?
+                          </Text>
                         </Block>
                         <Block center>
                           <Button color="primary" round style={styles.createButton}>
@@ -120,7 +71,7 @@ class TTS extends React.Component {
                               size={14}
                               color={nowTheme.COLORS.WHITE}
                             >
-                              다음 단계
+                              START
                             </Text>
                           </Button>
                         </Block>
@@ -189,6 +140,10 @@ const styles = StyleSheet.create({
     borderRadius: theme.SIZES.BASE * 1.75,
     justifyContent: 'center',
     marginHorizontal: 10,
+  },
+  photo: {
+    height: 230,
+    width: 300,
   },
 });
 
