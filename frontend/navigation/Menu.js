@@ -44,7 +44,7 @@ function CustomDrawerContent({
           <Icon
             name="align-left-22x"
             family="NowExtra"
-            size={15}
+            size={20}
             color={"white"}
             onPress={() => navigation.goBack()}
           />
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   header: {
     paddingHorizontal: 28,
     paddingBottom: theme.SIZES.BASE * 2.5,
-    paddingTop: theme.SIZES.BASE * 4,
+    paddingTop: Platform.OS === 'android' ? theme.SIZES.BASE : theme.SIZES.BASE * 4,
     justifyContent: "center"
   },
   headerIcon: {

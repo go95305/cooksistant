@@ -12,47 +12,40 @@ const { height, width } = Dimensions.get('window');
 const iPhoneX = () =>
   Platform.OS === 'ios' && (height === 812 || width === 812 || height === 896 || width === 896);
 
-const Button1 = ({ isWhite, style, navigation }) => (
-  <TouchableOpacity
-    style={[styles.button, style]}
-    onPress={() => navigation.navigate('RecipeRegister')}
+const Button1 = ({ style, navigation }) => (
+  <Button
+    style={{ width: 72, height: 35, marginHorizontal: 5, elevation: 0 }}
+    textStyle={{ fontFamily: 'montserrat-bold', color: nowTheme.COLORS.PRIMARY, fontSize: 12 }}
+    color="white"
+    round
+    onPress={() => navigation.navigate('TasteRegister')}
   >
-    <Icon
-      family="NowExtra"
-      size={16}
-      name="bulb"
-      color={nowTheme.COLORS[isWhite ? 'WHITE' : 'ICON']}
-    />
-    <Block
-      middle
-      style={[styles.notify, { backgroundColor: nowTheme.COLORS[isWhite ? 'WHITE' : 'PRIMARY'] }]}
-    />
-  </TouchableOpacity>
+    취향 등록
+  </Button>
 );
 
 const Button2 = ({ isWhite, style, navigation }) => (
-  <TouchableOpacity
-    style={[styles.button, style]}
-    onPress={() => navigation.navigate('TasteRegister')}
+  <Button
+    style={{ width: 72, height: 35, marginHorizontal: 5, elevation: 0 }}
+    textStyle={{ fontFamily: 'montserrat-bold', color: nowTheme.COLORS.PRIMARY, fontSize: 12 }}
+    color="white"
+    round
+    onPress={() => navigation.navigate('RecipeRegister')}
   >
-    <Icon
-      family="NowExtra"
-      size={16}
-      name="basket2x"
-      color={nowTheme.COLORS[isWhite ? 'WHITE' : 'ICON']}
-    />
-  </TouchableOpacity>
+    레시피 등록
+  </Button>
 );
 
 const Button3 = ({ isWhite, style, navigation }) => (
-  <TouchableOpacity style={[styles.button, style]} onPress={() => navigation.navigate('EvaluList')}>
-    <Icon
-      family="NowExtra"
-      size={16}
-      name="basket2x"
-      color={nowTheme.COLORS[isWhite ? 'WHITE' : 'ICON']}
-    />
-  </TouchableOpacity>
+  <Button
+    style={{ width: 72, height: 35, marginHorizontal: 5, elevation: 0 }}
+    textStyle={{ fontFamily: 'montserrat-bold', color: nowTheme.COLORS.PRIMARY, fontSize: 12 }}
+    color="white"
+    round
+    onPress={() => navigation.navigate('EvalueList')}
+  >
+    레시피 평가
+  </Button>
 );
 
 class Header extends React.Component {
@@ -197,17 +190,17 @@ class Header extends React.Component {
           style={navbarStyles}
           transparent={transparent}
           right={this.renderRight()}
-          rightStyle={{ alignItems: 'center' }}
+          rightStyle={{ alignItems: 'center', paddingRight: 90 }}
           left={
             <Icon
               name={back ? 'minimal-left2x' : 'align-left-22x'}
               family="NowExtra"
-              size={16}
+              size={22}
               onPress={this.handleLeftPress}
               color={iconColor || (white ? nowTheme.COLORS.WHITE : nowTheme.COLORS.ICON)}
             />
           }
-          leftStyle={{ paddingVertical: 12, flex: 0.2 }}
+          leftStyle={{ paddingVertical: 12, flex: 0.3 }}
           titleStyle={[
             styles.title,
             { color: nowTheme.COLORS[white ? 'WHITE' : 'HEADER'] },
@@ -228,15 +221,14 @@ const styles = StyleSheet.create({
   },
   title: {
     width: '100%',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
-    fontFamily: 'montserrat-regular',
+    fontFamily: 'montserrat-bold',
   },
   navbar: {
     paddingVertical: 0,
     paddingBottom: theme.SIZES.BASE * 1.5,
-    paddingTop: iPhoneX ? theme.SIZES.BASE * 4 : theme.SIZES.BASE,
-    zIndex: 5,
+    paddingTop: Platform.OS === 'android' ? theme.SIZES.BASE * 1.5 : theme.SIZES.BASE * 4,
   },
   shadow: {
     backgroundColor: theme.COLORS.WHITE,

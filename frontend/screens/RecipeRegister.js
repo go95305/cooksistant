@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   registerContainer: {
     marginTop: 55,
     width: width * 0.9,
-    height: height < 812 ? height * 0.8 : height * 0.8,
+    height: height < 812 ? height * 0.7 : height * 0.8,
     backgroundColor: nowTheme.COLORS.WHITE,
     borderRadius: 4,
     shadowColor: nowTheme.COLORS.BLACK,

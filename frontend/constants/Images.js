@@ -12,6 +12,8 @@ const InvisionLogo = require('../assets/imgs/invision-white-slim.png');
 const eggplant = require('../assets/imgs/가지볶음.jpg');
 const bookmark = require('../assets/imgs/bookmark.png');
 const bookmarkFull = require('../assets/imgs/bookmarkFull.png');
+const isEvalue = require('../assets/imgs/isEvalue.png');
+const etc = require('../assets/imgs/etc.png');
 
 const Viewed = [
   require('../assets/imgs/food1.png'),
@@ -43,4 +45,6 @@ export default {
   eggplant,
   bookmark,
   bookmarkFull,
+  isEvalue,
+  etc
 };
