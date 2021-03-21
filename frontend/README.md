@@ -1,4 +1,5 @@
 # React Native
+
 ## How to Run
 
 ```sh
@@ -8,5 +9,6 @@
 > yarn add react-native-hr-component
 > yarn add react-native-switch-selector
 > yarn add react-native-segment-control-tab
+> yarn add react-native-progress-steps
 > yarn start
 ```
