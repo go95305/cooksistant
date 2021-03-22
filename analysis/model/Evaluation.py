@@ -1,7 +1,7 @@
 from utils.database import db
 from sqlalchemy_serializer import SerializerMixin
 
-class User(db.Model, SerializerMixin):
+class Evaluation(db.Model, SerializerMixin):
     __tablename__ = 'evaluation'
 
     id = db.Column(db.BigInteger, primary_key=True, nullable=False, autoincrement=True)
