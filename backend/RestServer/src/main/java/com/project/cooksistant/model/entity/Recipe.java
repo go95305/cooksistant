@@ -1,11 +1,10 @@
 package com.project.cooksistant.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,32 +12,36 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Data
 @ToString
+@Table(name = "recipe")
 public class Recipe {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long recipeId;
 
+
     @ManyToOne
-    @JoinColumn(name = "uid", nullable = false)
+    @JoinColumn(name = "userId", nullable = false)
     private User user;
 
     @Column(name = "cuisine", nullable = false)
     private String cuisine;
 
+    @Column(columnDefinition = "text")
     private String description;
 
     @Column(name = "cooking_time")
     private String cookingTime;
 
     @OneToMany(mappedBy = "recipe")
-    private List<Recipe_has_ingredient> hasIngredients = new ArrayList<>();
+    private final List<RecipeIngredient> hasIngredients = new ArrayList<>();
 
 
+    private String image;
     private String level;
     private String serving;
-    private String image;
 
 }

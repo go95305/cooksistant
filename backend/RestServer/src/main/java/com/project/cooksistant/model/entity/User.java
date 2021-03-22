@@ -1,45 +1,42 @@
 package com.project.cooksistant.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @ToString
+@Table(name = "user")
 public class User {
     @Id
-    @GeneratedValue
-    @Column(name = "id",nullable = false)
-    private Long uid;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long userId;
 
-    @Column(name = "auth_key")
+    @Column(name = "auth_key",nullable = false)
     private String authKey;
 
-    @Column(name = "nickname")
+    @Column(name = "nickname",nullable = false)
     private String nickname;
 
-    @Column(name = "sweetness")
+    @Column(name = "sweetness",nullable = false)
     private Long sweetness;
 
-    @Column(name = "saltiness")
+    @Column(name = "saltiness",nullable = false)
     private Long saltiness;
 
-    @Column(name = "spiciness")
+    @Column(name = "spiciness",nullable = false)
     private Long spiciness;
 
-    @Column(name = "bitterness")
+    @Column(name = "bitterness",nullable = false)
     private Long bitterness;
 
-    @Column(name = "sourness")
+    @Column(name = "sourness",nullable = false)
     private Long sourness;
 
 }

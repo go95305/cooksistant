@@ -1,9 +1,6 @@
 package com.project.cooksistant.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,9 +9,11 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @ToString
-public class Recipe_has_ingredient {
+@Data
+@Table(name = "recipe_has_ingredient")
+public class RecipeIngredient {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -28,7 +27,7 @@ public class Recipe_has_ingredient {
     private Ingredient ingredient;
 
     private String amount;
-    @Column(name = "isType")
+    @Column(name = "type",nullable = false)
     private String type;
 
 }

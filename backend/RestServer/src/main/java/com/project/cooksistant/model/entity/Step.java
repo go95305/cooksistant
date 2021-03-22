@@ -1,9 +1,6 @@
 package com.project.cooksistant.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,20 +9,22 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @ToString
+@Data
+@Table(name = "step")
 public class Step {
     @Id
-    @GeneratedValue
-    @Column(name = "id",nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long stepId;
 
     @ManyToOne
     @JoinColumn(name = "recipeId",nullable = false)
     private Recipe recipe;
 
-    @Column(name = "description",nullable = false)
+    @Column(name = "description", nullable = false, columnDefinition = "text")
     private String description;
 
-    @Column(name = "level",nullable = false)
+    private String image;
+    @Column(name = "level", nullable = false)
     private Long level;
-    private String iamge;
 }
