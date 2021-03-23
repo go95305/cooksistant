@@ -26,20 +26,6 @@ public class Evaluation {
     @JoinColumn(name = "recipeId",nullable = false)
     private Recipe recipe;
 
-    @Column(name = "sweetness")
-    private Long sweetness;
-
-    @Column(name = "saltiness")
-    private Long saltiness;
-
-    @Column(name = "spiciness")
-    private Long spiciness;
-
-    @Column(name = "bitterness")
-    private Long bitterness;
-
-    @Column(name = "sourness")
-    private Long sourness;
 
     @Column(name = "favor",columnDefinition = "TINYINT(1)")
     private boolean favor;

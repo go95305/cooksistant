@@ -22,16 +22,21 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @ApiOperation(value = "취향 기반 레시피 리스트 제공")
-    @GetMapping("recipe/recommendation")
-    public ResponseEntity<Map<String, Object>> recommend() {
-        ResponseEntity<Map<String, Object>> resEntity = null;
-        Map<String, Object> map = new HashMap<String, Object>();
-
-        return resEntity;
-    }
-
-    @ApiOperation(value = "레시피 평가하기 (Ok)")
+//    @ApiOperation(value = "취향 기반 레시피 리스트 제공(X)")
+//    @GetMapping("recipe/recommendation")
+//    public ResponseEntity<Map<String, Object>> recommend() {
+//        ResponseEntity<Map<String, Object>> resEntity = null;
+//        Map<String, Object> map = new HashMap<String, Object>();
+//
+//        return resEntity;
+//    }
+//
+    @ApiOperation(value = "레시피 평가하기 (Ok)",notes = "Response\n" +
+            "                                          - complete: 현재 레시피 사용을 완료한 상태인가\n" +
+            "                                          - keywordList: 평가 키워드 리스트\n" +
+            "                                          - recipeId: 평가 레시피 번호\n" +
+            "                                          - sampled: 샘플링 되었는지:\n" +
+            "                                          - userId: 평가할 유저의 Id")
     @PostMapping("/recipe/evaluation")
     public String evaluation(@RequestBody EvaluationDTOpost evaluationDTOpost) throws Exception {
         boolean isEvaluation = recipeService.evaluateRecipe(evaluationDTOpost);
@@ -52,30 +57,30 @@ public class RecipeController {
 
     }
 
-    @ApiOperation(value = "트렌디한 레시피 보기", notes = "네이버 데이터랩에서 가져오기")
-    @GetMapping("/recipe/trend")
-    public ResponseEntity<Map<String, Object>> trendRecipe() {
-        ResponseEntity<Map<String, Object>> resEntity = null;
-        Map<String, Object> map = new HashMap<String, Object>();
-
-        return resEntity;
-    }
-
-    @ApiOperation(value = "레시피 등록")
-    @PostMapping("/recipe")
-    public String insertRecipe(@RequestBody RecipeDTOpost recipeDTOpost) {
-        String isInsert = recipeService.insertRecipe(recipeDTOpost);
-        if (isInsert.equals("success")) {
-            return "success";
-        } else {
-            return "fail";
-        }
-    }
-
-    @ApiOperation(value = "내가 리뷰한 혹은 리뷰하지 않은 레시피 리스트")
-    @PostMapping("/recipe/review/{authKey}")
-    public List<EvaluationDTO> viewRecipe(@PathVariable String authKey) {
-        List<EvaluationDTO> evaluationDTOList = recipeService.findAllEvaluation(authKey);
-        return evaluationDTOList;
-    }
+//    @ApiOperation(value = "트렌디한 레시피 보기", notes = "네이버 데이터랩에서 가져오기")
+//    @GetMapping("/recipe/trend")
+//    public ResponseEntity<Map<String, Object>> trendRecipe() {
+//        ResponseEntity<Map<String, Object>> resEntity = null;
+//        Map<String, Object> map = new HashMap<String, Object>();
+//
+//        return resEntity;
+//    }
+//
+//    @ApiOperation(value = "레시피 등록")
+//    @PostMapping("/recipe")
+//    public String insertRecipe(@RequestBody RecipeDTOpost recipeDTOpost) {
+//        String isInsert = recipeService.insertRecipe(recipeDTOpost);
+//        if (isInsert.equals("success")) {
+//            return "success";
+//        } else {
+//            return "fail";
+//        }
+//    }
+//
+//    @ApiOperation(value = "내가 리뷰한 혹은 리뷰하지 않은 레시피 리스트")
+//    @PostMapping("/recipe/review/{authKey}")
+//    public List<EvaluationDTO> viewRecipe(@PathVariable String authKey) {
+//        List<EvaluationDTO> evaluationDTOList = recipeService.findAllEvaluation(authKey);
+//        return evaluationDTOList;
+//    }
 }

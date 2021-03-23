@@ -24,19 +24,5 @@ public class User {
     @Column(name = "nickname",nullable = false)
     private String nickname;
 
-    @Column(name = "sweetness",nullable = false)
-    private Long sweetness;
-
-    @Column(name = "saltiness",nullable = false)
-    private Long saltiness;
-
-    @Column(name = "spiciness",nullable = false)
-    private Long spiciness;
-
-    @Column(name = "bitterness",nullable = false)
-    private Long bitterness;
-
-    @Column(name = "sourness",nullable = false)
-    private Long sourness;
 
 }
