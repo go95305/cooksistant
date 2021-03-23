@@ -79,7 +79,7 @@ class RecipeInfo extends React.Component {
               textStyle={{ fontSize: 15, color: 'white' }}
               color="Primary"
               round
-              onPress={() => this.props.navigation.navigate('TTS')}
+              onPress={() => this.props.navigation.navigate('TTSOrder')}
             >
               요리시작
             </Button>
@@ -246,7 +246,6 @@ class RecipeInfo extends React.Component {
     );
   };
   render() {
-    const { navigation } = this.props.navigation;
     return (
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}

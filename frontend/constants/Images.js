@@ -10,6 +10,8 @@ const androidLogo = require('../assets/imgs/android.png');
 const ProfilePicture = require('../assets/imgs/profile-img.jpg');
 const InvisionLogo = require('../assets/imgs/invision-white-slim.png');
 const eggplant = require('../assets/imgs/가지볶음.jpg');
+const cutEggplant = require('../assets/imgs/가지썰기.jpg');
+const mic = require('../assets/imgs/mic.png');
 const bookmark = require('../assets/imgs/bookmark.png');
 const bookmarkFull = require('../assets/imgs/bookmarkFull.png');
 const isEvalue = require('../assets/imgs/isEvalue.png');
@@ -46,5 +48,7 @@ export default {
   bookmark,
   bookmarkFull,
   isEvalue,
-  etc
+  etc,
+  cutEggplant,
+  mic,
 };
