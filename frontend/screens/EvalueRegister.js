@@ -27,13 +27,6 @@ const isLike = [
   { label: '싫어요', value: 1 },
 ];
 
-const isTaste = [
-  { label: '1', value: 1 },
-  { label: '2', value: 2 },
-  { label: '3', value: 3 },
-  { label: '4', value: 4 },
-  { label: '5', value: 5 },
-];
 
 class TasteRegister extends React.Component {
   static navigationOptions = {
@@ -153,126 +146,7 @@ class TasteRegister extends React.Component {
                     previousBtnTextStyle={buttonTextStyle}
                   >
                     <Block>
-                      <Block center style={styles.tasteContainer}>
-                        <Text
-                          style={{
-                            fontFamily: 'montserrat-bold',
-                            textAlign: 'center',
-                            marginBottom: Platform.OS === 'android' ? 10 : 15,
-                          }}
-                          color="#333"
-                          size={13}
-                        >
-                          매운 맛
-                        </Text>
-                        <SwitchSelector
-                          options={isTaste}
-                          initial={2}
-                          fontSize={15}
-                          textColor="#f18d46"
-                          selectedColor="white"
-                          buttonColor="#f18d46"
-                          borderColor="#f18d46"
-                          hasPadding
-                          onPress={(value) => console.log(`Call onPress with value: ${value}`)}
-                        />
-                      </Block>
-                      <Block center style={styles.tasteContainer}>
-                        <Text
-                          style={{
-                            fontFamily: 'montserrat-bold',
-                            textAlign: 'center',
-                            marginBottom: Platform.OS === 'android' ? 10 : 15,
-                          }}
-                          color="#333"
-                          size={13}
-                        >
-                          짠 맛
-                        </Text>
-                        <SwitchSelector
-                          options={isTaste}
-                          initial={2}
-                          fontSize={15}
-                          textColor="#f18d46"
-                          selectedColor="white"
-                          buttonColor="#f18d46"
-                          borderColor="#f18d46"
-                          hasPadding
-                          onPress={(value) => console.log(`Call onPress with value: ${value}`)}
-                        />
-                      </Block>
-                      <Block center style={styles.tasteContainer}>
-                        <Text
-                          style={{
-                            fontFamily: 'montserrat-bold',
-                            textAlign: 'center',
-                            marginBottom: Platform.OS === 'android' ? 10 : 15,
-                          }}
-                          color="#333"
-                          size={13}
-                        >
-                          단 맛
-                        </Text>
-                        <SwitchSelector
-                          options={isTaste}
-                          initial={2}
-                          fontSize={15}
-                          textColor="#f18d46"
-                          selectedColor="white"
-                          buttonColor="#f18d46"
-                          borderColor="#f18d46"
-                          hasPadding
-                          onPress={(value) => console.log(`Call onPress with value: ${value}`)}
-                        />
-                      </Block>
-                      <Block center style={styles.tasteContainer}>
-                        <Text
-                          style={{
-                            fontFamily: 'montserrat-bold',
-                            textAlign: 'center',
-                            marginBottom: Platform.OS === 'android' ? 10 : 15,
-                          }}
-                          color="#333"
-                          size={13}
-                        >
-                          신 맛
-                        </Text>
-                        <SwitchSelector
-                          options={isTaste}
-                          initial={2}
-                          fontSize={15}
-                          textColor="#f18d46"
-                          selectedColor="white"
-                          buttonColor="#f18d46"
-                          borderColor="#f18d46"
-                          hasPadding
-                          onPress={(value) => console.log(`Call onPress with value: ${value}`)}
-                        />
-                      </Block>
-                      <Block center style={styles.tasteContainer}>
-                        <Text
-                          style={{
-                            fontFamily: 'montserrat-bold',
-                            textAlign: 'center',
-                            marginBottom: Platform.OS === 'android' ? 10 : 15,
-                          }}
-                          color="#333"
-                          size={13}
-                        >
-                          쓴 맛
-                        </Text>
-                        <SwitchSelector
-                          options={isTaste}
-                          initial={2}
-                          fontSize={15}
-                          textColor="#f18d46"
-                          selectedColor="white"
-                          buttonColor="#f18d46"
-                          borderColor="#f18d46"
-                          hasPadding
-                          onPress={(value) => console.log(`Call onPress with value: ${value}`)}
-                        />
-                      </Block>
+                      
                     </Block>
                   </ProgressStep>
                 </ProgressSteps>
