@@ -11,6 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -147,7 +148,7 @@ public class RecipeService {
         Optional<Evaluation> evaluation = Optional.ofNullable(evaluationRepository.findById(evalId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "평가 데이터가 존재 하지 않습니다.")));
         List<EvaluationKeyword> evaluationKeywordList = evaluationKeywordRepository.findAllByEvaluation(evaluation);
         EvaluationDTO evaluationDTO = new EvaluationDTO();
-        evaluationDTO.setComplete(evaluation.get().isComplete());
+        evaluationDTO.setComplete(true);
         evaluationDTO.setSampled(evaluation.get().isSampled());
         evaluationDTO.setRecipeId(evaluation.get().getRecipe().getRecipeId());
         evaluationDTO.setUserId(evaluation.get().getUser().getUserId());
@@ -164,7 +165,7 @@ public class RecipeService {
         Evaluation evaluation = new Evaluation();
         evaluation.setRecipe(recipe.get());
         evaluation.setUser(user.get());
-        evaluation.setSampled(evaluationDTOpost.isSampled());
+        evaluation.setSampled(true);
         evaluation.setComplete(evaluationDTOpost.isComplete());
         evaluationRepository.save(evaluation);
 
@@ -180,13 +181,22 @@ public class RecipeService {
         return true;
 
     }
-//
-//    public List<EvaluationDTO> findAllEvaluation(String authKey) {
-//        Optional<User> user = Optional.ofNullable(userRepository.findByAuthKey(authKey).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 유저 존재하지않습니다.")));
-//        List<Evaluation> evaluationList = evaluationRepository.findAllByUser(user.get());
-//        List<EvaluationDTO> evaluationDTOList = modelMapper.map(evaluationList, new TypeToken<List<EvaluationDTO>>() {
-//        }.getType());
-//        return evaluationDTOList;
-//    }
+
+    public List<AllEvaluationDTO> findAllEvaluation(String authKey) {
+        Optional<User> user = Optional.ofNullable(userRepository.findByAuthKey(authKey).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 유저 존재하지않습니다.")));
+        List<Evaluation> evaluationList = evaluationRepository.findAllByUser(user.get()); // 유저가 사용한 모든 레시피 평가했든 안했든
+
+        List<AllEvaluationDTO> allEvaluationDTOList = new ArrayList<>();
+        for (int i = 0; i < evaluationList.size(); i++) {
+            AllEvaluationDTO allEvaluationDTO = new AllEvaluationDTO();
+            allEvaluationDTO.setCuisine(evaluationList.get(i).getRecipe().getCuisine());
+            allEvaluationDTO.setFavor(evaluationList.get(i).isFavor());
+            allEvaluationDTO.setIsComplete(evaluationList.get(i).isComplete());
+            allEvaluationDTO.setIsSampled(evaluationList.get(i).isSampled());
+            allEvaluationDTO.setRecipe_id(evaluationList.get(i).getRecipe().getRecipeId());
+            allEvaluationDTOList.add(allEvaluationDTO);
+        }
+        return allEvaluationDTOList;
+    }
 
 }

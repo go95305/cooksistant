@@ -1,5 +1,6 @@
 package com.project.cooksistant.model.dto;
 
+import com.project.cooksistant.model.entity.Keyword;
 import com.project.cooksistant.model.entity.Recipe;
 import com.project.cooksistant.model.entity.Scrap;
 import lombok.Getter;
@@ -13,11 +14,7 @@ import java.util.List;
 public class PersonalDTO {
     private Long userId;
     private String nickname;
-    private Long saltiness;
-    private Long sourness;
-    private Long spiciness;
-    private Long sweetness;
-    private Long bitterness;
+    List<String> mytasteList = new ArrayList<>();
     List<ScrapMypageDTO> scrapList = new ArrayList<>();
     List<RecipeMypageDTO> recipeList = new ArrayList<>();
 

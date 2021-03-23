@@ -9,4 +9,5 @@ import java.util.Optional;
 
 public interface EvaluationKeywordRepository extends JpaRepository<EvaluationKeyword, Long> {
     List<EvaluationKeyword> findAllByEvaluation(Optional<Evaluation> evaluation);
+
 }
