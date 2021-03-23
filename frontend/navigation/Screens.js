@@ -19,6 +19,7 @@ import Ingredient from '../screens/Ingredient';
 import TrendyList from '../screens/TrendyList';
 import Receipt from '../screens/Receipt';
 import TTS from '../screens/TTS';
+import TTSOrder from '../screens/TTSOrder';
 import SettingsScreen from '../screens/Settings';
 // drawer
 import CustomDrawerContent from './Menu';
@@ -90,11 +91,11 @@ function HomeStack(props) {
         }}
       />
       <Stack.Screen
-        name="TTS"
-        component={TTS}
+        name="TTSOrder"
+        component={TTSOrder}
         options={{
           header: ({ navigation, scene }) => (
-            <Header title="TTS" back black transparent navigation={navigation} scene={scene} />
+            <Header title="TTSOrder" back black transparent navigation={navigation} scene={scene} />
           ),
           headerTransparent: true,
         }}
@@ -134,11 +135,11 @@ function RecipeListStack(props) {
         }}
       />
       <Stack.Screen
-        name="TTS"
-        component={TTS}
+        name="TTSOrder"
+        component={TTSOrder}
         options={{
           header: ({ navigation, scene }) => (
-            <Header title="TTS" back black transparent navigation={navigation} scene={scene} />
+            <Header title="TTSOrder" back black transparent navigation={navigation} scene={scene} />
           ),
           headerTransparent: true,
         }}

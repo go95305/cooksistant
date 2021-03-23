@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Image,
+  View,
 } from 'react-native';
 import { Block, Checkbox, Text, Button as GaButton, theme } from 'galio-framework';
 
@@ -19,7 +20,7 @@ const DismissKeyboard = ({ children }) => (
   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
 );
 
-class TTS extends React.Component {
+class TTSOrder extends React.Component {
   render() {
     return (
       <DismissKeyboard>
@@ -50,28 +51,28 @@ class TTS extends React.Component {
                     <Block center flex={0.9}>
                       <Block flex space="between">
                         <Block middle>
-                          <Image style={styles.photo} source={Images.eggplant} />
+                          <Image style={styles.photo} source={Images.cutEggplant} />
                         </Block>
                         <Block flex={0.2} middle>
-                          <Text
-                            style={{
-                              fontFamily: 'montserrat-regular',
-                              textAlign: 'center',
-                            }}
-                            color="#333"
-                            size={18}
-                          >
-                            같이 요리해볼까요?
-                          </Text>
+                          <View style={styles.MainContainer}>
+                            <Text
+                              style={{
+                                fontFamily: 'montserrat-regular',
+                                textAlign: 'center',
+                                padding: 10,
+                              }}
+                              color="#333"
+                              size={18}
+                            >
+                              1. 먼저 가지를 먹기 좋게 썰어주세요! 저처럼 동글하게 썰어도 좋고,
+                              손가락만하게 썰어도 좋아요 :)
+                            </Text>
+                          </View>
                         </Block>
                         <Block center>
                           <Button color="primary" round style={styles.createButton}>
-                            <Text
-                              style={{ fontFamily: 'montserrat-bold' }}
-                              size={14}
-                              color={nowTheme.COLORS.WHITE}
-                            >
-                              START
+                            <Text color={nowTheme.COLORS.WHITE} size={30}>
+                              <Image center style={{ height: 20, width: 10 }} source={Images.mic} />
                             </Text>
                           </Button>
                         </Block>
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
   },
   createButton: {
     width: width * 0.5,
-    marginTop: 25,
+    marginTop: 10,
     marginBottom: 30,
   },
   social: {
@@ -146,6 +147,12 @@ const styles = StyleSheet.create({
     height: 230,
     width: 300,
   },
+  MainContainer: {
+    flex: 1,
+    paddingTop: Platform.OS === 'ios' ? 20 : 0,
+    justifyContent: 'center',
+    margin: 20,
+  },
 });
 
-export default TTS;
+export default TTSOrder;
