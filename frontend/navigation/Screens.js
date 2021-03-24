@@ -32,23 +32,6 @@ const { width } = Dimensions.get('screen');
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
-function ComponentsStack(props) {
-  return (
-    <Stack.Navigator initialRouteName="Components" mode="card" headerMode="screen">
-      <Stack.Screen
-        name="Components"
-        component={Components}
-        options={{
-          header: ({ navigation, scene }) => (
-            <Header title="Components" navigation={navigation} scene={scene} />
-          ),
-          backgroundColor: '#FFFFFF',
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
-
 function HomeStack(props) {
   return (
     <Stack.Navigator mode="card" headerMode="screen">
@@ -338,7 +321,6 @@ function AppStack(props) {
       initialRouteName="Home"
     >
       <Drawer.Screen name="Home" component={HomeStack} />
-      <Drawer.Screen name="Components" component={ComponentsStack} />
       <Drawer.Screen name="레시피 리스트" component={RecipeListStack} />
       <Drawer.Screen name="프로필" component={ProfileStack} />
       <Drawer.Screen name="재료" component={IngredientStack} />
