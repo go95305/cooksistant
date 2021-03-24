@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+
 import {
   StyleSheet,
   Dimensions,
@@ -15,15 +16,20 @@ import { Button } from '../components';
 import { Images, nowTheme } from '../constants';
 import Hr from 'react-native-hr-component';
 import { func } from 'prop-types';
+import { StatusHeight } from '../constants/utils';
 // import ImageButton from 'react-native-img-button';
 const { width, height } = Dimensions.get('screen');
 const thumbMeasure = (width - 48 - 32) / 3;
 
 class RecipeInfo extends React.Component {
   renderDetail = () => {
+    const [alternateImage, setAlternateImage] = useState(true);
+
+    const changeImage = () => {
+      setAlternateImage((alternateImage) => !alternateImage);
+    };
     return (
       <Block>
-        {/* <ScrollView showsVerticalScrollIndicator={false} style={{ width, height: height }}> */}
         <Block>
           <ImageBackground
             source={Images.eggplant}
@@ -51,9 +57,16 @@ class RecipeInfo extends React.Component {
               }}
               color="black"
             >
-              레시피
+              가지볶음
             </Text>
-            <Image source={Images.bookmark} style={{ marginLeft: 270 }} onPress={clickImg}></Image>
+            <TouchableOpacity activeOpacity={0.5} onPress={changeImage}>
+              {alternateImage && (
+                <Image source={Images.bookmark} style={{ marginLeft: 5, top: -5 }} />
+              )}
+              {!alternateImage && (
+                <Image source={Images.bookmarkFull} style={{ marginLeft: 5, top: -5 }} />
+              )}
+            </TouchableOpacity>
           </Block>
           <Block row>
             <Text
@@ -104,165 +117,163 @@ class RecipeInfo extends React.Component {
           </Block>
           <Hr />
           <Block>
-            <Text
-              style={{
-                color: '#2c2c2c',
-                fontWeight: 'bold',
-                fontSize: 19,
-                fontFamily: 'montserrat-bold',
-                marginTop: 10,
-                marginBottom: 10,
-                zIndex: 2,
-              }}
-            >
-              재료
-            </Text>
+            <Block>
+              <Text
+                style={{
+                  color: '#2c2c2c',
+                  fontWeight: 'bold',
+                  fontSize: 19,
+                  fontFamily: 'montserrat-bold',
+                  marginTop: 10,
+                  marginBottom: 10,
+                  zIndex: 2,
+                }}
+              >
+                재료
+              </Text>
 
-            <Block row>
-              <Button
-                style={{ width: '42%', height: 44, marginHorizontal: 10, elevation: 0 }}
-                textStyle={{ fontSize: 15, color: 'white' }}
-                color="Primary"
-                round
-              >
-                가지
-              </Button>
-              <Button
-                right
-                style={{ width: '42%', height: 44, marginHorizontal: 20, elevation: 0 }}
-                textStyle={{ fontSize: 15, color: 'white' }}
-                color="Primary"
-                round
-              >
-                고추
-              </Button>
+              <Block row>
+                <Button
+                  style={{ width: '42%', height: 44, marginHorizontal: 10, elevation: 0 }}
+                  textStyle={{ fontSize: 15, color: 'white' }}
+                  color="Primary"
+                  round
+                >
+                  가지
+                </Button>
+                <Button
+                  right
+                  style={{ width: '42%', height: 44, marginHorizontal: 20, elevation: 0 }}
+                  textStyle={{ fontSize: 15, color: 'white' }}
+                  color="Primary"
+                  round
+                >
+                  고추
+                </Button>
+              </Block>
+              <Block row>
+                <Button
+                  style={{ width: '42%', height: 44, marginHorizontal: 10, elevation: 0 }}
+                  textStyle={{ fontSize: 15, color: 'white' }}
+                  color="Primary"
+                  round
+                >
+                  양파
+                </Button>
+                <Button
+                  right
+                  style={{ width: '42%', height: 44, marginHorizontal: 20, elevation: 0 }}
+                  textStyle={{ fontSize: 15, color: 'white' }}
+                  color="Primary"
+                  round
+                >
+                  대파
+                </Button>
+              </Block>
+              <Block row>
+                <Button
+                  style={{ width: '42%', height: 44, marginHorizontal: 10, elevation: 0 }}
+                  textStyle={{ fontSize: 15, color: 'white' }}
+                  color="Primary"
+                  round
+                >
+                  통깨
+                </Button>
+                <Button
+                  right
+                  style={{ width: '42%', height: 44, marginHorizontal: 20, elevation: 0 }}
+                  textStyle={{ fontSize: 15, color: 'white' }}
+                  color="Primary"
+                  round
+                >
+                  참기름
+                </Button>
+              </Block>
             </Block>
-            <Block row>
-              <Button
-                style={{ width: '42%', height: 44, marginHorizontal: 10, elevation: 0 }}
-                textStyle={{ fontSize: 15, color: 'white' }}
-                color="Primary"
-                round
+            <Block>
+              <Text
+                style={{
+                  color: '#2c2c2c',
+                  fontWeight: 'bold',
+                  fontSize: 19,
+                  fontFamily: 'montserrat-bold',
+                  marginTop: 10,
+                  marginBottom: 10,
+                  zIndex: 2,
+                }}
               >
-                양파
-              </Button>
-              <Button
-                right
-                style={{ width: '42%', height: 44, marginHorizontal: 20, elevation: 0 }}
-                textStyle={{ fontSize: 15, color: 'white' }}
-                color="Primary"
-                round
-              >
-                대파
-              </Button>
-            </Block>
-            <Block row>
-              <Button
-                style={{ width: '42%', height: 44, marginHorizontal: 10, elevation: 0 }}
-                textStyle={{ fontSize: 15, color: 'white' }}
-                color="Primary"
-                round
-              >
-                통깨
-              </Button>
-              <Button
-                right
-                style={{ width: '42%', height: 44, marginHorizontal: 20, elevation: 0 }}
-                textStyle={{ fontSize: 15, color: 'white' }}
-                color="Primary"
-                round
-              >
-                참기름
-              </Button>
-            </Block>
-            <Text
-              style={{
-                color: '#2c2c2c',
-                fontWeight: 'bold',
-                fontSize: 19,
-                fontFamily: 'montserrat-bold',
-                marginTop: 10,
-                marginBottom: 10,
-                zIndex: 2,
-              }}
-            >
-              양념장
-            </Text>
+                양념장
+              </Text>
 
-            <Block row>
-              <Button
-                style={{ width: '42%', height: 44, marginHorizontal: 10, elevation: 0 }}
-                textStyle={{ fontSize: 15, color: 'white' }}
-                color="Primary"
-                round
-              >
-                간장
-              </Button>
-              <Button
-                right
-                style={{ width: '42%', height: 44, marginHorizontal: 20, elevation: 0 }}
-                textStyle={{ fontSize: 15, color: 'white' }}
-                color="Primary"
-                round
-              >
-                다진마늘
-              </Button>
-            </Block>
-            <Block row>
-              <Button
-                style={{ width: '42%', height: 44, marginHorizontal: 10, elevation: 0 }}
-                textStyle={{ fontSize: 15, color: 'white' }}
-                color="Primary"
-                round
-              >
-                굴소스
-              </Button>
-              <Button
-                right
-                style={{ width: '42%', height: 44, marginHorizontal: 20, elevation: 0 }}
-                textStyle={{ fontSize: 15, color: 'white' }}
-                color="Primary"
-                round
-              >
-                고추가루
-              </Button>
-            </Block>
-            <Block row>
-              <Button
-                style={{ width: '42%', height: 44, marginHorizontal: 10, elevation: 0 }}
-                textStyle={{ fontSize: 15, color: 'white' }}
-                color="Primary"
-                round
-              >
-                설탕
-              </Button>
+              <Block row>
+                <Button
+                  style={{ width: '42%', height: 44, marginHorizontal: 10, elevation: 0 }}
+                  textStyle={{ fontSize: 15, color: 'white' }}
+                  color="Primary"
+                  round
+                >
+                  간장
+                </Button>
+                <Button
+                  right
+                  style={{ width: '42%', height: 44, marginHorizontal: 20, elevation: 0 }}
+                  textStyle={{ fontSize: 15, color: 'white' }}
+                  color="Primary"
+                  round
+                >
+                  다진마늘
+                </Button>
+              </Block>
+              <Block row>
+                <Button
+                  style={{ width: '42%', height: 44, marginHorizontal: 10, elevation: 0 }}
+                  textStyle={{ fontSize: 15, color: 'white' }}
+                  color="Primary"
+                  round
+                >
+                  굴소스
+                </Button>
+                <Button
+                  right
+                  style={{ width: '42%', height: 44, marginHorizontal: 20, elevation: 0 }}
+                  textStyle={{ fontSize: 15, color: 'white' }}
+                  color="Primary"
+                  round
+                >
+                  고추가루
+                </Button>
+              </Block>
+              <Block row>
+                <Button
+                  style={{ width: '42%', height: 44, marginHorizontal: 10, elevation: 0 }}
+                  textStyle={{ fontSize: 15, color: 'white' }}
+                  color="Primary"
+                  round
+                >
+                  설탕
+                </Button>
+              </Block>
             </Block>
             <Hr />
           </Block>
         </Block>
-
-        {/* </ScrollView> */}
       </Block>
     );
   };
   render() {
     return (
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        style={styles.scrollableView}
-        showsVerticalScrollIndicator={false}
-      >
-        {this.renderDetail()}
-      </ScrollView>
+      <View style={styles.viewStyle}>
+        <ScrollView style={styles.scrollableView} showsVerticalScrollIndicator={false}>
+          {this.renderDetail()}
+        </ScrollView>
+      </View>
     );
   }
 }
 
-function clickImg() {
-  Alert.alert('click');
-}
 const styles = StyleSheet.create({
-  scrollableView: { height: height, flex: 1 },
+  scrollableView: { flexGrow: 1, height: 0 },
+  viewStyle: { flexGrow: 1, top: 60 },
   profileContainer: {
     padding: 0,
     zIndex: 1,
