@@ -10,8 +10,8 @@ import {
 } from 'react-native';
 import { Block, Text, Button as GaButton, theme } from 'galio-framework';
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
-import TagSelect from 'react-native-tag-select';
 import StarRating from 'react-native-star-rating';
+import TagSelector from 'react-native-tag-selector';
 
 import { Button, Icon, Input } from '../components';
 import { Images, nowTheme } from '../constants';
@@ -25,10 +25,35 @@ const recipe = {
 };
 
 class TasteRegister extends React.Component {
+  Tastes = [
+    { id: 1, name: '달아요' },
+    { id: 2, name: '짜요' },
+    { id: 3, name: '써요' },
+    { id: 4, name: '셔요' },
+    { id: 5, name: '매워요' },
+    { id: 6, name: '싱거워요' },
+  ];
+  Features = [
+    { id: 7, name: '기름져요' },
+    { id: 8, name: '느끼해요' },
+    { id: 9, name: '고소해요' },
+    { id: 10, name: '담백해요' },
+    { id: 11, name: '비려요' },
+    { id: 12, name: '바삭해요' },
+    { id: 13, name: '아삭해요' },
+    { id: 14, name: '쫀득해요' },
+    { id: 15, name: '쫄깃해요' },
+    { id: 16, name: '눅눅해요' },
+    { id: 17, name: '부드러워요' },
+    { id: 18, name: '향이강해요' },
+  ];
+
   constructor(props) {
     super(props);
     this.state = {
       starCount: this.starCount == null ? 3 : this.starCount,
+      selectedTastes: [],
+      selectedFeatures: [],
     };
   }
 
@@ -36,6 +61,25 @@ class TasteRegister extends React.Component {
     this.setState({
       starCount: rating,
     });
+  }
+
+  onSubmit() {
+    Alert.alert('확인','평가를 등록하시겠습니까?', [
+      {
+        text: '취소',
+        onPress: () => console.log('취소'),
+        style: 'cancel',
+      },
+      {
+        text: '네',
+        onPress: () => {
+          console.log('네');
+          Alert.alert('별점: ', JSON.stringify(this.state.starCount))
+          Alert.alert('맛: ', JSON.stringify(this.state.selectedTastes))
+          Alert.alert('특징: ', JSON.stringify(this.state.selectedFeatures))
+        },
+      },
+    ]);
   }
 
   render() {
@@ -101,9 +145,9 @@ class TasteRegister extends React.Component {
                             marginBottom: height > 800 ? 18 : 15,
                           }}
                           color="#333"
-                          size={15}
+                          size={14}
                         >
-                          레시피 평가
+                          레시피에 대해 평가해주세요!
                         </Text>
                         <StarRating
                           disabled={false}
@@ -115,29 +159,69 @@ class TasteRegister extends React.Component {
                           rating={this.state.starCount}
                           selectedStar={(rating) => this.onStarRatingPress(rating)}
                         />
-                        <Text style={{
+                        <Text
+                          style={{
                             fontFamily: 'montserrat-bold',
                             textAlign: 'center',
                             marginTop: height > 800 ? 15 : 10,
-                          }} >{this.state.starCount} / 5</Text>
+                          }}
+                        >
+                          {this.state.starCount} / 5
+                        </Text>
                       </Block>
                     </Block>
                   </ProgressStep>
                   <ProgressStep
-                    label="맛"
+                    label="맛 & 특징"
                     scrollViewProps={{ scrollEnabled: false }}
                     nextBtnTextStyle={buttonTextStyle}
                     previousBtnTextStyle={buttonTextStyle}
+                    onSubmit={this.onSubmit.bind(this)}
                   >
-                    <Block></Block>
-                  </ProgressStep>
-                  <ProgressStep
-                    label="특징"
-                    scrollViewProps={{ scrollEnabled: false }}
-                    nextBtnTextStyle={buttonTextStyle}
-                    previousBtnTextStyle={buttonTextStyle}
-                  >
-                    <Block></Block>
+                    <Block flex={1}>
+                      <Block>
+                        <Text
+                          style={{
+                            fontFamily: 'montserrat-bold',
+                            marginTop: 10,
+                            marginLeft: Platform.OS === 'android' ? 40 : 30,
+                          }}
+                          color="#333"
+                          size={14}
+                        >
+                          맛
+                        </Text>
+                        <Block flex={1} center style={styles.taste1Container}>
+                          <TagSelector
+                            tagStyle={styles.tag1}
+                            selectedTagStyle={styles.tag1Selected}
+                            tags={this.Tastes}
+                            onChange={(selected) => this.setState({ selectedTastes: selected })}
+                          />
+                        </Block>
+                      </Block>
+                      <Block>
+                        <Text
+                          style={{
+                            fontFamily: 'montserrat-bold',
+                            marginTop: 25,
+                            marginLeft: Platform.OS === 'android' ? 40 : 30,
+                          }}
+                          color="#333"
+                          size={14}
+                        >
+                          특징
+                        </Text>
+                        <Block flex={1} center style={styles.featureContainer}>
+                          <TagSelector
+                            tagStyle={styles.tag2}
+                            selectedTagStyle={styles.tag2Selected}
+                            tags={this.Features}
+                            onChange={(selected) => this.setState({ selectedFeatures: selected })}
+                          />
+                        </Block>
+                      </Block>
+                    </Block>
                   </ProgressStep>
                 </ProgressSteps>
               </Block>
@@ -182,40 +266,65 @@ const styles = StyleSheet.create({
   evalueContainer: {
     marginTop: Platform.OS === 'android' ? 35 : 45,
   },
-  tasteContainer: {
-    flex: 1,
-    backgroundColor: '#FFF',
-    marginTop: 50,
-    marginLeft: 15,
+  taste1Container: {
+    marginTop: 10,
+    marginLeft: 25,
   },
-  buttonContainer: {
-    padding: 15,
-  },
-  buttonInner: {
-    marginBottom: 15,
-  },
-  labelText: {
-    color: '#333',
-    fontSize: 20,
-    marginBottom: 15,
-  },
-  item: {
-    width: 100,
+  tag1: {
+    width: width > 350 ? 95 : 80,
+    padding: 10,
+    margin: 3,
     borderWidth: 1,
     borderColor: '#f18d46',
     backgroundColor: '#fff',
     borderRadius: 20,
-  },
-  label: {
-    color: '#f18d46',
+    fontSize: 14,
     fontFamily: 'montserrat-bold',
+    color: '#f18d46',
+    textAlign: 'center',
   },
-  itemSelected: {
+  tag1Selected: {
+    width: width > 350 ? 95 : 80,
+    padding: 10,
+    margin: 3,
+    borderWidth: 1,
+    borderColor: 'white',
     backgroundColor: '#f18d46',
-    borderColor: '#fff',
+    borderRadius: 20,
+    fontSize: 14,
+    fontFamily: 'montserrat-bold',
+    color: 'white',
+    textAlign: 'center',
   },
-  labelSelected: {
-    color: '#FFF',
+  featureContainer: {
+    marginTop: 15,
+    marginLeft: 25,
+  },
+  tag2: {
+    width: 90,
+    padding: 10,
+    margin: 3,
+    borderWidth: 1,
+    borderColor: '#f18d46',
+    backgroundColor: '#fff',
+    borderRadius: 18,
+    fontSize: 12,
+    fontFamily: 'montserrat-bold',
+    color: '#f18d46',
+    textAlign: 'center',
+  },
+  tag2Selected: {
+    width: 90,
+    padding: 10,
+    margin: 3,
+    borderWidth: 1,
+    borderColor: 'white',
+    backgroundColor: '#f18d46',
+    borderRadius: 18,
+    fontSize: 12,
+    fontFamily: 'montserrat-bold',
+    color: 'white',
+    textAlign: 'center',
   },
 });
 

@@ -40,7 +40,8 @@
     "react-native-segmented-control-tab": "^3.4.1",
     "react-native-star-rating": "^1.1.0",
     "react-native-svg": "12.1.0",
-    "react-native-tag-select": "^2.0.0"
+    "react-native-switch-selector": "^2.1.4",
+    "react-native-tag-selector": "^0.0.3"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",
