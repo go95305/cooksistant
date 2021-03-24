@@ -27,7 +27,6 @@ function CustomDrawerContent({
   const insets = useSafeArea();
   const screens = [
     "Home",
-    "Components",
     "레시피 리스트",
     "프로필",
     "재료",

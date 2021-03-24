@@ -12,33 +12,9 @@ const { height, width } = Dimensions.get('window');
 const iPhoneX = () =>
   Platform.OS === 'ios' && (height === 812 || width === 812 || height === 896 || width === 896);
 
-const Button1 = ({ style, navigation }) => (
+const EvalueListBtn = ({ isWhite, style, navigation }) => (
   <Button
-    style={{ width: 72, height: 35, marginHorizontal: 5, elevation: 0 }}
-    textStyle={{ fontFamily: 'montserrat-bold', color: nowTheme.COLORS.PRIMARY, fontSize: 12 }}
-    color="white"
-    round
-    onPress={() => navigation.navigate('TasteRegister')}
-  >
-    취향 등록
-  </Button>
-);
-
-const Button2 = ({ isWhite, style, navigation }) => (
-  <Button
-    style={{ width: 72, height: 35, marginHorizontal: 5, elevation: 0 }}
-    textStyle={{ fontFamily: 'montserrat-bold', color: nowTheme.COLORS.PRIMARY, fontSize: 12 }}
-    color="white"
-    round
-    onPress={() => navigation.navigate('RecipeRegister')}
-  >
-    레시피 등록
-  </Button>
-);
-
-const Button3 = ({ isWhite, style, navigation }) => (
-  <Button
-    style={{ width: 72, height: 35, marginHorizontal: 5, elevation: 0 }}
+    style={{ width: 80, height: 40, marginHorizontal: 5, elevation: 0 }}
     textStyle={{ fontFamily: 'montserrat-bold', color: nowTheme.COLORS.PRIMARY, fontSize: 12 }}
     color="white"
     round
@@ -62,9 +38,7 @@ class Header extends React.Component {
     switch (title) {
       case '프로필':
         return [
-          <Button1 key="recipe-register" navigation={navigation} isWhite={white} />,
-          <Button2 key="taste-register" navigation={navigation} isWhite={white} />,
-          <Button3 key="evalu-list" navigation={navigation} isWhite={white} />,
+          <EvalueListBtn key="evalu-list" navigation={navigation} isWhite={white} />,
         ];
       default:
         break;
@@ -190,7 +164,7 @@ class Header extends React.Component {
           style={navbarStyles}
           transparent={transparent}
           right={this.renderRight()}
-          rightStyle={{ alignItems: 'center', paddingRight: 90 }}
+          rightStyle={{ alignItems: 'center', paddingRight: 10 }}
           left={
             <Icon
               name={back ? 'minimal-left2x' : 'align-left-22x'}
@@ -228,7 +202,7 @@ const styles = StyleSheet.create({
   navbar: {
     paddingVertical: 0,
     paddingBottom: theme.SIZES.BASE * 1.5,
-    paddingTop: Platform.OS === 'android' ? theme.SIZES.BASE * 1.5 : theme.SIZES.BASE * 4,
+    paddingTop: Platform.OS === 'android' ? theme.SIZES.BASE * 2 : theme.SIZES.BASE * 4.5,
   },
   shadow: {
     backgroundColor: theme.COLORS.WHITE,
