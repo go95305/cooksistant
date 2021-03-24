@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   ImageBackground,
   Dimensions,
   Image,
+  Alert,
   StatusBar,
   TouchableWithoutFeedback,
 } from 'react-native';
+import { Block, Text, Button as GaButton, theme } from 'galio-framework';
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
-import SwitchSelector from 'react-native-switch-selector';
-import { Block, Checkbox, Text, Button as GaButton, theme } from 'galio-framework';
+import TagSelect from 'react-native-tag-select';
+import StarRating from 'react-native-star-rating';
 
 import { Button, Icon, Input } from '../components';
 import { Images, nowTheme } from '../constants';
@@ -22,34 +24,19 @@ const recipe = {
   isEvalu: false,
 };
 
-const isLike = [
-  { label: '좋아요', value: 0 },
-  { label: '싫어요', value: 1 },
-];
-
-
 class TasteRegister extends React.Component {
-  static navigationOptions = {
-    header: null,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      starCount: this.starCount == null ? 3 : this.starCount,
+    };
+  }
 
-  defaultScrollViewProps = {
-    scrollEnabled: false,
-    contentContainerStyle: {
-      flex: 1,
-      justifyContent: 'center',
-    },
-  };
-
-  onPrevStep = () => {
-    console.log('called previous step');
-  };
-  onNextStep = () => {
-    console.log('called next step');
-  };
-  onSubmitSteps = () => {
-    console.log('called on submit step.');
-  };
+  onStarRatingPress(rating) {
+    this.setState({
+      starCount: rating,
+    });
+  }
 
   render() {
     const progressStepsStyle = {
@@ -79,9 +66,8 @@ class TasteRegister extends React.Component {
               <Block style={styles.registerContainer}>
                 <ProgressSteps {...progressStepsStyle}>
                   <ProgressStep
-                    label="좋아요"
-                    onNext={this.onNextStep}
-                    scrollViewProps={this.defaultScrollViewProps}
+                    label="평가"
+                    scrollViewProps={{ scrollEnabled: false }}
                     nextBtnTextStyle={buttonTextStyle}
                     previousBtnTextStyle={buttonTextStyle}
                   >
@@ -91,7 +77,7 @@ class TasteRegister extends React.Component {
                           style={{
                             fontFamily: 'montserrat-bold',
                             textAlign: 'center',
-                            marginTop: 10,
+                            marginTop: height > 800 ? 15 : 10,
                             marginBottom: 15,
                           }}
                           color="#333"
@@ -102,52 +88,56 @@ class TasteRegister extends React.Component {
                         <Image
                           source={recipe.image}
                           style={{
-                            width: width - theme.SIZES.BASE * 6,
-                            height: 200,
+                            width: width - theme.SIZES.BASE * (height > 800 ? 6 : 8),
+                            height: height > 800 ? 210 : 180,
                           }}
                         />
                       </Block>
-                      <Block flex={1} center style={styles.likeContainer}>
+                      <Block flex={1} center style={styles.evalueContainer}>
                         <Text
                           style={{
                             fontFamily: 'montserrat-bold',
                             textAlign: 'center',
-                            marginBottom: Platform.OS === 'android' ? 20 : 15,
+                            marginBottom: height > 800 ? 18 : 15,
                           }}
                           color="#333"
                           size={15}
                         >
-                          레시피가 마음에 들었나요?
+                          레시피 평가
                         </Text>
-                        <SwitchSelector
-                          options={isLike}
-                          initial={1}
-                          fontSize={15}
-                          textColor="#f18d46"
-                          textStyle={{ fontFamily: 'montserrat-regular' }}
-                          selectedTextStyle={{ fontFamily: 'montserrat-regular' }}
-                          selectedColor="white"
-                          buttonColor="#f18d46"
-                          borderColor="#f18d46"
-                          hasPadding
-                          onPress={(value) => {
-                            console.log(`Call onPress with value: ${value}`);
-                          }}
+                        <StarRating
+                          disabled={false}
+                          maxStars={5}
+                          starSize={45}
+                          halfStarEnabled={true}
+                          emptyStarColor={'#f18d46'}
+                          fullStarColor={'#f18d46'}
+                          rating={this.state.starCount}
+                          selectedStar={(rating) => this.onStarRatingPress(rating)}
                         />
+                        <Text style={{
+                            fontFamily: 'montserrat-bold',
+                            textAlign: 'center',
+                            marginTop: height > 800 ? 15 : 10,
+                          }} >{this.state.starCount} / 5</Text>
                       </Block>
                     </Block>
                   </ProgressStep>
                   <ProgressStep
                     label="맛"
-                    onPrevious={this.onPrevStep}
-                    onSubmit={this.onSubmitSteps}
-                    scrollViewProps={this.defaultScrollViewProps}
+                    scrollViewProps={{ scrollEnabled: false }}
                     nextBtnTextStyle={buttonTextStyle}
                     previousBtnTextStyle={buttonTextStyle}
                   >
-                    <Block>
-                      
-                    </Block>
+                    <Block></Block>
+                  </ProgressStep>
+                  <ProgressStep
+                    label="특징"
+                    scrollViewProps={{ scrollEnabled: false }}
+                    nextBtnTextStyle={buttonTextStyle}
+                    previousBtnTextStyle={buttonTextStyle}
+                  >
+                    <Block></Block>
                   </ProgressStep>
                 </ProgressSteps>
               </Block>
@@ -189,13 +179,43 @@ const styles = StyleSheet.create({
     elevation: 1,
     overflow: 'hidden',
   },
-  tasteContainer: {
-    width: width * 0.7,
-    marginBottom: 10,
+  evalueContainer: {
+    marginTop: Platform.OS === 'android' ? 35 : 45,
   },
-  likeContainer: {
-    width: width * 0.7,
-    marginTop: Platform.OS === 'android' ? 30 : 40,
+  tasteContainer: {
+    flex: 1,
+    backgroundColor: '#FFF',
+    marginTop: 50,
+    marginLeft: 15,
+  },
+  buttonContainer: {
+    padding: 15,
+  },
+  buttonInner: {
+    marginBottom: 15,
+  },
+  labelText: {
+    color: '#333',
+    fontSize: 20,
+    marginBottom: 15,
+  },
+  item: {
+    width: 100,
+    borderWidth: 1,
+    borderColor: '#f18d46',
+    backgroundColor: '#fff',
+    borderRadius: 20,
+  },
+  label: {
+    color: '#f18d46',
+    fontFamily: 'montserrat-bold',
+  },
+  itemSelected: {
+    backgroundColor: '#f18d46',
+    borderColor: '#fff',
+  },
+  labelSelected: {
+    color: '#FFF',
   },
 });
 
