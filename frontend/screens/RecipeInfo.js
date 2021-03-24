@@ -15,9 +15,6 @@ import { Block, Text, theme, Button as GaButton } from 'galio-framework';
 import { Button } from '../components';
 import { Images, nowTheme } from '../constants';
 import Hr from 'react-native-hr-component';
-import { func } from 'prop-types';
-import { StatusHeight } from '../constants/utils';
-// import ImageButton from 'react-native-img-button';
 const { width, height } = Dimensions.get('screen');
 const thumbMeasure = (width - 48 - 32) / 3;
 
@@ -31,7 +28,6 @@ class RecipeInfo extends Component {
   changeImage = () => {
     this.setState({ img: require('../assets/imgs/bookmarkFull.png') });
   };
-
   // constructor(props) {
   //   super(props);
   //   this.state = {
