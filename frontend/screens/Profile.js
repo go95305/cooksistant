@@ -18,7 +18,7 @@ if (height < 800) {
 const ImgSize = (width - 48 - 32) / 3;
 const RecipeImg = (width - 48 - 32) / 2;
 
-const Taste = () => {
+const Info = () => {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Block middle style={{ justifyContent: 'flex-start' }}>
@@ -50,30 +50,6 @@ const Taste = () => {
           An artist of considerable range, named Ryan — the name has taken by Melbourne has raised,
           Brooklyn-based Nick Murphy — writes, performs and records all of his own music.
         </Text>
-      </Block>
-    </ScrollView>
-  );
-};
-const Recipe = () => {
-  return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <Block row style={{ paddingVertical: 10, paddingHorizontal: 15 }} space="between">
-        <Text
-          bold
-          size={20}
-          color="#2c2c2c"
-          style={{ marginTop: 5, fontFamily: 'montserrat-bold' }}
-        >
-          Recipe
-        </Text>
-      </Block>
-
-      <Block style={{ paddingBottom: -HeaderHeight * 2, paddingHorizontal: 15 }}>
-        <Block row space="between" style={{ flexWrap: 'wrap' }}>
-          {Images.Viewed.map((img, imgIndex) => (
-            <Image source={img} key={`viewed-${img}`} resizeMode="cover" style={styles.thumb} />
-          ))}
-        </Block>
       </Block>
     </ScrollView>
   );
@@ -132,10 +108,10 @@ class Profile extends React.Component {
               <Block
                 style={{ position: 'absolute', width: width, zIndex: 5, paddingHorizontal: 50 }}
               >
-                <Block middle style={{ top: height > 800 ? height * 0.128 : height * 0.09 }}>
+                <Block middle style={{ top: height > 800 ? height * 0.13 : height * 0.09 }}>
                   <Image source={Images.ProfilePicture} style={styles.avatar} />
                 </Block>
-                <Block style={{ top: height > 800 ? height * 0.128 : height * 0.09 }}>
+                <Block style={{ top: height > 800 ? height * 0.13 : height * 0.09 }}>
                   <Block middle>
                     <Text
                       style={{
@@ -189,7 +165,7 @@ class Profile extends React.Component {
           <Block style={styles.segmentContainer}>
             <Block>
               <SegmentedControlTab
-                values={['취향', '레시피', '스크랩']}
+                values={['사용자 정보', '스크랩']}
                 selectedIndex={this.state.selectedIndex}
                 onTabPress={this.handleIndexChange}
                 tabsContainerStyle={styles.tabsContainerStyle}
@@ -201,9 +177,8 @@ class Profile extends React.Component {
               />
             </Block>
             <Block style={{ marginTop: 20 }}>
-              {this.state.selectedIndex === 0 && <Taste />}
-              {this.state.selectedIndex === 1 && <Recipe />}
-              {this.state.selectedIndex === 2 && <Scrap />}
+              {this.state.selectedIndex === 0 && <Info />}
+              {this.state.selectedIndex === 1 && <Scrap />}
             </Block>
           </Block>
         </Block>
