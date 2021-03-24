@@ -43,6 +43,11 @@ class RecipeInfo extends Component {
   //   }
   // };
   renderDetail = () => {
+    const [alternateImage, setAlternateImage] = useState(true);
+
+    const changeImage = () => {
+      setAlternateImage((alternateImage) => !alternateImage);
+    };
     return (
       <Block>
         <Block>
