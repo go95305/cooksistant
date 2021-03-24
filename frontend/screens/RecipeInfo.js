@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 
 import {
   StyleSheet,
@@ -15,13 +15,33 @@ import { Block, Text, theme, Button as GaButton } from 'galio-framework';
 import { Button } from '../components';
 import { Images, nowTheme } from '../constants';
 import Hr from 'react-native-hr-component';
-import { func } from 'prop-types';
-import { StatusHeight } from '../constants/utils';
-// import ImageButton from 'react-native-img-button';
 const { width, height } = Dimensions.get('screen');
 const thumbMeasure = (width - 48 - 32) / 3;
 
-class RecipeInfo extends React.Component {
+class RecipeInfo extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      img: require('../assets/imgs/bookmark.png'),
+    };
+  }
+  changeImage = () => {
+    this.setState({ img: require('../assets/imgs/bookmarkFull.png') });
+  };
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     img: require('../assets/imgs/bookmark.png'),
+  //     value: 0,
+  //   };
+  // }
+  // changeImage = () => {
+  //   if (value == 0) {
+  //     this.setState({ img: require('../assets/imgs/bookmarkFull.png') }, 1);
+  //   } else if (value == 1) {
+  //     this.setState({ img: require('../assets/imgs/bookmark.png') }, 0);
+  //   }
+  // };
   renderDetail = () => {
     const [alternateImage, setAlternateImage] = useState(true);
 
@@ -59,13 +79,8 @@ class RecipeInfo extends React.Component {
             >
               가지볶음
             </Text>
-            <TouchableOpacity activeOpacity={0.5} onPress={changeImage}>
-              {alternateImage && (
-                <Image source={Images.bookmark} style={{ marginLeft: 5, top: -5 }} />
-              )}
-              {!alternateImage && (
-                <Image source={Images.bookmarkFull} style={{ marginLeft: 5, top: -5 }} />
-              )}
+            <TouchableOpacity activeOpacity={0.5} onPress={this.changeImage}>
+              <Image source={this.state.img} style={{ marginLeft: 5, top: -5 }} />
             </TouchableOpacity>
           </Block>
           <Block row>
@@ -260,6 +275,7 @@ class RecipeInfo extends React.Component {
       </Block>
     );
   };
+
   render() {
     return (
       <View style={styles.viewStyle}>
