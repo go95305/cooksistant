@@ -1,4 +1,4 @@
-import React, { Component} from 'react';
+import React, { Component } from 'react';
 //import React from 'react';
 import {
   StyleSheet,
@@ -9,6 +9,7 @@ import {
   Keyboard,
 } from 'react-native';
 import { Block, Checkbox, Text, Button as GaButton, theme } from 'galio-framework';
+import TagInput from 'react-native-tags-input';
 
 import { Button, Icon, Input } from '../components';
 import { Images, nowTheme } from '../constants';
@@ -19,12 +20,8 @@ const DismissKeyboard = ({ children }) => (
   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
 );
 
-
 class Ingredient extends React.Component {
-  
-   
   render() {
-    
     return (
       <DismissKeyboard>
         <Block flex middle>
@@ -45,14 +42,35 @@ class Ingredient extends React.Component {
                       color="#333"
                       size={18}
                     >
-                      재료
+                      재료를 등록해주세요 :)
                     </Text>
                   </Block>
 
                   <Block flex={1} middle space="between">
                     <Block center flex={0.9}>
                       <Block flex space="between">
-                        
+                        <Block>
+                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
+                            <Input
+                              right
+                              color="black"
+                              style={styles.search}
+                              placeholder="재료 검색"
+                              placeholderTextColor={'#8898AA'}
+                              iconContent={
+                                <Icon
+                                  size={16}
+                                  color={theme.COLORS.MUTED}
+                                  name="zoom-bold2x"
+                                  family="NowExtra"
+                                />
+                              }
+                            />
+                          </Block>
+                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
+                            
+                          </Block>
+                        </Block>
                         <Block center>
                           <Button color="primary" round style={styles.createButton}>
                             <Text
@@ -60,7 +78,7 @@ class Ingredient extends React.Component {
                               size={14}
                               color={nowTheme.COLORS.WHITE}
                             >
-                              다음 단계
+                              있는 재료로 등록하기
                             </Text>
                           </Button>
                         </Block>
@@ -74,7 +92,6 @@ class Ingredient extends React.Component {
         </Block>
       </DismissKeyboard>
     );
-                            
   }
 }
 
@@ -114,24 +131,19 @@ const styles = StyleSheet.create({
     borderColor: '#E3E3E3',
     borderRadius: 21.5,
   },
-  passwordCheck: {
-    paddingLeft: 2,
-    paddingTop: 6,
-    paddingBottom: 15,
+  search: {
+    height: 45,
+    width: width * 0.7,
+    marginHorizontal: 16,
+    borderWidth: 1,
+    borderRadius: 30,
+    borderColor: nowTheme.COLORS.BORDER,
   },
   createButton: {
     width: width * 0.5,
     marginTop: 25,
     marginBottom: 40,
   },
-  social: {
-    width: theme.SIZES.BASE * 3.5,
-    height: theme.SIZES.BASE * 3.5,
-    borderRadius: theme.SIZES.BASE * 1.75,
-    justifyContent: 'center',
-    marginHorizontal: 10,
-  },
-  
 });
 
 export default Ingredient;
