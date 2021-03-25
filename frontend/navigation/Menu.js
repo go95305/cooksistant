@@ -11,7 +11,6 @@ import { Block, Text, theme } from "galio-framework";
 import { useSafeArea } from "react-native-safe-area-context";
 import Images from "../constants/Images";
 import { DrawerItem as DrawerCustomItem, Icon } from "../components";
-
 import nowTheme from "../constants/Theme";
 
 const { width } = Dimensions.get("screen");
@@ -67,7 +66,7 @@ function CustomDrawerContent({
           />
         </Block>
         <DrawerCustomItem title="앱 소개" navigation={navigation}/>
-        <DrawerCustomItem title="로그아웃" navigation={navigation}/>
+        <DrawerCustomItem title="로그아웃" navigation={navigation} />
         </ScrollView>
       </Block>
     </Block>

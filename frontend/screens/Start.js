@@ -8,14 +8,29 @@ const { height, width } = Dimensions.get('screen');
 import { Images, nowTheme } from '../constants';
 import { HeaderHeight } from '../constants/utils';
 
+const firebaseConfig = {
+  apiKey: 'AIzaSyC8PjQAKy-gaLJ960SIFn2Bc-4PVG2dcXc',
+  authDomain: 'cooksistant-308615.firebaseapp.com',
+  databaseURL: 'https://cooksistant-308615-default-rtdb.firebaseio.com',
+  projectId: 'cooksistant-308615',
+  storageBucket: 'cooksistant-308615.appspot.com',
+  messagingSenderId: '859478845487',
+  appId: '1:859478845487:web:68ebbc76dfad6cdf22feda',
+  measurementId: 'G-2NQFW6NDY4',
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
 export default class Onboarding extends React.Component {
-  isUserEqual(googleUser, firebaseUser) {
+  isUserEqual = (googleUser, firebaseUser) => {
     if (firebaseUser) {
       var providerData = firebaseUser.providerData;
       for (var i = 0; i < providerData.length; i++) {
         if (
           providerData[i].providerId === firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
-          providerData[i].uid === googleUser.getBasicProfile.getId   
+          providerData[i].uid === googleUser.getBasicProfile().getId()
         ) {
           // We don't need to reauth the Firebase connection.
           return true;
@@ -23,7 +38,7 @@ export default class Onboarding extends React.Component {
       }
     }
     return false;
-  }
+  };
 
   onSignIn = (googleUser) => {
     console.log('Google Auth Response', googleUser);
@@ -38,15 +53,25 @@ export default class Onboarding extends React.Component {
             googleUser.idToken,
             googleUser.accessToken
           );
-
           // Sign in with credential from the Google user.
           firebase
             .auth()
             .signInWithCredential(credential)
-            .then(function () {
-              console.log('user signed in');
+            .then(function (result) {
+              console.log('user sign in');
+              firebase
+                .database()
+                .ref('/users' + result.user.uid)
+                .set({
+                  gmail: result.user.email,
+                  profile_picture: result.additionalUserInfo.profile.profile_picture,
+                  locale: result.additionalUserInfo.profile_picture.locale,
+                  first_name: result.additionalUserInfo.given_name,
+                  last_name: result.additionalUserInfo.first_name,
+                })
+                .then(function (snapshot) {});
             })
-            .catch((error) => {
+            .catch(function (error) {
               // Handle Errors here.
               var errorCode = error.code;
               var errorMessage = error.message;
@@ -85,6 +110,7 @@ export default class Onboarding extends React.Component {
       return { error: true };
     }
   };
+
   render() {
     const { navigation } = this.props;
 
@@ -96,7 +122,7 @@ export default class Onboarding extends React.Component {
             source={Images.Start}
             style={{ flex: 1, height: height, width, zIndex: 1 }}
           />
-          <Block space="between" style={styles.padded}>
+          <Block center space="between" style={styles.padded}>
             <Block>
               <Block>
                 <Button
@@ -145,7 +171,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.SIZES.BASE * 2,
     zIndex: 3,
     position: 'absolute',
-    bottom: Platform.OS === 'android' ? theme.SIZES.BASE * 2 : theme.SIZES.BASE * 3,
+    bottom: Platform.OS === 'android' ? theme.SIZES.BASE * 4.5 : theme.SIZES.BASE * 5,
   },
   button: {
     width: width - theme.SIZES.BASE * 4,
@@ -153,7 +179,6 @@ const styles = StyleSheet.create({
     shadowRadius: 0,
     shadowOpacity: 0,
   },
-
   gradient: {
     zIndex: 1,
     position: 'absolute',
