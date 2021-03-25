@@ -49,239 +49,204 @@ class RecipeInfo extends Component {
     //   setAlternateImage((alternateImage) => !alternateImage);
     // };
     return (
-      <Block>
+      <ScrollView style={styles.scrollableView} showsVerticalScrollIndicator={false}>
         <Block>
-          <ImageBackground
-            source={Images.eggplant}
-            style={styles.profileContainer}
-            imageStyle={styles.profileBackground}
-          ></ImageBackground>
-        </Block>
-        <Block
-          style={{
-            top: height * 0.2,
-            width: width,
-            zIndex: 5,
-            paddingHorizontal: 20,
-          }}
-        >
-          <Block right row>
-            <Text
-              style={{
-                marginTop: 15,
-                fontFamily: 'montserrat-bold',
-                marginBottom: theme.SIZES.BASE / 2,
-                fontWeight: '900',
-                fontSize: 26,
-                paddingTop: 100,
-              }}
-              color="black"
-            >
-              가지볶음
-            </Text>
-            <TouchableOpacity activeOpacity={0.5} onPress={this.changeImage}>
-              <Image source={this.state.img} style={{ marginLeft: 5, top: -5 }} />
-            </TouchableOpacity>
-          </Block>
-          <Block row>
-            <Text
-              left
-              color="black"
-              size={15}
-              style={{ marginBottom: 4, fontFamily: 'montserrat-regular' }}
-            >
-              2인분
-            </Text>
-            <Text> l </Text>
-            <Text
-              color="black"
-              size={15}
-              style={{ marginBottom: 4, fontFamily: 'montserrat-regular' }}
-            >
-              20분
-            </Text>
-          </Block>
-
-          <Block middle>
-            <Text
-              size={16}
-              muted
-              style={{
-                textAlign: 'center',
-                color: '#2c2c2c',
-                fontWeight: 'bold',
-                fontSize: 15,
-                paddingHorizontal: 15,
-                paddingTop: 10,
-                paddingBottom: 10,
-              }}
-            >
-              가지는 장도 튼튼하게 해주고, 피로회복에도 효과가 뛰어나다고 해요!! 이렇게 좋은
-              먹거리인 ‘가지’로 간단하지만 정말 맛있는 가지볶음을 해보아요 :)
-            </Text>
-          </Block>
-          <Hr />
           <Block>
-            <Block>
+            <ImageBackground
+              source={Images.eggplant}
+              style={styles.profileContainer}
+              imageStyle={styles.profileBackground}
+            ></ImageBackground>
+          </Block>
+          <Block
+            style={{
+              top: height * 0.2,
+              width: width,
+              zIndex: 5,
+              paddingHorizontal: 20,
+            }}
+          >
+            <Block right row>
               <Text
                 style={{
-                  color: '#2c2c2c',
-                  fontWeight: 'bold',
-                  fontSize: 19,
+                  marginTop: 15,
                   fontFamily: 'montserrat-bold',
-                  marginTop: 10,
-                  marginBottom: 10,
-                  zIndex: 2,
+                  marginBottom: theme.SIZES.BASE / 2,
+                  fontWeight: '900',
+                  fontSize: 26,
+                  paddingTop: height > 800 ? 130 : 100,
                 }}
+                color="black"
               >
-                재료
+                가지볶음
               </Text>
-
-              <Block row>
-                <Button
-                  style={{ width: '42%', height: 44, marginHorizontal: 10, elevation: 0 }}
-                  textStyle={{ fontSize: 15, color: 'white' }}
-                  color="Primary"
-                  round
-                >
-                  가지
-                </Button>
-                <Button
-                  right
-                  style={{ width: '42%', height: 44, marginHorizontal: 20, elevation: 0 }}
-                  textStyle={{ fontSize: 15, color: 'white' }}
-                  color="Primary"
-                  round
-                >
-                  고추
-                </Button>
-              </Block>
-              <Block row>
-                <Button
-                  style={{ width: '42%', height: 44, marginHorizontal: 10, elevation: 0 }}
-                  textStyle={{ fontSize: 15, color: 'white' }}
-                  color="Primary"
-                  round
-                >
-                  양파
-                </Button>
-                <Button
-                  right
-                  style={{ width: '42%', height: 44, marginHorizontal: 20, elevation: 0 }}
-                  textStyle={{ fontSize: 15, color: 'white' }}
-                  color="Primary"
-                  round
-                >
-                  대파
-                </Button>
-              </Block>
-              <Block row>
-                <Button
-                  style={{ width: '42%', height: 44, marginHorizontal: 10, elevation: 0 }}
-                  textStyle={{ fontSize: 15, color: 'white' }}
-                  color="Primary"
-                  round
-                >
-                  통깨
-                </Button>
-                <Button
-                  right
-                  style={{ width: '42%', height: 44, marginHorizontal: 20, elevation: 0 }}
-                  textStyle={{ fontSize: 15, color: 'white' }}
-                  color="Primary"
-                  round
-                >
-                  참기름
-                </Button>
-              </Block>
+              <TouchableOpacity activeOpacity={0.5} onPress={this.changeImage}>
+                <Image source={this.state.img} style={{ marginLeft: 5, top: -5 }} />
+              </TouchableOpacity>
             </Block>
-            <Block>
+            <Block row>
               <Text
+                left
+                color="black"
+                size={15}
+                style={{ marginBottom: 4, fontFamily: 'montserrat-regular' }}
+              >
+                2인분
+              </Text>
+              <Text> l </Text>
+              <Text
+                color="black"
+                size={15}
+                style={{ marginBottom: 4, fontFamily: 'montserrat-regular' }}
+              >
+                20분
+              </Text>
+            </Block>
+
+            <Block middle>
+              <Text
+                size={16}
+                muted
                 style={{
+                  textAlign: 'center',
                   color: '#2c2c2c',
                   fontWeight: 'bold',
-                  fontSize: 19,
-                  fontFamily: 'montserrat-bold',
-                  marginTop: 10,
-                  marginBottom: 10,
-                  zIndex: 2,
+                  fontSize: 15,
+                  paddingHorizontal: 15,
+                  paddingTop: 10,
+                  paddingBottom: 10,
                 }}
               >
-                양념장
+                가지는 장도 튼튼하게 해주고, 피로회복에도 효과가 뛰어나다고 해요!! 이렇게 좋은
+                먹거리인 ‘가지’로 간단하지만 정말 맛있는 가지볶음을 해보아요 :)
               </Text>
-
-              <Block row>
-                <Button
-                  style={{ width: '42%', height: 44, marginHorizontal: 10, elevation: 0 }}
-                  textStyle={{ fontSize: 15, color: 'white' }}
-                  color="Primary"
-                  round
-                >
-                  간장
-                </Button>
-                <Button
-                  right
-                  style={{ width: '42%', height: 44, marginHorizontal: 20, elevation: 0 }}
-                  textStyle={{ fontSize: 15, color: 'white' }}
-                  color="Primary"
-                  round
-                >
-                  다진마늘
-                </Button>
-              </Block>
-              <Block row>
-                <Button
-                  style={{ width: '42%', height: 44, marginHorizontal: 10, elevation: 0 }}
-                  textStyle={{ fontSize: 15, color: 'white' }}
-                  color="Primary"
-                  round
-                >
-                  굴소스
-                </Button>
-                <Button
-                  right
-                  style={{ width: '42%', height: 44, marginHorizontal: 20, elevation: 0 }}
-                  textStyle={{ fontSize: 15, color: 'white' }}
-                  color="Primary"
-                  round
-                >
-                  고추가루
-                </Button>
-              </Block>
-              <Block row>
-                <Button
-                  style={{ width: '42%', height: 44, marginHorizontal: 10, elevation: 0 }}
-                  textStyle={{ fontSize: 15, color: 'white' }}
-                  color="Primary"
-                  round
-                >
-                  설탕
-                </Button>
-              </Block>
             </Block>
             <Hr />
+            <Block>
+              <Block>
+                <Text style={styles.titleStyle}>재료</Text>
+
+                <Block row>
+                  <TouchableOpacity style={styles.ingreBtn}>
+                    <Block row>
+                      <Text style={styles.ingreTxt}>가지</Text>
+                      <View style={styles.viewStyle}>
+                        <Text style={styles.amoutTxt}>2개</Text>
+                      </View>
+                    </Block>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.ingreBtn}>
+                    <Block row>
+                      <Text style={styles.ingreTxt}>고추</Text>
+                      <View style={styles.viewStyle}>
+                        <Text style={styles.amoutTxt}>1개</Text>
+                      </View>
+                    </Block>
+                  </TouchableOpacity>
+                </Block>
+                <Block row>
+                  <TouchableOpacity style={styles.ingreBtn}>
+                    <Block row>
+                      <Text style={styles.ingreTxt}>양파</Text>
+                      <View style={styles.viewStyle}>
+                        <Text style={styles.amoutTxt}>1/4개</Text>
+                      </View>
+                    </Block>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.ingreBtn}>
+                    <Block row>
+                      <Text style={styles.ingreTxt}>대파</Text>
+                      <View style={styles.viewStyle}>
+                        <Text style={styles.amoutTxt}>1개</Text>
+                      </View>
+                    </Block>
+                  </TouchableOpacity>
+                </Block>
+                <Block row>
+                  <TouchableOpacity style={styles.ingreBtn}>
+                    <Block row>
+                      <Text style={styles.ingreTxt}>통깨</Text>
+                      <View style={styles.viewStyle}>
+                        <Text style={styles.amoutTxt}>0.5숟</Text>
+                      </View>
+                    </Block>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.ingreBtn}>
+                    <Block row>
+                      <Text style={styles.ingreTxt}>참기름</Text>
+                      <View style={styles.viewStyle}>
+                        <Text style={styles.amoutTxt}>1숟</Text>
+                      </View>
+                    </Block>
+                  </TouchableOpacity>
+                </Block>
+              </Block>
+              <Block>
+                <Text style={styles.titleStyle}>양념장</Text>
+
+                <Block row>
+                  <TouchableOpacity style={styles.ingreBtn}>
+                    <Block row>
+                      <Text style={styles.ingreTxt}>간장</Text>
+                      <View style={styles.viewStyle}>
+                        <Text style={styles.amoutTxt}>2숟</Text>
+                      </View>
+                    </Block>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.ingreBtn}>
+                    <Block row>
+                      <Text style={styles.ingreTxt}>다진마늘</Text>
+                      <View style={styles.viewStyle}>
+                        <Text style={styles.amoutTxt}>0.5숟</Text>
+                      </View>
+                    </Block>
+                  </TouchableOpacity>
+                </Block>
+                <Block row>
+                  <TouchableOpacity style={styles.ingreBtn}>
+                    <Block row>
+                      <Text style={styles.ingreTxt}>굴소스</Text>
+                      <View style={styles.viewStyle}>
+                        <Text style={styles.amoutTxt}>1숟</Text>
+                      </View>
+                    </Block>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.ingreBtn}>
+                    <Block row>
+                      <Text style={styles.ingreTxt}>고추가루</Text>
+                      <View style={styles.viewStyle}>
+                        <Text style={styles.amoutTxt}>0.5숟</Text>
+                      </View>
+                    </Block>
+                  </TouchableOpacity>
+                </Block>
+                <Block row>
+                  <TouchableOpacity style={styles.ingreBtn}>
+                    <Block row>
+                      <Text style={styles.ingreTxt}>설탕</Text>
+                      <View style={styles.viewStyle}>
+                        <Text style={styles.amoutTxt}>1숟</Text>
+                      </View>
+                    </Block>
+                  </TouchableOpacity>
+                </Block>
+              </Block>
+              <Hr />
+            </Block>
           </Block>
         </Block>
-      </Block>
+      </ScrollView>
     );
   };
 
   render() {
     return (
-      <View style={styles.viewStyle}>
-        <ScrollView style={styles.scrollableView} showsVerticalScrollIndicator={false}>
-          {this.renderDetail()}
-        </ScrollView>
+      <View style={styles.mainViewStyle}>
+        {this.renderDetail()}
         <View style={styles.underMenu}>
           <Button
-            style={{
-              width: 200,
-              height: 44,
-              marginHorizontal: 10,
-              elevation: 0,
-              alignItems: 'center',
-            }}
-            textStyle={{ fontSize: 15, color: 'white' }}
+            style={styles.btnStyle}
+            textStyle={{ fontSize: 15, color: '#F18D46' }}
             color="Primary"
             round
             onPress={() => this.props.navigation.navigate('TTSOrder')}
@@ -295,9 +260,65 @@ class RecipeInfo extends Component {
 }
 
 const styles = StyleSheet.create({
-  scrollableView: { flexGrow: 1, height: 0 },
-  viewStyle: { flexGrow: 1, top: 60 },
-  underMenu: { alignItems: 'center', marginBottom: 10, bottom: 50, backgroundColor: '#FFDEAD' },
+  scrollableView: { flexGrow: 1, height: height * 0.5 },
+  mainViewStyle: { flexGrow: 1, marginTop: height > 800 ? 100 : 60 },
+  viewStyle: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 30,
+    width: 50,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    color: 'black',
+    alignSelf: 'center',
+    fontFamily: 'montserrat-bold',
+  },
+  ingreTxt: {
+    fontSize: 15,
+    color: 'white',
+    margin: 10,
+    fontFamily: 'montserrat-bold',
+  },
+  amoutTxt: {
+    fontFamily: 'montserrat-bold',
+  },
+  titleStyle: {
+    color: '#2c2c2c',
+    fontWeight: 'bold',
+    fontSize: 19,
+    fontFamily: 'montserrat-bold',
+    marginTop: 10,
+    marginBottom: 10,
+    zIndex: 2,
+  },
+
+  ingreBtn: {
+    width: '45%',
+    height: 44,
+    marginHorizontal: 10,
+    elevation: 0,
+    margin: 5,
+    backgroundColor: '#F18D46',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 30,
+  },
+  underMenu: {
+    alignItems: 'center',
+    marginBottom: 10,
+    bottom: -10,
+    backgroundColor: 'white',
+  },
+  btnStyle: {
+    width: 200,
+    height: 44,
+    marginHorizontal: 10,
+    elevation: 0,
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderWidth: 4,
+    borderColor: '#F18D46',
+  },
   profileContainer: {
     padding: 0,
     zIndex: 1,
