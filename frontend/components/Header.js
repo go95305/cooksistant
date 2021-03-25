@@ -37,9 +37,7 @@ class Header extends React.Component {
 
     switch (title) {
       case '프로필':
-        return [
-          <EvalueListBtn key="evalu-list" navigation={navigation} isWhite={white} />,
-        ];
+        return [<EvalueListBtn key="evalu-list" navigation={navigation} isWhite={white} />];
       default:
         break;
     }

@@ -43,11 +43,11 @@ class RecipeInfo extends Component {
   //   }
   // };
   renderDetail = () => {
-    const [alternateImage, setAlternateImage] = useState(true);
+    // const [alternateImage, setAlternateImage] = useState(true);
 
-    const changeImage = () => {
-      setAlternateImage((alternateImage) => !alternateImage);
-    };
+    // const changeImage = () => {
+    //   setAlternateImage((alternateImage) => !alternateImage);
+    // };
     return (
       <Block>
         <Block>
@@ -101,17 +101,7 @@ class RecipeInfo extends Component {
               20분
             </Text>
           </Block>
-          <Block right>
-            <Button
-              style={{ width: 90, height: 44, marginHorizontal: 10, elevation: 0 }}
-              textStyle={{ fontSize: 15, color: 'white' }}
-              color="Primary"
-              round
-              onPress={() => this.props.navigation.navigate('TTSOrder')}
-            >
-              요리시작
-            </Button>
-          </Block>
+
           <Block middle>
             <Text
               size={16}
@@ -282,6 +272,23 @@ class RecipeInfo extends Component {
         <ScrollView style={styles.scrollableView} showsVerticalScrollIndicator={false}>
           {this.renderDetail()}
         </ScrollView>
+        <View style={styles.underMenu}>
+          <Button
+            style={{
+              width: 200,
+              height: 44,
+              marginHorizontal: 10,
+              elevation: 0,
+              alignItems: 'center',
+            }}
+            textStyle={{ fontSize: 15, color: 'white' }}
+            color="Primary"
+            round
+            onPress={() => this.props.navigation.navigate('TTSOrder')}
+          >
+            요리시작
+          </Button>
+        </View>
       </View>
     );
   }
@@ -290,6 +297,7 @@ class RecipeInfo extends Component {
 const styles = StyleSheet.create({
   scrollableView: { flexGrow: 1, height: 0 },
   viewStyle: { flexGrow: 1, top: 60 },
+  underMenu: { alignItems: 'center', marginBottom: 10, bottom: 50, backgroundColor: '#FFDEAD' },
   profileContainer: {
     padding: 0,
     zIndex: 1,
