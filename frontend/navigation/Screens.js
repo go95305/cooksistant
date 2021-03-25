@@ -78,7 +78,7 @@ function HomeStack(props) {
         component={TTSOrder}
         options={{
           header: ({ navigation, scene }) => (
-            <Header title="TTSOrder" back black transparent navigation={navigation} scene={scene} />
+            <Header title="TTS" back black transparent navigation={navigation} scene={scene} />
           ),
           headerTransparent: true,
         }}
@@ -108,7 +108,7 @@ function RecipeListStack(props) {
             <Header
               title="레시피 상세정보"
               back
-              white
+              black
               transparent
               navigation={navigation}
               scene={scene}
@@ -122,7 +122,7 @@ function RecipeListStack(props) {
         component={TTSOrder}
         options={{
           header: ({ navigation, scene }) => (
-            <Header title="TTSOrder" back black transparent navigation={navigation} scene={scene} />
+            <Header title="TTS" back black transparent navigation={navigation} scene={scene} />
           ),
           headerTransparent: true,
         }}
@@ -221,7 +221,7 @@ function ProfileStack(props) {
             <Header
               title="레시피 상세정보"
               back
-              white
+              black
               transparent
               navigation={navigation}
               scene={scene}
@@ -246,7 +246,7 @@ function ProfileStack(props) {
         component={TTSOrder}
         options={{
           header: ({ navigation, scene }) => (
-            <Header title="TTSOrder" back black transparent navigation={navigation} scene={scene} />
+            <Header title="TTS" back black transparent navigation={navigation} scene={scene} />
           ),
           headerTransparent: true,
         }}

@@ -73,7 +73,7 @@ class RecipeInfo extends Component {
                   fontFamily: 'montserrat-bold',
                   marginBottom: theme.SIZES.BASE / 2,
                   fontWeight: '900',
-                  fontSize: 26,
+                  fontSize: 25,
                   paddingTop: height > 800 ? 130 : 100,
                 }}
                 color="black"

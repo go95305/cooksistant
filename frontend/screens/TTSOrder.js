@@ -36,7 +36,7 @@ class TTSOrder extends React.Component {
                   <Block flex={0.2} middle>
                     <Text
                       style={{
-                        fontFamily: 'montserrat-regular',
+                        fontFamily: 'montserrat-bold',
                         textAlign: 'center',
                       }}
                       color="#333"
@@ -53,16 +53,17 @@ class TTSOrder extends React.Component {
                         <Block middle>
                           <Image style={styles.photo} source={Images.cutEggplant} />
                         </Block>
-                        <Block flex={0.2} middle>
+                        <Block middle>
                           <View style={styles.MainContainer}>
                             <Text
                               style={{
                                 fontFamily: 'montserrat-regular',
                                 textAlign: 'center',
-                                padding: 10,
+                                padding: 15,
+                                margin: 10,
                               }}
                               color="#333"
-                              size={18}
+                              size={17}
                             >
                               1. 먼저 가지를 먹기 좋게 썰어주세요! 저처럼 동글하게 썰어도 좋고,
                               손가락만하게 썰어도 좋아요 :)
@@ -116,40 +117,19 @@ const styles = StyleSheet.create({
     elevation: 1,
     overflow: 'hidden',
   },
-  inputIcons: {
-    marginRight: 12,
-    color: nowTheme.COLORS.ICON_INPUT,
-  },
-  inputs: {
-    borderWidth: 1,
-    borderColor: '#E3E3E3',
-    borderRadius: 21.5,
-  },
-  passwordCheck: {
-    paddingLeft: 2,
-    paddingTop: 6,
-    paddingBottom: 15,
-  },
+
   createButton: {
     width: width * 0.5,
     marginTop: 10,
     marginBottom: 30,
   },
-  social: {
-    width: theme.SIZES.BASE * 3.5,
-    height: theme.SIZES.BASE * 3.5,
-    borderRadius: theme.SIZES.BASE * 1.75,
-    justifyContent: 'center',
-    marginHorizontal: 10,
-  },
+
   photo: {
     borderRadius: 20,
-    height: 230,
-    width: 300,
+    height: 200,
+    width: 250,
   },
   MainContainer: {
-    flex: 1,
-    paddingTop: Platform.OS === 'ios' ? 20 : 0,
     justifyContent: 'center',
     margin: 20,
   },
