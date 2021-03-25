@@ -1,24 +1,23 @@
 package com.project.cooksistant.service;
 
 import com.project.cooksistant.Exception.RestException;
-import com.project.cooksistant.model.dto.*;
+import com.project.cooksistant.model.dto.PersonalDTO;
+import com.project.cooksistant.model.dto.RecipeMypageDTO;
+import com.project.cooksistant.model.dto.ScrapMypageDTO;
 import com.project.cooksistant.model.entity.Recipe;
 import com.project.cooksistant.model.entity.Scrap;
 import com.project.cooksistant.model.entity.User;
-import com.project.cooksistant.model.entity.UserKeyword;
 import com.project.cooksistant.repository.RecipeRepository;
 import com.project.cooksistant.repository.ScrapRepository;
-import com.project.cooksistant.repository.UserKeywordRepository;
 import com.project.cooksistant.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.swing.text.html.Option;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,16 +28,14 @@ public class UserService {
     private final RecipeRepository recipeRepository;
     private final ScrapRepository scrapRepository;
     private final ModelMapper modelMapper;
-    private final UserKeywordRepository userKeywordRepository;
     @PersistenceContext
     EntityManager entityManager;
 
-    public UserService(UserRepository userRepository, RecipeRepository recipeRepository, ScrapRepository scrapRepository, ModelMapper modelMapper, UserKeywordRepository userKeywordRepository) {
+    public UserService(UserRepository userRepository, RecipeRepository recipeRepository, ScrapRepository scrapRepository, ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.recipeRepository = recipeRepository;
         this.scrapRepository = scrapRepository;
         this.modelMapper = modelMapper;
-        this.userKeywordRepository = userKeywordRepository;
     }
 
     @Transactional
@@ -50,16 +47,11 @@ public class UserService {
         personalDTO.setUserId(user.get().getUserId());
         personalDTO.setNickname(user.get().getNickname());
 
-        List<UserKeyword> userKeywordList = userKeywordRepository.findAllByUser(user.get());
-        for (int i = 0; i < userKeywordList.size(); i++) {
-            personalDTO.getMytasteList().add(userKeywordList.get(i).getKeyword().getKeyword());
-        }
-
-        //내가 등록한 레시피 검색
-        List<Recipe> recipeList = recipeRepository.findAllByUser(user.get());
-        recipeMypageDTOList = modelMapper.map(recipeList, new TypeToken<List<RecipeMypageDTO>>() {
-        }.getType());
-        personalDTO.setRecipeList(recipeMypageDTOList);
+//        //내가 등록한 레시피 검색
+//        List<Recipe> recipeList = recipeRepository.findAllByUser(user.get());
+//        recipeMypageDTOList = modelMapper.map(recipeList, new TypeToken<List<RecipeMypageDTO>>() {
+//        }.getType());
+//        personalDTO.setRecipeList(recipeMypageDTOList);
 
         //내가 스크랩한 레시피 검색
         List<Scrap> scrapList = scrapRepository.findAllByUser(user.get());

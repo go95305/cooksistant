@@ -19,15 +19,15 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    //    @ApiOperation(value = "취향 기반 레시피 리스트 제공(X)")
-//    @GetMapping("recipe/recommendation")
-//    public ResponseEntity<Map<String, Object>> recommend() {
-//        ResponseEntity<Map<String, Object>> resEntity = null;
-//        Map<String, Object> map = new HashMap<String, Object>();
-//
-//        return resEntity;
-//    }
-//
+    @ApiOperation(value = "취향 기반 레시피 리스트 제공(X)", notes = "Request\n" +
+            "                                                   - userId:협업필터링에 사용될 유저와 비슷한 레시피 추천을 위한 UserId\n" +
+            "                                                   - List<String>: 추천받을 재료 리스트")
+    @GetMapping("recipe/recommendation")
+    public Long recommend(@RequestBody RecommendDTO recommendDTO) {
+        Long recipeId = recipeService.getRecommendation(recommendDTO);
+        return recipeId;
+    }
+
     @ApiOperation(value = "레시피 평가하기(Ok)", notes = "Request\n" +
             "                                          - complete: 레시피 리뷰 작성 여부\n" +
             "                                          - keywordList: 평가 키워드 리스트\n" +
@@ -78,7 +78,7 @@ public class RecipeController {
 //        }
 //    }
 
-    @ApiOperation(value = "내가 리뷰한 혹은 리뷰하지 않은 레시피 리스트 (Ok)",notes = "Request\n" +
+    @ApiOperation(value = "내가 리뷰한 혹은 리뷰하지 않은 레시피 리스트 (Ok)", notes = "Request\n" +
             "                                                           - authKey: 유저 인증키\n" +
             "                                                           Response\n" +
             "                                                           - cuisine: 레시피 명\n" +

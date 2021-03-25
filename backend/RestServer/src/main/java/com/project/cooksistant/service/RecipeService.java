@@ -33,7 +33,7 @@ public class RecipeService {
 
     public RecipeService(UserRepository userRepository, WebClient.Builder webClientBuilder, StepRepository stepRepository, RecipeRepository recipeRepository, IngredientRepository ingredientRepository, RecipeIngredientRepository recipeIngredientRepository, ModelMapper modelMapper, EvaluationRepository evaluationRepository, EvaluationKeywordRepository evaluationKeywordRepository, KeywordRepository keywordRepository) {
         this.userRepository = userRepository;
-        this.webClient = webClientBuilder.baseUrl("http://localhost:8080").build();
+        this.webClient = webClientBuilder.baseUrl("http://j4c101.p.ssafy.io:8083").build(); // 추후에 flask에 알맞게 변경 // 8083포트로 설정
         this.stepRepository = stepRepository;
         this.recipeRepository = recipeRepository;
         this.ingredientRepository = ingredientRepository;
@@ -44,15 +44,6 @@ public class RecipeService {
         this.keywordRepository = keywordRepository;
     }
 
-
-//    public List<UserDTO> findRecipeName() {
-////        ModelMapper modelMapper = new ModelMapper();
-//        List<User> list = userRepository.findAll();
-//        List<UserDTO> userDTOList = modelMapper.map(list, new TypeToken<List<UserDTO>>() {
-//        }.getType());
-//        System.out.println(userDTOList);
-//        return userDTOList;
-//    }
 //
 //    //새로운 레시피 등록시 해당 레시피 등록후 다시 리턴
 //    @Transactional
@@ -199,4 +190,11 @@ public class RecipeService {
         return allEvaluationDTOList;
     }
 
+    public Long getRecommendation(RecommendDTO recommendDTO) {
+        String hello = webClient.get()
+                .uri("/evaluation")
+                .retrieve()
+                .bodyToMono(String.class).block();
+        return Long.parseLong(hello);
+    }
 }
