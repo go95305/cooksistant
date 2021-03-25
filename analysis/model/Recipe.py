@@ -1,28 +1,31 @@
-from utils.database import db
-from sqlalchemy.orm import relationship
-from sqlalchemy_serializer import SerializerMixin
+from utils.database import cursor
+import pandas as pd
 
-association_table = db.Table('recipe_has_ingredient', db.metadata,
-    db.Column('recipe_id', db.Integer, db.ForeignKey('recipe.id')),
-    db.Column('ingredient_id', db.Integer, db.ForeignKey('ingredient.id'))
-)
+class Recipe:
 
-class Recipe(db.Model, SerializerMixin):
-    __tablename__ = 'recipe'
+    def getRecipeDFById(recipeIds):
+        recipeIds_str = [str(int) for int in recipeIds]
+        recipeIds_str = ",".join(recipeIds_str)
 
-    id = db.Column(db.BigInteger, primary_key=True, nullable=False, autoincrement=True)
-    user_id = db.Column(db.BigInteger, db.ForeignKey('user.id'))
-    cuisine = db.Column(db.String(255, 'utf8mb4_unicode_ci'))
-    description = db.Column(db.String())
-    cooking_time = db.Column(db.String(255, 'utf8mb4_unicode_ci'))
-    level = db.Column(db.String(255, 'utf8mb4_unicode_ci'))
-    serving = db.Column(db.String(255, 'utf8mb4_unicode_ci'))
-    image = db.Column(db.String(255, 'utf8mb4_unicode_ci'))
-    ingredients = relationship("Ingredient",
-                               secondary=association_table)
+        sql = f"select id, cuisine from recipe where id in ({recipeIds_str})"
+        cursor.execute(sql)
+        result = cursor.fetchall()
 
-class Ingredient(db.Model, SerializerMixin):
-    __tablename__ = 'ingredient'
+        return pd.DataFrame(result)
 
-    id = db.Column(db.BigInteger, primary_key=True, nullable=False, autoincrement=True)
-    name = db.Column(db.String(255, 'utf8mb4_unicode_ci'))
+
+    def getRecipeByIngredient(ingredients):
+        size = len(ingredients)
+        ingredients_str = "\",\"".join(ingredients)
+
+        sql = "select r.recipe_id\n" \
+              "from recipe_has_ingredient r left outer join ingredient i\n" \
+              "on r.ingredient_id = i.id\n" \
+              f"where i.name in (\"{ingredients_str}\")\n" \
+              "group by r.recipe_id\n" \
+              f"having count(r.recipe_id) = {size};"
+
+        cursor.execute(sql)
+        result = [item['recipe_id'] for item in cursor.fetchall()]
+
+        return result
