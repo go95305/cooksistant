@@ -30,7 +30,7 @@ def CF(user_id, ingredients):
     svd_user_predicted_ratings = np.dot(np.dot(U, sigma), Vt) + user_rating_mean.reshape(-1, 1)
     df_svd_preds = pd.DataFrame(svd_user_predicted_ratings, columns=user_recipe_rating.columns)
 
-    already_rated, predictions = recommend_movies(df_svd_preds, 2, df_recipe, df_rating, 10)
+    already_rated, predictions = recommend_movies(df_svd_preds, user_id, df_recipe, df_rating, 10)
 
     return predictions["id"].tolist()
 
