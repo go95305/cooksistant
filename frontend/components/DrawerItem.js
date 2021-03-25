@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity, Linking } from "react-native";
 import { Block, Text, theme } from "galio-framework";
+import firebase from 'firebase';
 
 import Icon from "./Icon";
 import nowTheme from "../constants/Theme";
@@ -72,16 +73,7 @@ class DrawerItem extends React.Component {
             style={{ opacity: 0.5 }}
           />
         );
-      case "Examples":
-        return (
-          <Icon
-            name="album"
-            family="NowExtra"
-            size={14}
-            color={focused ? nowTheme.COLORS.PRIMARY : "white"}
-          />
-        );
-      case "GETTING STARTED":
+      case "앱 소개":
         return (
           <Icon
             name="spaceship2x"
@@ -91,7 +83,7 @@ class DrawerItem extends React.Component {
             color={focused ? nowTheme.COLORS.PRIMARY : "white"}
           />
         );
-      case "LOGOUT":
+      case "로그아웃":
         return (
           <Icon
             name="share"
@@ -118,11 +110,10 @@ class DrawerItem extends React.Component {
       <TouchableOpacity
         style={{ height: 60 }}
         onPress={() =>
-          title == "GETTING STARTED"
-            ? Linking.openURL(
-                "https://demos.creative-tim.com/now-ui-pro-react-native/docs/"
+          title == "앱 소개" ? Linking.openURL(
+            "https://www.notion.so/SUB3-eddba11b91494c4185c65cec233fa8ac"
               ).catch(err => console.error("An error occurred", err))
-            : navigation.navigate(title == 'LOGOUT' ? 'Onboarding' : title)
+            : navigation.navigate(title == "로그아웃" ? "Start" : title)
         }
       >
         <Block flex row style={containerStyles}>

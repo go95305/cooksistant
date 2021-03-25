@@ -71,15 +71,15 @@ class Header extends React.Component {
           style={[styles.tab, styles.divider]}
           onPress={() => console.log(navigation.navigate('Home'))}
         >
-          <Block row middle>
+          <Block row middle style={{ borderColor: '#F18D46' }}>
             <Icon
               name="bulb"
               family="NowExtra"
-              size={18}
+              size={20}
               style={{ paddingRight: 8 }}
               color={nowTheme.COLORS.HEADER}
             />
-            <Text style={{ fontFamily: 'montserrat-regular' }} size={16} style={styles.tabTitle}>
+            <Text style={{ fontFamily: 'montserrat-regular' }} size={18} style={styles.tabTitle}>
               {optionLeft || '인기'}
             </Text>
           </Block>
@@ -95,7 +95,7 @@ class Header extends React.Component {
             />
             <Text
               style={{ fontFamily: 'montserrat-regular' }}
-              size={16}
+              size={18}
               style={styles.tabTitle}
               onPress={() => navigation.navigate('TrendyList')}
             >
