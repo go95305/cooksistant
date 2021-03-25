@@ -72,16 +72,7 @@ class DrawerItem extends React.Component {
             style={{ opacity: 0.5 }}
           />
         );
-      case "Examples":
-        return (
-          <Icon
-            name="album"
-            family="NowExtra"
-            size={14}
-            color={focused ? nowTheme.COLORS.PRIMARY : "white"}
-          />
-        );
-      case "GETTING STARTED":
+      case "앱 소개":
         return (
           <Icon
             name="spaceship2x"
@@ -91,7 +82,7 @@ class DrawerItem extends React.Component {
             color={focused ? nowTheme.COLORS.PRIMARY : "white"}
           />
         );
-      case "LOGOUT":
+      case "로그아웃":
         return (
           <Icon
             name="share"

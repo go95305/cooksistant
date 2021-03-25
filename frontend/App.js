@@ -6,8 +6,13 @@ import { Asset } from 'expo-asset';
 import { Block, GalioProvider } from 'galio-framework';
 import { NavigationContainer } from '@react-navigation/native';
 
+import * as firebase from 'firebase';
+import {firebaseConfig } from './config';
+
 import Screens from './navigation/Screens';
 import { Images, articles, nowTheme } from './constants';
+
+firebase.initializeApp(firebaseConfig);
 
 // cache app images
 const assetImages = [

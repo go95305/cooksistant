@@ -66,8 +66,8 @@ function CustomDrawerContent({
             style={{ borderColor: 'white', width: '93%', borderWidth: StyleSheet.hairlineWidth, marginHorizontal: 10}}
           />
         </Block>
-        <DrawerCustomItem title="GETTING STARTED" navigation={navigation}/>
-        <DrawerCustomItem title="LOGOUT" navigation={navigation}/>
+        <DrawerCustomItem title="앱 소개" navigation={navigation}/>
+        <DrawerCustomItem title="로그아웃" navigation={navigation}/>
         </ScrollView>
       </Block>
     </Block>
