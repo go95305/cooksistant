@@ -1,17 +1,15 @@
-from utils.database import db
-from sqlalchemy_serializer import SerializerMixin
+from utils.database import cursor
+import pandas as pd
 
-class Evaluation(db.Model, SerializerMixin):
-    __tablename__ = 'evaluation'
+class Evaluation:
 
-    id = db.Column(db.BigInteger, primary_key=True, nullable=False, autoincrement=True)
-    recipe_id = db.Column(db.BigInteger, db.ForeignKey('recipe.id'))
-    user_id = db.Column(db.BigInteger, db.ForeignKey('user.id'))
-    favor = db.Column(db.Boolean)
-    is_complete = db.Column(db.Boolean)
-    is_sampled = db.Column(db.Boolean)
-    bitterness = db.Column(db.BigInteger)
-    saltiness = db.Column(db.BigInteger)
-    sourness = db.Column(db.BigInteger)
-    spiciness = db.Column(db.BigInteger)
-    sweetness = db.Column(db.BigInteger)
+    def getEvaluationDFByRecipeId(recipeIds):
+        recipeIds_str = [str(int) for int in recipeIds]
+        recipeIds_str = ",".join(recipeIds_str)
+
+        sql = "select user_id, recipe_id, favor " \
+              f"from evaluation where recipe_id in ({recipeIds_str})"
+        cursor.execute(sql)
+        result = cursor.fetchall()
+
+        return pd.DataFrame(result)
