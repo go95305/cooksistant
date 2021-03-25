@@ -28,6 +28,7 @@
     "expo-google-app-auth": "^8.1.4",
     "expo-asset": "~8.2.1",
     "expo-font": "~8.4.0",
+    "expo-image-picker": "~9.2.0",
     "firebase": "^7.9.0",
     "galio-framework": "^0.7.1",
     "prop-types": "^15.7.2",
