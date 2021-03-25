@@ -9,6 +9,12 @@ import {
 } from 'react-native';
 import { Block, Checkbox, Text, Button as GaButton, theme } from 'galio-framework';
 
+
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
+import {View, Image } from "react-native";
+
+
 import { Button, Icon, Input } from '../components';
 import { Images, nowTheme } from '../constants';
 
@@ -19,7 +25,38 @@ const DismissKeyboard = ({ children }) => (
 );
 
 class Receipt extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+     hasCameraPermission: null,
+     image: null,
+    }
+   }
+
+  async componentDidMount() {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    this.setState({ hasCameraPermission: status === "granted" });
+  }
+  
+  _getPhotoLibrary = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+     allowsEditing: true,
+     aspect: [4, 3]
+    });
+    if (!result.cancelled) {
+     this.setState({ image: result.uri });
+    }
+   }
+   
   render() {
+    const { image, hasCameraPermission } = this.state;
+  if (hasCameraPermission === null) {
+   return <View />
+  }
+  else if (hasCameraPermission === false) {
+   return <Text>Access to camera has been denied.</Text>;
+  }
+  else {
     return (
       <DismissKeyboard>
         <Block flex middle>
@@ -40,7 +77,7 @@ class Receipt extends React.Component {
                       color="#333"
                       size={18}
                     >
-                     영수증 사진을 등록해주세요
+                      재료 검색
                     </Text>
                   </Block>
 
@@ -48,69 +85,77 @@ class Receipt extends React.Component {
                     <Block center flex={0.9}>
                       <Block flex space="between">
                         <Block>
-                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
-                            <Input
-                              placeholder="First Name"
-                              style={styles.inputs}
-                              iconContent={
-                                <Icon
-                                  size={16}
-                                  color="#ADB5BD"
-                                  name="profile-circle"
-                                  family="NowExtra"
-                                  style={styles.inputIcons}
-                                />
-                              }
-                            />
-                          </Block>
-                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
-                            <Input
-                              placeholder="Last Name"
-                              style={styles.inputs}
-                              iconContent={
-                                <Icon
-                                  size={16}
-                                  color="#ADB5BD"
-                                  name="caps-small2x"
-                                  family="NowExtra"
-                                  style={styles.inputIcons}
-                                />
-                              }
-                            />
-                          </Block>
-                          <Block width={width * 0.8}>
-                            <Input
-                              placeholder="Email"
-                              style={styles.inputs}
-                              iconContent={
-                                <Icon
-                                  size={16}
-                                  color="#ADB5BD"
-                                  name="email-852x"
-                                  family="NowExtra"
-                                  style={styles.inputIcons}
-                                />
-                              }
-                            />
-                          </Block>
-                          <Block
-                            style={{ marginVertical: theme.SIZES.BASE, marginLeft: 15 }}
-                            row
-                            width={width * 0.75}
-                          >
-                            <Checkbox
-                              checkboxStyle={{
-                                borderWidth: 1,
-                                borderRadius: 2,
-                                borderColor: '#E3E3E3',
+                            <View style={{ flex: 1 }}>
+                              <View style={styles.activeImageContainer}>
+                                {image ? (
+                                <Image source={{ uri: image }} style={{ flex: 1 }} />
+                                ) : (
+                                <View />
+                                )}
+                              </View>
+                              <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+                              <Button 
+                                onPress={this._getPhotoLibrary.bind(this)} 
+                                title="Photo Picker Screen!"
+                              >
+                                <Text>사진 등록</Text>
+                              </Button>
+                              </View>
+                            </View>
+                          <Block>
+                            <Text
+                              style={{
+                                color: '#2c2c2c',
+                                fontWeight: 'bold',
+                                fontSize: 19,
+                                fontFamily: 'montserrat-bold',
+                                marginTop: 10,
+                                marginBottom: 10,
+                                zIndex: 2,
                               }}
-                              color={nowTheme.COLORS.PRIMARY}
-                              labelStyle={{
-                                color: nowTheme.COLORS.HEADER,
-                                fontFamily: 'montserrat-regular',
-                              }}
-                              label="I agree to the terms and conditions."
-                            />
+                            >
+                              재료
+                            </Text>
+
+                            <Block row>
+                              <Button
+                                style={{ width: '42%', height: 44, marginHorizontal: 10, elevation: 0 }}
+                                textStyle={{ fontSize: 15, color: 'white' }}
+                                color="Primary"
+                                round
+                              >
+                                하늘
+                              </Button>
+                              <Button
+                                right
+                                style={{ width: '42%', height: 44, marginHorizontal: 20, elevation: 0 }}
+                                textStyle={{ fontSize: 15, color: 'white' }}
+                                color="Primary"
+                                round
+                              >
+                                부히
+                              </Button>
+                            </Block>
+                            <Block row>
+                              <Button
+                                style={{ width: '42%', height: 44, marginHorizontal: 10, elevation: 0 }}
+                                textStyle={{ fontSize: 15, color: 'white' }}
+                                color="Primary"
+                                round
+                              >
+                                지현
+                              </Button>
+                              <Button
+                                right
+                                style={{ width: '42%', height: 44, marginHorizontal: 20, elevation: 0 }}
+                                textStyle={{ fontSize: 15, color: 'white' }}
+                                color="Primary"
+                                round
+                              >
+                                유창
+                              </Button>
+                            </Block>
+                           
                           </Block>
                         </Block>
                         <Block center>
@@ -134,6 +179,7 @@ class Receipt extends React.Component {
         </Block>
       </DismissKeyboard>
     );
+                            }
   }
 }
 
@@ -190,6 +236,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginHorizontal: 10,
   },
+  activeImageContainer: {
+    flex: 0.9,
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
+    backgroundColor: "#eee",
+    borderBottomWidth: 0.5,
+    borderColor: "#fff"
+   },
 });
 
 export default Receipt ;
