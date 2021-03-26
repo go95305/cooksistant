@@ -35,7 +35,7 @@ function HomeStack(props) {
         component={Home}
         options={{
           header: ({ navigation, scene }) => (
-            <Header title="쿡시스턴트" search options navigation={navigation} scene={scene} />
+            <Header title="쿡시스턴트" search navigation={navigation} scene={scene} />
           ),
           cardStyle: { backgroundColor: '#FFFFFF' },
         }}
