@@ -25,8 +25,7 @@ function CustomDrawerContent({
 }) {
   const insets = useSafeArea();
   const screens = [
-    "Home",
-    "레시피 리스트",
+    "쿡시스턴트",
     "프로필",
     "재료",
     "영수증"
@@ -93,3 +92,4 @@ const styles = StyleSheet.create({
 });
 
 export default CustomDrawerContent;
+
