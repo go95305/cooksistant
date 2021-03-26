@@ -12,7 +12,7 @@ export default tabs = {
     { id: 'places', title: 'Places' },
   ],
   option: [
-    { id: 'popular', title: '인기' },
-    { id: 'trendy', title: '트랜디' },
+    { id: 'Home', title: '인기' },
+    { id: 'TrendyList', title: '트랜디' },
   ],
 };

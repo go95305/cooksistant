@@ -1,5 +1,5 @@
 import React from 'react';
-import { Block } from 'galio-framework';
+import { Block, theme } from 'galio-framework';
 import { Easing, Animated, Dimensions } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -13,9 +13,7 @@ import EvalueRegister from '../screens/EvalueRegister';
 import RecipeList from '../screens/RecipeList';
 import RecipeInfo from '../screens/RecipeInfo';
 import Ingredient from '../screens/Ingredient';
-import TrendyList from '../screens/TrendyList';
 import Receipt from '../screens/Receipt';
-import TTS from '../screens/TTS';
 import TTSOrder from '../screens/TTSOrder';
 import SettingsScreen from '../screens/Settings';
 // drawer
@@ -57,16 +55,6 @@ function HomeStack(props) {
             />
           ),
           headerTransparent: true,
-        }}
-      />
-      <Stack.Screen
-        name="TrendyList"
-        component={TrendyList}
-        options={{
-          header: ({ navigation, scene }) => (
-            <Header title="TrendyList" search options navigation={navigation} scene={scene} />
-          ),
-          cardStyle: { backgroundColor: '#FFFFFF' },
         }}
       />
       <Stack.Screen
