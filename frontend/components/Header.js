@@ -1,16 +1,23 @@
 import React from 'react';
 import { withNavigation } from '@react-navigation/compat';
-import { TouchableOpacity, StyleSheet, Platform, Dimensions, Keyboard } from 'react-native';
+import { TouchableOpacity, StyleSheet, Platform, Dimensions, Image } from 'react-native';
 import { Button, Block, NavBar, Text, theme, Button as GaButton } from 'galio-framework';
+
+import { Images, nowTheme } from '../constants';
 
 import Icon from './Icon';
 import Input from './Input';
 import Tabs from './Tabs';
-import nowTheme from '../constants/Theme';
 
 const { height, width } = Dimensions.get('window');
 const iPhoneX = () =>
   Platform.OS === 'ios' && (height === 812 || width === 812 || height === 896 || width === 896);
+
+const HomeBtn = ({ style, navigation }) => (
+  <TouchableOpacity style={[styles.button, style]} onPress={() => navigation.navigate('Home')}>
+    <Image source={Images.HomeLogo} style={styles.logo} />
+  </TouchableOpacity>
+);
 
 const EvalueListBtn = ({ isWhite, style, navigation }) => (
   <Button
@@ -38,6 +45,12 @@ class Header extends React.Component {
     switch (title) {
       case '프로필':
         return [<EvalueListBtn key="evalu-list" navigation={navigation} isWhite={white} />];
+      case '레시피 평가 리스트':
+      case '레시피 평가하기':
+      case '레시피 추천 받기':
+      case '레시피 상세정보':
+      case '요리 과정':
+        return [<HomeBtn key="home-btn" navigation={navigation} />];
       default:
         break;
     }
@@ -196,6 +209,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     fontFamily: 'montserrat-bold',
+  },
+  logo: {
+    height: 40,
+    width: 37
   },
   navbar: {
     paddingVertical: 0,

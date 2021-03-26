@@ -5,6 +5,7 @@ const ProfileBackground = require('../assets/imgs/profile-bg.png');
 const RegisterBackground = require('../assets/imgs/register-bg.png');
 const Pro = require('../assets/imgs/bg.png');
 const CookLogo = require('../assets/imgs/cooking.png');
+const HomeLogo = require('../assets/imgs/home.png');
 const iOSLogo = require('../assets/imgs/ios.png');
 const androidLogo = require('../assets/imgs/android.png');
 const ProfilePicture = require('../assets/imgs/profile-img.png');
@@ -41,6 +42,7 @@ export default {
   Pro,
   Products,
   NowLogo: CookLogo,
+  HomeLogo,
   iOSLogo,
   androidLogo,
   InvisionLogo,
