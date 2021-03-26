@@ -3,8 +3,8 @@ import { withNavigation } from '@react-navigation/compat';
 import PropTypes from 'prop-types';
 import { StyleSheet, Image, TouchableWithoutFeedback } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
-
-import { Images as check, nowTheme } from '../constants';
+import { nowTheme } from '../constants';
+import { MaterialIcons } from '@expo/vector-icons'; 
 
 class Card extends React.Component {
   render() {
@@ -68,7 +68,7 @@ class Card extends React.Component {
             </Block>
             <Block row space="between">
               <Text
-                style={{ paddingHorizontal: 10, paddingBottom: 5 }}
+                style={{padding: 5, }}
                 size={13}
                 muted={!isEvaluColor}
                 color={'#f18d46'}
@@ -77,9 +77,9 @@ class Card extends React.Component {
                 {item.isEvalu ? '레시피 보러가기' : '레시피 평가하기'}
               </Text>
               {item.isEvalu ? (
-                <Image source={check.isEvalue} style={{ marginRight: 8 }} />
+                <MaterialIcons name="check-box" size={27} color="#f18d46"/>
               ) : (
-                <Image source={check.etc} style={{ marginRight: 8 }} />
+                <MaterialIcons name="check-box-outline-blank" size={27} color="#f18d46" />
               )}
             </Block>
           </Block>
