@@ -3,5 +3,5 @@ COPY . .
 WORKDIR /app
 RUN pip freeze > requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
-EXPOSE 8083
+EXPOSE 5000
 CMD ["python","app.py"]
