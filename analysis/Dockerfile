@@ -1,6 +1,6 @@
 FROM python:3.7
-COPY . .
 WORKDIR /app
+COPY . .
 RUN pip freeze > requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 5000
