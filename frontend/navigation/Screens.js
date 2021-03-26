@@ -74,7 +74,14 @@ function HomeStack(props) {
         component={TTSOrder}
         options={{
           header: ({ navigation, scene }) => (
-            <Header title="요리 과정" back black transparent navigation={navigation} scene={scene} />
+            <Header
+              title="요리 과정"
+              back
+              black
+              transparent
+              navigation={navigation}
+              scene={scene}
+            />
           ),
           headerTransparent: true,
         }}
@@ -153,7 +160,14 @@ function ProfileStack(props) {
         component={TTSOrder}
         options={{
           header: ({ navigation, scene }) => (
-            <Header title="요리 과정" back black transparent navigation={navigation} scene={scene} />
+            <Header
+              title="요리 과정"
+              back
+              black
+              transparent
+              navigation={navigation}
+              scene={scene}
+            />
           ),
           headerTransparent: true,
         }}
@@ -180,7 +194,48 @@ function IngredientStack(props) {
         component={RecipeList}
         options={{
           header: ({ navigation, scene }) => (
-            <Header title="레시피 추천 받기" back black transparent navigation={navigation} scene={scene} />
+            <Header
+              title="레시피 추천 받기"
+              back
+              black
+              transparent
+              navigation={navigation}
+              scene={scene}
+            />
+          ),
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        name="Pro"
+        component={RecipeInfo}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header
+              title="레시피 상세정보"
+              back
+              black
+              transparent
+              navigation={navigation}
+              scene={scene}
+            />
+          ),
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        name="TTSOrder"
+        component={TTSOrder}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header
+              title="요리 과정"
+              back
+              black
+              transparent
+              navigation={navigation}
+              scene={scene}
+            />
           ),
           headerTransparent: true,
         }}
@@ -259,4 +314,3 @@ export default function StartStack(props) {
     </Stack.Navigator>
   );
 }
-
