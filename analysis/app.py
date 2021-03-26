@@ -5,7 +5,8 @@ def create_app(test_config=None) :
     app = Flask(__name__)
     app.debug = True
 
-    api = Api(app, title='TEST', description='레시피 추천 기능 API')
+    #Swagger 대 제목
+    api = Api(app, title='Recommend(Data Analysis)', description='레시피 추천 기능 API')
 
     from view.main_views import ns
     api.add_namespace(ns)

@@ -3,11 +3,11 @@ import pandas as pd
 
 class Recipe:
 
-    def getRecipeDFById(recipeIds):
-        recipeIds_str = [str(int) for int in recipeIds]
-        recipeIds_str = ",".join(recipeIds_str)
+    def getRecipeDFById():
+        # recipeIds_str = [str(int) for int in recipeIds]
+        # recipeIds_str = ",".join(recipeIds_str)
 
-        sql = f"select id, cuisine from recipe where id in ({recipeIds_str})"
+        sql = "select id, cuisine from recipe"
         cursor.execute(sql)
         result = cursor.fetchall()
 

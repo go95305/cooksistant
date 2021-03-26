@@ -13,7 +13,7 @@ insert_body = ns.model(
 )
 
 @ns.route('/evaluation')
-class test(Resource):
+class recommend(Resource):
     @ns.expect(insert_body)
     def post(self):
         data = request.json
