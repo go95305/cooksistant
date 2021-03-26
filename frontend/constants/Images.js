@@ -15,8 +15,6 @@ const cutEggplant = require('../assets/imgs/가지썰기.jpg');
 const mic = require('../assets/imgs/mic.png');
 const bookmark = require('../assets/imgs/bookmark.png');
 const bookmarkFull = require('../assets/imgs/bookmarkFull.png');
-const isEvalue = require('../assets/imgs/isEvalue.png');
-const etc = require('../assets/imgs/etc.png');
 
 const Viewed = [
   require('../assets/imgs/food1.png'),
@@ -49,8 +47,6 @@ export default {
   eggplant,
   bookmark,
   bookmarkFull,
-  isEvalue,
-  etc,
   cutEggplant,
   mic,
 };
