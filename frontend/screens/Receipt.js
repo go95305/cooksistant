@@ -9,6 +9,10 @@ import {
 } from 'react-native';
 import { Block, Checkbox, Text, Button as GaButton, theme } from 'galio-framework';
 
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
+import { Image } from 'react-native';
+
 import { Button, Icon, Input } from '../components';
 import { Images, nowTheme } from '../constants';
 
@@ -19,98 +23,160 @@ const DismissKeyboard = ({ children }) => (
 );
 
 class Receipt extends React.Component {
-  render() {
-    return (
-      <DismissKeyboard>
-        <Block flex middle>
-          <ImageBackground
-            source={Images.RegisterBackground}
-            style={styles.imageBackgroundContainer}
-            imageStyle={styles.imageBackground}
-          >
-            <Block flex middle>
-              <Block style={styles.registerContainer}>
-                <Block flex space="evenly">
-                  <Block flex={0.2} middle>
-                    <Text
-                      style={{
-                        fontFamily: 'montserrat-regular',
-                        textAlign: 'center',
-                      }}
-                      color="#333"
-                      size={18}
-                    >
-                     영수증 사진을 등록해주세요
-                    </Text>
-                  </Block>
+  constructor(props) {
+    super(props);
+    this.state = {
+      hasCameraPermission: null,
+      image: null,
+    };
+  }
 
-                  <Block flex={1} middle space="between">
-                    <Block center flex={0.9}>
-                      <Block flex space="between">
-                        <Block>
-                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
-                            <Input
-                              placeholder="First Name"
-                              style={styles.inputs}
-                              iconContent={
-                                <Icon
-                                  size={16}
-                                  color="#ADB5BD"
-                                  name="profile-circle"
-                                  family="NowExtra"
-                                  style={styles.inputIcons}
-                                />
-                              }
-                            />
+  async componentDidMount() {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    this.setState({ hasCameraPermission: status === 'granted' });
+  }
+
+  _getPhotoLibrary = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+    });
+    if (!result.cancelled) {
+      this.setState({ image: result.uri });
+    }
+  };
+
+  render() {
+    const { image, hasCameraPermission } = this.state;
+    if (hasCameraPermission === null) {
+      return <Block />;
+    } else if (hasCameraPermission === false) {
+      return <Text>Access to camera has been denied.</Text>;
+    } else {
+      return (
+        <DismissKeyboard>
+          <Block flex middle>
+            <ImageBackground
+              source={Images.RegisterBackground}
+              style={styles.imageBackgroundContainer}
+              imageStyle={styles.imageBackground}
+            >
+              <Block flex middle>
+                <Block style={styles.registerContainer}>
+                  <Block flex space="evenly">
+                    <Block flex={0.2} middle>
+                      <Text
+                        style={{
+                          fontFamily: 'montserrat-regular',
+                          textAlign: 'center',
+                        }}
+                        color="#333"
+                        size={18}
+                      >
+                        영수증 사진 등록
+                      </Text>
+                    </Block>
+
+                    <Block flex={1} middle space="between">
+                      <Block center>
+                        <Block flex space="between">
+                          <Block style={{ flex: 1 }}>
+                            <Block style={styles.activeImageContainer}>
+                              {image ? (
+                                <Image source={{ uri: image }} style={{ flex: 1 }} />
+                              ) : (
+                                <Block />
+                              )}
+                            </Block>
+                            <Block style={{ alignItems: 'center', justifyContent: 'center' }}>
+                              <Button color="primary" round style={styles.createButton}>
+                                <Text
+                                  style={{ fontFamily: 'montserrat-bold' }}
+                                  size={14}
+                                  color={nowTheme.COLORS.WHITE}
+                                  onPress={this._getPhotoLibrary.bind(this)}
+                                  title="Photo Picker Screen!"
+                                >
+                                  사진 등록
+                                </Text>
+                              </Button>
+                            </Block>
                           </Block>
-                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
-                            <Input
-                              placeholder="Last Name"
-                              style={styles.inputs}
-                              iconContent={
-                                <Icon
-                                  size={16}
-                                  color="#ADB5BD"
-                                  name="caps-small2x"
-                                  family="NowExtra"
-                                  style={styles.inputIcons}
-                                />
-                              }
-                            />
-                          </Block>
-                          <Block width={width * 0.8}>
-                            <Input
-                              placeholder="Email"
-                              style={styles.inputs}
-                              iconContent={
-                                <Icon
-                                  size={16}
-                                  color="#ADB5BD"
-                                  name="email-852x"
-                                  family="NowExtra"
-                                  style={styles.inputIcons}
-                                />
-                              }
-                            />
-                          </Block>
-                          <Block
-                            style={{ marginVertical: theme.SIZES.BASE, marginLeft: 15 }}
-                            row
-                            width={width * 0.75}
-                          >
-                            <Checkbox
-                              checkboxStyle={{
-                                borderWidth: 1,
-                                borderRadius: 2,
-                                borderColor: '#E3E3E3',
-                              }}
-                              color={nowTheme.COLORS.PRIMARY}
-                              labelStyle={{
-                                color: nowTheme.COLORS.HEADER,
-                                fontFamily: 'montserrat-regular',
-                              }}
-                              label="I agree to the terms and conditions."
-                            />
+                          <Block center width={width * 0.8}>
+                            <Block row>
+                              <Text
+                                style={{
+                                  color: '#2c2c2c',
+                                  fontWeight: 'bold',
+                                  fontSize: 19,
+                                  fontFamily: 'montserrat-bold',
+                                  marginBottom: 10,
+                                  zIndex: 2,
+                                }}
+                              >
+                                재료
+                              </Text>
+                            </Block>
+                            <Block row>
+                              <Button
+                                right
+                                style={{
+                                  width: '30%',
+                                  height: 30,
+                                  marginHorizontal: 10,
+                                  elevation: 0,
+                                }}
+                                textStyle={{ fontSize: 15, color: 'white' }}
+                                color="Primary"
+                                round
+                              >
+                                하늘
+                              </Button>
+                              <Button
+                                right
+                                style={{
+                                  width: '30%',
+                                  height: 30,
+                                  marginHorizontal: 10,
+                                  elevation: 0,
+                                }}
+                                textStyle={{ fontSize: 15, color: 'white' }}
+                                color="Primary"
+                                round
+                              >
+                                부히
+                              </Button>
+                            </Block>
+                            <Block row>
+                              <Button
+                                right
+                                style={{
+                                  width: '30%',
+                                  height: 30,
+                                  marginHorizontal: 10,
+                                  elevation: 0,
+                                }}
+                                textStyle={{ fontSize: 15, color: 'white' }}
+                                color="Primary"
+                                round
+                              >
+                                지현
+                              </Button>
+                              <Button
+                                right
+                                style={{
+                                  width: '30%',
+                                  height: 30,
+                                  marginHorizontal: 10,
+                                  elevation: 0,
+                                }}
+                                textStyle={{ fontSize: 15, color: 'white' }}
+                                color="Primary"
+                                round
+                              >
+                                유창
+                              </Button>
+                            </Block>
                           </Block>
                         </Block>
                         <Block center>
@@ -129,11 +195,11 @@ class Receipt extends React.Component {
                   </Block>
                 </Block>
               </Block>
-            </Block>
-          </ImageBackground>
-        </Block>
-      </DismissKeyboard>
-    );
+            </ImageBackground>
+          </Block>
+        </DismissKeyboard>
+      );
+    }
   }
 }
 
@@ -164,32 +230,21 @@ const styles = StyleSheet.create({
     elevation: 1,
     overflow: 'hidden',
   },
-  inputIcons: {
-    marginRight: 12,
-    color: nowTheme.COLORS.ICON_INPUT,
-  },
-  inputs: {
-    borderWidth: 1,
-    borderColor: '#E3E3E3',
-    borderRadius: 21.5,
-  },
-  passwordCheck: {
-    paddingLeft: 2,
-    paddingTop: 6,
-    paddingBottom: 15,
-  },
   createButton: {
     width: width * 0.5,
     marginTop: 25,
     marginBottom: 40,
   },
-  social: {
-    width: theme.SIZES.BASE * 3.5,
-    height: theme.SIZES.BASE * 3.5,
-    borderRadius: theme.SIZES.BASE * 1.75,
-    justifyContent: 'center',
-    marginHorizontal: 10,
+  activeImageContainer: {
+    flex: 0.9,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+    backgroundColor: '#eee',
+    borderBottomWidth: 0.5,
+    borderColor: '#fff',
   },
 });
 
-export default Receipt ;
+export default Receipt;
+
+

@@ -63,7 +63,8 @@ class EvalueList extends React.Component {
 
   render() {
     return (
-      <Block flex={1} style={{marginTop: height > 800 ? 90 : 50}}>
+      <Block flex={1} style={{ marginTop: height > 800 ? 80 : 50 }}>
+        <Block style={{ marginTop: 20 }}></Block>
         <ScrollView showsVerticalScrollIndicator={false}>{this.renderCards()}</ScrollView>
       </Block>
     );

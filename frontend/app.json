@@ -21,7 +21,16 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "host.exp.exponent",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "com.googleusercontent.apps.859478845487-23l78jo7evj2rdr9gkaupqauqq67d0o1"
+        }
+      }
+    },
+    "android": {
+      "package": "host.exp.exponent"
     },
     "description": "CookSistant"
   }

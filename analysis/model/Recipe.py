@@ -1,14 +1,31 @@
-from utils.database import db
-from sqlalchemy_serializer import SerializerMixin
+from utils.database import cursor
+import pandas as pd
 
-class Recipe(db.Model, SerializerMixin):
-    __tablename__ = 'recipe'
+class Recipe:
 
-    id = db.Column(db.BigInteger, primary_key=True, nullable=False, autoincrement=True)
-    user_id = db.Column(db.BigInteger, db.ForeignKey('user.id'))
-    cuisine = db.Column(db.String(255, 'utf8mb4_unicode_ci'))
-    description = db.Column(db.String())
-    cooking_time = db.Column(db.String(255, 'utf8mb4_unicode_ci'))
-    level = db.Column(db.String(255, 'utf8mb4_unicode_ci'))
-    serving = db.Column(db.String(255, 'utf8mb4_unicode_ci'))
-    image = db.Column(db.String(255, 'utf8mb4_unicode_ci'))
+    def getRecipeDFById():
+        # recipeIds_str = [str(int) for int in recipeIds]
+        # recipeIds_str = ",".join(recipeIds_str)
+
+        sql = "select id, cuisine from recipe"
+        cursor.execute(sql)
+        result = cursor.fetchall()
+
+        return pd.DataFrame(result)
+
+
+    def getRecipeByIngredient(ingredients):
+        size = len(ingredients)
+        ingredients_str = "\",\"".join(ingredients)
+
+        sql = "select r.recipe_id\n" \
+              "from recipe_has_ingredient r left outer join ingredient i\n" \
+              "on r.ingredient_id = i.id\n" \
+              f"where i.name in (\"{ingredients_str}\")\n" \
+              "group by r.recipe_id\n" \
+              f"having count(r.recipe_id) = {size};"
+
+        cursor.execute(sql)
+        result = [item['recipe_id'] for item in cursor.fetchall()]
+
+        return result
