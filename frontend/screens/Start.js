@@ -120,7 +120,7 @@ export default class Onboarding extends React.Component {
         <Block flex>
           <ImageBackground
             source={Images.Start}
-            style={{ flex: 1, height: height, width, zIndex: 1 }}
+            style={{ flex: 1, height: height * 1.05, width, zIndex: 1 }}
           />
           <Block center space="between" style={styles.padded}>
             <Block>
@@ -188,3 +188,4 @@ const styles = StyleSheet.create({
     height: 66,
   },
 });
+

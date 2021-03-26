@@ -37,7 +37,7 @@ function HomeStack(props) {
         component={Home}
         options={{
           header: ({ navigation, scene }) => (
-            <Header title="Home" search options navigation={navigation} scene={scene} />
+            <Header title="쿡시스턴트" search options navigation={navigation} scene={scene} />
           ),
           cardStyle: { backgroundColor: '#FFFFFF' },
         }}
@@ -59,7 +59,6 @@ function HomeStack(props) {
           headerTransparent: true,
         }}
       />
-
       <Stack.Screen
         name="TrendyList"
         component={TrendyList}
@@ -75,51 +74,7 @@ function HomeStack(props) {
         component={TTSOrder}
         options={{
           header: ({ navigation, scene }) => (
-            <Header title="TTSOrder" back black transparent navigation={navigation} scene={scene} />
-          ),
-          headerTransparent: true,
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
-
-function RecipeListStack(props) {
-  return (
-    <Stack.Navigator initialRouteName="RecipeList" mode="card" headerMode="screen">
-      <Stack.Screen
-        name="RecipeList"
-        component={RecipeList}
-        options={{
-          header: ({ navigation, scene }) => (
-            <Header title="레시피 리스트" navigation={navigation} scene={scene} />
-          ),
-          backgroundColor: '#FFFFFF',
-        }}
-      />
-      <Stack.Screen
-        name="Pro"
-        component={RecipeInfo}
-        options={{
-          header: ({ navigation, scene }) => (
-            <Header
-              title="레시피 상세정보"
-              back
-              white
-              transparent
-              navigation={navigation}
-              scene={scene}
-            />
-          ),
-          headerTransparent: true,
-        }}
-      />
-      <Stack.Screen
-        name="TTSOrder"
-        component={TTSOrder}
-        options={{
-          header: ({ navigation, scene }) => (
-            <Header title="TTSOrder" back black transparent navigation={navigation} scene={scene} />
+            <Header title="요리 과정" back black transparent navigation={navigation} scene={scene} />
           ),
           headerTransparent: true,
         }}
@@ -184,7 +139,7 @@ function ProfileStack(props) {
             <Header
               title="레시피 상세정보"
               back
-              white
+              black
               transparent
               navigation={navigation}
               scene={scene}
@@ -193,23 +148,12 @@ function ProfileStack(props) {
           headerTransparent: true,
         }}
       />
-
-      <Stack.Screen
-        name="TrendyList"
-        component={TrendyList}
-        options={{
-          header: ({ navigation, scene }) => (
-            <Header title="TrendyList" search options navigation={navigation} scene={scene} />
-          ),
-          cardStyle: { backgroundColor: '#FFFFFF' },
-        }}
-      />
       <Stack.Screen
         name="TTSOrder"
         component={TTSOrder}
         options={{
           header: ({ navigation, scene }) => (
-            <Header title="TTSOrder" back black transparent navigation={navigation} scene={scene} />
+            <Header title="요리 과정" back black transparent navigation={navigation} scene={scene} />
           ),
           headerTransparent: true,
         }}
@@ -227,6 +171,16 @@ function IngredientStack(props) {
         options={{
           header: ({ navigation, scene }) => (
             <Header transparent title="재료 등록" navigation={navigation} scene={scene} />
+          ),
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        name="RecipeList"
+        component={RecipeList}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header title="레시피 추천 받기" back black transparent navigation={navigation} scene={scene} />
           ),
           headerTransparent: true,
         }}
@@ -283,8 +237,7 @@ function AppStack(props) {
       }}
       initialRouteName="Home"
     >
-      <Drawer.Screen name="Home" component={HomeStack} />
-      <Drawer.Screen name="레시피 리스트" component={RecipeListStack} />
+      <Drawer.Screen name="쿡시스턴트" component={HomeStack} />
       <Drawer.Screen name="프로필" component={ProfileStack} />
       <Drawer.Screen name="재료" component={IngredientStack} />
       <Drawer.Screen name="영수증" component={ReceiptStack} />
@@ -306,3 +259,4 @@ export default function StartStack(props) {
     </Stack.Navigator>
   );
 }
+

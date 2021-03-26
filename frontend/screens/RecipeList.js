@@ -1,19 +1,18 @@
 import React from 'react';
 import { withNavigation } from '@react-navigation/compat';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet , Dimensions} from 'react-native';
 //galio
 import { Block, Text, theme } from 'galio-framework';
 
 import { articles, nowTheme } from '../constants';
 import { Card } from '../components';
 
+const { width, height } = Dimensions.get('screen');
+
 class RecipeList extends React.Component {
   renderCards = () => {
     return (
       <Block style={styles.container}>
-      <Text size={16} style={styles.title}>
-        Cards
-      </Text>
         <Card item={articles[0]} horizontal
               onPress={() => navigation.navigate('RecipeInfo')} />
         <Block flex row>
@@ -31,7 +30,8 @@ class RecipeList extends React.Component {
 
   render() {
     return (
-      <Block flex>
+      <Block flex={1} style={{ marginTop: height > 800 ? 80 : 50 }}>
+        <Block style={{ marginTop: 20 }}></Block>
         <ScrollView showsVerticalScrollIndicator={false}>{this.renderCards()}</ScrollView>
       </Block>
     );
@@ -40,14 +40,9 @@ class RecipeList extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: theme.SIZES.BASE
-  },
-  title: {
-    fontFamily: 'montserrat-bold',
-    paddingBottom: theme.SIZES.BASE,
-    marginTop: 44,
-    color: nowTheme.COLORS.HEADER
+    paddingHorizontal: theme.SIZES.BASE,
   }
 });
 
 export default RecipeList;
+

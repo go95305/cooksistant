@@ -113,7 +113,7 @@ class Ingredient extends React.Component {
                       onPress={() =>
                         this.state.tags.tagsArray.length === 0
                           ? Alert.alert("재료를 등록해주세요.")
-                          : Alert.alert("등록한 재료로 레시피를 추천해드릴까요?")
+                          : navigation.navigate('RecipeList')
                         //navigation.navigate('RecipeList')
                       }
                     >
@@ -195,3 +195,4 @@ const styles = StyleSheet.create({
 });
 
 export default Ingredient;
+

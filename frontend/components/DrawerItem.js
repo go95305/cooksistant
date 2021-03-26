@@ -11,30 +11,10 @@ class DrawerItem extends React.Component {
     const { title, focused } = this.props;
 
     switch (title) {
-      case "Home":
+      case "쿡시스턴트":
         return (
           <Icon
             name="app2x"
-            family="NowExtra"
-            size={18}
-            color={focused ? nowTheme.COLORS.PRIMARY : "white"}
-            style={{ opacity: 0.5 }}
-          />
-        );
-      case "Components":
-        return (
-          <Icon
-            name="atom2x"
-            family="NowExtra"
-            size={18}
-            color={focused ? nowTheme.COLORS.PRIMARY : "white"}
-            style={{ opacity: 0.5 }}
-          />
-        );
-      case "레시피 리스트":
-        return (
-          <Icon
-            name="paper"
             family="NowExtra"
             size={18}
             color={focused ? nowTheme.COLORS.PRIMARY : "white"}
@@ -52,21 +32,19 @@ class DrawerItem extends React.Component {
           />
         );
       case "재료":
-      case "영수증":
         return (
           <Icon
-            name="badge2x"
+            name="atom2x"
             family="NowExtra"
             size={18}
             color={focused ? nowTheme.COLORS.PRIMARY : "white"}
             style={{ opacity: 0.5 }}
           />
         );
-        
-      case "Settings":
+      case "영수증":
         return (
           <Icon
-            name="settings-gear-642x"
+            name="badge2x"
             family="NowExtra"
             size={18}
             color={focused ? nowTheme.COLORS.PRIMARY : "white"}
@@ -163,3 +141,4 @@ const styles = StyleSheet.create({
 });
 
 export default DrawerItem;
+
