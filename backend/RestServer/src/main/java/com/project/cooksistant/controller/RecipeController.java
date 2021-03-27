@@ -1,12 +1,13 @@
 package com.project.cooksistant.controller;
 
 import com.project.cooksistant.model.dto.*;
-import com.project.cooksistant.model.entity.Evaluation;
 import com.project.cooksistant.service.RecipeService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,18 +15,24 @@ import java.util.Map;
 @RestController
 public class RecipeController {
     private final RecipeService recipeService;
+    private final WebClient webClient;
 
-    public RecipeController(RecipeService recipeService) {
+    public RecipeController(RecipeService recipeService,WebClient.Builder webClientBuilder) {
         this.recipeService = recipeService;
+        this.webClient = webClientBuilder.baseUrl("http://j4c101.p.ssafy.io:8083").build();
     }
 
     @ApiOperation(value = "취향 기반 레시피 리스트 제공(X)", notes = "Request\n" +
             "                                                   - userId:협업필터링에 사용될 유저와 비슷한 레시피 추천을 위한 UserId\n" +
             "                                                   - List<String>: 추천받을 재료 리스트")
     @GetMapping("recipe/recommendation")
-    public Long recommend(@RequestBody RecommendDTO recommendDTO) {
-        Long recipeId = recipeService.getRecommendation(recommendDTO);
-        return recipeId;
+    public List<RecipeDTO> recommend(@RequestBody RecommendDTO recommendDTO) {
+        List<Long> recommendList = Collections.singletonList(webClient.get()
+                .uri("/evaluation")
+                .retrieve()
+                .bodyToMono(Long.class).block());
+        List<RecipeDTO> recipeDTOList = recipeService.getRecommendation(recommendList);
+        return recipeDTOList;
     }
 
     @ApiOperation(value = "레시피 평가하기(Ok)", notes = "Request\n" +

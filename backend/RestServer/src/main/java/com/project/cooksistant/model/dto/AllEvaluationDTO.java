@@ -8,7 +8,7 @@ import lombok.Setter;
 public class AllEvaluationDTO {
     private String cuisine;
     private Long recipe_id;
-    private Boolean favor;
+    private Float favor;
     private Boolean isSampled;
     private Boolean isComplete;
 

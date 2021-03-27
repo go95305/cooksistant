@@ -25,3 +25,14 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
+cloud:
+  aws:
+    credentials:
+      accessKey:
+      secretKey:
+    s3:
+      bucket: s3-recipe-img
+    region:
+      static: us-east-1
+    stack:
+      auto: false
