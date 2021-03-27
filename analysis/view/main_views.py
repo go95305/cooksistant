@@ -16,8 +16,9 @@ insert_body = ns.model(
 class recommend(Resource):
     @ns.expect(insert_body)
     def post(self):
-        data = request.json
-        user_id = data["user_id"]
-        ingredients = data["ingredients"]
+        data = request.get_json()
+        print(data)
+        user_id = data["userId"]
+        ingredients = data["ingredient"]
 
         return {"result" : AnalysisService.CF(user_id, ingredients) }

@@ -3,10 +3,7 @@ import pandas as pd
 
 class Recipe:
 
-    def getRecipeDFById():
-        # recipeIds_str = [str(int) for int in recipeIds]
-        # recipeIds_str = ",".join(recipeIds_str)
-
+    def getRecipe():
         sql = "select id, cuisine from recipe"
         cursor.execute(sql)
         result = cursor.fetchall()
@@ -23,9 +20,10 @@ class Recipe:
               "on r.ingredient_id = i.id\n" \
               f"where i.name in (\"{ingredients_str}\")\n" \
               "group by r.recipe_id\n" \
-              f"having count(r.recipe_id) = {size};"
+              f"having count(r.recipe_id) = {size}"
 
         cursor.execute(sql)
         result = [item['recipe_id'] for item in cursor.fetchall()]
 
         return result
+    

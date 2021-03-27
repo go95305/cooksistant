@@ -14,12 +14,13 @@ warnings.filterwarnings("ignore")
 
 def CF(user_id, ingredients):
 
-    df_recipe = Recipe.getRecipeDFById()  # 레시피 아이디 리스트에 포함된 데이터 가져오기
-    df_rating = Evaluation.getEvaluationDFByRecipeId()  # 레시피아이디 리스트에 포함된 평가 데이터 가져오기
+    df_recipe = Recipe.getRecipe()  # 전체 레시피 가져오기
+    df_rating = Evaluation.getEvaluation()  # 전체 레시피 평가 데이터 가져오기
 
+
+    # 협업 필터링 과정
     user_recipe_rating = df_rating.pivot_table(
         'favor', index='user_id', columns='recipe_id').fillna(0)
-
     matrix = user_recipe_rating.values
     user_rating_mean = np.mean(matrix, axis=1)
     matrix_user_mean = matrix - user_rating_mean.reshape(-1, 1)
@@ -32,7 +33,8 @@ def CF(user_id, ingredients):
 
     predictions = recommend_movies(
         df_svd_preds, user_id, df_recipe, df_rating)
-
+    # 협업 필터링 과정
+    
     # 뽑아온 레시피 중에서 해당 재료가 포함됬는지
     filteredRecipeId = Recipe.getRecipeByIngredient(ingredients)
     print(filteredRecipeId)
