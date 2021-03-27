@@ -24,7 +24,7 @@ public class RecipeController {
 
     public RecipeController(RecipeService recipeService, WebClient.Builder webClientBuilder) {
         this.recipeService = recipeService;
-        this.webClient = webClientBuilder.baseUrl("http://localhost:5000").build();
+        this.webClient = webClientBuilder.baseUrl("http://j4c101.p.ssafy.io:5000").build();
     }
 
     @ApiOperation(value = "취향 기반 레시피 리스트 제공(Ok)", notes = "Request\n" +
