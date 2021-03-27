@@ -231,7 +231,8 @@ public class RecipeService {
                 stepDTOList.add(stepDTO);
             }
             recipeDTO.setStepList(stepDTOList);
+            recipeDTOList.add(recipeDTO);
         }
-        return null;
+        return recipeDTOList;
     }
 }
