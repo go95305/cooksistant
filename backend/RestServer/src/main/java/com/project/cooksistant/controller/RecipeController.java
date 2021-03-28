@@ -78,15 +78,6 @@ public class RecipeController {
         return evaluationDTO;
     }
 
-    @ApiOperation(value = "트렌디한 레시피 보기", notes = "네이버 데이터랩에서 가져오기")
-    @GetMapping("/recipe/trend")
-    public ResponseEntity<Map<String, Object>> trendRecipe() {
-        ResponseEntity<Map<String, Object>> resEntity = null;
-        Map<String, Object> map = new HashMap<String, Object>();
-
-        return resEntity;
-    }
-
 
 //    @ApiOperation(value = "레시피 등록")
 //    @PostMapping("/recipe")
