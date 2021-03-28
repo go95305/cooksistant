@@ -7,14 +7,15 @@ import Icon from './Icon';
 import nowTheme from '../constants/Theme';
 
 class DrawerItem extends React.Component {
-  state = { user: {} };
-  componentDidMount() {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user != null) {
-        this.setState({ user: user });
-      }
-    });
-  }
+  checkLoggedIn = () => {
+    var user = firebase.auth().currentUser;
+    if (user) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   renderIcon = () => {
     const { title, focused } = this.props;
 
@@ -95,12 +96,32 @@ class DrawerItem extends React.Component {
     return (
       <TouchableOpacity
         style={{ height: 60 }}
-        onPress={() =>
-          title == "앱 소개" ? Linking.openURL(
-            "https://www.notion.so/SUB3-eddba11b91494c4185c65cec233fa8ac"
-          ).catch(err => console.error("An error occurred", err))
-            : navigation.navigate(title == "로그아웃" ? 'Start' : title)
-        }
+        onPress={() => {
+          switch (title) {
+            case '프로필':
+              const isTrue = this.checkLoggedIn();
+              if (isTrue) navigation.navigate(title);
+              else Alert.alert('로그인 후 이용가능해요.');
+              break;
+            case '로그아웃':
+              firebase
+                .auth()
+                .signOut()
+                .then(() => {
+                  // Sign-out successful.
+                  navigation.navigate('Start');
+                })
+                .catch((error) => {
+                  // An error happened.
+                });
+              break;
+            default:
+              navigation.navigate(title);
+          }
+        }}
+        // Linking.openURL(
+        //   'https://www.notion.so/SUB3-eddba11b91494c4185c65cec233fa8ac'
+        // ).catch((err) => console.error('An error occurred', err))
       >
         <Block flex row style={containerStyles}>
           <Block middle flex={0.1} style={{ marginRight: 5 }}>
