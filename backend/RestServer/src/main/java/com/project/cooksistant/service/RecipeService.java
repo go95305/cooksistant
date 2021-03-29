@@ -192,6 +192,7 @@ public class RecipeService {
             evaluationKeyword.setKeyword(keyword);//각각 키워드는 위에서구한 keyword 객체로 설정
             evaluationKeywordRepository.save(evaluationKeyword);
         }
+        evaluationRepository.save(evaluation.get());
         return true;
     }
 
