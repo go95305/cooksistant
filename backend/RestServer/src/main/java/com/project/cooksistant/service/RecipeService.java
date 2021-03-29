@@ -1,5 +1,7 @@
 package com.project.cooksistant.service;
 
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.project.cooksistant.Exception.RestException;
 import com.project.cooksistant.model.dto.*;
 import com.project.cooksistant.model.entity.*;
@@ -95,6 +97,7 @@ public class RecipeService {
             allEvaluationDTO.setIsComplete(evaluationList.get(i).isComplete());
             allEvaluationDTO.setIsSampled(evaluationList.get(i).isSampled());
             allEvaluationDTO.setRecipe_id(evaluationList.get(i).getRecipe().getRecipeId());
+            allEvaluationDTO.setImage(evaluationList.get(i).getRecipe().getImage());
             allEvaluationDTOList.add(allEvaluationDTO);
         }
         return allEvaluationDTOList;
@@ -102,6 +105,7 @@ public class RecipeService {
 
 
     public RecipeDTO getRecommendation(Long recipeId) {
+//        AmazonS3Client s3Client = (AmazonS3Client) AmazonS3ClientBuilder.defaultClient();
         //recipe_id가 유효한지 확인
         Optional<Recipe> recipe = Optional.ofNullable(recipeRepository.findById(recipeId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 레시피는 존재하지 않습니다.")));
         RecipeDTO recipeDTO = new RecipeDTO();

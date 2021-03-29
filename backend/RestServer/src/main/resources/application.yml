@@ -28,8 +28,8 @@ spring:
 cloud:
   aws:
     credentials:
-      accessKey:
-      secretKey:
+      accessKey: AKIAZH572DDMPGRMUQZ5
+      secretKey: 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
     s3:
       bucket: s3-recipe-img
     region:

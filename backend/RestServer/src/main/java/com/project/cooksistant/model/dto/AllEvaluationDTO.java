@@ -11,5 +11,6 @@ public class AllEvaluationDTO {
     private Float favor;
     private Boolean isSampled;
     private Boolean isComplete;
+    private String image;
 
 }
