@@ -16,6 +16,7 @@ import Ingredient from '../screens/Ingredient';
 import Receipt from '../screens/Receipt';
 import TTSOrder from '../screens/TTSOrder';
 import TTS from '../screens/TTS';
+import STT from '../screens/STT';
 import SettingsScreen from '../screens/Settings';
 // drawer
 import CustomDrawerContent from './Menu';
@@ -267,6 +268,23 @@ function TTSStack(props) {
   );
 }
 
+function STTStack(props) {
+  return (
+    <Stack.Navigator initialRouteName="STT" mode="card" headerMode="screen">
+      <Stack.Screen
+        name="STT"
+        component={STT}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header transparent title="STT" navigation={navigation} scene={scene} />
+          ),
+          headerTransparent: true,
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
 function AppStack(props) {
   return (
     <Drawer.Navigator
@@ -303,6 +321,7 @@ function AppStack(props) {
       <Drawer.Screen name="재료" component={IngredientStack} />
       <Drawer.Screen name="영수증" component={ReceiptStack} />
       <Drawer.Screen name="TTS" component={TTSStack} />
+      <Drawer.Screen name="STT" component={STTStack} />
     </Drawer.Navigator>
   );
 }

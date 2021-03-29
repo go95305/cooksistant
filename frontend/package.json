@@ -52,7 +52,8 @@
     "react-native-svg": "12.1.0",
     "react-native-switch-selector": "^2.1.4",
     "react-native-tag-selector": "^0.0.3",
-    "react-native-tags-input": "^1.0.10"
+    "react-native-tags-input": "^1.0.10",
+    "react-speech-recognition": "^3.7.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",
