@@ -37,6 +37,7 @@
     "react": "^16.13.1",
     "react-dom": "^17.0.2",
     "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz",
+    "react-native-animatable": "^1.3.3",
     "react-native-elements": "^3.3.2",
     "react-native-gesture-handler": "~1.8.0",
     "react-native-hr-component": "^2.0.3",
@@ -55,7 +56,8 @@
     "react-native-tag-selector": "^0.0.3",
     "react-native-tags-input": "^1.0.10",
     "react-native-tesseract-ocr": "^2.0.1",
-    "react-speech-recognition": "^3.7.0"
+    "react-speech-recognition": "^3.7.0",
+    "react-native-url-preview": "^1.1.9"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",
