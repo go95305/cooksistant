@@ -29,7 +29,8 @@ function CustomDrawerContent({
     "프로필",
     "재료",
     "영수증",
-    "TTS"
+    "TTS",
+    "STT"
   ];
   return (
     <Block
