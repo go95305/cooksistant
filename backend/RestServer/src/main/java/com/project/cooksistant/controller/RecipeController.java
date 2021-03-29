@@ -83,6 +83,7 @@ public class RecipeController {
             "                                          - favor: 평점" +
             "                                          - recipeId: 평가 레시피 번호\n" +
             "                                          - sampled: 샘플링 되었는지:\n" +
+            "                                          - isUpdate: 새로작성인지 수정인지" +
             "                                          - userId: 평가할 유저의 userId")
     @PostMapping("/recipe/evaluation")
     public String evaluation(@RequestBody EvaluationDTOpost evaluationDTOpost) throws Exception {
@@ -92,6 +93,16 @@ public class RecipeController {
         else
             return "fail";
     }
+
+    @PutMapping("/recipe/evaluationUpdate")
+    public String evaluationUpdate(@RequestBody EvaluationDTOpost evaluationDTOpost) {
+        boolean isEvaluation = recipeService.evaluateUpdate(evaluationDTOpost);
+        if (isEvaluation)
+            return "success";
+        else
+            return "fail";
+    }
+
 
     @ApiOperation(value = "특정 레시피 평가내용 보기(Ok)", notes = "Request\n" +
             "                                                 - evalId: 평가 번호\n" +
@@ -110,6 +121,7 @@ public class RecipeController {
     @ApiOperation(value = "내가 리뷰한 혹은 리뷰하지 않은 레시피 리스트 (Ok)", notes = "Request\n" +
             "                                                           - uid: 유저 인증키\n" +
             "                                                           Response\n" +
+            "                                                           - evaluationId:평가 인덱스\n" +
             "                                                           - cuisine: 레시피 명\n" +
             "                                                           - recipe_id: 레시피 번호\n" +
             "                                                           - favor: 평점\n" +

@@ -13,7 +13,9 @@ public class EvaluationDTOpost {
     private Long recipeId;
     private Long userId;
     private float favor;
+    private Boolean isUpdate;
+    private Long evaluationId;
     private List<String> keywordList = new ArrayList<>();
-    private boolean isSampled; //tts가 시작된순간
-    private boolean isComplete; //완전히 평가를 끝내면
+    private Boolean isSampled; //tts가 시작된순간
+    private Boolean isComplete; //완전히 평가를 끝내면
 }

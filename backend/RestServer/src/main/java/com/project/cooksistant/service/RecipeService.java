@@ -6,6 +6,7 @@ import com.project.cooksistant.Exception.RestException;
 import com.project.cooksistant.model.dto.*;
 import com.project.cooksistant.model.entity.*;
 import com.project.cooksistant.repository.*;
+import jdk.nashorn.internal.ir.CallNode;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -66,22 +67,26 @@ public class RecipeService {
         Optional<Recipe> recipe = Optional.ofNullable(recipeRepository.findById(evaluationDTOpost.getRecipeId()).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 레시피는 존재하지 않습니다.")));
         Optional<User> user = Optional.ofNullable(userRepository.findById(evaluationDTOpost.getUserId()).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 유저는 존재하지 않는 유저입니다.")));
         Evaluation evaluation = new Evaluation();
-        evaluation.setRecipe(recipe.get());
         evaluation.setUser(user.get());
         evaluation.setSampled(true);
-        evaluation.setFavor(evaluationDTOpost.getFavor());
-        evaluation.setComplete(evaluationDTOpost.isComplete());
-        evaluationRepository.save(evaluation);
+        evaluation.setRecipe(recipe.get());
+        evaluation.setComplete(evaluationDTOpost.getIsComplete());//isComplete를 true로 둔다.
+        if (evaluationDTOpost.getIsComplete()) {
+            evaluation.setFavor(evaluationDTOpost.getFavor());
+            evaluationRepository.save(evaluation);
 
 
-        for (int i = 0; i < evaluationDTOpost.getKeywordList().size(); i++) {
-            EvaluationKeyword evaluationKeyword = new EvaluationKeyword();
-            Keyword keyword = keywordRepository.findByKeyword(evaluationDTOpost.getKeywordList().get(i));//keyword 테이블에서 해당 키워드 정도 찾기
-            evaluationKeyword.setEvaluation(evaluation); //평가 id는 위에서 저장한 평가데이터의 id로 설정
-            evaluationKeyword.setKeyword(keyword);//각각 키워드는 위에서구한 keyword 객체로 설정
-            evaluationKeywordRepository.save(evaluationKeyword);
+            for (int i = 0; i < evaluationDTOpost.getKeywordList().size(); i++) {
+                EvaluationKeyword evaluationKeyword = new EvaluationKeyword();
+                Keyword keyword = keywordRepository.findByKeyword(evaluationDTOpost.getKeywordList().get(i));//keyword 테이블에서 해당 키워드 정도 찾기
+                evaluationKeyword.setEvaluation(evaluation); //평가 id는 위에서 저장한 평가데이터의 id로 설정
+                evaluationKeyword.setKeyword(keyword);//각각 키워드는 위에서구한 keyword 객체로 설정
+                evaluationKeywordRepository.save(evaluationKeyword);
+            }
+        } else {
+            evaluation.setComplete(evaluationDTOpost.getIsComplete());//isComplete를 false로 둔다.
+            evaluationRepository.save(evaluation);
         }
-
         return true;
 
     }
@@ -99,6 +104,7 @@ public class RecipeService {
             allEvaluationDTO.setIsSampled(evaluationList.get(i).isSampled());
             allEvaluationDTO.setRecipe_id(evaluationList.get(i).getRecipe().getRecipeId());
             allEvaluationDTO.setImage(evaluationList.get(i).getRecipe().getImage());
+            allEvaluationDTO.setEvaluationId(evaluationList.get(i).getEvalId());
             allEvaluationDTOList.add(allEvaluationDTO);
         }
         return allEvaluationDTOList;
@@ -174,4 +180,19 @@ public class RecipeService {
         }
         return recipeListupDTOList;
     }
+
+    public boolean evaluateUpdate(EvaluationDTOpost evaluationDTOpost) {
+        Optional<Evaluation> evaluation = Optional.ofNullable(evaluationRepository.findById(evaluationDTOpost.getEvaluationId()).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 평가데이터는 존재하지않습니다.")));
+        evaluation.get().setComplete(evaluationDTOpost.getIsComplete());
+        evaluation.get().setFavor(evaluationDTOpost.getFavor());
+        for (int i = 0; i < evaluationDTOpost.getKeywordList().size(); i++) {
+            EvaluationKeyword evaluationKeyword = new EvaluationKeyword();
+            Keyword keyword = keywordRepository.findByKeyword(evaluationDTOpost.getKeywordList().get(i));//keyword 테이블에서 해당 키워드 정도 찾기
+            evaluationKeyword.setEvaluation(evaluation.get()); //평가 id는 위에서 저장한 평가데이터의 id로 설정
+            evaluationKeyword.setKeyword(keyword);//각각 키워드는 위에서구한 keyword 객체로 설정
+            evaluationKeywordRepository.save(evaluationKeyword);
+        }
+        return true;
+    }
+
 }
