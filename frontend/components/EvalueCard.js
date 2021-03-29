@@ -31,44 +31,31 @@ class Card extends React.Component {
       <Block row={horizontal} card flex style={cardContainer}>
         <TouchableWithoutFeedback
           onPress={() => {
-            item.isEvalu ? navigation.navigate('Pro') : navigation.navigate('EvalueRegister');
+            item.isEvalu ? navigation.navigate('Pro', item) : navigation.navigate('EvalueRegister', item);
           }}
         >
           <Block flex style={imgContainer}>
-            <Image resizeMode="cover" source={item.image} style={imageStyles} />
+            <Image resizeMode="cover" source={{uri: item.image}}  style={imageStyles} />
           </Block>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
           onPress={() => {
-            item.isEvalu ? navigation.navigate('Pro') : navigation.navigate('EvalueRegister');
+            item.isEvalu ? navigation.navigate('Pro', item) : navigation.navigate('EvalueRegister', item);
           }}
         >
           <Block flex space="between" style={styles.cardDescription}>
             <Block flex>
               <Text
-                style={{ fontFamily: 'montserrat-bold', paddingTop: 15, paddingHorizontal: 10 }}
-                size={15}
+                style={{ fontFamily: 'montserrat-bold', paddingTop: 10, paddingHorizontal: 8, lineHeight: 18, }}
+                size={13}
                 color={nowTheme.COLORS.SECONDARY}
               >
                 {item.title}
               </Text>
-              {item.subtitle ? (
-                <Block flex center>
-                  <Text
-                    style={{ fontFamily: 'montserrat-bold' }}
-                    size={10}
-                    color={nowTheme.COLORS.BLACK}
-                  >
-                    {item.subtitle}
-                  </Text>
-                </Block>
-              ) : (
-                <Block />
-              )}
             </Block>
             <Block row space="between">
               <Text
-                style={{padding: 5, }}
+                style={{padding: 7 }}
                 size={13}
                 muted={!isEvaluColor}
                 color={'#f18d46'}
@@ -77,9 +64,9 @@ class Card extends React.Component {
                 {item.isEvalu ? '레시피 보러가기' : '레시피 평가하기'}
               </Text>
               {item.isEvalu ? (
-                <MaterialIcons name="check-box" size={27} color="#f18d46"/>
+                <MaterialIcons name="check-box" size={29} color="#f18d46"/>
               ) : (
-                <MaterialIcons name="check-box-outline-blank" size={27} color="#f18d46" />
+                <MaterialIcons name="check-box-outline-blank" size={29} color="#f18d46" />
               )}
             </Block>
           </Block>
