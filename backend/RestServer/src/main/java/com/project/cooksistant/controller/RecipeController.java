@@ -113,7 +113,8 @@ public class RecipeController {
             "                                                           - recipe_id: 레시피 번호\n" +
             "                                                           - favor: 좋아요 여부\n" +
             "                                                           - isSampled:샘플링 여부\n" +
-            "                                                           - isComplete: 레시피 리뷰 작성 여부")
+            "                                                           - isComplete: 레시피 리뷰 작성 여부\n" +
+            "                                                           - image: recipe 사진")
     @PostMapping("/recipe/review/{uid}")
     public List<AllEvaluationDTO> viewRecipe(@PathVariable String uid) {
         return recipeService.findAllEvaluation(uid);

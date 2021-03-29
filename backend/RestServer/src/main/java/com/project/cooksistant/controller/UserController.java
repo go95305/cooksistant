@@ -51,7 +51,7 @@ public class UserController {
             "                                           - description: 레시피 설명\n" +
             "                                           - image: 레시피 이미지 URL\n" +
             "                                           - recipeId: 레시피 인덱스\n" +
-            "                                           - nickname: 레시피 주인 닉네임")
+            "                                           - nickname: 레시피 주인 닉네임\n")
     @PostMapping("user/scrap/{recipeId}/{userId}")
     public ScrapMypageDTO scrapRecipe(@PathVariable Long recipeId, @PathVariable Long userId) {
         ScrapMypageDTO scrapMypageDTO = userService.scrapRecipe(recipeId, userId);
