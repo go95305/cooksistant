@@ -10,10 +10,8 @@ import {
 } from 'react-native';
 import { Block, Checkbox, Text, Button as GaButton, theme } from 'galio-framework';
 
-import { Button, Icon, Input } from '../components';
+import { STTButton, Button, Icon, Input } from '../components';
 import { Images, nowTheme } from '../constants';
-
-import * as Speech from 'expo-speech';
 
 
 const { width, height } = Dimensions.get('screen');
@@ -22,16 +20,9 @@ const DismissKeyboard = ({ children }) => (
   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
 );
 
-class TTS extends React.Component {
-  speak(){
-    const thingToSay = 'uid 저장을 위해서 기본 정보만 넣자는 소리 아닐까요?';
-    Speech.speak(thingToSay);
-  };
-
-
+class STT extends React.Component {
+  
   render() {
-
-
     return (
       <DismissKeyboard>
         <Block flex middle>
@@ -75,9 +66,10 @@ class TTS extends React.Component {
                             같이 요리해볼까요?
                           </Text>
                         </Block>
+
                         <Block style={styles.container}>
-                          <Button  onPress={this.speak} />
-                          <Text>버튼을 눌러주세요</Text>
+                            <Text>STT BUTTON</Text>
+                            <STTButton />
                         </Block>
                         
                         <Block center>
@@ -162,6 +154,12 @@ const styles = StyleSheet.create({
     height: 230,
     width: 300,
   },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
 
-export default TTS;
+export default STT;

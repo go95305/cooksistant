@@ -206,6 +206,24 @@ function ReceiptStack(props) {
   );
 }
 
+function TTSStack(props) {
+  return (
+    <Stack.Navigator initialRouteName="TTS" mode="card" headerMode="screen">
+      <Stack.Screen
+        name="TTS"
+        component={TTS}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header transparent title="TTS" navigation={navigation} scene={scene} />
+          ),
+          headerTransparent: true,
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+
 function AppStack(props) {
   return (
     <Drawer.Navigator
@@ -241,6 +259,7 @@ function AppStack(props) {
       <Drawer.Screen name="프로필" component={ProfileStack} />
       <Drawer.Screen name="재료" component={IngredientStack} />
       <Drawer.Screen name="영수증" component={ReceiptStack} />
+      <Drawer.Screen name="TTS" component={TTSStack} />
     </Drawer.Navigator>
   );
 }

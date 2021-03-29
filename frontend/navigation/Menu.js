@@ -28,7 +28,9 @@ function CustomDrawerContent({
     "쿡시스턴트",
     "프로필",
     "재료",
-    "영수증"
+    "영수증",
+    "TTS",
+    "STT"
   ];
   return (
     <Block
