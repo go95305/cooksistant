@@ -69,6 +69,7 @@ public class RecipeService {
         evaluation.setRecipe(recipe.get());
         evaluation.setUser(user.get());
         evaluation.setSampled(true);
+        evaluation.setFavor(evaluationDTOpost.getFavor());
         evaluation.setComplete(evaluationDTOpost.isComplete());
         evaluationRepository.save(evaluation);
 

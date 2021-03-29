@@ -80,6 +80,7 @@ public class RecipeController {
     @ApiOperation(value = "레시피 평가하기(Ok)", notes = "Request\n" +
             "                                          - complete: 레시피 리뷰 작성 여부\n" +
             "                                          - keywordList: 평가 키워드 리스트\n" +
+            "                                          - favor: 평점" +
             "                                          - recipeId: 평가 레시피 번호\n" +
             "                                          - sampled: 샘플링 되었는지:\n" +
             "                                          - userId: 평가할 유저의 userId")
