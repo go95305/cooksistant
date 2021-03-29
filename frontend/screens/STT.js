@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   ImageBackground,
@@ -13,27 +13,18 @@ import { Block, Checkbox, Text, Button as GaButton, theme } from 'galio-framewor
 import { STTButton, Button, Icon, Input } from '../components';
 import { Images, nowTheme } from '../constants';
 
-
-
-
-
-
-
+import OCR from './ocrtest';
 
 const { width, height } = Dimensions.get('screen');
-
 
 const DismissKeyboard = ({ children }) => (
   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
 );
 
 
-
-
 class STT extends React.Component {
-  
+    
   render() {
-
     return (
       <DismissKeyboard>
         <Block flex middle>
@@ -42,6 +33,7 @@ class STT extends React.Component {
             style={styles.imageBackgroundContainer}
             imageStyle={styles.imageBackground}
           >
+            <OCR></OCR>
             <Block flex middle>
               <Block style={styles.registerContainer}>
                 <Block flex space="evenly">
@@ -98,6 +90,7 @@ class STT extends React.Component {
                   </Block>
                 </Block>
               </Block>
+              
             </Block>
           </ImageBackground>
         </Block>
