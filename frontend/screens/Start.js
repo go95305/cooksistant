@@ -4,6 +4,7 @@ import { Block, Button, Text, theme } from 'galio-framework';
 import * as Google from 'expo-google-app-auth';
 //import * as GoogleSignIn from 'expo-google-sign-in';
 import firebase from 'firebase';
+import axios from "axios";
 
 const { height, width } = Dimensions.get('screen');
 import { Images, nowTheme } from '../constants';
@@ -59,7 +60,17 @@ export default class Onboarding extends React.Component {
             .auth()
             .signInWithCredential(credential)
             .then(() => {
-              console.log('user sign in');
+              var user = firebase.auth().currentUser;
+              axios.post(`http://j4c101.p.ssafy.io:8081/user`, {
+                nickname: user.displayName,
+                uid: user.uid
+              })
+              .then(function (response) {
+                console.log(response);
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
             })
             .catch((error) => {
               console.log(error);
@@ -167,3 +178,4 @@ const styles = StyleSheet.create({
     height: 66,
   },
 });
+
