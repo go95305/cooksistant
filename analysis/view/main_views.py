@@ -7,7 +7,7 @@ ns = Namespace('', description='레시피 추천 기능 API')
 insert_body = ns.model(
     "Insert body",
     {
-        "user_id": fields.String(description="user_id", required=True),
+        "userId": fields.String(description="user_id", required=True),
         "ingredients": fields.List(fields.String())
     }
 )
@@ -17,7 +17,7 @@ class recommend(Resource):
     @ns.expect(insert_body)
     def post(self):
         data = request.get_json()
-        user_id = data["user_id"]
+        user_id = data["userId"]
         ingredients = data["ingredients"]
 
         return {"result" : AnalysisService.CF(user_id, ingredients) }
