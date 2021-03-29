@@ -7,8 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class UserDTO {
-    private Long uid;
-    private String authKey;
+public class SignupDTO {
     private String nickname;
+    private String uid;
 }

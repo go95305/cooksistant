@@ -4,6 +4,7 @@ import com.project.cooksistant.Exception.RestException;
 import com.project.cooksistant.model.dto.PersonalDTO;
 import com.project.cooksistant.model.dto.RecipeMypageDTO;
 import com.project.cooksistant.model.dto.ScrapMypageDTO;
+import com.project.cooksistant.model.dto.SignupDTO;
 import com.project.cooksistant.model.entity.Recipe;
 import com.project.cooksistant.model.entity.Scrap;
 import com.project.cooksistant.model.entity.User;
@@ -92,5 +93,13 @@ public class UserService {
             scrapMypageDTO.setNickname(user.get().getNickname());
             return scrapMypageDTO;
         }
+    }
+
+    public void signup(SignupDTO signupDTO) {
+        User user = new User();
+        user.setAuthKey(signupDTO.getUid());
+        user.setNickname(signupDTO.getNickname());
+        userRepository.save(user);
+
     }
 }

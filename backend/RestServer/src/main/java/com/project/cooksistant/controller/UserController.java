@@ -2,12 +2,12 @@ package com.project.cooksistant.controller;
 
 import com.project.cooksistant.model.dto.PersonalDTO;
 import com.project.cooksistant.model.dto.ScrapMypageDTO;
+import com.project.cooksistant.model.dto.SignupDTO;
+import com.project.cooksistant.model.dto.UserDTO;
 import com.project.cooksistant.service.UserService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
@@ -56,5 +56,13 @@ public class UserController {
     public ScrapMypageDTO scrapRecipe(@PathVariable Long recipeId, @PathVariable Long userId) {
         ScrapMypageDTO scrapMypageDTO = userService.scrapRecipe(recipeId, userId);
         return scrapMypageDTO;
+    }
+
+    @ApiOperation(value = "cooksistant 서비스 가입(Ok)",notes = "Request\n" +
+            "                                              - uid:인증키?\n" +
+            "                                              - nickname: 닉네임")
+    @PostMapping("user")
+    public void signup(@RequestBody SignupDTO signupDTO) {
+        userService.signup(signupDTO);
     }
 }
