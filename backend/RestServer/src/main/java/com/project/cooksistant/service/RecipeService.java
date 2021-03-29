@@ -154,4 +154,19 @@ public class RecipeService {
         }
         return recipeListupDTOList;
     }
+
+    public List<RecipeListupDTO> recipeFavor() {
+        List<RecipeListupDTO> recipeListupDTOList = new ArrayList<>();
+        String jpql = "select distinct(e.recipe.recipeId) from Evaluation e order by e.favor desc";
+        List<Long> recipeIds = entityManager.createQuery(jpql, Long.class).getResultList();
+        for (int i = 0; i < recipeIds.size(); i++) {
+            RecipeListupDTO recipeListupDTO = new RecipeListupDTO();
+            Optional<Recipe> recipe = recipeRepository.findById(recipeIds.get(i));
+            recipeListupDTO.setRecipeId(recipe.get().getRecipeId());
+            recipeListupDTO.setUrl(recipe.get().getImage());
+            recipeListupDTO.setRecipename(recipe.get().getCuisine());
+            recipeListupDTOList.add(recipeListupDTO);
+        }
+        return recipeListupDTOList;
+    }
 }

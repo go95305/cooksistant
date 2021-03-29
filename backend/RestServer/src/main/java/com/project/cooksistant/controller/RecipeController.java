@@ -27,6 +27,12 @@ public class RecipeController {
         this.webClient = webClientBuilder.baseUrl("http://j4c101.p.ssafy.io:5000").build();
     }
 
+    @ApiOperation(value = "인기레시피")
+    @GetMapping("/recipe/favor")
+    public List<RecipeListupDTO> favorRecipe() {
+        return recipeService.recipeFavor();
+    }
+
     @ApiOperation(value = "취향 기반 레시피 리스트 제공(Ok)", notes = "Request\n" +
             "                                                   - userId:협업필터링에 사용될 유저와 비슷한 레시피 추천을 위한 UserId\n" +
             "                                                   - List<String>: 추천받을 재료 리스트\n" +
@@ -50,8 +56,7 @@ public class RecipeController {
         for (int i = 0; i < idx.length; i++) {
             recommendList.add(Long.parseLong(idx[i]));
         }
-        List<RecipeListupDTO> recipeListupDTOList = recipeService.recommendList(recommendList);
-        return recipeListupDTOList;
+        return recipeService.recommendList(recommendList);
     }
 
     @ApiOperation(value = "특정 레시피 상세보기(Ok)", notes = "Request\n" +
@@ -97,8 +102,7 @@ public class RecipeController {
             "                                                 - userId: 유저번호")
     @GetMapping("/recipe/evaluation/{evalId}")
     public EvaluationDTO specificEvaluation(@PathVariable Long evalId) {
-        EvaluationDTO evaluationDTO = recipeService.findEvaluation(evalId);
-        return evaluationDTO;
+        return recipeService.findEvaluation(evalId);
     }
 
 
@@ -112,8 +116,7 @@ public class RecipeController {
             "                                                           - isComplete: 레시피 리뷰 작성 여부")
     @PostMapping("/recipe/review/{uid}")
     public List<AllEvaluationDTO> viewRecipe(@PathVariable String uid) {
-        List<AllEvaluationDTO> evaluationDTOList = recipeService.findAllEvaluation(uid);
-        return evaluationDTOList;
+        return recipeService.findAllEvaluation(uid);
     }
 
 }
