@@ -6,6 +6,9 @@ import { Button } from '../components';
 import { Images, nowTheme, tabs } from '../constants';
 import { HeaderHeight } from '../constants/utils';
 
+import firebase from 'firebase';
+import axios from "axios";
+
 const { width, height } = Dimensions.get('screen');
 let and = 0,
   ios = 0;
@@ -82,7 +85,9 @@ const Scrap = () => {
 class Profile extends React.Component {
   constructor() {
     super();
+    var user = firebase.auth().currentUser; 
     this.state = {
+      nickName: user.displayName,
       selectedIndex: 0,
     };
   }
@@ -123,7 +128,7 @@ class Profile extends React.Component {
                       }}
                       color="#ffffff"
                     >
-                      사용자
+                      {this.state.nickName}
                     </Text>
                   </Block>
                   <Block style={styles.info}>
