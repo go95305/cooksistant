@@ -111,7 +111,7 @@ public class RecipeController {
             "                                                           Response\n" +
             "                                                           - cuisine: 레시피 명\n" +
             "                                                           - recipe_id: 레시피 번호\n" +
-            "                                                           - favor: 좋아요 여부\n" +
+            "                                                           - favor: 평점\n" +
             "                                                           - isSampled:샘플링 여부\n" +
             "                                                           - isComplete: 레시피 리뷰 작성 여부\n" +
             "                                                           - image: recipe 사진")

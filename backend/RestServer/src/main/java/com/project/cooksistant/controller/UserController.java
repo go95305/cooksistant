@@ -22,7 +22,6 @@ public class UserController {
             "                                           Response\n" +
             "                                           - userId:유저 인덱스\n" +
             "                                           - nickname:닉네임\n" +
-            "                                           - mytestlist: 내 취향 키워드 리스트\n" +
             "                                           - scrapList: 유저가 스크랩한 레시피 리스트\n" +
             "                                           - {\n" +
             "                                           - recipeId: 레시피 번호\n" +
@@ -30,15 +29,8 @@ public class UserController {
             "                                           - nickname: 레시피 소유자의 닉네임\n" +
             "                                           - cuisine: 스크랩한 레시피의 이름\n" +
             "                                           - description: 스크랩한 레시피의 설명\n" +
-            "                                           - }\n" +
-            "                                           - recipeList: 내가 작성한 레시피 리스트\n" +
-            "                                           - recipeId: 내 레시피 번호\n" +
-            "                                           - image: 내 레시피 사진 url\n" +
-            "                                           - username: 내 이름\n" +
-            "                                           - cuisine: 내 레시피 이름\n" +
-            "                                           - description: 내 레시피 설명\n" +
-            "                                           - }\n")
-    @GetMapping("user/{authKey}")
+            "                                           - }")
+    @GetMapping("user/{uid}")
     public PersonalDTO personalData(@PathVariable String uid) {
         PersonalDTO personalDTO = userService.getUserData(uid);
         return personalDTO;
@@ -58,7 +50,7 @@ public class UserController {
         return scrapMypageDTO;
     }
 
-    @ApiOperation(value = "cooksistant 서비스 가입(Ok)",notes = "Request\n" +
+    @ApiOperation(value = "cooksistant 서비스 가입(Ok)", notes = "Request\n" +
             "                                              - uid:인증키?\n" +
             "                                              - nickname: 닉네임")
     @PostMapping("user")

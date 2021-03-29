@@ -14,8 +14,6 @@ import java.util.List;
 public class PersonalDTO {
     private Long userId;
     private String nickname;
-    List<String> mytasteList = new ArrayList<>();
     List<ScrapMypageDTO> scrapList = new ArrayList<>();
-    List<RecipeMypageDTO> recipeList = new ArrayList<>();
 
 }
