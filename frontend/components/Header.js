@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     height: 40,
-    width: 37
+    width: 37,
   },
   navbar: {
     paddingVertical: 0,

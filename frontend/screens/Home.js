@@ -1,78 +1,105 @@
 import React from 'react';
-import { StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { StyleSheet, Dimensions, ScrollView, state } from 'react-native';
 import { Block, theme, Text } from 'galio-framework';
 import { Images, nowTheme, tabs } from '../constants';
 import { Card, Button } from '../components';
 import articles from '../constants/articles';
 import SegmentedControlTab from 'react-native-segmented-control-tab';
+import axios from 'axios';
 const { width, height } = Dimensions.get('screen');
-
-const Articles = () => {
-  return (
-    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.articles}>
-      <Block flex>
-        <Card item={articles[0]} horizontal onPress={() => navigation.navigate('RecipeInfo')} />
-        <Block flex row>
-          <Card item={articles[1]} style={{ marginRight: theme.SIZES.BASE }} />
-          <Card item={articles[2]} />
-        </Block>
-        <Card item={articles[3]} horizontal />
-        <Block flex row>
-          <Card item={articles[4]} style={{ marginRight: theme.SIZES.BASE }} />
-          <Card item={articles[5]} />
-        </Block>
-      </Block>
-    </ScrollView>
-  );
-};
-const Trendy = () => {
-  return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <Block flex row>
-        <Card
-          item={articles[0]}
-          style={{ marginRight: theme.SIZES.BASE }}
-          onPress={() => navigation.navigate('RecipeInfo')}
-        />
-        <Card item={articles[1]} onPress={() => navigation.navigate('RecipeInfo')} />
-      </Block>
-
-      <Block flex row>
-        <Card
-          item={articles[2]}
-          style={{ marginRight: theme.SIZES.BASE }}
-          onPress={() => navigation.navigate('RecipeInfo')}
-        />
-        <Card item={articles[1]} onPress={() => navigation.navigate('RecipeInfo')} />
-      </Block>
-      <Block flex row>
-        <Card
-          item={articles[3]}
-          style={{ marginRight: theme.SIZES.BASE }}
-          onPress={() => navigation.navigate('RecipeInfo')}
-        />
-        <Card item={articles[1]} onPress={() => navigation.navigate('RecipeInfo')} />
-      </Block>
-
-      <Block flex row>
-        <Card
-          item={articles[4]}
-          style={{ marginRight: theme.SIZES.BASE }}
-          onPress={() => navigation.navigate('RecipeInfo')}
-        />
-        <Card item={articles[5]} onPress={() => navigation.navigate('RecipeInfo')} />
-      </Block>
-    </ScrollView>
-  );
-};
 
 class Home extends React.Component {
   constructor() {
     super();
     this.state = {
       selectedIndex: 0,
+      recipePopular: [],
+      recipeTrendy: [],
     };
   }
+  state = { recipePopular: [], recipeTrendy: [] };
+  componentDidMount = () => {
+    axios
+      .get(`http://j4c101.p.ssafy.io:8081/recipe/favor`)
+      .then((result) => {
+        const arrayList = [];
+        if (result.data && Array.isArray(result.data)) {
+          result.data.forEach((el) => {
+            arrayList.push({
+              id: el.recipeId,
+              title: el.recipename,
+              image: el.url,
+              cta: '레시피 보러가기',
+            });
+          });
+        }
+        this.setState({
+          recipePopular: arrayList,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    axios
+      .get(`http://j4c101.p.ssafy.io:5000/trend`)
+      .then((result) => {
+        console.log(result);
+        const arrayList1 = [];
+        if (result.data.trendList && Array.isArray(result.data.trendList)) {
+          result.data.trendList.forEach((el) => {
+            arrayList1.push({
+              title: el.title,
+              image: el.link,
+              cta: '레시피 보러가기',
+            });
+          });
+        }
+        this.setState({
+          recipeTrendy: arrayList1,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  Articles = () => {
+    return (
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.articles}>
+        <Block flex>
+          {this.state.recipePopular.map((el, index) => {
+            return (
+              <Card
+                key={index}
+                item={el}
+                horizontal
+                onPress={() => navigation.navigate('RecipeInfo')}
+              />
+            );
+          })}
+        </Block>
+      </ScrollView>
+    );
+  };
+
+  Trendy = () => {
+    return (
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.articles}>
+        <Block flex>
+          {this.state.recipeTrendy.map((el, index) => {
+            return (
+              <Card
+                key={index}
+                item={el}
+                horizontal
+                onPress={() => navigation.navigate('RecipeInfo')}
+              />
+            );
+          })}
+        </Block>
+      </ScrollView>
+    );
+  };
 
   handleIndexChange = (index) => {
     this.setState({
@@ -95,12 +122,14 @@ class Home extends React.Component {
               activeTabStyle={styles.activeTabStyle}
               tabTextStyle={{ color: '#444444', fontFamily: 'montserrat-bold' }}
               height={50}
+              borderRadius={20}
             />
           </Block>
-          <Block style={{ marginBottom: 20, marginTop: 10 }}>
-            {this.state.selectedIndex === 0 && <Articles />}
-            {this.state.selectedIndex === 1 && <Trendy />}
-          </Block>
+          {this.state.selectedIndex === 0 ? (
+            <Block style={styles.listBox}>{this.Articles()}</Block>
+          ) : (
+            <Block style={styles.listBox}>{this.Trendy()}</Block>
+          )}
         </Block>
       </Block>
     );
@@ -140,6 +169,10 @@ const styles = StyleSheet.create({
   },
   activeTabStyle: {
     backgroundColor: '#f18d46',
+  },
+  listBox: {
+    marginBottom: Platform.OS === 'ios' ? 0 : 20,
+    marginTop: 10,
   },
 });
 
