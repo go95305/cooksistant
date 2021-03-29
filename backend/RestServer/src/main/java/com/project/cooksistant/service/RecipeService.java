@@ -44,96 +44,6 @@ public class RecipeService {
         this.keywordRepository = keywordRepository;
     }
 
-//
-//    //새로운 레시피 등록시 해당 레시피 등록후 다시 리턴
-//    @Transactional
-//    public String insertRecipe(RecipeDTOpost recipeDTOpost) {
-////        RecipeDTOpost newRecipeDTO = new RecipeDTOpost();
-////        List<StepDTOpost> stepDTOList = new ArrayList<>();//리턴할 조리과정 리스트
-////        List<IngredientDTOpost> ingredientDTOList = new ArrayList<>(); //리턴할 조리 재료 리스트
-//
-//        //레시피를 저장할 유저 정보 가져오기
-//        User user = userRepository.findByNickname(recipeDTOpost.getNickname());
-//        System.out.println(user);
-//        //이 모든과정은 회원 즉 유저정보가 있으면 가능
-//        if (user != null) {
-//            Recipe recipe = new Recipe();
-//            //레시피를 저장
-//            recipe.setCuisine(recipeDTOpost.getCuisine());
-//            recipe.setDescription(recipeDTOpost.getDescription());
-//            recipe.setCookingTime(recipeDTOpost.getCookingTime());
-//            recipe.setLevel(recipeDTOpost.getLevel());
-//            recipe.setServing(recipeDTOpost.getServing());
-//            recipe.setImage(recipeDTOpost.getImage());
-//            recipe.setUser(user);
-////            //리턴할 레시피 테이블 정보
-////            newRecipeDTO.setCuisine(recipe.getCuisine());
-////            newRecipeDTO.setCookingTime(recipe.getCookingTime());
-////            newRecipeDTO.setDescription(recipe.getDescription());
-////            newRecipeDTO.setImage(recipe.getImage());
-////            newRecipeDTO.setLevel(recipe.getLevel());
-////            newRecipeDTO.setServing(recipe.getServing());
-////            newRecipeDTO.setUserId(recipeDTOpost.getUserId());
-//
-//            //레시피에 맞는 조리과정을 저장
-//            for (int i = 0; i < recipeDTOpost.getStepDTOpostList().size(); i++) {
-//                StepDTOpost stepDTO = new StepDTOpost();
-//                Step step = new Step();
-//                step.setDescription(recipeDTOpost.getStepDTOpostList().get(i).getStepDescription());
-//                step.setImage(recipeDTOpost.getStepDTOpostList().get(i).getImage());
-//                step.setLevel(recipeDTOpost.getStepDTOpostList().get(i).getLevel());
-//                step.setRecipe(recipe);
-//                stepRepository.save(step);
-//
-////                stepDTO = modelMapper.map(step, StepDTOpost.class);
-////                stepDTOList.add(stepDTO);
-//            }
-//
-//            for (int i = 0; i < recipeDTOpost.getIngredientDTOpostList().size(); i++) {
-////                IngredientDTOpost newIngredientDTO = new IngredientDTOpost();
-//
-//                //재료가 ingredient테이블에 있는지 확인
-//                Ingredient hasIngredient = ingredientRepository.findByIngredientName(recipeDTOpost.getIngredientDTOpostList().get(i).getIngredientName());
-//                //만약 없으면 새롭게 재료를 넣는다.
-//                if (hasIngredient == null) {
-//                    Ingredient ingredient = new Ingredient();
-//                    ingredient.setIngredientName(recipeDTOpost.getIngredientDTOpostList().get(i).getIngredientName());
-//                    ingredientRepository.save(ingredient);
-////                    newIngredientDTO.setId(ingredient.getIngredientId());
-////                    newIngredientDTO.setIngredientName(ingredient.getIngredientName());
-//                    RecipeIngredient recipeIngredient = new RecipeIngredient();
-//                    recipeIngredient.setRecipe(recipe);
-//                    recipeIngredient.setIngredient(ingredient);
-//                    recipeIngredient.setAmount(recipeDTOpost.getIngredientDTOpostList().get(i).getAmount());
-//                    recipeIngredient.setType(recipeDTOpost.getIngredientDTOpostList().get(i).getIsType());
-//                    recipeIngredientRepository.save(recipeIngredient);//해당 레시피의 재료,amount,type을 저장
-//                } else {
-//                    RecipeIngredient recipeIngredient = new RecipeIngredient();
-//                    recipeIngredient.setRecipe(recipe);
-//                    recipeIngredient.setIngredient(hasIngredient);
-//                    recipeIngredient.setAmount(recipeDTOpost.getIngredientDTOpostList().get(i).getAmount());
-//                    recipeIngredient.setType(recipeDTOpost.getIngredientDTOpostList().get(i).getIsType());
-//                    recipeIngredientRepository.save(recipeIngredient);//해당 레시피의 재료,amount,type을 저장
-////                    newIngredientDTO.setId(hasIngredient.getIngredientId());
-////                    newIngredientDTO.setIngredientName(hasIngredient.getIngredientName());
-//                }
-//                //recipe_has_ingredient테이블에 추가
-//
-//
-////                newIngredientDTO.setAmount(recipeIngredient.getAmount());
-////                newIngredientDTO.setIsType(recipeIngredient.getType());
-////                ingredientDTOList.add(newIngredientDTO);
-//            }
-//            return "success";
-//        } else {
-//            return "fail";
-//        }
-//
-//
-//        //해당 테이블에 값 입력. 알맞는 컬럼정보만 넣게 modelmapper를 사용하자.
-//
-//
-//    }
 
     public EvaluationDTO findEvaluation(Long evalId) {
         Optional<Evaluation> evaluation = Optional.ofNullable(evaluationRepository.findById(evalId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "평가 데이터가 존재 하지 않습니다.")));
@@ -173,8 +83,8 @@ public class RecipeService {
 
     }
 
-    public List<AllEvaluationDTO> findAllEvaluation(String authKey) {
-        Optional<User> user = Optional.ofNullable(userRepository.findByAuthKey(authKey).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 유저 존재하지않습니다.")));
+    public List<AllEvaluationDTO> findAllEvaluation(String uid) {
+        Optional<User> user = Optional.ofNullable(userRepository.findByUid(uid).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 유저 존재하지않습니다.")));
         List<Evaluation> evaluationList = evaluationRepository.findAllByUser(user.get()); // 유저가 사용한 모든 레시피 평가했든 안했든
 
         List<AllEvaluationDTO> allEvaluationDTOList = new ArrayList<>();
@@ -191,48 +101,57 @@ public class RecipeService {
     }
 
 
-    public List<RecipeDTO> getRecommendation(List<Long> recommendList) {
-        List<RecipeDTO> recipeDTOList = new ArrayList<>();
-        for (int i = 0; i < recommendList.size(); i++) {
-            //recipe_id가 유효한지 확인
-            Optional<Recipe> recipe = Optional.ofNullable(recipeRepository.findById(recommendList.get(i)).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 레시피는 존재하지 않습니다.")));
-            RecipeDTO recipeDTO = new RecipeDTO();
-            recipeDTO.setRecipeId(recipe.get().getRecipeId());
-            recipeDTO.setNickname(recipe.get().getUser().getNickname());
-            recipeDTO.setCuisine(recipe.get().getCuisine());
-            recipeDTO.setDescription(recipe.get().getDescription());
-            recipeDTO.setCookingTime(recipe.get().getCookingTime());
-            recipeDTO.setImage(recipe.get().getImage());
-            recipeDTO.setLevel(recipe.get().getLevel());
-            recipeDTO.setServing(recipe.get().getServing());
+    public RecipeDTO getRecommendation(Long recipeId) {
+        //recipe_id가 유효한지 확인
+        Optional<Recipe> recipe = Optional.ofNullable(recipeRepository.findById(recipeId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 레시피는 존재하지 않습니다.")));
+        RecipeDTO recipeDTO = new RecipeDTO();
+        recipeDTO.setRecipeId(recipe.get().getRecipeId());
+        recipeDTO.setNickname(recipe.get().getUser().getNickname());
+        recipeDTO.setCuisine(recipe.get().getCuisine());
+        recipeDTO.setDescription(recipe.get().getDescription());
+        recipeDTO.setCookingTime(recipe.get().getCookingTime());
+        recipeDTO.setImage(recipe.get().getImage());
+        recipeDTO.setLevel(recipe.get().getLevel());
+        recipeDTO.setServing(recipe.get().getServing());
 
-            //해당 레시피의 id로 ingredientId를 알아낸다.
-            List<IngredientDTO> ingredientDTOList = new ArrayList<>();
-            List<RecipeIngredient> recipeIngredient = recipeIngredientRepository.findAllByRecipe(recipe); //recipe_has_ingredient table
-            for (int j = 0; j < recipeIngredient.size(); j++) {
-                Ingredient ingredient = ingredientRepository.findByIngredientId(recipeIngredient.get(i).getIngredient().getIngredientId());// recipe_has_ingredient테이블에서 해당 ingredient_id에 맞는 재료들을 불러온다.
-                IngredientDTO ingredientDTO = new IngredientDTO();
-                ingredientDTO.setIngredientName(ingredient.getIngredientName());
-                ingredientDTO.setAmount(recipeIngredient.get(i).getAmount());
-                ingredientDTO.setIsType(recipeIngredient.get(i).getType());
-                ingredientDTOList.add(ingredientDTO);
-            }
-            recipeDTO.setIngredientDTOList(ingredientDTOList); // 재료 정보를 넣는다.
-
-            //과정을 넣는다.
-            List<Step> stepList = stepRepository.findAllByRecipe(recipe);
-            List<StepDTO> stepDTOList = new ArrayList<>();
-
-            for (int j = 0; j < stepList.size(); j++) {
-                StepDTO stepDTO = new StepDTO();
-                stepDTO.setDescription(stepList.get(i).getDescription());
-                stepDTO.setImage(stepList.get(i).getImage());
-                stepDTO.setLevel(stepList.get(i).getLevel());
-                stepDTOList.add(stepDTO);
-            }
-            recipeDTO.setStepList(stepDTOList);
-            recipeDTOList.add(recipeDTO);
+        //해당 레시피의 id로 ingredientId를 알아낸다.
+        List<IngredientDTO> ingredientDTOList = new ArrayList<>();
+        List<RecipeIngredient> recipeIngredient = recipeIngredientRepository.findAllByRecipe(recipe); //recipe_has_ingredient table
+        for (int j = 0; j < recipeIngredient.size(); j++) {
+            Ingredient ingredient = ingredientRepository.findByIngredientId(recipeIngredient.get(j).getIngredient().getIngredientId());// recipe_has_ingredient테이블에서 해당 ingredient_id에 맞는 재료들을 불러온다.
+            IngredientDTO ingredientDTO = new IngredientDTO();
+            ingredientDTO.setIngredientName(ingredient.getIngredientName());
+            ingredientDTO.setAmount(recipeIngredient.get(j).getAmount());
+            ingredientDTO.setIsType(recipeIngredient.get(j).getType());
+            ingredientDTOList.add(ingredientDTO);
         }
-        return recipeDTOList;
+        recipeDTO.setIngredientDTOList(ingredientDTOList); // 재료 정보를 넣는다.
+
+        //과정을 넣는다.
+        List<Step> stepList = stepRepository.findAllByRecipe(recipe);
+        List<StepDTO> stepDTOList = new ArrayList<>();
+
+        for (int j = 0; j < stepList.size(); j++) {
+            StepDTO stepDTO = new StepDTO();
+            stepDTO.setDescription(stepList.get(j).getDescription());
+            stepDTO.setImage(stepList.get(j).getImage());
+            stepDTO.setLevel(stepList.get(j).getLevel());
+            stepDTOList.add(stepDTO);
+        }
+        recipeDTO.setStepList(stepDTOList);
+        return recipeDTO;
+    }
+
+    public List<RecipeListupDTO> recommendList(List<Long> recommendList) {
+        List<RecipeListupDTO> recipeListupDTOList = new ArrayList<>();
+        for (int i = 0; i < recommendList.size(); i++) {
+            RecipeListupDTO recipeListupDTO = new RecipeListupDTO();
+            Optional<Recipe> recipe = recipeRepository.findById(recommendList.get(i));
+            recipeListupDTO.setRecipeId(recipe.get().getRecipeId());
+            recipeListupDTO.setRecipename(recipe.get().getCuisine());
+            recipeListupDTO.setUrl(recipe.get().getImage());
+            recipeListupDTOList.add(recipeListupDTO);
+        }
+        return recipeListupDTOList;
     }
 }

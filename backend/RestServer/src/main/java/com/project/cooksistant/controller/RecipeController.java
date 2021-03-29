@@ -29,9 +29,15 @@ public class RecipeController {
 
     @ApiOperation(value = "취향 기반 레시피 리스트 제공(Ok)", notes = "Request\n" +
             "                                                   - userId:협업필터링에 사용될 유저와 비슷한 레시피 추천을 위한 UserId\n" +
-            "                                                   - List<String>: 추천받을 재료 리스트")
-    @PostMapping("recipe/recommendation")
-    public List<RecipeDTO> recommend(@RequestBody RecommendDTO recommendDTO) {
+            "                                                   - List<String>: 추천받을 재료 리스트\n" +
+            "                                                   Response\n" +
+            "                                                   -List<RecipeListupDTO>:레시피 리스트\n" +
+            "                                                   {\n" +
+            "                                                   - url: 이미지 주소\n" +
+            "                                                   - recipename: 레시피 이름\n" +
+            "                                                   - recipeId: 레시피 아이디")
+    @PostMapping("/recipe/recommendation")
+    public List<RecipeListupDTO> recommend(@RequestBody RecommendDTO recommendDTO) {
         Gson gson = new Gson();
         String jsonArray = (webClient.post()
                 .uri("/evaluation")
@@ -44,9 +50,26 @@ public class RecipeController {
         for (int i = 0; i < idx.length; i++) {
             recommendList.add(Long.parseLong(idx[i]));
         }
-        List<RecipeDTO> recipeDTOList = recipeService.getRecommendation(recommendList);
-        System.out.println(recipeDTOList);
-        return recipeDTOList;
+        List<RecipeListupDTO> recipeListupDTOList = recipeService.recommendList(recommendList);
+        return recipeListupDTOList;
+    }
+
+    @ApiOperation(value = "특정 레시피 상세보기(Ok)", notes = "Request\n" +
+            "                                         - recipeId: 레시피 아이디\n" +
+            "                                         Response\n" +
+            "                                         - recipeId:레시피아이디\n" +
+            "                                         - nickname:작성자 닉네임\n" +
+            "                                         - cuisine:레시피명\n" +
+            "                                         - description: 레시피 설명\n" +
+            "                                         - cookingtime: 조리시간\n" +
+            "                                         - image:사진 url\n" +
+            "                                         - level: 난이도\n" +
+            "                                         - serving: 인분\n" +
+            "                                         - List<IngredientDTO>: 재료 리스트\n" +
+            "                                         - List<StepDTO>:단계별 조리법")
+    @GetMapping("/recipe/show/{recipeId}")
+    public RecipeDTO showRecipe(@PathVariable Long recipeId) {
+        return recipeService.getRecommendation(recipeId);
     }
 
     @ApiOperation(value = "레시피 평가하기(Ok)", notes = "Request\n" +
@@ -54,7 +77,7 @@ public class RecipeController {
             "                                          - keywordList: 평가 키워드 리스트\n" +
             "                                          - recipeId: 평가 레시피 번호\n" +
             "                                          - sampled: 샘플링 되었는지:\n" +
-            "                                          - userId: 평가할 유저의 Id")
+            "                                          - userId: 평가할 유저의 userId")
     @PostMapping("/recipe/evaluation")
     public String evaluation(@RequestBody EvaluationDTOpost evaluationDTOpost) throws Exception {
         boolean isEvaluation = recipeService.evaluateRecipe(evaluationDTOpost);
@@ -79,28 +102,18 @@ public class RecipeController {
     }
 
 
-//    @ApiOperation(value = "레시피 등록")
-//    @PostMapping("/recipe")
-//    public String insertRecipe(@RequestBody RecipeDTOpost recipeDTOpost) {
-//        String isInsert = recipeService.insertRecipe(recipeDTOpost);
-//        if (isInsert.equals("success")) {
-//            return "success";
-//        } else {
-//            return "fail";
-//        }
-//    }
-
     @ApiOperation(value = "내가 리뷰한 혹은 리뷰하지 않은 레시피 리스트 (Ok)", notes = "Request\n" +
-            "                                                           - authKey: 유저 인증키\n" +
+            "                                                           - uid: 유저 인증키\n" +
             "                                                           Response\n" +
             "                                                           - cuisine: 레시피 명\n" +
             "                                                           - recipe_id: 레시피 번호\n" +
             "                                                           - favor: 좋아요 여부\n" +
             "                                                           - isSampled:샘플링 여부\n" +
             "                                                           - isComplete: 레시피 리뷰 작성 여부")
-    @PostMapping("/recipe/review/{authKey}")
-    public List<AllEvaluationDTO> viewRecipe(@PathVariable String authKey) {
-        List<AllEvaluationDTO> evaluationDTOList = recipeService.findAllEvaluation(authKey);
+    @PostMapping("/recipe/review/{uid}")
+    public List<AllEvaluationDTO> viewRecipe(@PathVariable String uid) {
+        List<AllEvaluationDTO> evaluationDTOList = recipeService.findAllEvaluation(uid);
         return evaluationDTOList;
     }
+
 }

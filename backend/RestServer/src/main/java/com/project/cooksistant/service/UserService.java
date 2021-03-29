@@ -12,7 +12,6 @@ import com.project.cooksistant.repository.RecipeRepository;
 import com.project.cooksistant.repository.ScrapRepository;
 import com.project.cooksistant.repository.UserRepository;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,24 +39,17 @@ public class UserService {
     }
 
     @Transactional
-    public PersonalDTO getUserData(String authKey) {
+    public PersonalDTO getUserData(String uid) {
         PersonalDTO personalDTO = new PersonalDTO();
         List<RecipeMypageDTO> recipeMypageDTOList = new ArrayList<>();
         List<ScrapMypageDTO> scrapMypageDTOList = new ArrayList<>();
-        Optional<User> user = Optional.ofNullable(userRepository.findByAuthKey(authKey).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 유저는 존재하지 않습니다.")));
+        Optional<User> user = Optional.ofNullable(userRepository.findByUid(uid).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 유저는 존재하지 않습니다.")));
         personalDTO.setUserId(user.get().getUserId());
         personalDTO.setNickname(user.get().getNickname());
 
-//        //내가 등록한 레시피 검색
-//        List<Recipe> recipeList = recipeRepository.findAllByUser(user.get());
-//        recipeMypageDTOList = modelMapper.map(recipeList, new TypeToken<List<RecipeMypageDTO>>() {
-//        }.getType());
-//        personalDTO.setRecipeList(recipeMypageDTOList);
-
         //내가 스크랩한 레시피 검색
         List<Scrap> scrapList = scrapRepository.findAllByUser(user.get());
-//        scrapMypageDTOList = modelMapper.map(scrapList, new TypeToken<List<ScrapMypageDTO>>() {
-//        }.getType());
+
         ScrapMypageDTO scrapMypageDTO = new ScrapMypageDTO();
         for (int i = 0; i < scrapList.size(); i++) {
             scrapMypageDTO.setNickname(scrapList.get(i).getUser().getNickname());
@@ -95,11 +87,16 @@ public class UserService {
         }
     }
 
-    public void signup(SignupDTO signupDTO) {
-        User user = new User();
-        user.setAuthKey(signupDTO.getUid());
-        user.setNickname(signupDTO.getNickname());
-        userRepository.save(user);
+    public RestException signup(SignupDTO signupDTO) {
+        Optional<User> user = userRepository.findByUid(signupDTO.getUid());
+        if (user.isPresent()) {
+            return new RestException(HttpStatus.NOT_FOUND, "이미 존재하는 유저입니다.");
+        }
+        User newuser = new User();
+        newuser.setUid(signupDTO.getUid());
+        newuser.setNickname(signupDTO.getNickname());
+        userRepository.save(newuser);
 
+        return null;
     }
 }

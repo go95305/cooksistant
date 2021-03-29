@@ -10,5 +10,5 @@ import java.util.List;
 @Setter
 public class RecommendDTO {
     private Long userId;
-    private List<String> ingredient = new ArrayList<>();
+    private List<String> ingredients = new ArrayList<>();
 }

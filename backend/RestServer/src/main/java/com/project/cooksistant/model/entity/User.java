@@ -18,8 +18,8 @@ public class User {
     @Column(name = "id")
     private Long userId;
 
-    @Column(name = "auth_key",nullable = false)
-    private String authKey;
+    @Column(name = "uid",nullable = false)
+    private String uid;
 
     @Column(name = "nickname",nullable = false)
     private String nickname;

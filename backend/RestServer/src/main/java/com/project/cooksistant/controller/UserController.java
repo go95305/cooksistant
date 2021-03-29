@@ -18,7 +18,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "유저 정보 불러오기(Ok)", notes = "Request\n" +
-            "                                           - authkey(pathVariable)\n" +
+            "                                           - uid(pathVariable)\n" +
             "                                           Response\n" +
             "                                           - userId:유저 인덱스\n" +
             "                                           - nickname:닉네임\n" +
@@ -39,8 +39,8 @@ public class UserController {
             "                                           - description: 내 레시피 설명\n" +
             "                                           - }\n")
     @GetMapping("user/{authKey}")
-    public PersonalDTO personalData(@PathVariable String authKey) {
-        PersonalDTO personalDTO = userService.getUserData(authKey);
+    public PersonalDTO personalData(@PathVariable String uid) {
+        PersonalDTO personalDTO = userService.getUserData(uid);
         return personalDTO;
     }
 
