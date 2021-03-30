@@ -15,7 +15,6 @@ const { width, height } = Dimensions.get('screen');
 
 class RecipeInfo extends Component {
   constructor(props) {
-    console.log('props' + props.route.params.id);
     super(props);
     this.state = {
       img: require('../assets/imgs/bookmark.png'),
