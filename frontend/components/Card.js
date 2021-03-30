@@ -27,14 +27,13 @@ class Card extends React.Component {
     const imgContainer = [
       styles.imageContainer,
       horizontal ? styles.horizontalStyles : styles.verticalStyles,
-      styles.shadow,
     ];
 
     return (
       <Block row={horizontal} card flex style={cardContainer}>
         <TouchableWithoutFeedback onPress={() => navigation.navigate('Pro', { id: item.id })}>
           <Block flex style={imgContainer}>
-            <Image resizeMode="cover" source={{ uri: item.image }} style={imageStyles} />
+            <Image resizeMode="contain" source={{ uri: item.image }} style={imageStyles} />
             {/* <RNUrlPreview text={item.image} /> */}
           </Block>
         </TouchableWithoutFeedback>
@@ -44,7 +43,7 @@ class Card extends React.Component {
               {/* <Text style={{ height: 0, width: 0 }}>{item.id}</Text> */}
               <Text
                 style={{ fontFamily: 'montserrat-regular' }}
-                size={14}
+                size={10}
                 style={titleStyles}
                 color={nowTheme.COLORS.SECONDARY}
               >
