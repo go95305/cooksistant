@@ -41,7 +41,7 @@ class EvalueList extends React.Component {
   
   renderCards = () => {
     return (
-      <Block style={styles.container}>
+      <Block center style={styles.container}>
         {this.state.apiResult.map((el, index) => { 
           return (<ECard key={index} item={el} horizontal />);
         })}

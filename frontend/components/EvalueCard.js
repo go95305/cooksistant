@@ -1,10 +1,12 @@
 import React from 'react';
 import { withNavigation } from '@react-navigation/compat';
 import PropTypes from 'prop-types';
-import { StyleSheet, Image, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Image, TouchableWithoutFeedback, Dimensions } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 import { nowTheme } from '../constants';
-import { MaterialIcons } from '@expo/vector-icons'; 
+import { MaterialIcons } from '@expo/vector-icons';
+
+const { width, height } = Dimensions.get('screen');
 
 class Card extends React.Component {
   render() {
@@ -12,14 +14,13 @@ class Card extends React.Component {
       navigation,
       item,
       horizontal,
-      full,
       style,
       isEvaluColor,
       imageStyle,
       titleStyle,
     } = this.props;
 
-    const imageStyles = [full ? styles.fullImage : styles.horizontalImage, imageStyle];
+    const imageStyles = [styles.horizontalImage, imageStyle];
     const cardContainer = [styles.card, styles.shadow, style];
     const imgContainer = [
       styles.imageContainer,
@@ -27,8 +28,10 @@ class Card extends React.Component {
       styles.shadow,
     ];
 
+    const title = item.title.split(']');
+    
     return (
-      <Block row={horizontal} card flex style={cardContainer}>
+      <Block card flex style={cardContainer}>
         <TouchableWithoutFeedback
           onPress={() => {
             item.isEvalu ? navigation.navigate('Pro', { recipe_id: item.id }) : navigation.navigate('EvalueRegister', {
@@ -56,11 +59,11 @@ class Card extends React.Component {
           <Block flex space="between" style={styles.cardDescription}>
             <Block flex>
               <Text
-                style={{ fontFamily: 'montserrat-bold', paddingTop: 10, paddingHorizontal: 8, lineHeight: 18, }}
+                style={{ fontFamily: 'montserrat-bold',paddingTop: 3, paddingHorizontal: 8, lineHeight: 20, }}
                 size={13}
                 color={nowTheme.COLORS.SECONDARY}
               >
-                {item.title}
+                {item.title.includes(']') ? title[0]+'] \n' + title[1].trim() : item.title}
               </Text>
             </Block>
             <Block row space="between">
@@ -99,10 +102,11 @@ Card.propTypes = {
 
 const styles = StyleSheet.create({
   card: {
+    width: width * 0.85,
     backgroundColor: theme.COLORS.WHITE,
     marginVertical: theme.SIZES.BASE,
     borderWidth: 0,
-    minHeight: 114,
+    minHeight: 120,
     marginBottom: 4,
   },
   cardTitle: {
@@ -114,6 +118,7 @@ const styles = StyleSheet.create({
     padding: theme.SIZES.BASE / 2,
   },
   imageContainer: {
+    height: 180,
     borderRadius: 3,
     elevation: 1,
     overflow: 'hidden',
@@ -122,7 +127,7 @@ const styles = StyleSheet.create({
     // borderRadius: 3,
   },
   horizontalImage: {
-    height: 122,
+    height: 174,
     width: 'auto',
   },
   horizontalStyles: {
@@ -134,7 +139,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 0,
   },
   fullImage: {
-    height: 215,
+    height: 200,
   },
   shadow: {
     shadowColor: '#8898AA',

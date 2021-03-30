@@ -1,5 +1,13 @@
 import React from 'react';
-import { StyleSheet, Dimensions, ScrollView, Image, ImageBackground, Platform } from 'react-native';
+import {
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+  Image,
+  ImageBackground,
+  TouchableWithoutFeedback,
+  Platform
+} from 'react-native';
 import SegmentedControlTab from 'react-native-segmented-control-tab';
 import { Block, Text, theme, Button as GaButton } from 'galio-framework';
 import { Button } from '../components';
@@ -10,24 +18,17 @@ import firebase from 'firebase';
 import axios from 'axios';
 
 const { width, height } = Dimensions.get('screen');
-let and = 0,
-  ios = 0;
-if (height < 800) {
-  and = 35;
-} else {
-  ios = 15;
-}
 
-const ImgSize = (width - 48 - 32) / 3;
+const iosImg = (width - 48 - 32) / 3;
+const andImg = (width - 48 - 32) / 2.5;
 const RecipeImg = (width - 48 - 32) / 2;
-const googleUser = firebase.auth().currentUser;
 
 class Profile extends React.Component {
   state = {
     googleInfo: {
-      nickName: googleUser.displayName,
-      email: googleUser.email,
-      img: googleUser.photoURL,
+      nickName: null,
+      email: null,
+      img: null,
     },
     Info: {
       userId: 0,
@@ -41,6 +42,13 @@ class Profile extends React.Component {
 
   componentDidMount = () => {
     const user = firebase.auth().currentUser;
+    this.setState({
+      googleInfo: {
+        nickName: user.displayName,
+        email: user.email,
+        img: user.photoURL,
+      },
+    });
     axios
       .get(`http://j4c101.p.ssafy.io:8081/user/${user.uid}`)
       .then((result) => {
@@ -52,14 +60,14 @@ class Profile extends React.Component {
             description: el.description,
             image: el.image,
           });
-        })
+        });
         this.setState({
           Info: {
             scrapSize: result.data.scrapSize,
             recipeUsedSize: result.data.recipeUsedSize,
             evaluatedSize: result.data.evaluatedSize,
             userId: result.data.userId,
-            scrapList: eList
+            scrapList: eList,
           },
         });
       })
@@ -126,12 +134,21 @@ class Profile extends React.Component {
   };
 
   Scrap = () => {
+    const { navigation } = this.props;
     return (
       <ScrollView showsVerticalScrollIndicator={false}>
         <Block style={{ paddingBottom: -HeaderHeight * 2, paddingHorizontal: 15 }}>
           <Block row space="between" style={{ flexWrap: 'wrap' }}>
-          {this.state.Info.scrapList.map((el, index) => (
-              <Image source={{uri: el.image}} key={index} resizeMode="cover" style={styles.thumb} />
+            {this.state.Info.scrapList.map((el, index) => (
+              // <Block> card flex style={cardContainer}
+                <TouchableWithoutFeedback key={index} onPress={() => navigation.navigate('Pro')}>
+                  <Image
+                    source={{ uri: el.image }}
+                    resizeMode="stretch"
+                    style={styles.thumb}
+                  />
+                </TouchableWithoutFeedback>
+              //</Block>
             ))}
           </Block>
         </Block>
@@ -140,7 +157,6 @@ class Profile extends React.Component {
   };
 
   render() {
-    const { navigation } = this.props;
     return (
       <Block style={styles.container}>
         <Block flex={2}>
@@ -153,7 +169,7 @@ class Profile extends React.Component {
               <Block
                 style={{ position: 'absolute', width: width, zIndex: 5, paddingHorizontal: 50 }}
               >
-                <Block center style={{ top: height > 800 ? height * 0.13 : height * 0.09 }}>
+                <Block center style={{ top: Platform.OS === 'android' ? height * 0.1: height * 0.13, }}>
                   <Image
                     source={
                       this.state.googleInfo.img != null
@@ -163,7 +179,7 @@ class Profile extends React.Component {
                     style={styles.avatar}
                   />
                 </Block>
-                <Block style={{ top: height > 800 ? height * 0.13 : height * 0.09 }}>
+                <Block style={{ top: Platform.OS === 'android' ? height * 0.1: height * 0.13, }}>
                   <Block center>
                     <Text
                       style={{
@@ -266,7 +282,7 @@ const styles = StyleSheet.create({
     height: height * 0.4,
   },
   info: {
-    marginTop: height > 800 ? 20 : 0,
+    marginTop: 10,
     paddingHorizontal: 10,
     height: height * 0.8,
   },
@@ -275,27 +291,24 @@ const styles = StyleSheet.create({
     marginTop: -80,
   },
   avatar: {
-    width: ImgSize,
-    height: ImgSize,
-    borderRadius: 50,
+    width: Platform.OS === 'android' ? andImg: iosImg,
+    height: Platform.OS === 'android' ? andImg: iosImg,
+    borderRadius: Platform.OS === 'android' ? 55 : 50,
     borderWidth: 0,
-  },
-  nameInfo: {
-    marginTop: 35,
   },
   thumb: {
     borderRadius: 3,
     marginVertical: 6,
     alignSelf: 'center',
     width: RecipeImg,
-    height: RecipeImg,
+    height: 100,
   },
   // segment style
   segmentContainer: {
     width,
-    height: height * 0.5 - and,
+    height: height * 0.5,
     padding: theme.SIZES.BASE,
-    marginTop: and + ios,
+    marginTop: Platform.OS === 'android' ? height * 0.04: height * 0.01,
   },
   tabsContainerStyle: {
     height: 40,
