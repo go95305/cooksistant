@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Dimensions, Alert} from 'react-native';
+import { ScrollView, StyleSheet, Dimensions, Alert } from 'react-native';
 //galio
 import { Block, Text, theme } from 'galio-framework';
 
@@ -10,64 +10,40 @@ import firebase from 'firebase';
 
 const { width, height } = Dimensions.get('screen');
 
-const recipes = [
-  {
-    title: '빨간맛 떡볶이',
-    image: require('../assets/imgs/food1.png'),
-    isEvalu: false,
-    horizontal: true,
-  },
-  {
-    title: '감자조림',
-    image: require('../assets/imgs/food2.png'),
-    isEvalu: true,
-  },
-  {
-    title: '나박김치',
-    image: require('../assets/imgs/food3.png'),
-    isEvalu: false,
-    horizontal: true,
-  },
-  {
-    title: '된장찌개',
-    image: require('../assets/imgs/food4.png'),
-    isEvalu: false,
-    horizontal: true,
-  },
-
-  {
-    title: '제육볶음',
-    image: require('../assets/imgs/food5.png'),
-    isEvalu: true,
-    horizontal: true,
-  },
-  {
-    title: '채소듬뿍 김밥',
-    image: require('../assets/imgs/food6.png'),
-    isEvalu: true,
-    horizontal: true,
-  },
-];
 class EvalueList extends React.Component {
-  state = { apiResult: [] };
-  // componentDidMount = () => {
-  //   var user = firebase.auth().currentUser;
-  //   axios
-  //     .post(`http://j4c101.p.ssafy.io:8081/recipe/review`, {
-  //       authKey: user.uid
-  //     })
-  //     .then((result) => {
-  //     })
-  // };
+  state = {
+    apiResult: []
+  };
+
+  componentDidMount = () => {
+    var user = firebase.auth().currentUser;
+    axios
+      .post(`http://j4c101.p.ssafy.io:8081/recipe/review/${user.uid}`)
+      .then((result) => {
+        const arrayList = [];
+        if (result.data && Array.isArray(result.data)) {
+          result.data.forEach((el) => {
+            arrayList.push({
+              title: el.cuisine,
+              eId: el.evaluationId,
+              rId: el.recipe_id,
+              isEvalu: el.isComplete,
+              image: el.image,
+            });
+          });
+        }
+        this.setState({ apiResult: arrayList })
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   renderCards = () => {
     return (
       <Block style={styles.container}>
-        <ECard item={recipes[0]} horizontal />
-        <ECard item={recipes[1]} horizontal />
-        <ECard item={recipes[2]} horizontal />
-        <ECard item={recipes[3]} horizontal />
-        <ECard item={recipes[4]} horizontal />
-        <ECard item={recipes[5]} horizontal />
+        {this.state.apiResult.map((el, index) => { 
+          return (<ECard key={index} item={el} horizontal />);
+        })}
       </Block>
     );
   };
