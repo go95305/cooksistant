@@ -41,7 +41,6 @@ public class UserService {
     @Transactional
     public PersonalDTO getUserData(String uid) {
         PersonalDTO personalDTO = new PersonalDTO();
-        List<RecipeMypageDTO> recipeMypageDTOList = new ArrayList<>();
         List<ScrapMypageDTO> scrapMypageDTOList = new ArrayList<>();
         Optional<User> user = Optional.ofNullable(userRepository.findByUid(uid).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 유저는 존재하지 않습니다.")));
         personalDTO.setUserId(user.get().getUserId());
@@ -50,13 +49,14 @@ public class UserService {
         //내가 스크랩한 레시피 검색
         List<Scrap> scrapList = scrapRepository.findAllByUser(user.get());
         personalDTO.setScrapSize(scrapList.size());
-        ScrapMypageDTO scrapMypageDTO = new ScrapMypageDTO();
         for (int i = 0; i < scrapList.size(); i++) {
+            ScrapMypageDTO scrapMypageDTO = new ScrapMypageDTO();
             scrapMypageDTO.setNickname(scrapList.get(i).getUser().getNickname());
             scrapMypageDTO.setRecipeId(scrapList.get(i).getRecipe().getRecipeId());
             scrapMypageDTO.setImage(scrapList.get(i).getRecipe().getImage());
             scrapMypageDTO.setDescription(scrapList.get(i).getRecipe().getDescription());
             scrapMypageDTO.setCuisine(scrapList.get(i).getRecipe().getCuisine());
+            System.out.println(scrapMypageDTO);
             scrapMypageDTOList.add(scrapMypageDTO);
         }
         personalDTO.setScrapList(scrapMypageDTOList);
@@ -68,7 +68,7 @@ public class UserService {
 
         //평가한 레시피 개수
         String evalCount = "select count(e) from Evaluation e where e.user.uid= :uid";
-        Long eval = entityManager.createQuery(evalCount, Long.class).setParameter("uid",uid).getSingleResult();
+        Long eval = entityManager.createQuery(evalCount, Long.class).setParameter("uid", uid).getSingleResult();
         personalDTO.setRecipeUsedSize(eval);
         return personalDTO;
     }
