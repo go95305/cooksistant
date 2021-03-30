@@ -189,9 +189,9 @@ export default class App extends React.Component {
 			this.setState({ uploading: true });
 
 			if (!pickerResult.cancelled) {
-				//uploadUrl = await uploadImageAsync(pickerResult.uri);
-				//this.setState({ image: uploadUrl });
-        this.setState({ image: pickerResult.uri });
+				uploadUrl = await uploadImageAsync(pickerResult.uri);
+				this.setState({ image: uploadUrl });
+        //this.setState({ image: pickerResult.uri });
 			}
 		} catch (e) {
 			console.log(e);
@@ -209,16 +209,16 @@ export default class App extends React.Component {
 				requests: [
 					{
 						features: [
-							{ type: 'LABEL_DETECTION', maxResults: 10 },
-							{ type: 'LANDMARK_DETECTION', maxResults: 5 },
-							{ type: 'FACE_DETECTION', maxResults: 5 },
-							{ type: 'LOGO_DETECTION', maxResults: 5 },
+						// 	{ type: 'LABEL_DETECTION', maxResults: 10 },
+						// 	{ type: 'LANDMARK_DETECTION', maxResults: 5 },
+						// 	{ type: 'FACE_DETECTION', maxResults: 5 },
+						// 	{ type: 'LOGO_DETECTION', maxResults: 5 },
 							{ type: 'TEXT_DETECTION', maxResults: 5 },
-							{ type: 'DOCUMENT_TEXT_DETECTION', maxResults: 5 },
-							{ type: 'SAFE_SEARCH_DETECTION', maxResults: 5 },
-							{ type: 'IMAGE_PROPERTIES', maxResults: 5 },
-							{ type: 'CROP_HINTS', maxResults: 5 },
-							{ type: 'WEB_DETECTION', maxResults: 5 }
+							 { type: 'DOCUMENT_TEXT_DETECTION', maxResults: 5 },
+							// { type: 'SAFE_SEARCH_DETECTION', maxResults: 5 },
+							// { type: 'IMAGE_PROPERTIES', maxResults: 5 },
+							// { type: 'CROP_HINTS', maxResults: 5 },
+							// { type: 'WEB_DETECTION', maxResults: 5 }
 						],
 						image: {
 							source: {
@@ -228,7 +228,7 @@ export default class App extends React.Component {
 					}
 				]
 			});
-      console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+
 			let response = await fetch(
 				'https://vision.googleapis.com/v1/images:annotate?key=' +
 					Environment['GOOGLE_CLOUD_VISION_API_KEY'],
@@ -238,13 +238,13 @@ export default class App extends React.Component {
 						'Content-Type': 'application/json'
 					},
 					method: 'POST',
-					body: body
+					// body: body
+          body: body
 				}
 			);
 			let responseJson = await response.json();
       console.log('###########################################')
 			console.log(responseJson);
-      console.log('###########################################')
 
 			this.setState({
 				googleResponse: responseJson,
@@ -257,11 +257,14 @@ export default class App extends React.Component {
 }
 
 async function uploadImageAsync(uri) {
+  
 	const blob = await new Promise((resolve, reject) => {
+    
 		const xhr = new XMLHttpRequest();
 		xhr.onload = function() {
 			resolve(xhr.response);
 		};
+    
 		xhr.onerror = function(e) {
 			console.log(e);
 			reject(new TypeError('Network request failed'));
