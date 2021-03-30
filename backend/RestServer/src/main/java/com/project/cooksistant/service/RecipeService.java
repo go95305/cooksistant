@@ -93,7 +93,7 @@ public class RecipeService {
 
     public List<AllEvaluationDTO> findAllEvaluation(String uid) {
         Optional<User> user = Optional.ofNullable(userRepository.findByUid(uid).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 유저 존재하지않습니다.")));
-        List<Evaluation> evaluationList = evaluationRepository.findAllByUser(user.get()); // 유저가 사용한 모든 레시피 평가했든 안했든
+        List<Evaluation> evaluationList = evaluationRepository.findAllByUserOrderByIsComplete(user.get()); // 유저가 사용한 모든 레시피 평가했든 안했든
 
         List<AllEvaluationDTO> allEvaluationDTOList = new ArrayList<>();
         for (int i = 0; i < evaluationList.size(); i++) {
