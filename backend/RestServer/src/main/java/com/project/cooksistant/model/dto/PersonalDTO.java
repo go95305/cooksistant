@@ -14,6 +14,10 @@ import java.util.List;
 public class PersonalDTO {
     private Long userId;
     private String nickname;
+    private int scrapSize;
+    private Long recipeUsedSize;
+    private Long evaluatedSize;
     List<ScrapMypageDTO> scrapList = new ArrayList<>();
+
 
 }

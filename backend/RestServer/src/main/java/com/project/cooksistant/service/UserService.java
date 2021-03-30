@@ -49,7 +49,7 @@ public class UserService {
 
         //내가 스크랩한 레시피 검색
         List<Scrap> scrapList = scrapRepository.findAllByUser(user.get());
-
+        personalDTO.setScrapSize(scrapList.size());
         ScrapMypageDTO scrapMypageDTO = new ScrapMypageDTO();
         for (int i = 0; i < scrapList.size(); i++) {
             scrapMypageDTO.setNickname(scrapList.get(i).getUser().getNickname());
@@ -60,6 +60,16 @@ public class UserService {
             scrapMypageDTOList.add(scrapMypageDTO);
         }
         personalDTO.setScrapList(scrapMypageDTOList);
+
+        //이용완료한 레시피 개수
+        String usedRecipeCount = "select count(e) from Evaluation e where e.user.uid= :uid and e.isComplete=true";
+        Long used = entityManager.createQuery(usedRecipeCount, Long.class).setParameter("uid", uid).getSingleResult();
+        personalDTO.setEvaluatedSize(used);
+
+        //평가한 레시피 개수
+        String evalCount = "select count(e) from Evaluation e where e.user.uid= :uid";
+        Long eval = entityManager.createQuery(evalCount, Long.class).setParameter("uid",uid).getSingleResult();
+        personalDTO.setRecipeUsedSize(eval);
         return personalDTO;
     }
 
