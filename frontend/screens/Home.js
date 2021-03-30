@@ -68,14 +68,7 @@ class Home extends React.Component {
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.articles}>
         <Block flex>
           {this.state.recipePopular.map((el, index) => {
-            return (
-              <Card
-                key={index}
-                item={el}
-                horizontal
-                onPress={() => navigation.navigate('RecipeInfo')}
-              />
-            );
+            return <Card key={index} item={el} horizontal />;
           })}
         </Block>
       </ScrollView>
@@ -87,14 +80,7 @@ class Home extends React.Component {
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.articles}>
         <Block flex>
           {this.state.recipeTrendy.map((el, index) => {
-            return (
-              <Card
-                key={index}
-                item={el}
-                horizontal
-                onPress={() => navigation.navigate('RecipeInfo')}
-              />
-            );
+            return <Card key={index} item={el} horizontal />;
           })}
         </Block>
       </ScrollView>

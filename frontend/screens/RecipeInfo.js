@@ -10,16 +10,32 @@ import {
 import { Block, Text, theme, Button as GaButton } from 'galio-framework';
 import { Button } from '../components';
 import { Images, nowTheme } from '../constants';
-
+import axios from 'axios';
 const { width, height } = Dimensions.get('screen');
 
 class RecipeInfo extends Component {
   constructor(props) {
+    console.log('props' + props.route.params.id);
     super(props);
     this.state = {
       img: require('../assets/imgs/bookmark.png'),
+      id: props.route.params.id,
     };
   }
+  state = {
+    recipeDetail: {
+      id: 0,
+      nickname: null,
+      title: null,
+      content: null,
+      cookingtime: null,
+      image: null,
+      level: null,
+      serving: null,
+      ingredientDTOList: [],
+      stepList: [],
+    },
+  };
   changeImage = () => {
     this.setState({ img: require('../assets/imgs/bookmarkFull.png') });
   };
@@ -37,6 +53,32 @@ class RecipeInfo extends Component {
   //     this.setState({ img: require('../assets/imgs/bookmark.png') }, 0);
   //   }
   // };
+
+  componentDidMount = (props) => {
+    axios
+      .get(`http://j4c101.p.ssafy.io:8081/recipe/show/${this.state.id}`)
+      .then((result) => {
+        if (result.data) {
+          this.setState({
+            recipeDetail: {
+              id: result.data.recipeId,
+              nickname: result.data.nickname,
+              cuisine: result.data.cuisine,
+              description: result.data.description,
+              cookingtime: result.data.cookingtime,
+              image: result.data.image,
+              level: result.data.level,
+              serving: result.data.serving,
+              ingredientDTOList: result.data.ingredientDTOList,
+              stepList: result.data.stepList,
+            },
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   renderDetail = () => {
     return (
       <Block style={styles.container}>
@@ -52,7 +94,7 @@ class RecipeInfo extends Component {
                   <ScrollView showsVerticalScrollIndicator={false}>
                     <Block>
                       <Image
-                        source={Images.eggplant}
+                        source={{ uri: this.state.recipeDetail.image }}
                         style={{
                           width: width * 0.9,
                           height: 252,
@@ -66,8 +108,9 @@ class RecipeInfo extends Component {
                           fontSize: 24,
                         }}
                         color="black"
+                        key={recipe.cuisine}
                       >
-                        가지볶음
+                        {this.state.recipeDetail.cuisine}
                       </Text>
                       <TouchableOpacity activeOpacity={0.5} onPress={this.changeImage}>
                         <Image source={this.state.img} style={{ marginLeft: 10 }} />
@@ -75,11 +118,11 @@ class RecipeInfo extends Component {
                     </Block>
                     <Block row style={{ marginLeft: 25, marginBottom: 4 }}>
                       <Text color="black" size={15} style={{ fontFamily: 'montserrat-regular' }}>
-                        2인분
+                        {this.state.recipeDetail.serving}
                       </Text>
                       <Text> | </Text>
                       <Text color="black" size={15} style={{ fontFamily: 'montserrat-regular' }}>
-                        20분
+                        {this.state.recipeDetail.cookingtime}
                       </Text>
                     </Block>
                     <Block center style={{ width: width * 0.8, alignItems: 'center' }}>
@@ -94,8 +137,7 @@ class RecipeInfo extends Component {
                           padding: 10,
                         }}
                       >
-                        가지는 장도 튼튼하게 해주고, 피로회복에도 효과가 뛰어나다고 해요!! 이렇게
-                        좋은 먹거리인 ‘가지’로 간단하지만 정말 맛있는 가지볶음을 해보아요 :)
+                        {this.state.recipeDetail.description}
                       </Text>
                     </Block>
                     <Block
@@ -231,7 +273,11 @@ class RecipeInfo extends Component {
   render() {
     return (
       <Block style={styles.mainViewStyle}>
-        <Block flex={9}>{this.renderDetail()}</Block>
+        {this.state.recipeDetail &&
+          this.state.recipeDetail.length > 0 &&
+          this.state.recipeDetail.map((recipe) => {
+            <Block flex={9}>{this.renderDetail(recipe)}</Block>;
+          })}
         <Block flex={1} style={styles.underMenu}>
           <Button
             style={styles.btnStyle}
@@ -314,7 +360,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     overflow: 'hidden',
     padding: 5,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   amoutTxt: {
     fontSize: 12,
