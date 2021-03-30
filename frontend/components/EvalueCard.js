@@ -31,7 +31,12 @@ class Card extends React.Component {
       <Block row={horizontal} card flex style={cardContainer}>
         <TouchableWithoutFeedback
           onPress={() => {
-            item.isEvalu ? navigation.navigate('Pro', item) : navigation.navigate('EvalueRegister', item);
+            item.isEvalu ? navigation.navigate('Pro', { recipe_id: item.id }) : navigation.navigate('EvalueRegister', {
+              eId:item.eId,
+              rId: item.rId,
+              title: item.title,
+              image: item.image
+            });
           }}
         >
           <Block flex style={imgContainer}>
@@ -40,7 +45,12 @@ class Card extends React.Component {
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
           onPress={() => {
-            item.isEvalu ? navigation.navigate('Pro', item) : navigation.navigate('EvalueRegister', item);
+            item.isEvalu ? navigation.navigate('Pro', { recipe_id: item.id }) : navigation.navigate('EvalueRegister', {
+              eId:item.eId,
+              recipeId: item.rId,
+              title: item.title,
+              image: item.image
+            });
           }}
         >
           <Block flex space="between" style={styles.cardDescription}>
