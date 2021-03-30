@@ -38,6 +38,7 @@ class EvalueList extends React.Component {
         console.log(error);
       });
   };
+  
   renderCards = () => {
     return (
       <Block style={styles.container}>

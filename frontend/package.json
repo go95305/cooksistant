@@ -56,8 +56,8 @@
     "react-native-tag-selector": "^0.0.3",
     "react-native-tags-input": "^1.0.10",
     "react-native-tesseract-ocr": "^2.0.1",
-    "react-speech-recognition": "^3.7.0",
-    "react-native-url-preview": "^1.1.9"
+    "react-native-url-preview": "^1.1.9",
+    "react-speech-recognition": "^3.7.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",
