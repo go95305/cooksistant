@@ -14,13 +14,14 @@ class Card extends React.Component {
       navigation,
       item,
       horizontal,
+      full,
       style,
       isEvaluColor,
       imageStyle,
       titleStyle,
     } = this.props;
 
-    const imageStyles = [styles.horizontalImage, imageStyle];
+    const imageStyles = [full ? styles.fullImage : styles.horizontalImage, imageStyle];
     const cardContainer = [styles.card, styles.shadow, style];
     const imgContainer = [
       styles.imageContainer,
@@ -29,57 +30,66 @@ class Card extends React.Component {
     ];
 
     const title = item.title.split(']');
-    
+
     return (
       <Block card flex style={cardContainer}>
         <TouchableWithoutFeedback
           onPress={() => {
-            item.isEvalu ? navigation.navigate('Pro', { recipe_id: item.id }) : navigation.navigate('EvalueRegister', {
-              eId:item.eId,
-              rId: item.rId,
-              title: item.title,
-              image: item.image
-            });
+            item.isEvalu
+              ? navigation.navigate('Pro', { recipe_id: item.id })
+              : navigation.navigate('EvalueRegister', {
+                  eId: item.eId,
+                  rId: item.rId,
+                  title: item.title,
+                  image: item.image,
+                });
           }}
         >
           <Block flex style={imgContainer}>
-            <Image resizeMode="cover" source={{uri: item.image}}  style={imageStyles} />
+            <Image resizeMode="cover" source={{ uri: item.image }} style={imageStyles} />
           </Block>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
           onPress={() => {
-            item.isEvalu ? navigation.navigate('Pro', { recipe_id: item.id }) : navigation.navigate('EvalueRegister', {
-              eId:item.eId,
-              recipeId: item.rId,
-              title: item.title,
-              image: item.image
-            });
+            item.isEvalu
+              ? navigation.navigate('Pro', { recipe_id: item.id })
+              : navigation.navigate('EvalueRegister', {
+                  eId: item.eId,
+                  recipeId: item.rId,
+                  title: item.title,
+                  image: item.image,
+                });
           }}
         >
           <Block flex space="between" style={styles.cardDescription}>
             <Block flex>
               <Text
-                style={{ fontFamily: 'montserrat-bold',paddingTop: 3, paddingHorizontal: 8, lineHeight: 20, }}
+                style={{
+                  fontFamily: 'montserrat-bold',
+                  paddingTop: 3,
+                  paddingHorizontal: 8,
+                  lineHeight: 20,
+                }}
                 size={13}
                 color={nowTheme.COLORS.SECONDARY}
               >
-                {item.title.includes(']') ? title[0]+'] \n' + title[1].trim() : item.title}
+                {item.title.includes(']')
+                  ? title[0] +
+                    '] \n' +
+                    (title[1].trim().length > 26
+                      ? title[1].trim().substr(0, 26) + ' ...'
+                      : title[1].trim())
+                  : (item.title.length > 26 ? item.title.substr(0, 26) + ' ...' : item.title)}
               </Text>
             </Block>
             <Block row space="between">
-              <Text
-                style={{padding: 7 }}
-                size={13}
-                muted={!isEvaluColor}
-                color={'#f18d46'}
-                bold
-              >
+              <Text style={{ padding: 7 }} size={13} muted={!isEvaluColor} color={'#f18d46'} bold>
                 {item.isEvalu ? '레시피 보러가기' : '레시피 평가하기'}
               </Text>
               {item.isEvalu ? (
-                <MaterialIcons name="check-box" size={29} color="#f18d46"/>
+                <MaterialIcons name="check-box" size={30} color="#f18d46" />
               ) : (
-                <MaterialIcons name="check-box-outline-blank" size={29} color="#f18d46" />
+                <MaterialIcons name="check-box-outline-blank" size={30} color="#f18d46" />
               )}
             </Block>
           </Block>
@@ -102,11 +112,10 @@ Card.propTypes = {
 
 const styles = StyleSheet.create({
   card: {
-    width: width * 0.85,
     backgroundColor: theme.COLORS.WHITE,
     marginVertical: theme.SIZES.BASE,
     borderWidth: 0,
-    minHeight: 120,
+    minHeight: 114,
     marginBottom: 4,
   },
   cardTitle: {
@@ -118,7 +127,6 @@ const styles = StyleSheet.create({
     padding: theme.SIZES.BASE / 2,
   },
   imageContainer: {
-    height: 180,
     borderRadius: 3,
     elevation: 1,
     overflow: 'hidden',
@@ -127,7 +135,7 @@ const styles = StyleSheet.create({
     // borderRadius: 3,
   },
   horizontalImage: {
-    height: 174,
+    height: 122,
     width: 'auto',
   },
   horizontalStyles: {
@@ -139,7 +147,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 0,
   },
   fullImage: {
-    height: 200,
+    height: 190,
   },
   shadow: {
     shadowColor: '#8898AA',

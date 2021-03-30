@@ -6,7 +6,7 @@ import {
   Image,
   ImageBackground,
   TouchableWithoutFeedback,
-  Platform
+  Platform,
 } from 'react-native';
 import SegmentedControlTab from 'react-native-segmented-control-tab';
 import { Block, Text, theme, Button as GaButton } from 'galio-framework';
@@ -138,17 +138,52 @@ class Profile extends React.Component {
     return (
       <ScrollView showsVerticalScrollIndicator={false}>
         <Block style={{ paddingBottom: -HeaderHeight * 2, paddingHorizontal: 15 }}>
-          <Block row space="between" style={{ flexWrap: 'wrap' }}>
+          <Block center>
             {this.state.Info.scrapList.map((el, index) => (
-              // <Block> card flex style={cardContainer}
-                <TouchableWithoutFeedback key={index} onPress={() => navigation.navigate('Pro')}>
-                  <Image
+              <TouchableWithoutFeedback key={index} onPress={() => navigation.navigate('Pro')}>
+                <Block flex card center shadow style={styles.category}>
+                  <ImageBackground
+                    resizeMode='cover'
                     source={{ uri: el.image }}
-                    resizeMode="stretch"
-                    style={styles.thumb}
-                  />
-                </TouchableWithoutFeedback>
-              //</Block>
+                    style={[
+                      styles.imageBlock,
+                      { width: width - theme.SIZES.BASE * 5, height: 160 },
+                    ]}
+                    imageStyle={{
+                      width: width - theme.SIZES.BASE * 5,
+                      height: 160,
+                    }}
+                  >
+                    <Block style={styles.categoryTitle}>
+                      <Text
+                        style={{
+                          textAlign: 'center',
+                          fontSize: 13,
+                          fontFamily: 'montserrat-bold',
+                          zIndex: 2,
+                          color: 'white',
+                          paddingHorizontal: 15,
+                        }}
+                      >
+                        {el.title.substr(0, (el.title.indexOf(']') + 1))}
+                      </Text>
+                      <Text
+                        style={{
+                          textAlign: 'center',
+                          fontSize: 15,
+                          fontFamily: 'montserrat-bold',
+                          lineHeight: 25,
+                          zIndex: 2,
+                          color: 'white',
+                          paddingHorizontal: 15,
+                        }}
+                      >
+                        {el.title.substr((el.title.indexOf(']') + 2))}
+                      </Text>
+                    </Block>
+                  </ImageBackground>
+                </Block>
+              </TouchableWithoutFeedback>
             ))}
           </Block>
         </Block>
@@ -169,7 +204,10 @@ class Profile extends React.Component {
               <Block
                 style={{ position: 'absolute', width: width, zIndex: 5, paddingHorizontal: 50 }}
               >
-                <Block center style={{ top: Platform.OS === 'android' ? height * 0.1: height * 0.13, }}>
+                <Block
+                  center
+                  style={{ top: Platform.OS === 'android' ? height * 0.1 : height * 0.13 }}
+                >
                   <Image
                     source={
                       this.state.googleInfo.img != null
@@ -179,7 +217,7 @@ class Profile extends React.Component {
                     style={styles.avatar}
                   />
                 </Block>
-                <Block style={{ top: Platform.OS === 'android' ? height * 0.1: height * 0.13, }}>
+                <Block style={{ top: Platform.OS === 'android' ? height * 0.1 : height * 0.13 }}>
                   <Block center>
                     <Text
                       style={{
@@ -291,8 +329,8 @@ const styles = StyleSheet.create({
     marginTop: -80,
   },
   avatar: {
-    width: Platform.OS === 'android' ? andImg: iosImg,
-    height: Platform.OS === 'android' ? andImg: iosImg,
+    width: Platform.OS === 'android' ? andImg : iosImg,
+    height: Platform.OS === 'android' ? andImg : iosImg,
     borderRadius: Platform.OS === 'android' ? 55 : 50,
     borderWidth: 0,
   },
@@ -308,7 +346,7 @@ const styles = StyleSheet.create({
     width,
     height: height * 0.5,
     padding: theme.SIZES.BASE,
-    marginTop: Platform.OS === 'android' ? height * 0.04: height * 0.01,
+    marginTop: Platform.OS === 'android' ? height * 0.04 : height * 0.01,
   },
   tabsContainerStyle: {
     height: 40,
@@ -318,6 +356,21 @@ const styles = StyleSheet.create({
   },
   activeTabStyle: {
     backgroundColor: '#f18d46',
+  },
+  category: {
+    backgroundColor: theme.COLORS.WHITE,
+    marginVertical: theme.SIZES.BASE / 3,
+    borderWidth: 0,
+  },
+  categoryTitle: {
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageBlock: {
+    overflow: 'hidden',
+    borderRadius: 4,
   },
 });
 

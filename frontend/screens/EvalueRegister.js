@@ -101,28 +101,10 @@ class TasteRegister extends React.Component {
       });
   };
 
-  onSubmitBtn() {
-    Alert.alert('확인', '평가를 등록하시겠습니까?', [
-      {
-        text: '취소',
-        onPress: () => console.log('취소'),
-        style: 'cancel',
-      },
-      {
-        text: '네',
-        onPress: () => {
-          this.onSubmit;
-        },
-      },
-      { cancelable: false },
-    ]);
-  }
-
   render() {
-    const { navigation } = this.props;
-
     const title = this.props.route.params.title;
     const image = this.props.route.params.image;
+    const tmp = title.split(']');
 
     const progressStepsStyle = {
       labelFontFamily: 'montserrat-bold',
@@ -157,26 +139,27 @@ class TasteRegister extends React.Component {
                     previousBtnTextStyle={buttonTextStyle}
                   >
                     <Block flex={1} style={{ alignItems: 'center' }}>
-                      <Block center style={{ marginTop: 10 }}>
+                      <Block center style={{ marginTop: 7 }}>
                         <Text
                           style={{
                             fontFamily: 'montserrat-bold',
                             textAlign: 'center',
                             lineHeight: 28,
-                            margin: 15,
-                            marginTop: 5
+                            margin: 20,
+                            marginTop: height > 800 ? 0 : -5
                           }}
                           color="#333"
-                          size={19}
+                          size={15}
                         >
-                          {title}
+                          {title.includes(']') ? tmp[0] + '] \n' + tmp[1].trim() : title} 
                         </Text>
                         <Image
+                          resizeMode="stretch"
                           source={{ uri: image }}
                           style={{
-                            borderRadius: 10,
+                            borderRadius: 15,
                             width: width * 0.8,
-                            height: height > 800 ? 210 : 180,
+                            height: 200,
                           }}
                         />
                       </Block>
@@ -185,8 +168,8 @@ class TasteRegister extends React.Component {
                           style={{
                             fontFamily: 'montserrat-bold',
                             textAlign: 'center',
-                            marginTop: -5,
-                            marginBottom: height > 800 ? 18 : 15,
+                            marginTop: height > 800 ? -5 : -10,
+                            marginBottom: 15,
                           }}
                           color="#333"
                           size={14}
@@ -206,7 +189,7 @@ class TasteRegister extends React.Component {
                         <Text
                           style={{
                             fontFamily: 'montserrat-bold',
-                            textAlign: 'center',
+                            alignItems: 'center',
                             marginTop: height > 800 ? 15 : 10,
                           }}
                         >
@@ -235,7 +218,7 @@ class TasteRegister extends React.Component {
                         >
                           맛
                         </Text>
-                        <Block flex={1} center style={styles.taste1Container}>
+                        <Block flex={1} center style={styles.tasteContainer}>
                           <TagSelector
                             tagStyle={styles.tag1}
                             selectedTagStyle={styles.tag1Selected}
@@ -308,11 +291,11 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   evalueContainer: {
-    marginTop: Platform.OS === 'android' ? 35 : 45,
+    marginTop: 35,
   },
-  taste1Container: {
+  tasteContainer: {
     marginTop: 10,
-    marginLeft: 25,
+    marginLeft: 20,
   },
   tag1: {
     width: width > 350 ? 95 : 80,
@@ -321,7 +304,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#f18d46',
     backgroundColor: '#fff',
-    borderRadius: 20,
+    borderRadius: 18,
     fontSize: 14,
     fontFamily: 'montserrat-bold',
     color: '#f18d46',
@@ -343,7 +326,7 @@ const styles = StyleSheet.create({
   },
   featureContainer: {
     marginTop: 15,
-    marginLeft: 25,
+    marginLeft: 20,
   },
   tag2: {
     width: 90,
