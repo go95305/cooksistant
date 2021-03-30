@@ -25,7 +25,8 @@ class EvalueList extends React.Component {
           result.data.forEach((el) => {
             arrayList.push({
               title: el.cuisine,
-              id: el.recipe_id,
+              eId: el.evaluationId,
+              rId: el.recipe_id,
               isEvalu: el.isComplete,
               image: el.image,
             });
