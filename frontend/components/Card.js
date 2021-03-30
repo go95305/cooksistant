@@ -3,7 +3,7 @@ import { withNavigation } from '@react-navigation/compat';
 import PropTypes from 'prop-types';
 import { StyleSheet, Image, TouchableWithoutFeedback } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
-
+import RecipeInfo from '../screens/RecipeInfo';
 import RNUrlPreview from 'react-native-url-preview';
 import { nowTheme } from '../constants';
 
@@ -27,23 +27,23 @@ class Card extends React.Component {
     const imgContainer = [
       styles.imageContainer,
       horizontal ? styles.horizontalStyles : styles.verticalStyles,
-      styles.shadow,
     ];
 
     return (
       <Block row={horizontal} card flex style={cardContainer}>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('Pro')}>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('Pro', { id: item.id })}>
           <Block flex style={imgContainer}>
-            <Image resizeMode="cover" source={{ uri: item.image }} style={imageStyles} />
+            <Image resizeMode="contain" source={{ uri: item.image }} style={imageStyles} />
             {/* <RNUrlPreview text={item.image} /> */}
           </Block>
         </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('Pro')}>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('Pro', { id: item.id })}>
           <Block flex space="between" style={styles.cardDescription}>
             <Block flex>
+              {/* <Text style={{ height: 0, width: 0 }}>{item.id}</Text> */}
               <Text
                 style={{ fontFamily: 'montserrat-regular' }}
-                size={14}
+                size={10}
                 style={titleStyles}
                 color={nowTheme.COLORS.SECONDARY}
               >

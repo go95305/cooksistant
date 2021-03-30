@@ -65,8 +65,8 @@ export default class Onboarding extends React.Component {
                 nickname: user.displayName,
                 uid: user.uid
               })
-              .then(function (response) {
-                console.log(response);
+              .then(()=> {
+                console.log("success");
               })
               .catch(function (error) {
                 console.log(error);
@@ -94,11 +94,10 @@ export default class Onboarding extends React.Component {
       if (result.type === 'success') {
         await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
         this.onSignIn(result);
-        Alert.alert(result.user.name + "님 안녕하세요!");
         this.props.navigation.navigate('App');
       }
     } catch ({ message }) {
-      alert('login: Error:' + message);
+      console.log(message);
     }
   }
   render() {

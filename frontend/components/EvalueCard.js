@@ -1,10 +1,12 @@
 import React from 'react';
 import { withNavigation } from '@react-navigation/compat';
 import PropTypes from 'prop-types';
-import { StyleSheet, Image, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Image, TouchableWithoutFeedback, Dimensions } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 import { nowTheme } from '../constants';
-import { MaterialIcons } from '@expo/vector-icons'; 
+import { MaterialIcons } from '@expo/vector-icons';
+
+const { width, height } = Dimensions.get('screen');
 
 class Card extends React.Component {
   render() {
@@ -27,59 +29,67 @@ class Card extends React.Component {
       styles.shadow,
     ];
 
+    const title = item.title.split(']');
+
     return (
-      <Block row={horizontal} card flex style={cardContainer}>
+      <Block card flex style={cardContainer}>
         <TouchableWithoutFeedback
           onPress={() => {
-            item.isEvalu ? navigation.navigate('Pro') : navigation.navigate('EvalueRegister');
+            item.isEvalu
+              ? navigation.navigate('Pro', { recipe_id: item.id })
+              : navigation.navigate('EvalueRegister', {
+                  eId: item.eId,
+                  rId: item.rId,
+                  title: item.title,
+                  image: item.image,
+                });
           }}
         >
           <Block flex style={imgContainer}>
-            <Image resizeMode="cover" source={item.image} style={imageStyles} />
+            <Image resizeMode="cover" source={{ uri: item.image }} style={imageStyles} />
           </Block>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
           onPress={() => {
-            item.isEvalu ? navigation.navigate('Pro') : navigation.navigate('EvalueRegister');
+            item.isEvalu
+              ? navigation.navigate('Pro', { recipe_id: item.id })
+              : navigation.navigate('EvalueRegister', {
+                  eId: item.eId,
+                  recipeId: item.rId,
+                  title: item.title,
+                  image: item.image,
+                });
           }}
         >
           <Block flex space="between" style={styles.cardDescription}>
             <Block flex>
               <Text
-                style={{ fontFamily: 'montserrat-bold', paddingTop: 15, paddingHorizontal: 10 }}
-                size={15}
+                style={{
+                  fontFamily: 'montserrat-bold',
+                  paddingTop: 3,
+                  paddingHorizontal: 8,
+                  lineHeight: 20,
+                }}
+                size={13}
                 color={nowTheme.COLORS.SECONDARY}
               >
-                {item.title}
+                {item.title.includes(']')
+                  ? title[0] +
+                    '] \n' +
+                    (title[1].trim().length > 26
+                      ? title[1].trim().substr(0, 26) + ' ...'
+                      : title[1].trim())
+                  : (item.title.length > 26 ? item.title.substr(0, 26) + ' ...' : item.title)}
               </Text>
-              {item.subtitle ? (
-                <Block flex center>
-                  <Text
-                    style={{ fontFamily: 'montserrat-bold' }}
-                    size={10}
-                    color={nowTheme.COLORS.BLACK}
-                  >
-                    {item.subtitle}
-                  </Text>
-                </Block>
-              ) : (
-                <Block />
-              )}
             </Block>
             <Block row space="between">
-              <Text
-                style={{padding: 5, }}
-                size={13}
-                muted={!isEvaluColor}
-                color={'#f18d46'}
-                bold
-              >
+              <Text style={{ padding: 7 }} size={13} muted={!isEvaluColor} color={'#f18d46'} bold>
                 {item.isEvalu ? '레시피 보러가기' : '레시피 평가하기'}
               </Text>
               {item.isEvalu ? (
-                <MaterialIcons name="check-box" size={27} color="#f18d46"/>
+                <MaterialIcons name="check-box" size={30} color="#f18d46" />
               ) : (
-                <MaterialIcons name="check-box-outline-blank" size={27} color="#f18d46" />
+                <MaterialIcons name="check-box-outline-blank" size={30} color="#f18d46" />
               )}
             </Block>
           </Block>
@@ -137,7 +147,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 0,
   },
   fullImage: {
-    height: 215,
+    height: 190,
   },
   shadow: {
     shadowColor: '#8898AA',

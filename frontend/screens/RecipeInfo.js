@@ -10,7 +10,7 @@ import {
 import { Block, Text, theme, Button as GaButton } from 'galio-framework';
 import { Button } from '../components';
 import { Images, nowTheme } from '../constants';
-
+import axios from 'axios';
 const { width, height } = Dimensions.get('screen');
 
 class RecipeInfo extends Component {
@@ -18,6 +18,20 @@ class RecipeInfo extends Component {
     super(props);
     this.state = {
       img: require('../assets/imgs/bookmark.png'),
+      id: props.route.params.id,
+
+      recipeDetail: {
+        id: 0,
+        nickname: null,
+        cuisine: null,
+        description: null,
+        cookingtime: null,
+        image: null,
+        level: null,
+        serving: null,
+        ingredientDTOList: [],
+        stepList: [],
+      },
     };
   }
   changeImage = () => {
@@ -37,6 +51,47 @@ class RecipeInfo extends Component {
   //     this.setState({ img: require('../assets/imgs/bookmark.png') }, 0);
   //   }
   // };
+
+  componentDidMount = (props) => {
+    axios
+      .get(`http://j4c101.p.ssafy.io:8081/recipe/show/${this.state.id}`)
+      .then((result) => {
+        console.log(result);
+        const IngredientList = [];
+        const stepList = [];
+        result.data.ingredientDTOList.forEach((el) => {
+          IngredientList.push({
+            ingredientName: el.ingredientName,
+            amount: el.amount,
+            isType: el.isType,
+          });
+        }),
+          result.data.stepList.forEach((el) => {
+            stepList.push({
+              description: el.description,
+              image: el.image,
+              level: el.level,
+            });
+          }),
+          this.setState({
+            recipeDetail: {
+              id: result.data.recipeId,
+              nickname: result.data.nickname,
+              cuisine: result.data.cuisine,
+              description: result.data.description,
+              cookingtime: result.data.cookingtime,
+              image: result.data.image,
+              level: result.data.level,
+              serving: result.data.serving,
+              ingredientDTOList: IngredientList,
+              stepList: stepList,
+            },
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   renderDetail = () => {
     return (
       <Block style={styles.container}>
@@ -52,34 +107,44 @@ class RecipeInfo extends Component {
                   <ScrollView showsVerticalScrollIndicator={false}>
                     <Block>
                       <Image
-                        source={Images.eggplant}
+                        resizeMode="contain"
+                        source={{ uri: this.state.recipeDetail.image }}
                         style={{
                           width: width * 0.9,
                           height: 252,
                         }}
                       />
                     </Block>
-                    <Block row style={{ marginTop: 20, marginLeft: 20, marginBottom: 8 }}>
+                    <Block
+                      row
+                      style={{
+                        width: width * 0.65,
+                        marginTop: 20,
+                        marginLeft: 20,
+                        marginBottom: 8,
+                      }}
+                    >
                       <Text
                         style={{
                           fontFamily: 'montserrat-bold',
-                          fontSize: 24,
+                          fontSize: 15,
+                          lineHeight: 18,
                         }}
                         color="black"
                       >
-                        가지볶음
+                        {this.state.recipeDetail.cuisine}
                       </Text>
                       <TouchableOpacity activeOpacity={0.5} onPress={this.changeImage}>
                         <Image source={this.state.img} style={{ marginLeft: 10 }} />
                       </TouchableOpacity>
                     </Block>
                     <Block row style={{ marginLeft: 25, marginBottom: 4 }}>
-                      <Text color="black" size={15} style={{ fontFamily: 'montserrat-regular' }}>
-                        2인분
+                      <Text color="black" size={13} style={{ fontFamily: 'montserrat-regular' }}>
+                        {this.state.recipeDetail.serving}
                       </Text>
-                      <Text> | </Text>
-                      <Text color="black" size={15} style={{ fontFamily: 'montserrat-regular' }}>
-                        20분
+                      <Text size={13}> | </Text>
+                      <Text color="black" size={13} style={{ fontFamily: 'montserrat-regular' }}>
+                        {this.state.recipeDetail.cookingtime}
                       </Text>
                     </Block>
                     <Block center style={{ width: width * 0.8, alignItems: 'center' }}>
@@ -90,12 +155,11 @@ class RecipeInfo extends Component {
                           textAlign: 'center',
                           color: '#2c2c2c',
                           fontWeight: 'bold',
-                          fontSize: 15,
+                          fontSize: 13,
                           padding: 10,
                         }}
                       >
-                        가지는 장도 튼튼하게 해주고, 피로회복에도 효과가 뛰어나다고 해요!! 이렇게
-                        좋은 먹거리인 ‘가지’로 간단하지만 정말 맛있는 가지볶음을 해보아요 :)
+                        {this.state.recipeDetail.description}
                       </Text>
                     </Block>
                     <Block
@@ -106,116 +170,20 @@ class RecipeInfo extends Component {
                         marginHorizontal: 10,
                       }}
                     />
-                    <Block style={{ width: width * 0.8 }}>
-                      <Block style={{ width: width * 0.8 }}>
-                        <Text style={styles.titleStyle}> 재료</Text>
-                        <Block style={{ marginLeft: 15 }}>
-                          <Block row>
-                            <Block style={styles.ingreBtn}>
-                              <Block row>
-                                <Text style={styles.ingreTxt}>가지</Text>
-                                <Block style={styles.amoutBtn}>
-                                  <Text style={styles.amoutTxt}>2개</Text>
-                                </Block>
-                              </Block>
-                            </Block>
-                            <Block style={styles.ingreBtn}>
-                              <Block row>
-                                <Text style={styles.ingreTxt}>고추</Text>
-                                <Block style={styles.amoutBtn}>
-                                  <Text style={styles.amoutTxt}>1개</Text>
-                                </Block>
+                    <Block style={{ width: width * 0.9 }}>
+                      <Text style={styles.titleStyle}> 재료</Text>
+
+                      <Block row style={{ marginLeft: 10, flexWrap: 'wrap' }}>
+                        {this.state.recipeDetail.ingredientDTOList.map((el, index) => (
+                          <Block style={styles.ingreBtn}>
+                            <Block row>
+                              <Text style={styles.ingreTxt}>{el.ingredientName}</Text>
+                              <Block style={styles.amoutBtn}>
+                                <Text style={styles.amoutTxt}>{el.amount}</Text>
                               </Block>
                             </Block>
                           </Block>
-                          <Block row>
-                            <Block style={styles.ingreBtn}>
-                              <Block row>
-                                <Text style={styles.ingreTxt}>양파</Text>
-                                <Block style={styles.amoutBtn}>
-                                  <Text style={styles.amoutTxt}>1/4개</Text>
-                                </Block>
-                              </Block>
-                            </Block>
-                            <Block style={styles.ingreBtn}>
-                              <Block row>
-                                <Text style={styles.ingreTxt}>대파</Text>
-                                <Block style={styles.amoutBtn}>
-                                  <Text style={styles.amoutTxt}>1개</Text>
-                                </Block>
-                              </Block>
-                            </Block>
-                          </Block>
-                          <Block row>
-                            <Block style={styles.ingreBtn}>
-                              <Block row>
-                                <Text style={styles.ingreTxt}>통깨</Text>
-                                <Block style={styles.amoutBtn}>
-                                  <Text style={styles.amoutTxt}>0.5숟</Text>
-                                </Block>
-                              </Block>
-                            </Block>
-                            <Block style={styles.ingreBtn}>
-                              <Block row>
-                                <Text style={styles.ingreTxt}>참기름</Text>
-                                <Block style={styles.amoutBtn}>
-                                  <Text style={styles.amoutTxt}>1숟</Text>
-                                </Block>
-                              </Block>
-                            </Block>
-                          </Block>
-                        </Block>
-                      </Block>
-                      <Block>
-                        <Text style={styles.titleStyle}>양념장</Text>
-                        <Block style={{ marginLeft: 15 }}>
-                          <Block row>
-                            <Block style={styles.ingreBtn}>
-                              <Block row>
-                                <Text style={styles.ingreTxt}>간장</Text>
-                                <Block style={styles.amoutBtn}>
-                                  <Text style={styles.amoutTxt}>2숟</Text>
-                                </Block>
-                              </Block>
-                            </Block>
-                            <Block style={styles.ingreBtn}>
-                              <Block row>
-                                <Text style={styles.ingreTxt}>다진마늘</Text>
-                                <Block style={styles.amoutBtn}>
-                                  <Text style={styles.amoutTxt}>0.5숟</Text>
-                                </Block>
-                              </Block>
-                            </Block>
-                          </Block>
-                          <Block row>
-                            <Block style={styles.ingreBtn}>
-                              <Block row>
-                                <Text style={styles.ingreTxt}>굴소스</Text>
-                                <Block style={styles.amoutBtn}>
-                                  <Text style={styles.amoutTxt}>1숟</Text>
-                                </Block>
-                              </Block>
-                            </Block>
-                            <Block style={styles.ingreBtn}>
-                              <Block row>
-                                <Text style={styles.ingreTxt}>고추가루</Text>
-                                <Block style={styles.amoutBtn}>
-                                  <Text style={styles.amoutTxt}>0.5숟</Text>
-                                </Block>
-                              </Block>
-                            </Block>
-                          </Block>
-                          <Block row>
-                            <Block style={styles.ingreBtn}>
-                              <Block row>
-                                <Text style={styles.ingreTxt}>설탕</Text>
-                                <Block style={styles.amoutBtn}>
-                                  <Text style={styles.amoutTxt}>1숟</Text>
-                                </Block>
-                              </Block>
-                            </Block>
-                          </Block>
-                        </Block>
+                        ))}
                       </Block>
                     </Block>
                   </ScrollView>
@@ -279,29 +247,18 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   mainViewStyle: { flexGrow: 1, marginTop: height > 800 ? 100 : 60 },
-  viewStyle: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 30,
-    width: 50,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    color: 'black',
-    alignSelf: 'center',
-    fontFamily: 'montserrat-bold',
-  },
+
   ingreBtn: {
-    width: '50%',
+    width: width * 0.4,
     height: 45,
     margin: 5,
-    elevation: 0,
     backgroundColor: '#F18D46',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 30,
   },
   ingreTxt: {
-    fontSize: 15,
+    fontSize: 13,
     color: 'white',
     margin: 10,
     fontFamily: 'montserrat-bold',
@@ -314,10 +271,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     overflow: 'hidden',
     padding: 5,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   amoutTxt: {
-    fontSize: 12,
+    fontSize: 10,
     fontFamily: 'montserrat-bold',
     textAlign: 'center',
   },
