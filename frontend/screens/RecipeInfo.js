@@ -18,23 +18,22 @@ class RecipeInfo extends Component {
     super(props);
     this.state = {
       img: require('../assets/imgs/bookmark.png'),
-      id: this.props.route.params.id,
+      id: props.route.params.id,
+
+      recipeDetail: {
+        id: 0,
+        nickname: null,
+        cuisine: null,
+        description: null,
+        cookingtime: null,
+        image: null,
+        level: null,
+        serving: null,
+        ingredientDTOList: [],
+        stepList: [],
+      },
     };
   }
-  state = {
-    recipeDetail: {
-      id: 0,
-      nickname: null,
-      title: null,
-      content: null,
-      cookingtime: null,
-      image: null,
-      level: null,
-      serving: null,
-      ingredientDTOList: [],
-      stepList: [],
-    },
-  };
   changeImage = () => {
     this.setState({ img: require('../assets/imgs/bookmarkFull.png') });
   };
@@ -57,7 +56,23 @@ class RecipeInfo extends Component {
     axios
       .get(`http://j4c101.p.ssafy.io:8081/recipe/show/${this.state.id}`)
       .then((result) => {
-        if (result.data) {
+        console.log(result);
+        const IngredientList = [];
+        const stepList = [];
+        result.data.ingredientDTOList.forEach((el) => {
+          IngredientList.push({
+            ingredientName: el.ingredientName,
+            amount: el.amount,
+            isType: el.isType,
+          });
+        }),
+          result.data.stepList.forEach((el) => {
+            stepList.push({
+              description: el.description,
+              image: el.image,
+              level: el.level,
+            });
+          }),
           this.setState({
             recipeDetail: {
               id: result.data.recipeId,
@@ -68,11 +83,10 @@ class RecipeInfo extends Component {
               image: result.data.image,
               level: result.data.level,
               serving: result.data.serving,
-              ingredientDTOList: result.data.ingredientDTOList,
-              stepList: result.data.stepList,
+              ingredientDTOList: IngredientList,
+              stepList: stepList,
             },
           });
-        }
       })
       .catch((error) => {
         console.log(error);
@@ -93,6 +107,7 @@ class RecipeInfo extends Component {
                   <ScrollView showsVerticalScrollIndicator={false}>
                     <Block>
                       <Image
+                        resizeMode="contain"
                         source={{ uri: this.state.recipeDetail.image }}
                         style={{
                           width: width * 0.9,
@@ -100,14 +115,22 @@ class RecipeInfo extends Component {
                         }}
                       />
                     </Block>
-                    <Block row style={{ marginTop: 20, marginLeft: 20, marginBottom: 8 }}>
+                    <Block
+                      row
+                      style={{
+                        width: width * 0.65,
+                        marginTop: 20,
+                        marginLeft: 20,
+                        marginBottom: 8,
+                      }}
+                    >
                       <Text
                         style={{
                           fontFamily: 'montserrat-bold',
-                          fontSize: 24,
+                          fontSize: 15,
+                          lineHeight: 18,
                         }}
                         color="black"
-                        key={recipe.cuisine}
                       >
                         {this.state.recipeDetail.cuisine}
                       </Text>
@@ -116,11 +139,11 @@ class RecipeInfo extends Component {
                       </TouchableOpacity>
                     </Block>
                     <Block row style={{ marginLeft: 25, marginBottom: 4 }}>
-                      <Text color="black" size={15} style={{ fontFamily: 'montserrat-regular' }}>
+                      <Text color="black" size={13} style={{ fontFamily: 'montserrat-regular' }}>
                         {this.state.recipeDetail.serving}
                       </Text>
-                      <Text> | </Text>
-                      <Text color="black" size={15} style={{ fontFamily: 'montserrat-regular' }}>
+                      <Text size={13}> | </Text>
+                      <Text color="black" size={13} style={{ fontFamily: 'montserrat-regular' }}>
                         {this.state.recipeDetail.cookingtime}
                       </Text>
                     </Block>
@@ -132,7 +155,7 @@ class RecipeInfo extends Component {
                           textAlign: 'center',
                           color: '#2c2c2c',
                           fontWeight: 'bold',
-                          fontSize: 15,
+                          fontSize: 13,
                           padding: 10,
                         }}
                       >
@@ -147,116 +170,20 @@ class RecipeInfo extends Component {
                         marginHorizontal: 10,
                       }}
                     />
-                    <Block style={{ width: width * 0.8 }}>
-                      <Block style={{ width: width * 0.8 }}>
-                        <Text style={styles.titleStyle}> 재료</Text>
-                        <Block style={{ marginLeft: 15 }}>
-                          <Block row>
-                            <Block style={styles.ingreBtn}>
-                              <Block row>
-                                <Text style={styles.ingreTxt}>가지</Text>
-                                <Block style={styles.amoutBtn}>
-                                  <Text style={styles.amoutTxt}>2개</Text>
-                                </Block>
-                              </Block>
-                            </Block>
-                            <Block style={styles.ingreBtn}>
-                              <Block row>
-                                <Text style={styles.ingreTxt}>고추</Text>
-                                <Block style={styles.amoutBtn}>
-                                  <Text style={styles.amoutTxt}>1개</Text>
-                                </Block>
+                    <Block style={{ width: width * 0.9 }}>
+                      <Text style={styles.titleStyle}> 재료</Text>
+
+                      <Block row style={{ marginLeft: 10, flexWrap: 'wrap' }}>
+                        {this.state.recipeDetail.ingredientDTOList.map((el, index) => (
+                          <Block style={styles.ingreBtn}>
+                            <Block row>
+                              <Text style={styles.ingreTxt}>{el.ingredientName}</Text>
+                              <Block style={styles.amoutBtn}>
+                                <Text style={styles.amoutTxt}>{el.amount}</Text>
                               </Block>
                             </Block>
                           </Block>
-                          <Block row>
-                            <Block style={styles.ingreBtn}>
-                              <Block row>
-                                <Text style={styles.ingreTxt}>양파</Text>
-                                <Block style={styles.amoutBtn}>
-                                  <Text style={styles.amoutTxt}>1/4개</Text>
-                                </Block>
-                              </Block>
-                            </Block>
-                            <Block style={styles.ingreBtn}>
-                              <Block row>
-                                <Text style={styles.ingreTxt}>대파</Text>
-                                <Block style={styles.amoutBtn}>
-                                  <Text style={styles.amoutTxt}>1개</Text>
-                                </Block>
-                              </Block>
-                            </Block>
-                          </Block>
-                          <Block row>
-                            <Block style={styles.ingreBtn}>
-                              <Block row>
-                                <Text style={styles.ingreTxt}>통깨</Text>
-                                <Block style={styles.amoutBtn}>
-                                  <Text style={styles.amoutTxt}>0.5숟</Text>
-                                </Block>
-                              </Block>
-                            </Block>
-                            <Block style={styles.ingreBtn}>
-                              <Block row>
-                                <Text style={styles.ingreTxt}>참기름</Text>
-                                <Block style={styles.amoutBtn}>
-                                  <Text style={styles.amoutTxt}>1숟</Text>
-                                </Block>
-                              </Block>
-                            </Block>
-                          </Block>
-                        </Block>
-                      </Block>
-                      <Block>
-                        <Text style={styles.titleStyle}>양념장</Text>
-                        <Block style={{ marginLeft: 15 }}>
-                          <Block row>
-                            <Block style={styles.ingreBtn}>
-                              <Block row>
-                                <Text style={styles.ingreTxt}>간장</Text>
-                                <Block style={styles.amoutBtn}>
-                                  <Text style={styles.amoutTxt}>2숟</Text>
-                                </Block>
-                              </Block>
-                            </Block>
-                            <Block style={styles.ingreBtn}>
-                              <Block row>
-                                <Text style={styles.ingreTxt}>다진마늘</Text>
-                                <Block style={styles.amoutBtn}>
-                                  <Text style={styles.amoutTxt}>0.5숟</Text>
-                                </Block>
-                              </Block>
-                            </Block>
-                          </Block>
-                          <Block row>
-                            <Block style={styles.ingreBtn}>
-                              <Block row>
-                                <Text style={styles.ingreTxt}>굴소스</Text>
-                                <Block style={styles.amoutBtn}>
-                                  <Text style={styles.amoutTxt}>1숟</Text>
-                                </Block>
-                              </Block>
-                            </Block>
-                            <Block style={styles.ingreBtn}>
-                              <Block row>
-                                <Text style={styles.ingreTxt}>고추가루</Text>
-                                <Block style={styles.amoutBtn}>
-                                  <Text style={styles.amoutTxt}>0.5숟</Text>
-                                </Block>
-                              </Block>
-                            </Block>
-                          </Block>
-                          <Block row>
-                            <Block style={styles.ingreBtn}>
-                              <Block row>
-                                <Text style={styles.ingreTxt}>설탕</Text>
-                                <Block style={styles.amoutBtn}>
-                                  <Text style={styles.amoutTxt}>1숟</Text>
-                                </Block>
-                              </Block>
-                            </Block>
-                          </Block>
-                        </Block>
+                        ))}
                       </Block>
                     </Block>
                   </ScrollView>
@@ -272,11 +199,7 @@ class RecipeInfo extends Component {
   render() {
     return (
       <Block style={styles.mainViewStyle}>
-        {this.state.recipeDetail &&
-          this.state.recipeDetail.length > 0 &&
-          this.state.recipeDetail.map((recipe) => {
-            <Block flex={9}>{this.renderDetail(recipe)}</Block>;
-          })}
+        <Block flex={9}>{this.renderDetail()}</Block>
         <Block flex={1} style={styles.underMenu}>
           <Button
             style={styles.btnStyle}
@@ -324,29 +247,18 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   mainViewStyle: { flexGrow: 1, marginTop: height > 800 ? 100 : 60 },
-  viewStyle: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 30,
-    width: 50,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    color: 'black',
-    alignSelf: 'center',
-    fontFamily: 'montserrat-bold',
-  },
+
   ingreBtn: {
-    width: '50%',
+    width: width * 0.4,
     height: 45,
     margin: 5,
-    elevation: 0,
     backgroundColor: '#F18D46',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 30,
   },
   ingreTxt: {
-    fontSize: 15,
+    fontSize: 13,
     color: 'white',
     margin: 10,
     fontFamily: 'montserrat-bold',
@@ -362,7 +274,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   amoutTxt: {
-    fontSize: 12,
+    fontSize: 10,
     fontFamily: 'montserrat-bold',
     textAlign: 'center',
   },
