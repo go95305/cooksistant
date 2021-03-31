@@ -30,3 +30,4 @@ class Evaluation:
         cursor.execute(sql)
         result = cursor.fetchall()
         return pd.DataFrame(result)
+    

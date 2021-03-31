@@ -19,7 +19,6 @@ def CF(user_id, ingredients):
     df_recipe = Recipe.getRecipe()  # 전체 레시피 가져오기
     df_rating = Evaluation.getEvaluation()  # 전체 레시피 평가 데이터 가져오기
 
-
     # 협업 필터링 과정
     user_recipe_rating = df_rating.pivot_table(
         'favor', index='user_id', columns='recipe_id').fillna(0)
