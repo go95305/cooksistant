@@ -43,7 +43,7 @@ class Card extends React.Component {
               {/* <Text style={{ height: 0, width: 0 }}>{item.id}</Text> */}
               <Text
                 style={{ fontFamily: 'montserrat-regular' }}
-                size={10}
+                size={12}
                 style={titleStyles}
                 color={nowTheme.COLORS.SECONDARY}
               >
