@@ -52,9 +52,9 @@ class Profile extends React.Component {
     axios
       .get(`http://j4c101.p.ssafy.io:8081/user/${user.uid}`)
       .then((result) => {
-        const eList = [];
+        const sList = [];
         result.data.scrapList.forEach((el) => {
-          eList.push({
+          sList.push({
             rId: el.recipeId,
             title: el.cuisine,
             description: el.description,
@@ -67,7 +67,7 @@ class Profile extends React.Component {
             recipeUsedSize: result.data.recipeUsedSize,
             evaluatedSize: result.data.evaluatedSize,
             userId: result.data.userId,
-            scrapList: eList,
+            scrapList: sList,
           },
         });
       })
@@ -140,7 +140,7 @@ class Profile extends React.Component {
         <Block style={{ paddingBottom: -HeaderHeight * 2, paddingHorizontal: 15 }}>
           <Block center>
             {this.state.Info.scrapList.map((el, index) => (
-              <TouchableWithoutFeedback key={index} onPress={() => navigation.navigate('Pro')}>
+              <TouchableWithoutFeedback key={index} onPress={() => navigation.navigate('Pro', { id: el.rId })}>
                 <Block flex card center shadow style={styles.category}>
                   <ImageBackground
                     resizeMode="cover"
@@ -214,11 +214,11 @@ class Profile extends React.Component {
               >
                 <Block
                   center
-                  style={{ top: Platform.OS === 'android' ? height * 0.1 : height * 0.13 }}
+                  style={{ top: Platform.OS === 'android' ? height * 0.1 : height * 0.135 }}
                 >
                   <Image source={{ uri: this.state.googleInfo.img }} style={styles.avatar} />
                 </Block>
-                <Block style={{ top: Platform.OS === 'android' ? height * 0.1 : height * 0.13 }}>
+                <Block style={{ top: Platform.OS === 'android' ? height * 0.1 : height * 0.135 }}>
                   <Block center>
                     <Text
                       style={{
