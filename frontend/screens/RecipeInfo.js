@@ -15,18 +15,17 @@ const { width, height } = Dimensions.get('screen');
 
 class RecipeInfo extends Component {
   constructor(props) {
-    console.log('props' + props.route.params.id);
     super(props);
     this.state = {
       img: require('../assets/imgs/bookmark.png'),
-      id: props.route.params.id,
+      id: this.props.route.params.id,
 
       recipeDetail: {
         id: 0,
         nickname: null,
         cuisine: null,
         description: null,
-        cookingtime: null,
+        cookingTime: null,
         image: null,
         level: null,
         serving: null,
@@ -57,13 +56,16 @@ class RecipeInfo extends Component {
     axios
       .get(`http://j4c101.p.ssafy.io:8081/recipe/show/${this.state.id}`)
       .then((result) => {
-        console.log(result);
         const IngredientList = [];
         const stepList = [];
+
         result.data.ingredientDTOList.forEach((el) => {
+          const tmp = el.amount.split('(');
+          const tmp1 = el.ingredientName.split('(');
+
           IngredientList.push({
-            ingredientName: el.ingredientName,
-            amount: el.amount,
+            ingredientName: tmp1[0],
+            amount: tmp[0],
             isType: el.isType,
           });
         }),
@@ -80,7 +82,7 @@ class RecipeInfo extends Component {
               nickname: result.data.nickname,
               cuisine: result.data.cuisine,
               description: result.data.description,
-              cookingtime: result.data.cookingtime,
+              cookingTime: result.data.cookingTime,
               image: result.data.image,
               level: result.data.level,
               serving: result.data.serving,
@@ -145,7 +147,7 @@ class RecipeInfo extends Component {
                       </Text>
                       <Text size={13}> | </Text>
                       <Text color="black" size={13} style={{ fontFamily: 'montserrat-regular' }}>
-                        {this.state.recipeDetail.cookingtime}
+                        {this.state.recipeDetail.cookingTime}
                       </Text>
                     </Block>
                     <Block center style={{ width: width * 0.8, alignItems: 'center' }}>
@@ -175,12 +177,12 @@ class RecipeInfo extends Component {
                       <Text style={styles.titleStyle}> 재료</Text>
 
                       <Block row style={{ marginLeft: 10, flexWrap: 'wrap' }}>
-                        {this.state.recipeDetail.ingredientDTOList.map((el, index) => (
+                        {this.state.recipeDetail.ingredientDTOList.map((idx, index) => (
                           <Block style={styles.ingreBtn}>
                             <Block row>
-                              <Text style={styles.ingreTxt}>{el.ingredientName}</Text>
+                              <Text style={styles.ingreTxt}>{idx.ingredientName}</Text>
                               <Block style={styles.amoutBtn}>
-                                <Text style={styles.amoutTxt}>{el.amount}</Text>
+                                <Text style={styles.amoutTxt}>{idx.amount}</Text>
                               </Block>
                             </Block>
                           </Block>
@@ -207,7 +209,9 @@ class RecipeInfo extends Component {
             textStyle={{ fontSize: 15, color: '#F18D46' }}
             color="Primary"
             round
-            onPress={() => this.props.navigation.navigate('TTSOrder')}
+            onPress={() =>
+              this.props.navigation.navigate('TTSOrder', { id: this.state.recipeDetail.id })
+            }
           >
             요리시작
           </Button>
@@ -261,7 +265,7 @@ const styles = StyleSheet.create({
   ingreTxt: {
     fontSize: 13,
     color: 'white',
-    margin: 10,
+    margin: 5,
     fontFamily: 'montserrat-bold',
   },
   amoutBtn: {

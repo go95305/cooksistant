@@ -5,78 +5,106 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
   Image,
+  View,
 } from 'react-native';
 import { Block, Text, Button as GaButton, theme } from 'galio-framework';
-
+import axios from 'axios';
 import { Button, Icon, Input } from '../components';
 import { Images, nowTheme } from '../constants';
 
+import Swiper from 'react-native-swiper';
 const { width, height } = Dimensions.get('screen');
 
 class TTSOrder extends React.Component {
+  constructor(props) {
+    console.log('props' + props.route.params.id);
+    super(props);
+    this.state = {
+      swiperShow: false,
+      id: this.props.route.params.id,
+      recipeDetail: {
+        id: 0,
+        nickname: null,
+        cuisine: null,
+        stepList: [],
+      },
+    };
+  }
+  componentDidMount = (props) => {
+    axios
+      .get(`http://j4c101.p.ssafy.io:8081/recipe/show/${this.state.id}`)
+      .then((result) => {
+        console.log(result);
+        console.log('result.data.cuisine' + result.data.cuisine);
+        const list = [];
+        const title1 = result.data.cuisine.substr(0, result.data.cuisine.indexOf(']') + 1);
+        const title2 = result.data.cuisine.substr(result.data.cuisine.indexOf(']') + 2);
+
+        result.data.stepList.forEach((el) => {
+          list.push({
+            description: el.description,
+            image: el.image,
+            level: el.level,
+          });
+        }),
+          this.setState({
+            recipeDetail: {
+              id: result.data.recipeId,
+              nickname: result.data.nickname,
+              cuisine: title1,
+              cuisine1: title2,
+              stepList: list,
+            },
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    setTimeout(() => {
+      this.setState({
+        swiperShow: true,
+      });
+    }, 0);
+  };
+
   render() {
-    return (
-      <Block style={styles.container}>
+    if (this.state.swiperShow) {
+      return (
+        <Block style={styles.container}>
+          <Block flex middle>
+            <Swiper style={styles.imgWrapper} height={200} showsButtons={true} autoplay={false}>
+              {this.state.recipeDetail.stepList.map((idx, index) => (
+                <View style={styles.imgView}>
+                  <Image source={{ uri: idx.image }} style={styles.bannerImg} />
+                </View>
+              ))}
+            </Swiper>
+          </Block>
+        </Block>
+      );
+    } else {
+      return (
         <Block flex middle>
           <ImageBackground
             source={Images.RegisterBackground}
             style={styles.imageBackgroundContainer}
             imageStyle={styles.imageBackground}
           >
-            <Block flex middle>
-              <Block style={styles.registerContainer}>
-                <Block flex space="evenly">
-                  <Block flex={1.5} middle>
-                    <Text
-                      style={{
-                        fontFamily: 'montserrat-bold',
-                        textAlign: 'center',
-                      }}
-                      color="#333"
-                      size={25}
-                      bold
-                    >
-                      가지 볶음
-                    </Text>
-                  </Block>
-                  <Block flex={7.5} space="between">
-                    <Block>
-                      <Block middle>
-                        <Image style={styles.photo} source={Images.cutEggplant} />
-                      </Block>
-                      <Block middle>
-                        <Block style={styles.MainContainer}>
-                          <Text
-                            style={{
-                              fontFamily: 'montserrat-regular',
-                              textAlign: 'center',
-                              lineHeight: 25,
-                              padding: 10,
-                            }}
-                            color="#333"
-                            size={18}
-                          >
-                            1. 먼저 가지를 먹기 좋게 썰어주세요! 저처럼 동글하게 썰어도 좋고,
-                            손가락만하게 썰어도 좋아요 :)
-                          </Text>
-                        </Block>
-                      </Block>
-                    </Block>
-                  </Block>
-                  <Block flex={1} center>
-                    <Button color="primary" round style={styles.createButton}>
-                      <Text color={nowTheme.COLORS.WHITE} size={30}>
-                        <Image center style={{ height: 20, width: 10 }} source={Images.mic} />
-                      </Text>
-                    </Button>
-                  </Block>
-                </Block>
-              </Block>
-            </Block>
+            <Swiper style={styles.imgWrapper} height={200} showsButtons={true} autoplay={true}>
+              <View style={styles.imgView}>
+                <Image
+                  source={{
+                    uri:
+                      'https://recipe1.ezmember.co.kr/cache/recipe/2015/12/28/afc904b7d9ff6e62aae0d02ed64033331.jpg',
+                  }}
+                  style={styles.bannerImg}
+                />
+              </View>
+            </Swiper>
           </ImageBackground>
         </Block>
-      </Block>
-    );
+      );
+    }
   }
 }
 
@@ -125,6 +153,17 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === 'ios' ? 20 : 0,
     justifyContent: 'center',
     margin: 10,
+  },
+  imgWrapper: {
+    height: 230,
+    width: 300,
+  },
+  imgView: {
+    height: 200,
+  },
+  bannerImg: {
+    height: 230,
+    width: 300,
   },
 });
 
