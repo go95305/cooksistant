@@ -1,20 +1,15 @@
 package com.project.cooksistant.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.google.gson.*;
 import com.project.cooksistant.model.dto.*;
+import com.project.cooksistant.model.entity.Evaluation;
 import com.project.cooksistant.service.RecipeService;
 import io.swagger.annotations.ApiOperation;
-import jdk.nashorn.internal.parser.JSONParser;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.modelmapper.TypeToken;
-import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.io.IOException;
 import java.util.*;
 
 @RestController
@@ -27,13 +22,19 @@ public class RecipeController {
         this.webClient = webClientBuilder.baseUrl("http://j4c101.p.ssafy.io:5000").build();
     }
 
+//    @PostMapping("/recipe")
+//    public void newRecipe(@RequestBody RecipeDTOpost recipeDTOpost) {
+//        recipeService.newRecipe(recipeDTOpost);
+//
+//    }
+
     @ApiOperation(value = "인기레시피")
     @GetMapping("/recipe/favor")
     public List<RecipeListupDTO> favorRecipe() {
         return recipeService.recipeFavor();
     }
 
-    @ApiOperation(value = "취향 기반 레시피 리스트 제공(Ok)", notes = "Request\n" +
+    @ApiOperation(value = "취향 기반 레시피 리스트 제공(Ok) 신규유저라면 평가 데이터가 없으므로 인기순, 그 외 평가 데이터가 존재하는 유저는 추천을받는다", notes = "Request\n" +
             "                                                   - userId:협업필터링에 사용될 유저와 비슷한 레시피 추천을 위한 UserId\n" +
             "                                                   - List<String>: 추천받을 재료 리스트\n" +
             "                                                   Response\n" +
@@ -44,19 +45,26 @@ public class RecipeController {
             "                                                   - recipeId: 레시피 아이디")
     @PostMapping("/recipe/recommendation")
     public List<RecipeListupDTO> recommend(@RequestBody RecommendDTO recommendDTO) {
-        Gson gson = new Gson();
-        String jsonArray = (webClient.post()
-                .uri("/evaluation")
-                .body(Mono.just(recommendDTO), RecommendDTO.class)
-                .retrieve()
-                .bodyToMono(String.class).block());
-        JsonObject jsonObject = gson.fromJson(jsonArray, JsonObject.class);
-        String[] idx = gson.fromJson(jsonObject.getAsJsonArray("result"), String[].class);
-        List<Long> recommendList = new ArrayList<>();
-        for (int i = 0; i < idx.length; i++) {
-            recommendList.add(Long.parseLong(idx[i]));
+        int size = recipeService.evaluationExist(recommendDTO.getUserId());
+        if (size == 1) {
+            Gson gson = new Gson();
+            String jsonArray = (webClient.post()
+                    .uri("/evaluation")
+                    .body(Mono.just(recommendDTO), RecommendDTO.class)
+                    .retrieve()
+                    .bodyToMono(String.class).block());
+            JsonObject jsonObject = gson.fromJson(jsonArray, JsonObject.class);
+            String[] idx = gson.fromJson(jsonObject.getAsJsonArray("result"), String[].class);
+            List<Long> recommendList = new ArrayList<>();
+            for (int i = 0; i < idx.length; i++) {
+                recommendList.add(Long.parseLong(idx[i]));
+            }
+            return recipeService.recommendList(recommendList);
+        } else {
+            //해당 유저의 평가데이터가 존재하지않으면 인기순으로 리턴
+            return recipeService.recipeFavor();
         }
-        return recipeService.recommendList(recommendList);
+
     }
 
     @ApiOperation(value = "특정 레시피 상세보기(Ok)", notes = "Request\n" +
@@ -82,8 +90,7 @@ public class RecipeController {
             "                                          - keywordList: 평가 키워드 리스트\n" +
             "                                          - favor: 평점" +
             "                                          - recipeId: 평가 레시피 번호\n" +
-            "                                          - sampled: 샘플링 되었는지:\n" +
-            "                                          - isUpdate: 새로작성인지 수정인지" +
+            "                                          - isUpdate: 새로작성인지 수정인지\n" +
             "                                          - userId: 평가할 유저의 userId")
     @PostMapping("/recipe/evaluation")
     public String evaluation(@RequestBody EvaluationDTOpost evaluationDTOpost) throws Exception {
@@ -94,6 +101,7 @@ public class RecipeController {
             return "fail";
     }
 
+    @ApiOperation(value = "평가하지 않은 리뷰 평가하기")
     @PutMapping("/recipe/evaluationUpdate")
     public String evaluationUpdate(@RequestBody EvaluationDTOpost evaluationDTOpost) {
         boolean isEvaluation = recipeService.evaluateUpdate(evaluationDTOpost);
@@ -110,7 +118,6 @@ public class RecipeController {
             "                                                 - complete: 레시피 리뷰 작성 여부\n" +
             "                                                 - keywords: 키워드 리스트\n" +
             "                                                 - recipeid: 레시피 번호\n" +
-            "                                                 - sampled: 샘플링 되었는지\n" +
             "                                                 - userId: 유저번호")
     @GetMapping("/recipe/evaluation/{evalId}")
     public EvaluationDTO specificEvaluation(@PathVariable Long evalId) {
@@ -133,4 +140,20 @@ public class RecipeController {
         return recipeService.findAllEvaluation(uid);
     }
 
+//    @ApiOperation(value = "레시피 클릭시 추천 데이터로 포함")
+//    @PostMapping("/recipe/click")
+//    public void recipeClick(@RequestBody RecipeClickDTO recipeClickDTO) {
+//        recipeService.recipeClick(recipeClickDTO);
+//    }
+
+    @ApiOperation(value = "레시피 검색", notes = "Request\n" +
+            "                                  - Cuisine: 레시피 명\n" +
+            "                                  Response:" +
+            "                                 - recipename: 레시피명\n" +
+            "                                 - url: 사진 url\n" +
+            "                                 - recipeId: 레시피 번호")
+    @GetMapping("/recipe/search/{cuisine}")
+    public List<RecipeListupDTO> searchRecipe(@PathVariable String cuisine) {
+        return recipeService.search(cuisine);
+    }
 }

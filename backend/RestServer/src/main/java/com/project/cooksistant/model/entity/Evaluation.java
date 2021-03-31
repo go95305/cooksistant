@@ -31,10 +31,10 @@ public class Evaluation {
     private float favor;
 
     @Column(name = "is_complete", columnDefinition = "TINYINT(1)")
-    private boolean isComplete;
+    private Boolean isComplete;
 
-    @Column(name = "is_sampled", columnDefinition = "TINYINT(1)")
-    private boolean isSampled;
+    @Column(name = "is_sampled", columnDefinition = "TINYINT(1)") //레시피를 단순히 클릭하여 데이터 분석에 활용(레시피를 클릭했으면 1)
+    private Boolean isSampled;
 
 
 }

@@ -30,7 +30,7 @@ public class UserController {
             "                                           - cuisine: 스크랩한 레시피의 이름\n" +
             "                                           - description: 스크랩한 레시피의 설명\n" +
             "                                           - }")
-    @GetMapping("user/{uid}")
+    @GetMapping("/user/{uid}")
     public PersonalDTO personalData(@PathVariable String uid) {
         PersonalDTO personalDTO = userService.getUserData(uid);
         return personalDTO;
@@ -44,7 +44,7 @@ public class UserController {
             "                                           - image: 레시피 이미지 URL\n" +
             "                                           - recipeId: 레시피 인덱스\n" +
             "                                           - nickname: 레시피 주인 닉네임\n")
-    @PostMapping("user/scrap/{recipeId}/{userId}")
+    @PostMapping("/user/scrap/{recipeId}/{userId}")
     public ScrapMypageDTO scrapRecipe(@PathVariable Long recipeId, @PathVariable Long userId) {
         ScrapMypageDTO scrapMypageDTO = userService.scrapRecipe(recipeId, userId);
         return scrapMypageDTO;
@@ -53,8 +53,9 @@ public class UserController {
     @ApiOperation(value = "cooksistant 서비스 가입(Ok)", notes = "Request\n" +
             "                                              - uid:인증키?\n" +
             "                                              - nickname: 닉네임")
-    @PostMapping("user")
+    @PostMapping("/user")
     public void signup(@RequestBody SignupDTO signupDTO) {
         userService.signup(signupDTO);
     }
+
 }

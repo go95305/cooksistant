@@ -12,11 +12,11 @@ import java.util.Optional;
 public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
 
 
-//    List<Evaluation> findAllByRecipe(Optional<Recipe> recipe);
 
-//    List<Evaluation> findAllByUserId(Long userId);
 
     List<Evaluation> findAllByUser(User user);
 
     List<Evaluation> findAllByUserOrderByIsComplete(User user);
+
+    Evaluation findByUser(User user);
 }

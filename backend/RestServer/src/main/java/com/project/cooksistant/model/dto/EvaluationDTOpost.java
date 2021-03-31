@@ -16,6 +16,6 @@ public class EvaluationDTOpost {
     private Boolean isUpdate;
     private Long evaluationId;
     private List<String> keywordList = new ArrayList<>();
-    private Boolean isSampled; //tts가 시작된순간
+//    private Boolean isSampled; //tts가 시작된순간
     private Boolean isComplete; //완전히 평가를 끝내면
 }

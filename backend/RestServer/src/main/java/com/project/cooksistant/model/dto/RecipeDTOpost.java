@@ -14,7 +14,7 @@ public class RecipeDTOpost {
     private String cookingTime;
     private String cuisine;
     private String description;
-    private String nickname;
+    private String uid;
     private String image;
     private String level;
     private String serving;

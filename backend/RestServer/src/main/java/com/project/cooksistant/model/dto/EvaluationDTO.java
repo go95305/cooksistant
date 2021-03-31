@@ -13,5 +13,5 @@ public class EvaluationDTO {
     private Long userId;
     private List<String> keywords = new ArrayList<>();
     private boolean isSampled; //tts가 시작된순간
-    private boolean isComplete; //완전히 평가를 끝내면
+//    private boolean isComplete; //완전히 평가를 끝내면
 }

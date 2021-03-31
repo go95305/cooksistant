@@ -7,6 +7,8 @@ import lombok.Setter;
 @Getter
 public class RecipeListupDTO {
     private String url;
+    private String description;
+    private float favor;
     private String recipename;
     private Long recipeId;
 }
