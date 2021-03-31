@@ -1,18 +1,16 @@
-import React, { Component } from 'react';
-//import React from 'react';
+import React from 'react';
 import {
   StyleSheet,
   ImageBackground,
   Dimensions,
   TouchableWithoutFeedback,
   Keyboard,
-  Image,
   Alert,
 } from 'react-native';
-import { Block, Text, Button as GaButton, theme } from 'galio-framework';
+import { Block, Text, theme } from 'galio-framework';
 import TagInput from 'react-native-tags-input';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Button, Icon, Input } from '../components';
+import { Button, Icon } from '../components';
 import { Images, nowTheme } from '../constants';
 import firebase from 'firebase';
 import axios from 'axios';
@@ -126,7 +124,7 @@ class Ingredient extends React.Component {
                     style={styles.createButton}
                     onPress={() =>
                       this.state.tags.tagsArray.length > 0
-                        ? navigation.navigate('RecipeList', {
+                        ? navigation.navigate('RecommList', {
                             userId: this.state.userId,
                             ingredients: this.state.tags.tagsArray,
                           })

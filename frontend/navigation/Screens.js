@@ -10,7 +10,7 @@ import Home from '../screens/Home';
 import Profile from '../screens/Profile';
 import EvalueList from '../screens/EvalueList';
 import EvalueRegister from '../screens/EvalueRegister';
-import RecipeList from '../screens/RecipeList';
+import RecommList from '../screens/RecommList';
 import RecipeInfo from '../screens/RecipeInfo';
 import Ingredient from '../screens/Ingredient';
 import Receipt from '../screens/Receipt';
@@ -180,8 +180,8 @@ function IngredientStack(props) {
         }}
       />
       <Stack.Screen
-        name="RecipeList"
-        component={RecipeList}
+        name="RecommList"
+        component={RecommList}
         options={{
           header: ({ navigation, scene }) => (
             <Header

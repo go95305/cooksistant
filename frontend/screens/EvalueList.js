@@ -1,8 +1,6 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Dimensions, Alert } from 'react-native';
-//galio
 import { Block, Text, theme } from 'galio-framework';
-
 import { nowTheme } from '../constants';
 import { ECard } from '../components';
 import axios from 'axios';
@@ -16,7 +14,7 @@ class EvalueList extends React.Component {
   };
 
   componentDidMount = () => {
-    var user = firebase.auth().currentUser;
+     var user = firebase.auth().currentUser;
     axios
       .post(`http://j4c101.p.ssafy.io:8081/recipe/review/${user.uid}`)
       .then((result) => {
@@ -24,11 +22,12 @@ class EvalueList extends React.Component {
         if (result.data && Array.isArray(result.data)) {
           result.data.forEach((el) => {
             arrayList.push({
-              title: el.cuisine,
               eId: el.evaluationId,
+              title: el.cuisine,
               rId: el.recipe_id,
-              isEvalu: el.isComplete,
               image: el.image,
+              isEvalu: el.isComplete,
+              flag: true
             });
           });
         }
