@@ -22,11 +22,28 @@ public class RecipeController {
         this.webClient = webClientBuilder.baseUrl("http://j4c101.p.ssafy.io:5000").build();
     }
 
-//    @PostMapping("/recipe")
-//    public void newRecipe(@RequestBody RecipeDTOpost recipeDTOpost) {
-//        recipeService.newRecipe(recipeDTOpost);
-//
-//    }
+    @ApiOperation(value = "레시피 등록",notes = "Request\n" +
+            "                                 - cookingTime: 조리시간\n" +
+            "                                 - cuisine: 레시피명\n" +
+            "                                 - description: 레시피 설명\n" +
+            "                                 - uid: 등록하는 유저 uid\n" +
+            "                                 - image: 레시피 사진 url\n" +
+            "                                 - level: 난이도\n" +
+            "                                 - serving: 인분\n" +
+            "                                 - {\n" +
+            "                                 - stepdescription: 과정 설명\n" +
+            "                                 - image: 과정 사진\n" +
+            "                                 - level: 과정 난이도\n" +
+            "                                 -}\n" +
+            "                                 - {\n" +
+            "                                 - ingredientName:재료명\n" +
+            "                                 - amount:재료량\n" +
+            "                                 - isType: 재료 구분")
+    @PostMapping("/recipe")
+    public void newRecipe(@RequestBody RecipeDTOpost recipeDTOpost) {
+        recipeService.newRecipe(recipeDTOpost);
+
+    }
 
     @ApiOperation(value = "인기레시피")
     @GetMapping("/recipe/favor")

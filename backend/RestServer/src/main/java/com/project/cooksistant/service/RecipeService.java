@@ -6,6 +6,7 @@ import com.project.cooksistant.Exception.RestException;
 import com.project.cooksistant.model.dto.*;
 import com.project.cooksistant.model.entity.*;
 import com.project.cooksistant.repository.*;
+import io.swagger.models.auth.In;
 import jdk.nashorn.internal.ir.CallNode;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -168,7 +169,7 @@ public class RecipeService {
             Long recipeId = recipe.get().getRecipeId();
             //평균평점
             String query = "select avg(e.favor) from Evaluation e where e.recipe.recipeId= :recipeId";
-            Double avg_favor = entityManager.createQuery(query, Double.class).setParameter("recipeId",recipeId).getSingleResult();
+            Double avg_favor = entityManager.createQuery(query, Double.class).setParameter("recipeId", recipeId).getSingleResult();
 
             recipeListupDTO.setFavor(avg_favor);
             recipeListupDTOList.add(recipeListupDTO);
@@ -228,7 +229,7 @@ public class RecipeService {
             Long recipeId = recipeList.get(i).getRecipeId();
             //평균평점
             String query = "select avg(e.favor) from Evaluation e where e.recipe.recipeId= :recipeId";
-            Double avg_favor = entityManager.createQuery(query, Double.class).setParameter("recipeId",recipeId).getSingleResult();
+            Double avg_favor = entityManager.createQuery(query, Double.class).setParameter("recipeId", recipeId).getSingleResult();
             recipeListupDTO.setFavor(avg_favor);
             recipeListupDTOList.add(recipeListupDTO);
         }
@@ -242,17 +243,52 @@ public class RecipeService {
             return 1;
         else return 0;
     }
-}
 
-//    public void newRecipe(RecipeDTOpost recipeDTOpost) {
-//        //해당 유저가 존재하는지 확인
-//        Optional<User> user = Optional.ofNullable(userRepository.findByUid(recipeDTOpost.getUid()).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 유저는 존재하지 않습니다.")));
-//        //1. recipe 테이블에 등록
-//        Recipe recipe = new Recipe();
-//
-//        //2. recipe_has_ingredient 테이블에 등록
-//
-//        //3. step 테이블에 등록록
-//
-//        //4. 만약 재료가 존재하지않은 재료면 재료 테이블에 새로 등록록
-//    }
+
+    public void newRecipe(RecipeDTOpost recipeDTOpost) {
+        //해당 유저가 존재하는지 확인
+        Optional<User> user = Optional.ofNullable(userRepository.findByUid(recipeDTOpost.getUid()).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 유저는 존재하지 않습니다.")));
+        //1. recipe 테이블에 등록
+        Recipe recipe = new Recipe();
+        recipe.setUser(user.get());
+        recipe.setImage(recipeDTOpost.getImage());
+        recipe.setServing(recipeDTOpost.getServing());
+        recipe.setLevel(recipeDTOpost.getLevel());
+        recipe.setCookingTime(recipeDTOpost.getCookingTime());
+        recipe.setDescription(recipeDTOpost.getDescription());
+        recipe.setCuisine(recipeDTOpost.getCuisine());
+        recipeRepository.save(recipe);
+        //3. recipe_has_ingredient 테이블에 등록
+        List<IngredientDTOpost> ingredientList = recipeDTOpost.getIngredientDTOpostList();
+        for (int i = 0; i < ingredientList.size(); i++) {
+            String ingredientName = ingredientList.get(i).getIngredientName();
+            Optional<Ingredient> ing = Optional.ofNullable(ingredientRepository.findByName(ingredientName));
+            RecipeIngredient recipeIngredient = new RecipeIngredient();
+            //2. 만약 재료가 존재하지않은 재료면 재료 테이블에 새로 등록
+            if (!ing.isPresent()) {//해당재료가 존재하지않은 재료면
+                Ingredient ingredient = new Ingredient();
+                ingredient.setIngredientName(ingredientName);
+                ingredientRepository.save(ingredient);
+                recipeIngredient.setIngredient(ingredient);
+            } else {
+                recipeIngredient.setIngredient(ing.get());
+            }
+            recipeIngredient.setType(ingredientList.get(i).getIsType());
+            recipeIngredient.setAmount(ingredientList.get(i).getAmount());
+            recipeIngredient.setRecipe(recipe);
+            recipeIngredientRepository.save(recipeIngredient);
+        }
+
+        //4. step 테이블에 등록
+        List<StepDTOpost> stepDTOList = recipeDTOpost.getStepDTOpostList();
+        for (int i = 0; i < stepDTOList.size(); i++) {
+            Step step = new Step();
+            step.setRecipe(recipe);
+            step.setLevel(stepDTOList.get(i).getLevel());
+            step.setDescription(stepDTOList.get(i).getStepDescription());
+            step.setImage(stepDTOList.get(i).getImage());
+            stepRepository.save(step);
+        }
+
+    }
+}
