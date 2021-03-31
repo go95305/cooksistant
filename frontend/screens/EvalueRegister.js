@@ -144,7 +144,7 @@ class TasteRegister extends React.Component {
                           style={{
                             fontFamily: 'montserrat-bold',
                             textAlign: 'center',
-                            lineHeight: 28,
+                            lineHeight: 25,
                             margin: 20,
                             marginTop: height > 800 ? 0 : -5
                           }}
@@ -169,7 +169,7 @@ class TasteRegister extends React.Component {
                             fontFamily: 'montserrat-bold',
                             textAlign: 'center',
                             marginTop: height > 800 ? -5 : -10,
-                            marginBottom: 15,
+                            marginBottom: 13,
                           }}
                           color="#333"
                           size={14}
@@ -326,10 +326,10 @@ const styles = StyleSheet.create({
   },
   featureContainer: {
     marginTop: 15,
-    marginLeft: 20,
+    marginLeft: width > 340 ? 20 : 15,
   },
   tag2: {
-    width: 90,
+    width: width > 340 ? 90 : 85,
     padding: 10,
     margin: 3,
     borderWidth: 1,
@@ -342,7 +342,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   tag2Selected: {
-    width: 90,
+    width: width > 340 ? 90 : 85,
     padding: 10,
     margin: 3,
     borderWidth: 1,

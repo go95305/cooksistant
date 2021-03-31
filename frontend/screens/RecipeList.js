@@ -1,20 +1,50 @@
 import React from 'react';
-import { withNavigation } from '@react-navigation/compat';
 import { ScrollView, StyleSheet , Dimensions} from 'react-native';
 //galio
 import { Block, Text, theme } from 'galio-framework';
 
-import { articles, nowTheme } from '../constants';
+import { nowTheme } from '../constants';
 import { Card } from '../components';
 
 const { width, height } = Dimensions.get('screen');
 
+import axios from 'axios';
+
 class RecipeList extends React.Component {
+  state = {
+    userId: this.props.route.params.userId,
+    ingreList: this.props.route.params.ingredients,
+    recipeList:[]
+  }
+  
+  componentDidMount = () => {
+    axios
+      .post(`http://j4c101.p.ssafy.io:8081/recipe/recommendation`, {
+        ingredients: this.state.ingreList,
+        userId: this.state.userId
+      })
+      .then((result) => {
+        const arrayList = [];
+        if (result.data && Array.isArray(result.data)) {
+          result.data.forEach((el) => {
+            arrayList.push({
+              rId: el.recipeId,
+              rName: el.recipename,
+              rImage: el.url,
+            });
+          });
+        }
+        this.setState({ recipeList: arrayList })
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   renderCards = () => {
     return (
       <Block style={styles.container}>
-        <Card item={articles[0]} horizontal
-              onPress={() => navigation.navigate('RecipeInfo')} />
+        {/* <Card item={articles[0]} horizontal/>
         <Block flex row>
           <Card item={articles[1]} style={{ marginRight: theme.SIZES.BASE }} />
           <Card item={articles[2]} />
@@ -23,7 +53,9 @@ class RecipeList extends React.Component {
         <Block flex row>
           <Card item={articles[4]} style={{ marginRight: theme.SIZES.BASE }} />
           <Card item={articles[5]} />
-        </Block>
+        </Block> */}
+        <Text>{this.state.ingreList[0]}</Text>
+        <Text>{this.state.recipeList.length}</Text>
       </Block>
     );
   };

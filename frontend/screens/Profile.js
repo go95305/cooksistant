@@ -143,7 +143,7 @@ class Profile extends React.Component {
               <TouchableWithoutFeedback key={index} onPress={() => navigation.navigate('Pro')}>
                 <Block flex card center shadow style={styles.category}>
                   <ImageBackground
-                    resizeMode='cover'
+                    resizeMode="cover"
                     source={{ uri: el.image }}
                     style={[
                       styles.imageBlock,
@@ -160,12 +160,13 @@ class Profile extends React.Component {
                           textAlign: 'center',
                           fontSize: 13,
                           fontFamily: 'montserrat-bold',
+                          lineHeight: 25,
                           zIndex: 2,
                           color: 'white',
                           paddingHorizontal: 15,
                         }}
                       >
-                        {el.title.substr(0, (el.title.indexOf(']') + 1))}
+                        {el.title.substr(0, el.title.indexOf(']') + 1)}
                       </Text>
                       <Text
                         style={{
@@ -178,7 +179,7 @@ class Profile extends React.Component {
                           paddingHorizontal: 15,
                         }}
                       >
-                        {el.title.substr((el.title.indexOf(']') + 2))}
+                        {el.title.substr(el.title.indexOf(']') + 2)}
                       </Text>
                     </Block>
                   </ImageBackground>
@@ -208,14 +209,7 @@ class Profile extends React.Component {
                   center
                   style={{ top: Platform.OS === 'android' ? height * 0.1 : height * 0.13 }}
                 >
-                  <Image
-                    source={
-                      this.state.googleInfo.img != null
-                        ? { uri: this.state.googleInfo.img }
-                        : Images.ProfilePicture
-                    }
-                    style={styles.avatar}
-                  />
+                  <Image source={{ uri: this.state.googleInfo.img }} style={styles.avatar} />
                 </Block>
                 <Block style={{ top: Platform.OS === 'android' ? height * 0.1 : height * 0.13 }}>
                   <Block center>

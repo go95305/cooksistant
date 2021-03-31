@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, TouchableOpacity, Alert, Linking } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 import firebase from 'firebase';
 
@@ -7,15 +7,6 @@ import Icon from './Icon';
 import nowTheme from '../constants/Theme';
 
 class DrawerItem extends React.Component {
-  checkLoggedIn = () => {
-    var user = firebase.auth().currentUser;
-    if (user) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
   renderIcon = () => {
     const { title, focused } = this.props;
 
@@ -98,10 +89,10 @@ class DrawerItem extends React.Component {
         style={{ height: 60 }}
         onPress={() => {
           switch (title) {
-            case '프로필':
-              const isTrue = this.checkLoggedIn();
-              if (isTrue) navigation.navigate(title);
-              else Alert.alert('로그인 후 이용가능해요.');
+            case '앱 소개':
+              Linking.openURL(
+                'https://www.notion.so/SUB3-eddba11b91494c4185c65cec233fa8ac'
+              ).catch((err) => console.error('An error occurred', err))
               break;
             case '로그아웃':
               firebase
@@ -119,9 +110,6 @@ class DrawerItem extends React.Component {
               navigation.navigate(title);
           }
         }}
-        // Linking.openURL(
-        //   'https://www.notion.so/SUB3-eddba11b91494c4185c65cec233fa8ac'
-        // ).catch((err) => console.error('An error occurred', err))
       >
         <Block flex row style={containerStyles}>
           <Block middle flex={0.1} style={{ marginRight: 5 }}>
