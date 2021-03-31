@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Alert, Linking } from 'react-native';
+import { CommonActions } from '@react-navigation/native'; 
 import { Block, Text, theme } from 'galio-framework';
 import firebase from 'firebase';
 
