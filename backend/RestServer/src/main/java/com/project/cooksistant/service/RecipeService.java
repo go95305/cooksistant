@@ -99,17 +99,15 @@ public class RecipeService {
 
         List<AllEvaluationDTO> allEvaluationDTOList = new ArrayList<>();
         for (int i = 0; i < evaluationList.size(); i++) {
-            if (!(evaluationList.get(i).getIsSampled() && !evaluationList.get(i).getIsComplete())) { //sampled=1, complete=0을 제외하고 전부 리뷰리스트로 리턴
-                AllEvaluationDTO allEvaluationDTO = new AllEvaluationDTO();
-                allEvaluationDTO.setCuisine(evaluationList.get(i).getRecipe().getCuisine());
-                allEvaluationDTO.setFavor(evaluationList.get(i).getFavor());
-                allEvaluationDTO.setIsComplete(evaluationList.get(i).getIsComplete());
-                allEvaluationDTO.setIsSampled(evaluationList.get(i).getIsSampled());
-                allEvaluationDTO.setRecipe_id(evaluationList.get(i).getRecipe().getRecipeId());
-                allEvaluationDTO.setImage(evaluationList.get(i).getRecipe().getImage());
-                allEvaluationDTO.setEvaluationId(evaluationList.get(i).getEvalId());
-                allEvaluationDTOList.add(allEvaluationDTO);
-            }
+            AllEvaluationDTO allEvaluationDTO = new AllEvaluationDTO();
+            allEvaluationDTO.setCuisine(evaluationList.get(i).getRecipe().getCuisine());
+            allEvaluationDTO.setFavor(evaluationList.get(i).getFavor());
+            allEvaluationDTO.setIsComplete(evaluationList.get(i).getIsComplete());
+            allEvaluationDTO.setIsSampled(evaluationList.get(i).getIsSampled());
+            allEvaluationDTO.setRecipe_id(evaluationList.get(i).getRecipe().getRecipeId());
+            allEvaluationDTO.setImage(evaluationList.get(i).getRecipe().getImage());
+            allEvaluationDTO.setEvaluationId(evaluationList.get(i).getEvalId());
+            allEvaluationDTOList.add(allEvaluationDTO);
         }
         return allEvaluationDTOList;
     }
