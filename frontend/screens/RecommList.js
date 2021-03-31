@@ -1,27 +1,24 @@
 import React from 'react';
-import { ScrollView, StyleSheet , Dimensions} from 'react-native';
-//galio
+import { ScrollView, StyleSheet, Dimensions, Alert } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
-
 import { nowTheme } from '../constants';
-import { Card } from '../components';
+import { ECard } from '../components';
+import axios from 'axios';
 
 const { width, height } = Dimensions.get('screen');
-
-import axios from 'axios';
 
 class RecipeList extends React.Component {
   state = {
     userId: this.props.route.params.userId,
     ingreList: this.props.route.params.ingredients,
-    recipeList:[]
-  }
-  
+    recipeList: [],
+  };
+
   componentDidMount = () => {
     axios
       .post(`http://j4c101.p.ssafy.io:8081/recipe/recommendation`, {
         ingredients: this.state.ingreList,
-        userId: this.state.userId
+        userId: this.state.userId,
       })
       .then((result) => {
         const arrayList = [];
@@ -29,33 +26,26 @@ class RecipeList extends React.Component {
           result.data.forEach((el) => {
             arrayList.push({
               rId: el.recipeId,
-              rName: el.recipename,
-              rImage: el.url,
+              title: el.recipename,
+              image: el.url,
+              favor: el.favor,
+              desc: el.description,
+              flag: false
             });
           });
         }
-        this.setState({ recipeList: arrayList })
+        this.setState({ recipeList: arrayList });
       })
       .catch((error) => {
         console.log(error);
       });
   };
-
   renderCards = () => {
     return (
       <Block style={styles.container}>
-        {/* <Card item={articles[0]} horizontal/>
-        <Block flex row>
-          <Card item={articles[1]} style={{ marginRight: theme.SIZES.BASE }} />
-          <Card item={articles[2]} />
-        </Block>
-        <Card item={articles[3]} horizontal />
-        <Block flex row>
-          <Card item={articles[4]} style={{ marginRight: theme.SIZES.BASE }} />
-          <Card item={articles[5]} />
-        </Block> */}
-        <Text>{this.state.ingreList[0]}</Text>
-        <Text>{this.state.recipeList.length}</Text>
+        {this.state.recipeList.map((el, index) => { 
+          return (<ECard key={index} item={el} full />);
+        })}
       </Block>
     );
   };
@@ -73,8 +63,12 @@ class RecipeList extends React.Component {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: theme.SIZES.BASE,
-  }
+  },
+  title: {
+    fontFamily: 'montserrat-bold',
+    paddingBottom: theme.SIZES.BASE,
+    marginTop: 45,
+    color: nowTheme.COLORS.HEADER,
+  },
 });
-
 export default RecipeList;
-

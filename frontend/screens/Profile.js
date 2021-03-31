@@ -166,7 +166,7 @@ class Profile extends React.Component {
                           paddingHorizontal: 15,
                         }}
                       >
-                        {el.title.substr(0, el.title.indexOf(']') + 1)}
+                        {el.title.includes(']') ? el.title.substr(0, el.title.indexOf(']') + 1) : el.title}
                       </Text>
                       <Text
                         style={{
@@ -179,7 +179,14 @@ class Profile extends React.Component {
                           paddingHorizontal: 15,
                         }}
                       >
-                        {el.title.substr(el.title.indexOf(']') + 2)}
+                        {el.title.includes(']')
+                            ? el.title.substr(el.title.indexOf(']') + 2).trim().length > 26
+                              ? el.title
+                                  .substr(el.title.indexOf(']') + 2)
+                                  .trim()
+                                  .substr(0, 26) + ' ⋯'
+                              : el.title.substr(el.title.indexOf(']') + 2).trim()
+                            : el.title}
                       </Text>
                     </Block>
                   </ImageBackground>
@@ -358,7 +365,7 @@ const styles = StyleSheet.create({
   },
   categoryTitle: {
     height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
     justifyContent: 'center',
     alignItems: 'center',
   },
