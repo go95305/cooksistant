@@ -178,7 +178,7 @@ class RecipeInfo extends Component {
 
                       <Block row style={{ marginLeft: 10, flexWrap: 'wrap' }}>
                         {this.state.recipeDetail.ingredientDTOList.map((idx, index) => (
-                          <Block style={styles.ingreBtn}>
+                          <Block key={index} style={styles.ingreBtn}>
                             <Block row>
                               <Text style={styles.ingreTxt}>{idx.ingredientName}</Text>
                               <Block style={styles.amoutBtn}>

@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  ImageBackground,
-  Dimensions,
-  TouchableWithoutFeedback,
-  Image,
-  View,
-} from 'react-native';
+import { StyleSheet, ImageBackground, Dimensions, TouchableOpacity, Image } from 'react-native';
 import { Block, Text, Button as GaButton, theme } from 'galio-framework';
 import axios from 'axios';
 import { Button, Icon, Input } from '../components';
@@ -42,9 +35,9 @@ class TTSOrder extends React.Component {
 
         result.data.stepList.forEach((el) => {
           list.push({
-            description: el.description,
             image: el.image,
             level: el.level,
+            description: el.description,
           });
         }),
           this.setState({
@@ -60,51 +53,60 @@ class TTSOrder extends React.Component {
       .catch((error) => {
         console.log(error);
       });
-    setTimeout(() => {
-      this.setState({
-        swiperShow: true,
-      });
-    }, 0);
   };
 
   render() {
-    if (this.state.swiperShow) {
-      return (
-        <Block style={styles.container}>
-          <Block flex middle>
-            <Swiper style={styles.imgWrapper} height={200} showsButtons={true} autoplay={false}>
-              {this.state.recipeDetail.stepList.map((idx, index) => (
-                <View style={styles.imgView}>
-                  <Image source={{ uri: idx.image }} style={styles.bannerImg} />
-                </View>
-              ))}
-            </Swiper>
-          </Block>
-        </Block>
-      );
-    } else {
-      return (
-        <Block flex middle>
-          <ImageBackground
-            source={Images.RegisterBackground}
-            style={styles.imageBackgroundContainer}
-            imageStyle={styles.imageBackground}
-          >
-            <Swiper style={styles.imgWrapper} height={200} showsButtons={true} autoplay={true}>
-              <View style={styles.imgView}>
-                <Image
-                  source={{
-                    uri:
-                      'https://recipe1.ezmember.co.kr/cache/recipe/2015/12/28/afc904b7d9ff6e62aae0d02ed64033331.jpg',
+    return (
+      <Swiper>
+        {this.state.recipeDetail.stepList.map((idx, index) => (
+          <Block key={index} style={[styles.slideContainer]}>
+            <Block cente style={{ width: width * 0.8, alignItems: 'center' }}>
+              <Text
+                style={{
+                  fontFamily: 'montserrat-bold',
+                  textAlign: 'center',
+                }}
+                color="#333"
+                size={20}
+                bold
+              >
+                {this.state.recipeDetail.cuisine}
+              </Text>
+              <Text
+                style={{
+                  fontFamily: 'montserrat-bold',
+                  textAlign: 'center',
+                }}
+                color="#333"
+                size={15}
+                bold
+              >
+                {this.state.recipeDetail.cuisine1}
+              </Text>
+            </Block>
+            <Block space="between">
+              <Block center style={{ marginTop: 50, marginBottom: 50 }}>
+                <ImageBackground style={{ height: 150, width: 250 }} source={{ uri: idx.image }} />
+              </Block>
+              <Block style={{ width: width * 0.8, alignItems: 'center' }}>
+                <Text
+                  style={{
+                    fontFamily: 'montserrat-regular',
+                    textAlign: 'center',
+                    lineHeight: 25,
+                    padding: 10,
                   }}
-                  style={styles.bannerImg}
-                />
-              </View>
-            </Swiper>
-          </ImageBackground>
-        </Block>
-      );
-    }
+                  color="#333"
+                  size={15}
+                >
+                  {idx.description}
+                </Text>
+              </Block>
+            </Block>
+          </Block>
+        ))}
+      </Swiper>
+    );
   }
 }
 
@@ -154,16 +156,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     margin: 10,
   },
-  imgWrapper: {
-    height: 230,
-    width: 300,
+  container: {
+    flex: 1,
   },
-  imgView: {
-    height: 200,
-  },
-  bannerImg: {
-    height: 230,
-    width: 300,
+  slideContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
