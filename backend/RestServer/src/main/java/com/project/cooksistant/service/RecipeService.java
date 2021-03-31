@@ -168,7 +168,7 @@ public class RecipeService {
             Long recipeId = recipe.get().getRecipeId();
             //평균평점
             String query = "select avg(e.favor) from Evaluation e where e.recipe.recipeId= :recipeId";
-            float avg_favor = entityManager.createQuery(query, float.class).getSingleResult();
+            Double avg_favor = entityManager.createQuery(query, Double.class).setParameter("recipeId",recipeId).getSingleResult();
 
             recipeListupDTO.setFavor(avg_favor);
             recipeListupDTOList.add(recipeListupDTO);
@@ -228,7 +228,7 @@ public class RecipeService {
             Long recipeId = recipeList.get(i).getRecipeId();
             //평균평점
             String query = "select avg(e.favor) from Evaluation e where e.recipe.recipeId= :recipeId";
-            float avg_favor = entityManager.createQuery(query, float.class).getSingleResult();
+            Double avg_favor = entityManager.createQuery(query, Double.class).setParameter("recipeId",recipeId).getSingleResult();
             recipeListupDTO.setFavor(avg_favor);
             recipeListupDTOList.add(recipeListupDTO);
         }
@@ -237,8 +237,8 @@ public class RecipeService {
 
     public int evaluationExist(Long userId) {
         Optional<User> user = Optional.ofNullable(userRepository.findById(userId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 유저는 존재하지 않습니다.")));
-        Optional<Evaluation> evaluation = Optional.ofNullable(evaluationRepository.findByUser(user.get()));
-        if (evaluation.isPresent())
+        Optional<List<Evaluation>> evaluationList = Optional.ofNullable((List<Evaluation>) evaluationRepository.findByUser(user.get()));
+        if (evaluationList.get().size() > 0)
             return 1;
         else return 0;
     }

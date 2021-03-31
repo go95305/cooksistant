@@ -18,5 +18,5 @@ public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
 
     List<Evaluation> findAllByUserOrderByIsComplete(User user);
 
-    Evaluation findByUser(User user);
+    List<Evaluation> findByUser(User user);
 }
