@@ -262,7 +262,7 @@ public class RecipeService {
         List<IngredientDTOpost> ingredientList = recipeDTOpost.getIngredientDTOpostList();
         for (int i = 0; i < ingredientList.size(); i++) {
             String ingredientName = ingredientList.get(i).getIngredientName();
-            Optional<Ingredient> ing = Optional.ofNullable(ingredientRepository.findByName(ingredientName));
+            Optional<Ingredient> ing = (Optional<Ingredient>) ingredientRepository.findByIngredientName(ingredientName);
             RecipeIngredient recipeIngredient = new RecipeIngredient();
             //2. 만약 재료가 존재하지않은 재료면 재료 테이블에 새로 등록
             if (!ing.isPresent()) {//해당재료가 존재하지않은 재료면
