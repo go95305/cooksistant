@@ -129,6 +129,7 @@ class TTS extends React.Component {
                       <Block flex space="between">
                         <Block middle>
                           <Image
+                            resizeMode="contain"
                             style={styles.photo}
                             source={{ uri: this.state.recipeDetail.image }}
                           />

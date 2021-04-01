@@ -11,12 +11,16 @@ import { Block, Text, theme, Button as GaButton } from 'galio-framework';
 import { Button } from '../components';
 import { Images, nowTheme } from '../constants';
 import axios from 'axios';
+import firebase from 'firebase';
+
 const { width, height } = Dimensions.get('screen');
 
 class RecipeInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      userId: null,
+
       img: require('../assets/imgs/bookmark.png'),
       id: this.props.route.params.id,
 
@@ -35,30 +39,56 @@ class RecipeInfo extends Component {
     };
   }
   changeImage = () => {
-    this.setState({ img: require('../assets/imgs/bookmarkFull.png') });
+    if (this.state.userId == null) {
+      alert('로그인 후 이용해 주세요!');
+    } else {
+      axios
+        .post(
+          `http://j4c101.p.ssafy.io:8081/user/scrap/${this.state.recipeDetail.id}/${this.state.userId}`
+        )
+        .then((result) => this.setState({ img: require('../assets/imgs/bookmarkFull.png') }))
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     img: require('../assets/imgs/bookmark.png'),
-  //     value: 0,
-  //   };
-  // }
-  // changeImage = () => {
-  //   if (value == 0) {
-  //     this.setState({ img: require('../assets/imgs/bookmarkFull.png') }, 1);
-  //   } else if (value == 1) {
-  //     this.setState({ img: require('../assets/imgs/bookmark.png') }, 0);
-  //   }
-  // };
 
-  componentDidMount = (props) => {
+  componentDidMount = () => {
+    // 로그인된 회원
+    var user = firebase.auth().currentUser;
+
+    if (user) {
+      console.log('DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD');
+      axios
+        .get(`http://j4c101.p.ssafy.io:8081/user/${user.uid}`)
+        .then((result) => {
+          console.log(result.data.userId);
+          this.setState({ userId: result.data.userId });
+          axios
+            .get(`http://j4c101.p.ssafy.io:8081/user/isscrap/${this.state.userId}/${this.state.id}`)
+            .then((result) => {
+              console.log('rerere' + result);
+              if (result.data == true) {
+                this.setState({ img: require('../assets/imgs/bookmarkFull.png') });
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      console.log('DDDDDDDffffffffffDDDDDDDD');
+      console.log(this.state.userId);
+    }
+
     axios
       .get(`http://j4c101.p.ssafy.io:8081/recipe/show/${this.state.id}`)
       .then((result) => {
         const IngredientList = [];
         const stepList = [];
-
+        console.log(result);
         result.data.ingredientDTOList.forEach((el) => {
           const tmp = el.amount.split('(');
           const tmp1 = el.ingredientName.split('(');
@@ -94,7 +124,11 @@ class RecipeInfo extends Component {
       .catch((error) => {
         console.log(error);
       });
+    // 로그인된 회원이 스크랩한 레시피 인가?
+    if (user) {
+    }
   };
+
   renderDetail = () => {
     return (
       <Block style={styles.container}>
