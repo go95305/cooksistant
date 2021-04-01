@@ -206,11 +206,11 @@ class RecipeInfo extends Component {
         <Block flex={1} style={styles.underMenu}>
           <Button
             style={styles.btnStyle}
-            textStyle={{ fontSize: 15, color: '#F18D46' }}
+            textStyle={{ fontSize: 15, color: '#F18D46', fontFamily: 'montserrat-bold' }}
             color="Primary"
             round
             onPress={() =>
-              this.props.navigation.navigate('TTSOrder', { id: this.state.recipeDetail.id })
+              this.props.navigation.navigate('TTS', { id: this.state.recipeDetail.id })
             }
           >
             요리시작
