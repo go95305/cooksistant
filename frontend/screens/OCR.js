@@ -126,14 +126,13 @@ export default class App extends React.Component {
 				>
 					<Image source={{ uri: image }} style={{ width: 250, height: 250 }} />
 				</View>
-        <Text>Raw JSON:</Text>
 				<Text
 					onPress={this._copyToClipboard}
 					onLongPress={this._share}
 					style={{ paddingVertical: 10, paddingHorizontal: 10 }}
 				/>
 
-				
+				<Text>Raw JSON:</Text>
 
 				{googleResponse && (
 					<Text
@@ -202,7 +201,6 @@ export default class App extends React.Component {
 		}
 	};
 
-  
 	submitToGoogle = async () => {
 		try {
 			this.setState({ uploading: true });
@@ -215,7 +213,7 @@ export default class App extends React.Component {
 							//{ type: 'LANDMARK_DETECTION', maxResults: 5 },
 							//{ type: 'FACE_DETECTION', maxResults: 5 },
 							//{ type: 'LOGO_DETECTION', maxResults: 5 },
-							{ type: 'TEXT_DETECTION'},
+							{ type: 'TEXT_DETECTION', maxResults: 5 },
 							// { type: 'DOCUMENT_TEXT_DETECTION', maxResults: 5 },
 							// { type: 'SAFE_SEARCH_DETECTION', maxResults: 5 },
 							//{ type: 'IMAGE_PROPERTIES', maxResults: 5 },
@@ -240,7 +238,7 @@ export default class App extends React.Component {
 				{
 					headers: {
 						Accept: 'application/json',
-						'Content-Type': 'application/json;charset=UTF-8'
+						'Content-Type': 'application/json'
 					},
 					method: 'POST',
 					// body: body
@@ -251,27 +249,12 @@ export default class App extends React.Component {
       console.log('###########################################')
       console.log(responseJson);
       console.log('###########################################')
-      console.log(JSON.stringify(responseJson));
-			console.log(JSON.stringify(JSON.parse(JSON.stringify(responseJson)).responses));
-      console.log('###########################################')
-      console.log('###########################################')
-      console.log('###########################################')
-      
-      try {
-        console.log(JSON.stringify(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(responseJson)).responses)).error));
-        console.log(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(responseJson)).responses)).textAnnotations);
-        console.log(JSON.stringify(JSON.parse(JSON.parse(JSON.stringify(responseJson)).responses).textAnnotations));  
-      } catch (error) {
-        console.log("error");
-      }
-      
-        
+			console.log(response);
 
 			this.setState({
 				googleResponse: responseJson,
 				uploading: false
 			});
-      
 		} catch (error) {
 			console.log(error);
 		}
