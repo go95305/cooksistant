@@ -15,12 +15,11 @@ class Recipe:
         size = len(ingredients)
         ingredients_str = "\",\"".join(ingredients)
 
-        sql = "select r.recipe_id\n" \
+        sql = "select distinct(r.recipe_id)\n" \
               "from recipe_has_ingredient r left outer join ingredient i\n" \
               "on r.ingredient_id = i.id\n" \
               f"where i.name in (\"{ingredients_str}\")\n" \
-              "group by r.recipe_id\n" \
-              f"having count(r.recipe_id) = {size}"
+              "group by r.recipe_id"
 
         cursor.execute(sql)
         result = [item['recipe_id'] for item in cursor.fetchall()]

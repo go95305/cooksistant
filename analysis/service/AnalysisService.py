@@ -34,13 +34,14 @@ def CF(user_id, ingredients):
 
     predictions = recommend_movies(
         df_svd_preds, user_id, df_recipe, df_rating)
+    # print(predictions)
     # 협업 필터링 과정
     a=predictions.iloc[0].iloc[2]
     # print(a)
     #컨텐츠 기반  필터링 수행
     contents_filtered=CBF(a)
     #컨텐츠 기반 필터링 수행
-
+    # print(contents_filtered)
     # 뽑아온 레시피 중에서 해당 재료가 포함됬는지
     filteredRecipeId = Recipe.getRecipeByIngredient(ingredients)
     # print(filteredRecipeId)
@@ -51,17 +52,17 @@ def CF(user_id, ingredients):
         if item in filteredRecipeId:
             cf_filtered_recipeId.append(item)
             filteredRecipeId.remove(item)
-    print(cf_filtered_recipeId)
+    # print(cf_filtered_recipeId)
     best_recommendation = cf_filtered_recipeId+filteredRecipeId
     idx=1
-    recommend=[]
+    final_recommend=[]
     for item in best_recommendation:
         if idx==11:
             break
-        recommend.append(item)
+        final_recommend.append(item)
         idx=idx+1
-    print(recommend)
-    return recommend
+    # print(final_recommend)
+    return final_recommend
 
 
 def recommend_movies(df_svd_preds, user_id, ori_recipe_df, ori_ratings_df):
@@ -93,8 +94,10 @@ def recommend_movies(df_svd_preds, user_id, ori_recipe_df, ori_ratings_df):
 
 # 유저가 최근에 평가한 데이터랑 키워드가 담긴 데이터프레임으로 한다
 def CBF(recipe_id_CF):
+    
     dataframe = Evaluation.getCBFDataFrame()
-    m = dataframe['count'].quantile(0.8)
+    
+    m = dataframe['count'].quantile(0.6)
     dataframe=dataframe.copy().loc[dataframe['count']>=m]
     C=dataframe['favor_average'].mean()
     v=dataframe['count']
@@ -106,8 +109,9 @@ def CBF(recipe_id_CF):
     count_vector = CountVectorizer(ngram_range=(1,3))
     c_vector_keywords = count_vector.fit_transform(dataframe['keyword'])
     keyword_sim = cosine_similarity(c_vector_keywords,c_vector_keywords).argsort()[:, ::-1]
+    # print(dataframe)
     recommended= get_recommend_movie_list(keyword_sim,dataframe,recipe_id=recipe_id_CF)
-    # print(recipe_id_list)
+    # print(recommended)
     return recommended
 
 # def weighted_rating(x,m,C):

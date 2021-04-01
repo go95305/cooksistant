@@ -6,7 +6,7 @@ def getIngredients(ocr):
     kkma = Kkma()
     #ocr로 스캔한 문자열에서 명사를 추출한다.
     ocr_couldbe_ingredients=kkma.nouns(ocr)
-    # print(ocr_couldbe_ingredients)
+    print(ocr_couldbe_ingredients)
     #전체 재료를 가져온다.
     all_ingredients = Ingredient.getIngredients()
     array_ingredients=[]
@@ -20,5 +20,4 @@ def getIngredients(ocr):
         if item in array_ingredients:
             ingredients.append(item)
 
-    # print(ingredients)
     return ingredients
