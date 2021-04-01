@@ -11,7 +11,7 @@ import { Block, Text, theme } from "galio-framework";
 import { useSafeArea } from "react-native-safe-area-context";
 import Images from "../constants/Images";
 import { DrawerItem as DrawerCustomItem, Icon } from "../components";
-import nowTheme from "../constants/Theme";
+import firebase from 'firebase';
 
 const { width } = Dimensions.get("screen");
 
@@ -24,15 +24,24 @@ function CustomDrawerContent({
   ...rest
 }) {
   const insets = useSafeArea();
-  const screens = [
-    "쿡시스턴트",
-    "프로필",
-    "재료",
-    "영수증",
-    "TTS",
-    "STT",
-    "OCR"
-  ];
+  const user = firebase.auth().currentUser;
+  let screens = [];
+  if (user) {
+    screens = [
+      "쿡시스턴트",
+      "프로필",
+      "재료",
+      "영수증",
+      "TTS",
+      "STT"
+    ];
+  } else {
+    screens = [
+      "쿡시스턴트",
+      "TTS",
+      "STT"
+    ];
+  }
   return (
     <Block
       style={styles.container}

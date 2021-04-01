@@ -1,81 +1,118 @@
 import React from 'react';
-import {
-  StyleSheet,
-  ImageBackground,
-  Dimensions,
-  TouchableWithoutFeedback,
-  Image,
-} from 'react-native';
+import { StyleSheet, ImageBackground, Dimensions, TouchableOpacity, Image } from 'react-native';
 import { Block, Text, Button as GaButton, theme } from 'galio-framework';
-
+import axios from 'axios';
 import { Button, Icon, Input } from '../components';
 import { Images, nowTheme } from '../constants';
 
+import Swiper from 'react-native-swiper';
 const { width, height } = Dimensions.get('screen');
 
 class TTSOrder extends React.Component {
+  constructor(props) {
+    console.log('props' + props.route.params.id);
+    super(props);
+    this.state = {
+      swiperShow: false,
+      id: this.props.route.params.id,
+      recipeDetail: {
+        id: 0,
+        nickname: null,
+        cuisine: null,
+        stepList: [],
+      },
+    };
+  }
+  componentDidMount = (props) => {
+    axios
+      .get(`http://j4c101.p.ssafy.io:8081/recipe/show/${this.state.id}`)
+      .then((result) => {
+        console.log(result);
+        console.log('result.data.cuisine' + result.data.cuisine);
+        const list = [];
+        const title1 = result.data.cuisine.substr(0, result.data.cuisine.indexOf(']') + 1);
+        const title2 = result.data.cuisine.substr(result.data.cuisine.indexOf(']') + 2);
+
+        result.data.stepList.forEach((el) => {
+          list.push({
+            image: el.image,
+            level: el.level,
+            description: el.description,
+          });
+        }),
+          this.setState({
+            recipeDetail: {
+              id: result.data.recipeId,
+              nickname: result.data.nickname,
+              cuisine: title1,
+              cuisine1: title2,
+              stepList: list,
+            },
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   render() {
     return (
-      <Block style={styles.container}>
-        <Block flex middle>
-          <ImageBackground
-            source={Images.RegisterBackground}
-            style={styles.imageBackgroundContainer}
-            imageStyle={styles.imageBackground}
-          >
-            <Block flex middle>
-              <Block style={styles.registerContainer}>
-                <Block flex space="evenly">
-                  <Block flex={1.5} middle>
-                    <Text
-                      style={{
-                        fontFamily: 'montserrat-bold',
-                        textAlign: 'center',
-                      }}
-                      color="#333"
-                      size={25}
-                      bold
-                    >
-                      가지 볶음
-                    </Text>
-                  </Block>
-                  <Block flex={7.5} space="between">
-                    <Block>
-                      <Block middle>
-                        <Image style={styles.photo} source={Images.cutEggplant} />
-                      </Block>
-                      <Block middle>
-                        <Block style={styles.MainContainer}>
-                          <Text
-                            style={{
-                              fontFamily: 'montserrat-regular',
-                              textAlign: 'center',
-                              lineHeight: 25,
-                              padding: 10,
-                            }}
-                            color="#333"
-                            size={18}
-                          >
-                            1. 먼저 가지를 먹기 좋게 썰어주세요! 저처럼 동글하게 썰어도 좋고,
-                            손가락만하게 썰어도 좋아요 :)
-                          </Text>
-                        </Block>
-                      </Block>
-                    </Block>
-                  </Block>
-                  <Block flex={1} center>
-                    <Button color="primary" round style={styles.createButton}>
-                      <Text color={nowTheme.COLORS.WHITE} size={30}>
-                        <Image center style={{ height: 20, width: 10 }} source={Images.mic} />
-                      </Text>
-                    </Button>
-                  </Block>
-                </Block>
+      <Swiper>
+        {this.state.recipeDetail.stepList.map((idx, index) => (
+          <Block center key={index} style={[styles.registerContainer]}>
+            <Block
+              center
+              style={{
+                marginTop: height > 800 ? 100 : 60,
+                width: width * 0.8,
+                alignItems: 'center',
+              }}
+            >
+              <Text
+                style={{
+                  fontFamily: 'montserrat-bold',
+                  textAlign: 'center',
+                }}
+                color="#333"
+                size={20}
+                bold
+              >
+                {this.state.recipeDetail.cuisine}
+              </Text>
+              <Text
+                style={{
+                  fontFamily: 'montserrat-bold',
+                  textAlign: 'center',
+                }}
+                color="#333"
+                size={15}
+                bold
+              >
+                {this.state.recipeDetail.cuisine1}
+              </Text>
+            </Block>
+            <Block space="between">
+              <Block center style={{ marginTop: 50, marginBottom: 50 }}>
+                <ImageBackground style={{ height: 150, width: 250 }} source={{ uri: idx.image }} />
+              </Block>
+              <Block style={{ width: width * 0.8, alignItems: 'center' }}>
+                <Text
+                  style={{
+                    fontFamily: 'montserrat-regular',
+                    textAlign: 'center',
+                    lineHeight: 25,
+                    padding: 10,
+                  }}
+                  color="#333"
+                  size={15}
+                >
+                  {idx.description}
+                </Text>
               </Block>
             </Block>
-          </ImageBackground>
-        </Block>
-      </Block>
+          </Block>
+        ))}
+      </Swiper>
     );
   }
 }
@@ -96,9 +133,9 @@ const styles = StyleSheet.create({
     height: height,
   },
   registerContainer: {
-    marginTop: 55,
+    marginTop: height > 800 ? 100 : 70,
     width: width * 0.9,
-    height: height * 0.8,
+    height: height * 0.9,
     backgroundColor: nowTheme.COLORS.WHITE,
     borderRadius: 4,
     shadowColor: nowTheme.COLORS.BLACK,
@@ -111,20 +148,16 @@ const styles = StyleSheet.create({
     elevation: 1,
     overflow: 'hidden',
   },
-  createButton: {
-    width: width * 0.5,
-    marginTop: 10,
-    marginBottom: 30,
+  container: {
+    flex: 1,
   },
-  photo: {
-    borderRadius: 20,
-    height: 230,
-    width: 300,
-  },
-  MainContainer: {
-    paddingTop: Platform.OS === 'ios' ? 20 : 0,
+  slideContainer: {
+    flex: 1,
+    alignItems: 'center',
     justifyContent: 'center',
-    margin: 10,
+    backgroundColor: 'red',
+    width: width * 0.9,
+    height: height / 2,
   },
 });
 

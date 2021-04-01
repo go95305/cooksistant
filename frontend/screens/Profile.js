@@ -52,9 +52,9 @@ class Profile extends React.Component {
     axios
       .get(`http://j4c101.p.ssafy.io:8081/user/${user.uid}`)
       .then((result) => {
-        const eList = [];
+        const sList = [];
         result.data.scrapList.forEach((el) => {
-          eList.push({
+          sList.push({
             rId: el.recipeId,
             title: el.cuisine,
             description: el.description,
@@ -67,7 +67,7 @@ class Profile extends React.Component {
             recipeUsedSize: result.data.recipeUsedSize,
             evaluatedSize: result.data.evaluatedSize,
             userId: result.data.userId,
-            scrapList: eList,
+            scrapList: sList,
           },
         });
       })
@@ -140,10 +140,10 @@ class Profile extends React.Component {
         <Block style={{ paddingBottom: -HeaderHeight * 2, paddingHorizontal: 15 }}>
           <Block center>
             {this.state.Info.scrapList.map((el, index) => (
-              <TouchableWithoutFeedback key={index} onPress={() => navigation.navigate('Pro')}>
+              <TouchableWithoutFeedback key={index} onPress={() => navigation.navigate('Pro', { id: el.rId })}>
                 <Block flex card center shadow style={styles.category}>
                   <ImageBackground
-                    resizeMode='cover'
+                    resizeMode="cover"
                     source={{ uri: el.image }}
                     style={[
                       styles.imageBlock,
@@ -160,12 +160,13 @@ class Profile extends React.Component {
                           textAlign: 'center',
                           fontSize: 13,
                           fontFamily: 'montserrat-bold',
+                          lineHeight: 25,
                           zIndex: 2,
                           color: 'white',
                           paddingHorizontal: 15,
                         }}
                       >
-                        {el.title.substr(0, (el.title.indexOf(']') + 1))}
+                        {el.title.includes(']') ? el.title.substr(0, el.title.indexOf(']') + 1) : el.title}
                       </Text>
                       <Text
                         style={{
@@ -178,7 +179,14 @@ class Profile extends React.Component {
                           paddingHorizontal: 15,
                         }}
                       >
-                        {el.title.substr((el.title.indexOf(']') + 2))}
+                        {el.title.includes(']')
+                            ? el.title.substr(el.title.indexOf(']') + 2).trim().length > 26
+                              ? el.title
+                                  .substr(el.title.indexOf(']') + 2)
+                                  .trim()
+                                  .substr(0, 26) + ' ⋯'
+                              : el.title.substr(el.title.indexOf(']') + 2).trim()
+                            : el.title}
                       </Text>
                     </Block>
                   </ImageBackground>
@@ -206,18 +214,11 @@ class Profile extends React.Component {
               >
                 <Block
                   center
-                  style={{ top: Platform.OS === 'android' ? height * 0.1 : height * 0.13 }}
+                  style={{ top: Platform.OS === 'android' ? height * 0.1 : height * 0.135 }}
                 >
-                  <Image
-                    source={
-                      this.state.googleInfo.img != null
-                        ? { uri: this.state.googleInfo.img }
-                        : Images.ProfilePicture
-                    }
-                    style={styles.avatar}
-                  />
+                  <Image source={{ uri: this.state.googleInfo.img }} style={styles.avatar} />
                 </Block>
-                <Block style={{ top: Platform.OS === 'android' ? height * 0.1 : height * 0.13 }}>
+                <Block style={{ top: Platform.OS === 'android' ? height * 0.1 : height * 0.135 }}>
                   <Block center>
                     <Text
                       style={{
@@ -364,7 +365,7 @@ const styles = StyleSheet.create({
   },
   categoryTitle: {
     height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
     justifyContent: 'center',
     alignItems: 'center',
   },

@@ -10,6 +10,7 @@ import Home from '../screens/Home';
 import Profile from '../screens/Profile';
 import EvalueList from '../screens/EvalueList';
 import EvalueRegister from '../screens/EvalueRegister';
+import RecommList from '../screens/RecommList';
 import RecipeList from '../screens/RecipeList';
 import RecipeInfo from '../screens/RecipeInfo';
 import Ingredient from '../screens/Ingredient';
@@ -17,8 +18,6 @@ import Receipt from '../screens/Receipt';
 import TTSOrder from '../screens/TTSOrder';
 import TTS from '../screens/TTS';
 import STT from '../screens/STT';
-import OCR from '../screens/OCR';
-import SettingsScreen from '../screens/Settings';
 // drawer
 import CustomDrawerContent from './Menu';
 // header for screens
@@ -41,6 +40,23 @@ function HomeStack(props) {
             <Header title="쿡시스턴트" search navigation={navigation} scene={scene} />
           ),
           cardStyle: { backgroundColor: '#FFFFFF' },
+        }}
+      />
+      <Stack.Screen
+        name="RecipeList"
+        component={RecipeList}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header
+              title="레시피 검색"
+              back
+              black
+              transparent
+              navigation={navigation}
+              scene={scene}
+            />
+          ),
+          headerTransparent: true,
         }}
       />
       <Stack.Screen
@@ -118,7 +134,7 @@ function ProfileStack(props) {
         options={{
           header: ({ navigation, scene }) => (
             <Header
-              title="레시피 평가하기"
+              title="레시피 평가"
               back
               black
               transparent
@@ -181,12 +197,12 @@ function IngredientStack(props) {
         }}
       />
       <Stack.Screen
-        name="RecipeList"
-        component={RecipeList}
+        name="RecommList"
+        component={RecommList}
         options={{
           header: ({ navigation, scene }) => (
             <Header
-              title="레시피 추천 받기"
+              title="레시피 추천"
               back
               black
               transparent

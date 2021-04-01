@@ -1,23 +1,21 @@
-import React, { Component } from 'react';
-//import React from 'react';
+import React from 'react';
 import {
   StyleSheet,
   ImageBackground,
   Dimensions,
-  StatusBar,
   TouchableWithoutFeedback,
   Keyboard,
-  Image,
   Alert,
 } from 'react-native';
-import { Block, Text, Button as GaButton, theme } from 'galio-framework';
+import { Block, Text, theme } from 'galio-framework';
 import TagInput from 'react-native-tags-input';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Button, Icon, Input } from '../components';
+import { Button, Icon } from '../components';
 import { Images, nowTheme } from '../constants';
+import firebase from 'firebase';
+import axios from 'axios';
 
 const { width, height } = Dimensions.get('screen');
-
 const DismissKeyboard = ({ children }) => (
   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
 );
@@ -26,6 +24,7 @@ class Ingredient extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      userId: 0,
       tags: {
         tag: '',
         tagsArray: [],
@@ -39,6 +38,20 @@ class Ingredient extends React.Component {
     this.setState({
       tags: state,
     });
+  };
+
+  componentDidMount = () => {
+    const user = firebase.auth().currentUser;
+    axios
+      .get(`http://j4c101.p.ssafy.io:8081/user/${user.uid}`)
+      .then((result) => {
+        this.setState({
+          userId: result.data.userId,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   render() {
@@ -105,17 +118,23 @@ class Ingredient extends React.Component {
                   </Block>
                 </Block>
                 <Block flex={0.3} center>
-                  <Button color="primary" round style={styles.createButton}>
+                  <Button
+                    color="primary"
+                    round
+                    style={styles.createButton}
+                    onPress={() =>
+                      this.state.tags.tagsArray.length > 0
+                        ? navigation.navigate('RecommList', {
+                            userId: this.state.userId,
+                            ingredients: this.state.tags.tagsArray,
+                          })
+                        : Alert.alert('재료를 등록해주세요.')
+                    }
+                  >
                     <Text
                       style={{ fontFamily: 'montserrat-bold' }}
                       size={14}
                       color={nowTheme.COLORS.WHITE}
-                      onPress={() =>
-                        this.state.tags.tagsArray.length === 0
-                          ? Alert.alert("재료를 등록해주세요.")
-                          : navigation.navigate('RecipeList')
-                        //navigation.navigate('RecipeList')
-                      }
                     >
                       있는 재료로 레시피 추천받기
                     </Text>
@@ -195,4 +214,3 @@ const styles = StyleSheet.create({
 });
 
 export default Ingredient;
-

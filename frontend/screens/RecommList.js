@@ -7,15 +7,19 @@ import axios from 'axios';
 
 const { width, height } = Dimensions.get('screen');
 
-class RecipeList extends React.Component {
+class RecommList extends React.Component {
   state = {
-    keyword: this.props.route.params.keyword,
+    userId: this.props.route.params.userId,
+    ingreList: this.props.route.params.ingredients,
     recipeList: [],
   };
 
   componentDidMount = () => {
     axios
-      .get(`http://j4c101.p.ssafy.io:8081/recipe/search/${this.state.keyword}`)
+      .post(`http://j4c101.p.ssafy.io:8081/recipe/recommendation`, {
+        ingredients: this.state.ingreList,
+        userId: this.state.userId,
+      })
       .then((result) => {
         const arrayList = [];
         if (result.data && Array.isArray(result.data)) {
@@ -67,4 +71,4 @@ const styles = StyleSheet.create({
     color: nowTheme.COLORS.HEADER,
   },
 });
-export default RecipeList;
+export default RecommList;
