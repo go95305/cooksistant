@@ -31,7 +31,7 @@ const RecipeRegisterBtn = ({ navigation }) => (
     textStyle={{ fontFamily: 'montserrat-bold', color: nowTheme.COLORS.PRIMARY, fontSize: 12 }}
     color="white"
     round
-    onPress={() => navigation.navigate('EvalueList')}
+    onPress={() => navigation.navigate('RecipeRegister')}
   >
     레시피 등록
   </Button>

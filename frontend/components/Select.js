@@ -9,7 +9,7 @@ import { nowTheme } from '../constants';
 
 class DropDown extends React.Component {
   state = {
-    value: 1
+    value: this.props.default
   };
 
   handleOnSelect = (index, value) => {
@@ -41,7 +41,7 @@ class DropDown extends React.Component {
         style={modalStyles}
         onSelect={this.handleOnSelect}
         dropdownStyle={styles.dropdown}
-        dropdownTextStyle={{ paddingLeft: 16, fontSize: 12 }}
+        dropdownTextStyle={{ paddingLeft: 30, fontSize: 14 , height: 45}}
         {...props}
       >
         <Block flex row middle space="between">
@@ -51,7 +51,7 @@ class DropDown extends React.Component {
           <Icon
             name={iconName || 'minimal-down2x'}
             family={iconFamily || 'NowExtra'}
-            size={iconSize || 10}
+            size={iconSize || 14}
             color={iconColor || nowTheme.COLORS.WHITE}
           />
         </Block>
@@ -71,25 +71,22 @@ DropDown.propTypes = {
 
 const styles = StyleSheet.create({
   qty: {
-    width: 100,
+    width: 80,
     backgroundColor: nowTheme.COLORS.DEFAULT,
-    paddingHorizontal: 16,
-    paddingTop: 10,
+    paddingHorizontal: 15,
+    paddingTop: 15,
     paddingBottom: 9.5,
-    borderRadius: 4,
-    shadowColor: 'rgba(0, 0, 0, 0.1)',
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    shadowOpacity: 1
+    borderRadius: 12,
   },
   text: {
     color: nowTheme.COLORS.WHITE,
-    fontWeight: '600'
+    fontWeight: '600',
+    padding: 5
   },
   dropdown: {
     marginTop: 8,
-    marginLeft: -16,
-    width: 100
+    marginLeft: -10,
+    width: 70,
   }
 });
 
