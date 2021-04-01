@@ -3,6 +3,7 @@ package com.project.cooksistant.model.dto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ public class RecipeDTOpost {
     private String cuisine;
     private String description;
     private String uid;
-    private String image;
+    private MultipartFile image;
     private String level;
     private String serving;
     private List<StepDTOpost> stepDTOpostList = new ArrayList<>();//레시피의 진행 과정

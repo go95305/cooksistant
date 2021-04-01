@@ -1,13 +1,10 @@
 package com.project.cooksistant.service;
 
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.project.cooksistant.Exception.RestException;
 import com.project.cooksistant.model.dto.*;
 import com.project.cooksistant.model.entity.*;
 import com.project.cooksistant.repository.*;
-import io.swagger.models.auth.In;
-import jdk.nashorn.internal.ir.CallNode;
+import com.project.cooksistant.s3.S3Uploader;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -15,6 +12,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,8 +32,9 @@ public class RecipeService {
     private final EvaluationRepository evaluationRepository;
     private final EvaluationKeywordRepository evaluationKeywordRepository;
     private final KeywordRepository keywordRepository;
+    private final S3Uploader s3Uploader;
 
-    public RecipeService(UserRepository userRepository, WebClient.Builder webClientBuilder, StepRepository stepRepository, RecipeRepository recipeRepository, IngredientRepository ingredientRepository, RecipeIngredientRepository recipeIngredientRepository, ModelMapper modelMapper, EvaluationRepository evaluationRepository, EvaluationKeywordRepository evaluationKeywordRepository, KeywordRepository keywordRepository) {
+    public RecipeService(UserRepository userRepository, WebClient.Builder webClientBuilder, StepRepository stepRepository, RecipeRepository recipeRepository, IngredientRepository ingredientRepository, RecipeIngredientRepository recipeIngredientRepository, ModelMapper modelMapper, EvaluationRepository evaluationRepository, EvaluationKeywordRepository evaluationKeywordRepository, KeywordRepository keywordRepository, S3Uploader s3Uploader) {
         this.userRepository = userRepository;
         this.webClient = webClientBuilder.baseUrl("http://j4c101.p.ssafy.io:8083").build(); // 추후에 flask에 알맞게 변경 // 8083포트로 설정
         this.stepRepository = stepRepository;
@@ -46,6 +45,7 @@ public class RecipeService {
         this.evaluationRepository = evaluationRepository;
         this.evaluationKeywordRepository = evaluationKeywordRepository;
         this.keywordRepository = keywordRepository;
+        this.s3Uploader = s3Uploader;
     }
 
 
@@ -243,13 +243,12 @@ public class RecipeService {
     }
 
 
-    public void newRecipe(RecipeDTOpost recipeDTOpost) {
+    public void newRecipe(RecipeDTOpost recipeDTOpost) throws IOException {
         //해당 유저가 존재하는지 확인
         Optional<User> user = Optional.ofNullable(userRepository.findByUid(recipeDTOpost.getUid()).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 유저는 존재하지 않습니다.")));
         //1. recipe 테이블에 등록
         Recipe recipe = new Recipe();
         recipe.setUser(user.get());
-        recipe.setImage(recipeDTOpost.getImage());
         recipe.setServing(recipeDTOpost.getServing());
         recipe.setLevel(recipeDTOpost.getLevel());
         recipe.setCookingTime(recipeDTOpost.getCookingTime());
@@ -260,7 +259,7 @@ public class RecipeService {
         List<IngredientDTOpost> ingredientList = recipeDTOpost.getIngredientDTOpostList();
         for (int i = 0; i < ingredientList.size(); i++) {
             String ingredientName = ingredientList.get(i).getIngredientName();
-            Optional<Ingredient> ing = (Optional<Ingredient>) ingredientRepository.findByIngredientName(ingredientName);
+            Optional<Ingredient> ing = Optional.ofNullable(ingredientRepository.findByIngredientName(ingredientName));
             RecipeIngredient recipeIngredient = new RecipeIngredient();
             //2. 만약 재료가 존재하지않은 재료면 재료 테이블에 새로 등록
             if (!ing.isPresent()) {//해당재료가 존재하지않은 재료면
@@ -288,6 +287,9 @@ public class RecipeService {
             stepRepository.save(step);
         }
 
+        //5.s3에 이미지 업로드 후 recipe image에 set한다.
+        String image = s3Uploader.upload(recipeDTOpost.getImage(), "recipe_pic");
+        recipe.setImage(image);
     }
 
     public List<String> allIngredient() {

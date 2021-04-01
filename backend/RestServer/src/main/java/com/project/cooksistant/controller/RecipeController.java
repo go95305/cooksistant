@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.io.IOException;
 import java.util.*;
 
 @RestController
@@ -40,7 +41,7 @@ public class RecipeController {
             "                                 - amount:재료량\n" +
             "                                 - isType: 재료 구분")
     @PostMapping("/recipe")
-    public void newRecipe(@RequestBody RecipeDTOpost recipeDTOpost) {
+    public void newRecipe(@RequestBody RecipeDTOpost recipeDTOpost) throws IOException {
         recipeService.newRecipe(recipeDTOpost);
 
     }
