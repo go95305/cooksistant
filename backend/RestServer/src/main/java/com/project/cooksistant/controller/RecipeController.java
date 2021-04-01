@@ -85,6 +85,23 @@ public class RecipeController {
 
     }
 
+    @PostMapping("/recipe/ocr/")
+    public List<RecipeListupDTO> ocrIngredient(@RequestBody OcrDTO ocrDTO) {
+        Gson gson = new Gson();
+        String jsonArray = (webClient.post()
+                .uri("/konlypy")
+                .body(Mono.just(ocrDTO), OcrDTO.class)
+                .retrieve()
+                .bodyToMono(String.class).block());
+        JsonObject jsonObject = gson.fromJson(jsonArray, JsonObject.class);
+        String[] idx = gson.fromJson(jsonObject.getAsJsonArray("result"), String[].class);
+        List<Long> recommendList = new ArrayList<>();
+        for (int i = 0; i < idx.length; i++) {
+            recommendList.add(Long.parseLong(idx[i]));
+        }
+        return recipeService.recommendList(recommendList);
+    }
+
     @ApiOperation(value = "특정 레시피 상세보기(Ok)", notes = "Request\n" +
             "                                         - recipeId: 레시피 아이디\n" +
             "                                         Response\n" +

@@ -296,4 +296,18 @@ public class RecipeService {
         String jpql = "select i.ingredientName from Ingredient i";
         return entityManager.createQuery(jpql, String.class).getResultList();
     }
+
+//    public List<String> scanRecipe(String scan) {
+//        String[] ingredients = scan.split(" ");
+//        List<String> ingredientList = new ArrayList<>();
+//        List<Ingredient> ingredient = ingredientRepository.findAll();
+//        for (int i = 0; i < ingredients.length; i++) {
+//            String scanIngredient = ingredients[i];
+//            System.out.println(ingredients[i]);
+//            if (ingredient.contains(scanIngredient))
+//                ingredientList.add(scanIngredient);
+//        }
+//
+//        return ingredientList;
+//    }
 }
