@@ -59,8 +59,15 @@ class TTSOrder extends React.Component {
     return (
       <Swiper>
         {this.state.recipeDetail.stepList.map((idx, index) => (
-          <Block key={index} style={[styles.slideContainer]}>
-            <Block cente style={{ width: width * 0.8, alignItems: 'center' }}>
+          <Block center key={index} style={[styles.registerContainer]}>
+            <Block
+              center
+              style={{
+                marginTop: height > 800 ? 100 : 60,
+                width: width * 0.8,
+                alignItems: 'center',
+              }}
+            >
               <Text
                 style={{
                   fontFamily: 'montserrat-bold',
@@ -126,9 +133,9 @@ const styles = StyleSheet.create({
     height: height,
   },
   registerContainer: {
-    marginTop: 55,
+    marginTop: height > 800 ? 100 : 70,
     width: width * 0.9,
-    height: height * 0.8,
+    height: height * 0.9,
     backgroundColor: nowTheme.COLORS.WHITE,
     borderRadius: 4,
     shadowColor: nowTheme.COLORS.BLACK,
@@ -141,21 +148,6 @@ const styles = StyleSheet.create({
     elevation: 1,
     overflow: 'hidden',
   },
-  createButton: {
-    width: width * 0.5,
-    marginTop: 10,
-    marginBottom: 30,
-  },
-  photo: {
-    borderRadius: 20,
-    height: 230,
-    width: 300,
-  },
-  MainContainer: {
-    paddingTop: Platform.OS === 'ios' ? 20 : 0,
-    justifyContent: 'center',
-    margin: 10,
-  },
   container: {
     flex: 1,
   },
@@ -163,6 +155,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'red',
+    width: width * 0.9,
+    height: height / 2,
   },
 });
 
