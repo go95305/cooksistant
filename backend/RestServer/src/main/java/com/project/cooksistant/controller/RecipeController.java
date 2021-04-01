@@ -22,7 +22,7 @@ public class RecipeController {
         this.webClient = webClientBuilder.baseUrl("http://j4c101.p.ssafy.io:5000").build();
     }
 
-    @ApiOperation(value = "레시피 등록",notes = "Request\n" +
+    @ApiOperation(value = "레시피 등록", notes = "Request\n" +
             "                                 - cookingTime: 조리시간\n" +
             "                                 - cuisine: 레시피명\n" +
             "                                 - description: 레시피 설명\n" +
@@ -172,5 +172,11 @@ public class RecipeController {
     @GetMapping("/recipe/search/{cuisine}")
     public List<RecipeListupDTO> searchRecipe(@PathVariable String cuisine) {
         return recipeService.search(cuisine);
+    }
+
+    @ApiOperation(value = "전체 재료 리스트", notes = "전체 재료 리스트를 리턴해준다.")
+    @GetMapping("/recipe/ingredient")
+    public List<String> allIngredient() {
+        return recipeService.allIngredient();
     }
 }

@@ -9,5 +9,4 @@ public class IngredientDTOpost {
     private String ingredientName;
     private String amount;
     private String isType;
-
 }

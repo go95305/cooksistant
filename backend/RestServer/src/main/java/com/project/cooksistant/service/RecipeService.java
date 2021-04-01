@@ -289,4 +289,9 @@ public class RecipeService {
         }
 
     }
+
+    public List<String> allIngredient() {
+        String jpql = "select i.ingredientName from Ingredient i";
+        return entityManager.createQuery(jpql, String.class).getResultList();
+    }
 }
