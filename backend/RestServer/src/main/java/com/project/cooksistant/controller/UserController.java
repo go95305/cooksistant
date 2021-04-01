@@ -4,6 +4,7 @@ import com.project.cooksistant.model.dto.PersonalDTO;
 import com.project.cooksistant.model.dto.ScrapMypageDTO;
 import com.project.cooksistant.model.dto.SignupDTO;
 import com.project.cooksistant.model.dto.UserDTO;
+import com.project.cooksistant.service.RecipeService;
 import com.project.cooksistant.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -58,4 +59,11 @@ public class UserController {
         userService.signup(signupDTO);
     }
 
+    @ApiOperation(value = "해당 유저가 해당 레시피를스크랩했는지 여부", notes = "Request\n" +
+            "                                                           - recipeId:레시피 인덱스\n" +
+            "                                                           - userId: 유저 인덱스")
+    @GetMapping("/user/isscrap/{userId}/{recipeId}")
+    public Boolean isScraped(@PathVariable Long userId, @PathVariable Long recipeId) {
+        return userService.myScrapData(userId, recipeId);
+    }
 }

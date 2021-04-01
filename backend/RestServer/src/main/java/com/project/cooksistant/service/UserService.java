@@ -12,12 +12,14 @@ import com.project.cooksistant.repository.RecipeRepository;
 import com.project.cooksistant.repository.ScrapRepository;
 import com.project.cooksistant.repository.UserRepository;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,9 +44,16 @@ public class UserService {
     public PersonalDTO getUserData(String uid) {
         PersonalDTO personalDTO = new PersonalDTO();
         List<ScrapMypageDTO> scrapMypageDTOList = new ArrayList<>();
+        List<RecipeMypageDTO> recipeMypageDTOList = new ArrayList<>();
         Optional<User> user = Optional.ofNullable(userRepository.findByUid(uid).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 유저는 존재하지 않습니다.")));
         personalDTO.setUserId(user.get().getUserId());
         personalDTO.setNickname(user.get().getNickname());
+
+        //내가 등록한 레시피 검색
+        List<Recipe> recipeList = recipeRepository.findAllByUser(user.get());
+        recipeMypageDTOList = modelMapper.map(recipeList, new TypeToken<List<RecipeMypageDTO>>() {
+        }.getType());
+        personalDTO.setRecipeList(recipeMypageDTOList);
 
         //내가 스크랩한 레시피 검색
         List<Scrap> scrapList = scrapRepository.findAllByUser(user.get());
@@ -108,5 +117,15 @@ public class UserService {
         userRepository.save(newuser);
 
         return null;
+    }
+
+    public Boolean myScrapData(Long userId, Long recipeId) {
+        Optional<User> user = Optional.ofNullable(userRepository.findById(userId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 유저는 존재하지 않습니다.")));
+        Optional<Recipe> recipe = Optional.ofNullable(recipeRepository.findById(recipeId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 레시피는 존재하지 않습니다.")));
+        Optional<Scrap> scrap = Optional.ofNullable(scrapRepository.findScrapByRecipeAndUser(recipe, user));
+        if (scrap.isPresent())
+            return true;
+        else
+            return false;
     }
 }

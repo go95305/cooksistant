@@ -18,6 +18,7 @@ public class PersonalDTO {
     private Long recipeUsedSize;
     private Long evaluatedSize;
     List<ScrapMypageDTO> scrapList = new ArrayList<>();
+    List<RecipeMypageDTO> recipeList = new ArrayList<>();
 
 
 }
