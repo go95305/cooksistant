@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class OcrDTO {
     private Long userId;
-    private String ocrScan;
+    private String ocrscan;
 }

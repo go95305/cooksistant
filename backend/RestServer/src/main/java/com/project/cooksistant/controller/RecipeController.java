@@ -93,6 +93,7 @@ public class RecipeController {
                 .body(Mono.just(ocrDTO), OcrDTO.class)
                 .retrieve()
                 .bodyToMono(String.class).block());
+        System.out.println(jsonArray);
         JsonObject jsonObject = gson.fromJson(jsonArray, JsonObject.class);
         String[] idx = gson.fromJson(jsonObject.getAsJsonArray("result"), String[].class);
         List<Long> recommendList = new ArrayList<>();
