@@ -1,12 +1,13 @@
 import React from 'react';
-import { StyleSheet, ImageBackground, Dimensions, Image } from 'react-native';
+import { StyleSheet, ImageBackground, Dimensions, Image, Platform } from 'react-native';
 import { Block, Text, Button as GaButton } from 'galio-framework';
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
+import InputSpinner from 'react-native-input-spinner';
 import firebase from 'firebase';
 import axios from 'axios';
 
 import { MaterialIcons } from '@expo/vector-icons';
-import { Button, Icon, Input } from '../components';
+import { Input, Select } from '../components';
 import { Images, nowTheme } from '../constants';
 
 const { width, height } = Dimensions.get('screen');
@@ -16,6 +17,10 @@ class RecipeRegister extends React.Component {
     super(props);
     this.state = {
       userId: null,
+      title: '',
+      intro: '',
+      serving: 0,
+      time: 0,
       stepDTOpostList: [],
       ingredientDTOpostList: [],
     };
@@ -99,8 +104,19 @@ class RecipeRegister extends React.Component {
                     previousBtnTextStyle={buttonTextStyle}
                   >
                     <Block style={{ alignItems: 'center' }}>
-                      <Block flex={1} center style={styles.recipeContainer}>
-                        <Block width={width * 0.7} style={{ marginBottom: 5 }}>
+                      <Block flex={1} middle style={styles.recipeContainer}>
+                        <Block width={width * 0.7} style={{ marginBottom: 8 }}>
+                          <Text
+                            style={{
+                              fontFamily: 'montserrat-regular',
+                              textAlign: 'center',
+                              marginBottom: Platform.OS == 'android' ? 8 : 13,
+                            }}
+                            color={nowTheme.COLORS.MUTED}
+                            size={16}
+                          >
+                            나만의 레시피를 알려주세요.
+                          </Text>
                           <this.titleInput
                             multiline
                             numberOfLines={4}
@@ -114,34 +130,67 @@ class RecipeRegister extends React.Component {
                                 style={styles.inputIcons}
                               />
                             }
+                            onChangeText={(text) => {
+                              this.setState({ title: text });
+                            }}
                           />
                         </Block>
-                        <Block row space="around " width={width * 0.7} style={{ marginBottom: 5 }}>
-                          <Block center>
-                            <Text
-                              style={{ fontFamily: 'montserrat-regular' }}
-                              size={14}
-                              color="black"
-                            >
-                              이용 완료
-                            </Text>
+                        <Block
+                          row
+                          space="between"
+                          width={width * 0.7}
+                          style={{ marginBottom: 8, padding: 1 }}
+                        >
+                          <Block flex left>
+                            <Select
+                              default={'인분'}
+                              color={'#f18d46'}
+                              options={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+                              onSelect={(opt) => {
+                                this.setState({ serving: opt + 1 });
+                              }}
+                            />
                           </Block>
-                          <Block center>
-                            <Text
-                              style={{ fontFamily: 'montserrat-regular' }}
-                              size={14}
-                              color="black"
-                            >
-                              평가 완료
-                            </Text>
+                          <Block flex center style={{marginLeft: Platform.OS == 'android' ? 10 : 0}}>
+                            <Block row space="between">
+                              <InputSpinner
+                                max={60}
+                                min={0}
+                                step={5}
+                                height={47}
+                                style={{ minWidth: 130, shadowOpacity: 0, borderRadius: 11 }}
+                                color={'#f18d46'}
+                                skin={'round'}
+                                value={this.state.time}
+                                onChange={(num) => {
+                                  this.setState({ time: num });
+                                }}
+                              />
+                              <Text
+                                style={{
+                                  fontFamily: 'montserrat-regular',
+                                  textAlign: 'center',
+                                  margin: 5,
+                                  marginTop: 18,
+                                  marginRight: 35,
+                                }}
+                                color={nowTheme.COLORS.MUTED}
+                                size={13}
+                              >
+                                분 이내
+                              </Text>
+                            </Block>
                           </Block>
                         </Block>
-                        <Block width={width * 0.7} style={{ marginBottom: 5 }}>
+                        <Block width={width * 0.7} style={{ marginBottom: 8 }}>
                           <this.introInput
                             multiline
                             numberOfLines={10}
                             placeholder="레시피 소개"
                             style={styles.introInput}
+                            onChangeText={(text) => {
+                              this.setState({ intro: text });
+                            }}
                           />
                         </Block>
                       </Block>
@@ -206,7 +255,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   recipeContainer: {
-    marginTop: 10,
+    marginTop: 25,
   },
   titleInput: {
     height: 80,
@@ -215,9 +264,9 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   introInput: {
-    height: 150,
+    height: 180,
     alignItems: 'flex-start',
-    paddingTop: 20,
+    paddingTop: Platform.OS == 'android' ? 0 : 20,
     paddingLeft: 20,
     borderWidth: 1,
     borderColor: '#E3E3E3',
