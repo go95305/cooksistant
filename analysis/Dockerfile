@@ -5,8 +5,7 @@ COPY . .
 RUN pip install -r requirements.txt
 RUN apt-get update && \
     apt-get install -y curl \
-    wget \
-    openjdk-8-jdk
+    wget openjdk-8-jdk
 # RUN pip install JPype1-1.1.2-cp37-cp37m-win_amd64.whl
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
 EXPOSE 5000
