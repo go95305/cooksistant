@@ -24,7 +24,7 @@ const DismissKeyboard = ({ children }) => (
 
 class TTS extends React.Component {
   speak(){
-    const thingToSay = 'uid 저장을 위해서 기본 정보만 넣자는 소리 아닐까요?';
+    const thingToSay = '텍스트 안에서 함수실행은 어떻게 하죠?';
     Speech.speak(thingToSay);
   };
 

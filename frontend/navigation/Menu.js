@@ -30,7 +30,8 @@ function CustomDrawerContent({
     "재료",
     "영수증",
     "TTS",
-    "STT"
+    "STT",
+    "OCR"
   ];
   return (
     <Block

@@ -17,6 +17,7 @@ import Receipt from '../screens/Receipt';
 import TTSOrder from '../screens/TTSOrder';
 import TTS from '../screens/TTS';
 import STT from '../screens/STT';
+import OCR from '../screens/OCR';
 import SettingsScreen from '../screens/Settings';
 // drawer
 import CustomDrawerContent from './Menu';
@@ -285,6 +286,23 @@ function STTStack(props) {
   );
 }
 
+function OCRStack(props) {
+  return (
+    <Stack.Navigator initialRouteName="OCR" mode="card" headerMode="screen">
+      <Stack.Screen
+        name="OCR"
+        component={OCR}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header transparent title="OCR" navigation={navigation} scene={scene} />
+          ),
+          headerTransparent: true,
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
 function AppStack(props) {
   return (
     <Drawer.Navigator
@@ -322,6 +340,7 @@ function AppStack(props) {
       <Drawer.Screen name="영수증" component={ReceiptStack} />
       <Drawer.Screen name="TTS" component={TTSStack} />
       <Drawer.Screen name="STT" component={STTStack} />
+      <Drawer.Screen name="OCR" component={OCRStack} />
     </Drawer.Navigator>
   );
 }
