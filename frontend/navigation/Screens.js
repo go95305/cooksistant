@@ -77,6 +77,23 @@ function HomeStack(props) {
         }}
       />
       <Stack.Screen
+        name="TTS"
+        component={TTS}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header
+              title="요리 과정 START"
+              back
+              black
+              transparent
+              navigation={navigation}
+              scene={scene}
+            />
+          ),
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
         name="TTSOrder"
         component={TTSOrder}
         options={{
@@ -163,6 +180,23 @@ function ProfileStack(props) {
         }}
       />
       <Stack.Screen
+        name="TTS"
+        component={TTS}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header
+              title="요리 과정 START"
+              back
+              black
+              transparent
+              navigation={navigation}
+              scene={scene}
+            />
+          ),
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
         name="TTSOrder"
         component={TTSOrder}
         options={{
@@ -220,6 +254,23 @@ function IngredientStack(props) {
           header: ({ navigation, scene }) => (
             <Header
               title="레시피 상세정보"
+              back
+              black
+              transparent
+              navigation={navigation}
+              scene={scene}
+            />
+          ),
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        name="TTS"
+        component={TTS}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header
+              title="요리 과정 START"
               back
               black
               transparent

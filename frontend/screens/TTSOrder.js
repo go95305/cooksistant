@@ -30,8 +30,6 @@ class TTSOrder extends React.Component {
         console.log(result);
         console.log('result.data.cuisine' + result.data.cuisine);
         const list = [];
-        const title1 = result.data.cuisine.substr(0, result.data.cuisine.indexOf(']') + 1);
-        const title2 = result.data.cuisine.substr(result.data.cuisine.indexOf(']') + 2);
 
         result.data.stepList.forEach((el) => {
           list.push({
@@ -44,8 +42,7 @@ class TTSOrder extends React.Component {
             recipeDetail: {
               id: result.data.recipeId,
               nickname: result.data.nickname,
-              cuisine: title1,
-              cuisine1: title2,
+              cuisine: result.data.cuisine,
               stepList: list,
             },
           });
@@ -63,7 +60,7 @@ class TTSOrder extends React.Component {
             <Block
               center
               style={{
-                marginTop: height > 800 ? 100 : 60,
+                marginTop: height > 800 ? 100 : 80,
                 width: width * 0.8,
                 alignItems: 'center',
               }}
@@ -77,7 +74,7 @@ class TTSOrder extends React.Component {
                 size={20}
                 bold
               >
-                {this.state.recipeDetail.cuisine}
+                Level.
               </Text>
               <Text
                 style={{
@@ -88,14 +85,21 @@ class TTSOrder extends React.Component {
                 size={15}
                 bold
               >
-                {this.state.recipeDetail.cuisine1}
+                {idx.level}
               </Text>
             </Block>
             <Block space="between">
               <Block center style={{ marginTop: 50, marginBottom: 50 }}>
-                <ImageBackground style={{ height: 150, width: 250 }} source={{ uri: idx.image }} />
+                <Image style={{ height: 150, width: 250 }} source={{ uri: idx.image }} />
               </Block>
-              <Block style={{ width: width * 0.8, alignItems: 'center' }}>
+              <Block
+                style={{
+                  width: width * 0.8,
+                  alignItems: 'center',
+                  borderRadius: 20,
+                  backgroundColor: '#FFDEAD',
+                }}
+              >
                 <Text
                   style={{
                     fontFamily: 'montserrat-regular',
