@@ -10,7 +10,7 @@ const { width, height } = Dimensions.get('screen');
 
 class TTSOrder extends React.Component {
   constructor(props) {
-    console.log('props' + props.route.params.id);
+    // console.log('props' + props.route.params.id);
     super(props);
     this.state = {
       swiperShow: false,

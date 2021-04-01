@@ -1,9 +1,8 @@
 import React from 'react';
 import { StyleSheet, Dimensions, ScrollView, state } from 'react-native';
-import { Block, theme, Text } from 'galio-framework';
-import { Images, nowTheme, tabs } from '../constants';
-import { Card, Button } from '../components';
-import articles from '../constants/articles';
+import { Block, theme } from 'galio-framework';
+import { nowTheme } from '../constants';
+import { Card, CardTrendy } from '../components';
 import SegmentedControlTab from 'react-native-segmented-control-tab';
 import axios from 'axios';
 const { width, height } = Dimensions.get('screen');
