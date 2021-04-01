@@ -94,6 +94,7 @@ export default class Onboarding extends React.Component {
       if (result.type === 'success') {
         await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
         this.onSignIn(result);
+        Alert.alert(result.user.name);
         this.props.navigation.navigate('App');
       }
     } catch ({ message }) {

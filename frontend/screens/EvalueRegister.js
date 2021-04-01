@@ -5,8 +5,6 @@ import {
   Dimensions,
   Image,
   Alert,
-  StatusBar,
-  TouchableWithoutFeedback,
 } from 'react-native';
 import { Block, Text, Button as GaButton, theme } from 'galio-framework';
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
@@ -17,7 +15,6 @@ import firebase from 'firebase';
 import axios from 'axios';
 
 import { Images, nowTheme } from '../constants';
-import { CommonActions } from '@react-navigation/routers';
 
 const { width, height } = Dimensions.get('screen');
 

@@ -12,6 +12,7 @@ import EvalueList from '../screens/EvalueList';
 import EvalueRegister from '../screens/EvalueRegister';
 import RecommList from '../screens/RecommList';
 import RecipeList from '../screens/RecipeList';
+import RecipeRegister from '../screens/RecipeRegister';
 import RecipeInfo from '../screens/RecipeInfo';
 import Ingredient from '../screens/Ingredient';
 import Receipt from '../screens/Receipt';
@@ -108,6 +109,23 @@ function ProfileStack(props) {
             <Header transparent white title="프로필" navigation={navigation} scene={scene} />
           ),
           cardStyle: { backgroundColor: '#FFFFFF' },
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        name="RecipeRegister"
+        component={RecipeRegister}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header
+              title="레시피 등록"
+              back
+              black
+              transparent
+              navigation={navigation}
+              scene={scene}
+            />
+          ),
           headerTransparent: true,
         }}
       />

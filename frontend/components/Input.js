@@ -28,10 +28,6 @@ class ArInput extends React.Component {
         color={nowTheme.COLORS.HEADER}
         iconContent={
           <Icon
-            size={14}
-            color={nowTheme.COLORS.ICON}
-            name="link"
-            family="AntDesign"
           />
         }
         {...this.props}
@@ -59,7 +55,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     borderColor: nowTheme.COLORS.BORDER,
     height: 44,
-    backgroundColor: '#FFFFFF'
+    backgroundColor: '#FFFFFF',
   },
   success: {
     borderColor: nowTheme.COLORS.INPUT_SUCCESS
