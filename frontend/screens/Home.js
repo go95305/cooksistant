@@ -1,10 +1,19 @@
 import React from 'react';
-import { StyleSheet, Dimensions, ScrollView, state } from 'react-native';
-import { Block, theme } from 'galio-framework';
+import {
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+  Image,
+  state,
+  TouchableWithoutFeedback,
+} from 'react-native';
+import { Block, Text, theme } from 'galio-framework';
 import { nowTheme } from '../constants';
 import { Card, CardTrendy } from '../components';
 import SegmentedControlTab from 'react-native-segmented-control-tab';
 import axios from 'axios';
+import Swiper from 'react-native-swiper';
+import RNUrlPreview from 'react-native-url-preview';
 const { width, height } = Dimensions.get('screen');
 
 class Home extends React.Component {
@@ -62,102 +71,91 @@ class Home extends React.Component {
         console.log(error);
       });
   };
-  Articles = () => {
-    return (
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.articles}>
-        <Block flex>
-          {this.state.recipePopular.map((el, index) => {
-            return <Card key={index} item={el} horizontal />;
-          })}
-        </Block>
-      </ScrollView>
-    );
-  };
 
-  Trendy = () => {
-    return (
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.articles}>
-        <Block flex>
-          {this.state.recipeTrendy.map((el, index) => {
-            return <Card key={index} item={el} horizontal />;
-          })}
-        </Block>
-      </ScrollView>
-    );
-  };
-
-  handleIndexChange = (index) => {
-    this.setState({
-      ...this.state,
-      selectedIndex: index,
-    });
-  };
   render() {
-    const { navigation } = this.props;
     return (
-      <Block style={styles.container}>
-        <Block style={styles.segmentContainer}>
-          <Block>
-            <SegmentedControlTab
-              values={['인기', '트랜디']}
-              selectedIndex={this.state.selectedIndex}
-              onTabPress={this.handleIndexChange}
-              tabsContainerStyle={styles.tabsContainerStyle}
-              tabStyle={styles.tabStyle}
-              activeTabStyle={styles.activeTabStyle}
-              tabTextStyle={{ color: '#444444', fontFamily: 'montserrat-bold' }}
-              height={50}
-              borderRadius={20}
-            />
+      <Block style={{ flex: 1 }}>
+        <Block style={{ flex: 1, padding: 10 }}>
+          <Block style={{ flex: 0.5 }}>
+            <Text style={{ fontFamily: 'montserrat-bold', marginTop: 30 }}>인기 레시피</Text>
           </Block>
-          {this.state.selectedIndex === 0 ? (
-            <Block style={styles.listBox}>{this.Articles()}</Block>
-          ) : (
-            <Block style={styles.listBox}>{this.Trendy()}</Block>
-          )}
+          <Block style={{ flex: 1.5 }}>
+            <Swiper style={styles.wrapper} renderPagination={renderPagination} loop={false}>
+              {this.state.recipePopular.map((el, index) => (
+                <Card key={index} item={el} horizontal />
+              ))}
+            </Swiper>
+          </Block>
+          <Block style={{ flex: 1 }}></Block>
+        </Block>
+
+        <Block style={{ flex: 1 }}>
+          <Block style={{ flex: 0.5 }}>
+            <Text style={{ fontFamily: 'montserrat-bold', marginTop: 30, padding: 10 }}>
+              트렌디 레시피
+            </Text>
+          </Block>
+          <Block style={{ flex: 1.5 }}>
+            <Swiper
+              vertical
+              loop
+              timeout={-2.5}
+              controlsProps={{
+                dotActiveStyle: { backgroundColor: 'red' },
+                cellsContent: {
+                  'bottom-left': <Text>SOME LOGO</Text>,
+                },
+              }}
+            >
+              {this.state.recipeTrendy.map((el, index) => (
+                <Block key={index} style={{ flex: 1, padding: 10 }}>
+                  <Block>
+                    {/* <Image resizeMode="contain" source={{ uri: el.image }} style={imageStyles} /> */}
+                    <RNUrlPreview text={el.image} />
+                  </Block>
+                  <Text>{el.title}</Text>
+                </Block>
+              ))}
+            </Swiper>
+          </Block>
         </Block>
       </Block>
     );
   }
 }
-
+const renderPagination = (index, total, context) => {
+  return (
+    <Block style={styles.paginationStyle}>
+      <Text style={{ color: 'grey' }}>
+        <Text style={styles.paginationText}>{index + 1}</Text>
+      </Text>
+    </Block>
+  );
+};
 const styles = StyleSheet.create({
-  home: {
-    width: width,
-    height: height * 0.35,
-  },
-  articles: {
-    width: width - theme.SIZES.BASE * 2,
-    paddingVertical: theme.SIZES.BASE,
-    paddingHorizontal: 2,
-    fontFamily: 'montserrat-regular',
-  },
-  container: {
+  wrapper: {},
+  slide: {
     flex: 1,
-    paddingHorizontal: theme.SIZES.BASE,
+    justifyContent: 'center',
   },
-  title: {
-    fontFamily: 'montserrat-bold',
-    paddingBottom: theme.SIZES.BASE,
-    marginTop: 44,
-    color: nowTheme.COLORS.HEADER,
+  text: {
+    color: '#fff',
+    fontSize: 30,
+    fontWeight: 'bold',
   },
-  segmentContainer: {
-    height: height * 0.65,
+  image: {
+    width,
+    height: height / 2,
+    flex: 1,
   },
-  tabsContainerStyle: {
-    height: 40,
-    marginTop: 20,
+  paginationStyle: {
+    position: 'absolute',
+    bottom: 10,
+    right: 10,
   },
-  tabStyle: {
-    borderColor: '#f18d46',
-  },
-  activeTabStyle: {
-    backgroundColor: '#f18d46',
-  },
-  listBox: {
-    marginBottom: Platform.OS === 'ios' ? 0 : 20,
-    marginTop: 10,
+  paginationText: {
+    color: 'white',
+    fontSize: 15,
   },
 });
 
