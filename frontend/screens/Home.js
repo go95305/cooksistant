@@ -30,6 +30,7 @@ class Home extends React.Component {
     axios
       .get(`http://j4c101.p.ssafy.io:8081/recipe/favor`)
       .then((result) => {
+        console.log(result);
         const arrayList = [];
         if (result.data && Array.isArray(result.data)) {
           result.data.forEach((el) => {
@@ -76,47 +77,52 @@ class Home extends React.Component {
     return (
       <Block style={{ flex: 1 }}>
         <Block style={{ flex: 1, padding: 10 }}>
-          <Block style={{ flex: 0.5 }}>
-            <Text style={{ fontFamily: 'montserrat-bold', marginTop: 30 }}>인기 레시피</Text>
+          <Block style={{ flex: height > 800 ? 0.5 : 0.3 }}>
+            <Text
+              style={{
+                fontFamily: 'montserrat-bold',
+                marginTop: height > 800 ? 30 : 10,
+                paddingLeft: height > 800 ? 20 : 10,
+              }}
+            >
+              인기 레시피
+            </Text>
           </Block>
-          <Block style={{ flex: 1.5 }}>
+          <Block style={{ flex: height > 800 ? 3 : 4 }}>
             <Swiper style={styles.wrapper} renderPagination={renderPagination} loop={false}>
               {this.state.recipePopular.map((el, index) => (
-                <Card key={index} item={el} horizontal />
+                <Card key={index} item={el} full />
               ))}
             </Swiper>
           </Block>
-          <Block style={{ flex: 1 }}></Block>
         </Block>
 
         <Block style={{ flex: 1 }}>
-          <Block style={{ flex: 0.5 }}>
-            <Text style={{ fontFamily: 'montserrat-bold', marginTop: 30, padding: 10 }}>
-              트렌디 레시피
-            </Text>
-          </Block>
-          <Block style={{ flex: 1.5 }}>
-            <Swiper
-              vertical
-              loop
-              timeout={-2.5}
-              controlsProps={{
-                dotActiveStyle: { backgroundColor: 'red' },
-                cellsContent: {
-                  'bottom-left': <Text>SOME LOGO</Text>,
-                },
-              }}
-            >
-              {this.state.recipeTrendy.map((el, index) => (
-                <Block key={index} style={{ flex: 1, padding: 10 }}>
-                  <Block>
-                    {/* <Image resizeMode="contain" source={{ uri: el.image }} style={imageStyles} /> */}
-                    <RNUrlPreview text={el.image} />
+          <Block style={{ flex: 1, padding: 10 }}>
+            <Block style={{ flex: height > 800 ? 0.5 : 0.3 }}>
+              <Text
+                style={{
+                  fontFamily: 'montserrat-bold',
+                  marginTop: height > 800 ? 30 : 10,
+                  paddingLeft: height > 800 ? 20 : 10,
+                }}
+              >
+                트렌디 레시피
+              </Text>
+            </Block>
+            <Block style={{ flex: 3 }}>
+              <Swiper loop timeout={-2.5} renderPagination={renderPagination}>
+                {this.state.recipeTrendy.map((el, index) => (
+                  <Block key={index} style={{ flex: 1, padding: 10 }}>
+                    <Block>
+                      {/* <Image resizeMode="contain" source={{ uri: el.image }} style={imageStyles} /> */}
+                      <RNUrlPreview text={el.image} />
+                    </Block>
+                    <Text>{el.title}</Text>
                   </Block>
-                  <Text>{el.title}</Text>
-                </Block>
-              ))}
-            </Swiper>
+                ))}
+              </Swiper>
+            </Block>
           </Block>
         </Block>
       </Block>
@@ -127,7 +133,7 @@ const renderPagination = (index, total, context) => {
   return (
     <Block style={styles.paginationStyle}>
       <Text style={{ color: 'grey' }}>
-        <Text style={styles.paginationText}>{index + 1}</Text>
+        <Text style={styles.paginationText}></Text>
       </Text>
     </Block>
   );

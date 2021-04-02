@@ -41,6 +41,15 @@ class RecipeInfo extends Component {
   changeImage = () => {
     if (this.state.userId == null) {
       alert('로그인 후 이용해 주세요!');
+    } else if (this.state.img == require('../assets/imgs/bookmarkFull.png')) {
+      axios
+        .put(
+          `http://j4c101.p.ssafy.io:8081/user/deleteScrap/${this.state.userId}/${this.state.recipeDetail.id}`
+        )
+        .then((result) => this.setState({ img: require('../assets/imgs/bookmark.png') }))
+        .catch((error) => {
+          console.log(error);
+        });
     } else {
       axios
         .post(
@@ -58,7 +67,6 @@ class RecipeInfo extends Component {
     var user = firebase.auth().currentUser;
 
     if (user) {
-      console.log('DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD');
       axios
         .get(`http://j4c101.p.ssafy.io:8081/user/${user.uid}`)
         .then((result) => {
@@ -79,8 +87,6 @@ class RecipeInfo extends Component {
         .catch((error) => {
           console.log(error);
         });
-      console.log('DDDDDDDffffffffffDDDDDDDD');
-      console.log(this.state.userId);
     }
 
     axios
