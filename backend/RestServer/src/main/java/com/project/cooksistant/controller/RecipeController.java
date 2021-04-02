@@ -5,6 +5,7 @@ import com.google.gson.*;
 import com.project.cooksistant.model.dto.*;
 import com.project.cooksistant.model.entity.Evaluation;
 import com.project.cooksistant.service.RecipeService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -40,7 +41,7 @@ public class RecipeController {
             "                                 - ingredientName:재료명\n" +
             "                                 - amount:재료량\n" +
             "                                 - isType: 재료 구분")
-    @PostMapping("/recipe")
+    @PostMapping("/recipe/create")
     public void newRecipe(@RequestBody RecipeDTOpost recipeDTOpost) throws IOException {
         recipeService.newRecipe(recipeDTOpost);
 
@@ -85,6 +86,15 @@ public class RecipeController {
 
     }
 
+    @ApiOperation(value = "OCR로 영수증 재료 인식 후 레시피 추천", notes = "Request\n" +
+            "                                                       - userId:유저 인덱스\n" +
+            "                                                       - ocrscan: 스캔을 통해 출력된 문자열\n" +
+            "                                                   Response\n" +
+            "                                                   -List<RecipeListupDTO>:레시피 리스트\n" +
+            "                                                   {\n" +
+            "                                                   - url: 이미지 주소\n" +
+            "                                                   - recipename: 레시피 이름\n" +
+            "                                                   - recipeId: 레시피 아이디")
     @PostMapping("/recipe/ocr/")
     public List<RecipeListupDTO> ocrIngredient(@RequestBody OcrDTO ocrDTO) {
         Gson gson = new Gson();

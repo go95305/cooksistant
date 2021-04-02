@@ -51,22 +51,37 @@ public class UserService {
 
         //내가 등록한 레시피 검색
         List<Recipe> recipeList = recipeRepository.findAllByUser(user.get());
-        recipeMypageDTOList = modelMapper.map(recipeList, new TypeToken<List<RecipeMypageDTO>>() {
-        }.getType());
+        for (int i = 0; i < recipeList.size(); i++) {
+            if (recipeList.get(i).getFlag()) {
+                RecipeMypageDTO recipeMypageDTO = new RecipeMypageDTO();
+                recipeMypageDTO.setRecipeId(recipeList.get(i).getRecipeId());
+                recipeMypageDTO.setCuisine(recipeList.get(i).getCuisine());
+                recipeMypageDTO.setDescription(recipeList.get(i).getDescription());
+                recipeMypageDTO.setImage(recipeList.get(i).getImage());
+                recipeMypageDTO.setUser(recipeList.get(i).getUser());
+                recipeMypageDTOList.add(recipeMypageDTO);
+            }
+        }
         personalDTO.setRecipeList(recipeMypageDTOList);
+
+//        recipeMypageDTOList = modelMapper.map(recipeList, new TypeToken<List<RecipeMypageDTO>>() {
+//        }.getType());
+//        personalDTO.setRecipeList(recipeMypageDTOList);
 
         //내가 스크랩한 레시피 검색
         List<Scrap> scrapList = scrapRepository.findAllByUser(user.get());
         personalDTO.setScrapSize(scrapList.size());
         for (int i = 0; i < scrapList.size(); i++) {
-            ScrapMypageDTO scrapMypageDTO = new ScrapMypageDTO();
-            scrapMypageDTO.setNickname(scrapList.get(i).getUser().getNickname());
-            scrapMypageDTO.setRecipeId(scrapList.get(i).getRecipe().getRecipeId());
-            scrapMypageDTO.setImage(scrapList.get(i).getRecipe().getImage());
-            scrapMypageDTO.setDescription(scrapList.get(i).getRecipe().getDescription());
-            scrapMypageDTO.setCuisine(scrapList.get(i).getRecipe().getCuisine());
-            System.out.println(scrapMypageDTO);
-            scrapMypageDTOList.add(scrapMypageDTO);
+            if (scrapList.get(i).getFlag()) {
+                ScrapMypageDTO scrapMypageDTO = new ScrapMypageDTO();
+                scrapMypageDTO.setNickname(scrapList.get(i).getUser().getNickname());
+                scrapMypageDTO.setRecipeId(scrapList.get(i).getRecipe().getRecipeId());
+                scrapMypageDTO.setImage(scrapList.get(i).getRecipe().getImage());
+                scrapMypageDTO.setDescription(scrapList.get(i).getRecipe().getDescription());
+                scrapMypageDTO.setCuisine(scrapList.get(i).getRecipe().getCuisine());
+                System.out.println(scrapMypageDTO);
+                scrapMypageDTOList.add(scrapMypageDTO);
+            }
         }
         personalDTO.setScrapList(scrapMypageDTOList);
 
@@ -127,5 +142,14 @@ public class UserService {
             return true;
         else
             return false;
+    }
+
+    public Boolean deleteScrap(Long userid, Long recipeId) {
+        Optional<User> user = Optional.ofNullable(userRepository.findById(userid).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 유저는 존재하지 않습니다.")));
+        Optional<Recipe> recipe = Optional.ofNullable(recipeRepository.findById(recipeId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 레시피는 존재하지 않습니다.")));
+        Optional<Scrap> scrap = Optional.ofNullable(scrapRepository.findScrapByRecipeAndUser(recipe, user));
+        scrap.get().setFlag(false);
+        scrapRepository.save(scrap.get());
+        return true;
     }
 }

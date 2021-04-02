@@ -3,10 +3,7 @@ package com.project.cooksistant.controller;
 import com.project.cooksistant.model.dto.PersonalDTO;
 import com.project.cooksistant.model.dto.ScrapMypageDTO;
 import com.project.cooksistant.model.dto.SignupDTO;
-import com.project.cooksistant.model.dto.UserDTO;
-import com.project.cooksistant.service.RecipeService;
 import com.project.cooksistant.service.UserService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,5 +62,13 @@ public class UserController {
     @GetMapping("/user/isscrap/{userId}/{recipeId}")
     public Boolean isScraped(@PathVariable Long userId, @PathVariable Long recipeId) {
         return userService.myScrapData(userId, recipeId);
+    }
+
+    @ApiOperation(value = "레시피 스크랩 해제",notes = "Reques\n" +
+            "                                       - userid: 유저 인덱스\n" +
+            "                                       - recipeId: 레시피 인덱스")
+    @PutMapping("/user/deleteScrap/{userId}/{recipeId}")
+    public Boolean deleteScrap(@PathVariable Long userid, @PathVariable Long recipeId) {
+        return userService.deleteScrap(userid, recipeId);
     }
 }

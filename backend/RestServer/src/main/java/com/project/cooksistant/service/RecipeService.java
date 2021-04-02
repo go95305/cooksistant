@@ -177,7 +177,7 @@ public class RecipeService {
 
     public List<RecipeListupDTO> recipeFavor() {
         List<RecipeListupDTO> recipeListupDTOList = new ArrayList<>();
-        String jpql = "select distinct(e.recipe.recipeId) from Evaluation e order by e.favor desc";
+        String jpql = "select distinct(e.recipe.recipeId) from Evaluation e where e.recipe.flag=true order by e.favor desc";
         List<Long> recipeIds = entityManager.createQuery(jpql, Long.class).getResultList();
         for (int i = 0; i < recipeIds.size(); i++) {
             RecipeListupDTO recipeListupDTO = new RecipeListupDTO();
@@ -185,6 +185,11 @@ public class RecipeService {
             recipeListupDTO.setRecipeId(recipe.get().getRecipeId());
             recipeListupDTO.setUrl(recipe.get().getImage());
             recipeListupDTO.setRecipename(recipe.get().getCuisine());
+            Long recipeId = recipe.get().getRecipeId();
+            //평균평점
+            String query = "select avg(e.favor) from Evaluation e where e.recipe.recipeId= :recipeId";
+            Double avg_favor = entityManager.createQuery(query, Double.class).setParameter("recipeId", recipeId).getSingleResult();
+            recipeListupDTO.setFavor(avg_favor);
             recipeListupDTOList.add(recipeListupDTO);
         }
         return recipeListupDTOList;
