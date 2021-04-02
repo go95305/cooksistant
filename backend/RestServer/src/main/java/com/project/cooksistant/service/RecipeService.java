@@ -124,7 +124,7 @@ public class RecipeService {
         recipeDTO.setCuisine(recipe.get().getCuisine());
         recipeDTO.setDescription(recipe.get().getDescription());
         recipeDTO.setCookingTime(recipe.get().getCookingTime());
-        recipeDTO.setImage(recipe.get().getImage());
+        recipeDTO.setImage("https://" + S3Uploader.CLOUD_FRONT_DOMAIN_NAME + "/" + recipe.get().getImage());
         recipeDTO.setLevel(recipe.get().getLevel());
         recipeDTO.setServing(recipe.get().getServing());
 
@@ -304,11 +304,10 @@ public class RecipeService {
         return entityManager.createQuery(jpql, String.class).getResultList();
     }
 
-    public void mainImage(MultipartFile file, Long recipeId) throws IOException {
+    public void mainImage(String originalName, MultipartFile file, Long recipeId) throws IOException {
         Optional<Recipe> recipe = recipeRepository.findById(recipeId);
         //5.s3에 이미지 업로드 후 recipe image에 set한다.
-        String image = s3Uploader.upload(file, recipeId);
-        System.out.println(image);
+        String image = s3Uploader.upload(originalName, file, recipeId);
         recipe.get().setImage(image);
         recipeRepository.save(recipe.get());
     }
@@ -328,9 +327,9 @@ public class RecipeService {
         stepRepository.save(step.get());
     }
 
-    public void stepImage(MultipartFile file, Long stepId) throws IOException {
+    public void stepImage(String originalName, MultipartFile file, Long stepId) throws IOException {
         Optional<Step> step = Optional.ofNullable(stepRepository.findById(stepId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 과정은 존재하지 않습니다.")));
-        String image = s3Uploader.uploadStep(file, stepId);
+        String image = s3Uploader.uploadStep(originalName, file, stepId);
         step.get().setImage(image);
         stepRepository.save(step.get());
     }

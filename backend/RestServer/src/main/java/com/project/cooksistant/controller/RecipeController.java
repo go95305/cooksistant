@@ -49,8 +49,8 @@ public class RecipeController {
             "                                                   - file: 사진\n" +
             "                                                   - recipeId: 레시피 인덱스")
     @PostMapping(value = "/recipe/mainImage")
-    public void mainImage(@RequestParam("file") MultipartFile file, @RequestParam("recipeId") Long recipeId) throws IOException {
-        recipeService.mainImage(file, recipeId);
+    public void mainImage(@RequestParam String originalName, @RequestParam("file") MultipartFile file, @RequestParam("recipeId") Long recipeId) throws IOException {
+        recipeService.mainImage(originalName, file, recipeId);
     }
 
     @ApiOperation(value = "레시피 기본 내용 수정(레시피 명,설명,조리시간)")
@@ -59,7 +59,7 @@ public class RecipeController {
         recipeService.basicFix(recipeBasicFixDTO);
     }
 
-    @ApiOperation(value = "레시피과정 수정하기(설명,레벨,이미지)",notes = "Request\n" +
+    @ApiOperation(value = "레시피과정 수정하기(설명,레벨,이미지)", notes = "Request\n" +
             "                                                       - stepId:과정 인덱스\n" +
             "                                                       - description: 과정 설명\n" +
             "                                                       - leve: 과정 레벨")
@@ -70,8 +70,8 @@ public class RecipeController {
 
     @ApiOperation(value = "레시피과정 이미지 수정하기")
     @PutMapping("/recipe/stepImage")
-    public void stepImage(@RequestParam("file") MultipartFile file, @RequestParam("stepId") Long stepId) throws IOException {
-        recipeService.stepImage(file, stepId);
+    public void stepImage(@RequestParam String originalName, @RequestParam("file") MultipartFile file, @RequestParam("stepId") Long stepId) throws IOException {
+        recipeService.stepImage(originalName, file, stepId);
     }
 
     @ApiOperation(value = "레시피 재료 수정하기", notes = "Request\n" +
@@ -85,7 +85,7 @@ public class RecipeController {
 
     @ApiOperation(value = "레시피 삭제")
     @PutMapping("/recipe/delete/{recipeId}")
-    public void deleteRecipe(@PathVariable Long recipdId){
+    public void deleteRecipe(@PathVariable Long recipdId) {
         recipeService.deleteRecipe(recipdId);
     }
 

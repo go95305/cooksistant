@@ -4,7 +4,6 @@ import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -15,10 +14,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @NoArgsConstructor
 @Service
 public class S3Uploader {
+    public static final String CLOUD_FRONT_DOMAIN_NAME = "d19e6vx92ogal.cloudfront.net.";
     private AmazonS3 s3Client;
 
     @Value("${cloud.aws.credentials.accessKey}")
@@ -42,19 +44,37 @@ public class S3Uploader {
                 .build();
     }
 
-    public String upload(MultipartFile file, Long recipeId) throws IOException {
-        String fileName = "pic_" + recipeId + ".jpg";
+    public String upload(String currentFilePath, MultipartFile file, Long recipeId) throws IOException {
+        SimpleDateFormat date = new SimpleDateFormat("yyyymmddHHmmss");
+        String fileName = file.getOriginalFilename() + "-" + date.format(new Date());
+
+        if (!"".equals(currentFilePath) && currentFilePath != null) {
+            boolean isExistObject = s3Client.doesObjectExist(bucket, currentFilePath);
+
+            if (isExistObject) {
+                s3Client.deleteObject(bucket, currentFilePath);
+            }
+        }
+
         System.out.println(fileName);
         s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
-        return s3Client.getUrl(bucket, fileName).toString();
+        return fileName;
     }
 
-    public String uploadStep(MultipartFile file, Long stepId) throws IOException {
-        String fileName = "pic_" + stepId + ".jpg";
-        System.out.println(fileName);
-        s3Client.putObject(new PutObjectRequest(bucket+"/step", fileName, file.getInputStream(), null)
+    public String uploadStep(String currentFilePath, MultipartFile file, Long stepId) throws IOException {
+        SimpleDateFormat date = new SimpleDateFormat("yyyymmddHHmmss");
+        String fileName = file.getOriginalFilename() + "-" + date.format(new Date());
+
+        if (!"".equals(currentFilePath) && currentFilePath != null) {
+            boolean isExistObject = s3Client.doesObjectExist(bucket + "/step", currentFilePath);
+
+            if (isExistObject) {
+                s3Client.deleteObject(bucket + "/step", currentFilePath);
+            }
+        }
+        s3Client.putObject(new PutObjectRequest(bucket + "/step", fileName, file.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
-        return s3Client.getUrl(bucket+"/step", fileName).toString();
+        return fileName;
     }
 }
