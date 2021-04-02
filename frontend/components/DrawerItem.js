@@ -63,6 +63,7 @@ class DrawerItem extends React.Component {
           />
         );
       case '로그아웃':
+      case '로그인':
         return (
           <Icon
             name="share"
@@ -101,11 +102,24 @@ class DrawerItem extends React.Component {
                 .signOut()
                 .then(() => {
                   // Sign-out successful.
-                  navigation.navigate('Start');
+                  navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [{ name: 'Start' }],
+                })
+              )
                 })
                 .catch((error) => {
                   // An error happened.
                 });
+              break;
+            case '로그인':
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [{ name: 'Start' }],
+                })
+              )
               break;
             default:
               navigation.navigate(title);
