@@ -32,14 +32,10 @@ function CustomDrawerContent({
       "프로필",
       "재료",
       "영수증",
-      "TTS",
-      "STT"
     ];
   } else {
     screens = [
       "쿡시스턴트",
-      "TTS",
-      "STT"
     ];
   }
   return (
@@ -77,7 +73,7 @@ function CustomDrawerContent({
           />
         </Block>
         <DrawerCustomItem title="앱 소개" navigation={navigation}/>
-        <DrawerCustomItem title="로그아웃" navigation={navigation} />
+        {user ?  <DrawerCustomItem title="로그아웃" navigation={navigation} /> : <DrawerCustomItem title="로그인" navigation={navigation} />}
         </ScrollView>
       </Block>
     </Block>
