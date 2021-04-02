@@ -249,7 +249,7 @@ public class RecipeService {
     }
 
 
-    public void newRecipe(RecipeDTOpost recipeDTOpost, MultipartFile files) throws IOException {
+    public Long newRecipe(RecipeDTOpost recipeDTOpost) throws IOException {
         //해당 유저가 존재하는지 확인
         Optional<User> user = Optional.ofNullable(userRepository.findByUid(recipeDTOpost.getUid()).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 유저는 존재하지 않습니다.")));
         //1. recipe 테이블에 등록
@@ -292,15 +292,21 @@ public class RecipeService {
             step.setImage(stepDTOList.get(i).getImage());
             stepRepository.save(step);
         }
-
-        //5.s3에 이미지 업로드 후 recipe image에 set한다.
-        String image = s3Uploader.upload(files, "recipe_pic");
-        recipe.setImage(image);
+        return recipe.getRecipeId();
     }
 
     public List<String> allIngredient() {
         String jpql = "select i.ingredientName from Ingredient i";
         return entityManager.createQuery(jpql, String.class).getResultList();
+    }
+
+    public void mainImage(MultipartFile file, Long recipeId) throws IOException {
+        Optional<Recipe> recipe = recipeRepository.findById(recipeId);
+        //5.s3에 이미지 업로드 후 recipe image에 set한다.
+        String image = s3Uploader.upload(file, recipeId);
+        System.out.println(image);
+        recipe.get().setImage(image);
+        recipeRepository.save(recipe.get());
     }
 
 //    public List<String> scanRecipe(String scan) {

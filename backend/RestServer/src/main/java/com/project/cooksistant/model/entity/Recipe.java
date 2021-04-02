@@ -43,6 +43,6 @@ public class Recipe {
     private String image;
     private String level;
     private String serving;
-    @Column(columnDefinition = "bit default true")
+    @Column(columnDefinition = "TINYINT(1) default true")
     private Boolean flag;
 }

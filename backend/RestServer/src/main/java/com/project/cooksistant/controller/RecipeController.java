@@ -7,6 +7,7 @@ import com.project.cooksistant.model.entity.Evaluation;
 import com.project.cooksistant.service.RecipeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -42,11 +43,14 @@ public class RecipeController {
             "                                 - ingredientName:재료명\n" +
             "                                 - amount:재료량\n" +
             "                                 - isType: 재료 구분")
-    @PostMapping("/recipe/create")
-    public void newRecipe(@RequestBody RecipeDTOpost recipeDTOpost, @RequestParam("file") MultipartFile files) throws IOException {
-        System.out.println("레시피를 만들자!!===============");
-        recipeService.newRecipe(recipeDTOpost, files);
+    @PostMapping(value = "/recipe/create")
+    public Long newRecipe(@RequestBody RecipeDTOpost recipeDTOpost) throws IOException {
+        return recipeService.newRecipe(recipeDTOpost);
+    }
 
+    @PostMapping(value = "/recipe/mainImage")
+    public void mainImage(@RequestParam("file") MultipartFile file, @RequestParam("recipeId") Long recipeId) throws IOException {
+        recipeService.mainImage(file, recipeId);
     }
 
     @ApiOperation(value = "인기레시피")
