@@ -37,7 +37,7 @@ def CF(user_id, ingredients):
     # print(predictions)
     # 협업 필터링 과정
     a=predictions.iloc[0].iloc[2]
-    # print(a)
+    print(a)
     #컨텐츠 기반  필터링 수행
     contents_filtered=CBF(a)
     #컨텐츠 기반 필터링 수행
@@ -110,8 +110,8 @@ def CBF(recipe_id_CF):
     c_vector_keywords = count_vector.fit_transform(dataframe['keyword'])
     keyword_sim = cosine_similarity(c_vector_keywords,c_vector_keywords).argsort()[:, ::-1]
     # print(dataframe)
-    recommended= get_recommend_movie_list(keyword_sim,dataframe,recipe_id=recipe_id_CF)
-    # print(recommended)
+    recommended= get_recommend_movie_list(keyword_sim,dataframe,recipe_id_CF)
+    print(recommended)
     return recommended
 
 # def weighted_rating(x,m,C):

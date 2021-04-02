@@ -26,9 +26,8 @@ class recommend(Resource):
     @ns.expect(insert_body)
     def post(self):
         data = request.get_json()
-        user_id = data["userId"]
+        user_id = str(data["userId"])
         ingredients = data["ingredients"]
-        print(ingredients)
 
         return {"result" : AnalysisService.CF(user_id, ingredients) }
 
@@ -45,5 +44,6 @@ class ocr(Resource):
         user_id=data["userId"]
         ocr = data['ocrscan']
         ingredients = Ocr.getIngredients(ocr)
-        print(ingredients)
-        return {"result" : AnalysisService.CF(user_id, ingredients) }
+        
+        
+        return {"result" : AnalysisService.CF(str(user_id), ingredients) }
