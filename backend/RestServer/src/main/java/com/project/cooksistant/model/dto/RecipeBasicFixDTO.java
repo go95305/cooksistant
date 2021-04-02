@@ -5,9 +5,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class StepDTO {
-    private Long stepId;
+public class RecipeBasicFixDTO {
+    private Long recipId;
     private String description;
-    private String image;
-    private Long level;
+    private String cuisine;
+    private String cookingTime;
 }

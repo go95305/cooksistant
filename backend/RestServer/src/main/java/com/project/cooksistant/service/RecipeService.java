@@ -134,6 +134,7 @@ public class RecipeService {
         for (int j = 0; j < recipeIngredient.size(); j++) {
             Ingredient ingredient = ingredientRepository.findByIngredientId(recipeIngredient.get(j).getIngredient().getIngredientId());// recipe_has_ingredient테이블에서 해당 ingredient_id에 맞는 재료들을 불러온다.
             IngredientDTO ingredientDTO = new IngredientDTO();
+            ingredientDTO.setIngredientId(ingredient.getIngredientId());
             ingredientDTO.setIngredientName(ingredient.getIngredientName());
             ingredientDTO.setAmount(recipeIngredient.get(j).getAmount());
             ingredientDTO.setIsType(recipeIngredient.get(j).getType());
@@ -147,6 +148,7 @@ public class RecipeService {
 
         for (int j = 0; j < stepList.size(); j++) {
             StepDTO stepDTO = new StepDTO();
+            stepDTO.setStepId(stepList.get(j).getStepId());
             stepDTO.setDescription(stepList.get(j).getDescription());
             stepDTO.setImage(stepList.get(j).getImage());
             stepDTO.setLevel(stepList.get(j).getLevel());
@@ -185,6 +187,7 @@ public class RecipeService {
             Optional<Recipe> recipe = recipeRepository.findById(recipeIds.get(i));
             recipeListupDTO.setRecipeId(recipe.get().getRecipeId());
             recipeListupDTO.setUrl(recipe.get().getImage());
+            recipeListupDTO.setDescription(recipe.get().getDescription());
             recipeListupDTO.setRecipename(recipe.get().getCuisine());
             Long recipeId = recipe.get().getRecipeId();
             //평균평점
@@ -260,6 +263,7 @@ public class RecipeService {
         recipe.setCookingTime(recipeDTOpost.getCookingTime());
         recipe.setDescription(recipeDTOpost.getDescription());
         recipe.setCuisine(recipeDTOpost.getCuisine());
+        recipe.setFlag(true);
         recipeRepository.save(recipe);
         //3. recipe_has_ingredient 테이블에 등록
         List<IngredientDTOpost> ingredientList = recipeDTOpost.getIngredientDTOpostList();
@@ -309,17 +313,39 @@ public class RecipeService {
         recipeRepository.save(recipe.get());
     }
 
-//    public List<String> scanRecipe(String scan) {
-//        String[] ingredients = scan.split(" ");
-//        List<String> ingredientList = new ArrayList<>();
-//        List<Ingredient> ingredient = ingredientRepository.findAll();
-//        for (int i = 0; i < ingredients.length; i++) {
-//            String scanIngredient = ingredients[i];
-//            System.out.println(ingredients[i]);
-//            if (ingredient.contains(scanIngredient))
-//                ingredientList.add(scanIngredient);
-//        }
-//
-//        return ingredientList;
-//    }
+    public void basicFix(RecipeBasicFixDTO recipeBasicFixDTO) {
+        Optional<Recipe> recipe = Optional.ofNullable(recipeRepository.findById(recipeBasicFixDTO.getRecipId()).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 레시피는 존재하지 않습니다.")));
+        recipe.get().setCuisine(recipeBasicFixDTO.getCuisine());
+        recipe.get().setDescription(recipeBasicFixDTO.getDescription());
+        recipe.get().setCookingTime(recipeBasicFixDTO.getCookingTime());
+        recipeRepository.save(recipe.get());
+    }
+
+    public void stepFix(RecipeStepFixDTO recipeStepFixDTO) {
+        Optional<Step> step = Optional.ofNullable(stepRepository.findById(recipeStepFixDTO.getStepId()).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 과정은 존재하지 않습니다.")));
+        step.get().setDescription(recipeStepFixDTO.getDescription());
+        step.get().setLevel(recipeStepFixDTO.getLevel());
+        stepRepository.save(step.get());
+    }
+
+    public void stepImage(MultipartFile file, Long stepId) throws IOException {
+        Optional<Step> step = Optional.ofNullable(stepRepository.findById(stepId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 과정은 존재하지 않습니다.")));
+        String image = s3Uploader.uploadStep(file, stepId);
+        step.get().setImage(image);
+        stepRepository.save(step.get());
+    }
+
+    public void ingredientFix(RecipeIngredientFixDTO recipeIngredientFixDTO) {
+        Optional<RecipeIngredient> recipeIngredient = Optional.ofNullable(recipeIngredientRepository.findById(recipeIngredientFixDTO.getRecipeIngredientId()).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 재료 정보는 존재하지 않습니다.")));
+        recipeIngredient.get().setAmount(recipeIngredientFixDTO.getAmount());
+        recipeIngredient.get().setType(recipeIngredientFixDTO.getType());
+        recipeIngredientRepository.save(recipeIngredient.get());
+    }
+
+    public void deleteRecipe(Long recipdId) {
+        Optional<Recipe> recipe = Optional.ofNullable(recipeRepository.findById(recipdId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 레시피는 존재하지 않습니다.")));
+        recipe.get().setFlag(false);
+        recipeRepository.save(recipe.get());
+    }
+
 }

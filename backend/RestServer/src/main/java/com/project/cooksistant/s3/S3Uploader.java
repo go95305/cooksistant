@@ -42,11 +42,19 @@ public class S3Uploader {
                 .build();
     }
 
-    public String upload(MultipartFile file,Long recipeId) throws IOException {
-        String fileName = "pic_"+recipeId+".jpg";
+    public String upload(MultipartFile file, Long recipeId) throws IOException {
+        String fileName = "pic_" + recipeId + ".jpg";
         System.out.println(fileName);
         s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
         return s3Client.getUrl(bucket, fileName).toString();
+    }
+
+    public String uploadStep(MultipartFile file, Long stepId) throws IOException {
+        String fileName = "pic_" + stepId + ".jpg";
+        System.out.println(fileName);
+        s3Client.putObject(new PutObjectRequest(bucket+"/step", fileName, file.getInputStream(), null)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
+        return s3Client.getUrl(bucket+"/step", fileName).toString();
     }
 }

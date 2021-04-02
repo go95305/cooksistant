@@ -3,11 +3,8 @@ package com.project.cooksistant.controller;
 
 import com.google.gson.*;
 import com.project.cooksistant.model.dto.*;
-import com.project.cooksistant.model.entity.Evaluation;
 import com.project.cooksistant.service.RecipeService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -48,9 +45,48 @@ public class RecipeController {
         return recipeService.newRecipe(recipeDTOpost);
     }
 
+    @ApiOperation(value = "레시피 메인 사진 S3업로드 및 컬럼 값 설정", notes = "Request\n" +
+            "                                                   - file: 사진\n" +
+            "                                                   - recipeId: 레시피 인덱스")
     @PostMapping(value = "/recipe/mainImage")
     public void mainImage(@RequestParam("file") MultipartFile file, @RequestParam("recipeId") Long recipeId) throws IOException {
         recipeService.mainImage(file, recipeId);
+    }
+
+    @ApiOperation(value = "레시피 기본 내용 수정(레시피 명,설명,조리시간)")
+    @PutMapping("/recipe/fjx/basic")
+    public void fixBasicRecipe(@RequestBody RecipeBasicFixDTO recipeBasicFixDTO) {
+        recipeService.basicFix(recipeBasicFixDTO);
+    }
+
+    @ApiOperation(value = "레시피과정 수정하기(설명,레벨,이미지)",notes = "Request\n" +
+            "                                                       - stepId:과정 인덱스\n" +
+            "                                                       - description: 과정 설명\n" +
+            "                                                       - leve: 과정 레벨")
+    @PutMapping("/recipe/fix/step")
+    public void fixStepRecipe(@RequestBody RecipeStepFixDTO recipeStepFixDTO) {
+        recipeService.stepFix(recipeStepFixDTO);
+    }
+
+    @ApiOperation(value = "레시피과정 이미지 수정하기")
+    @PutMapping("/recipe/stepImage")
+    public void stepImage(@RequestParam("file") MultipartFile file, @RequestParam("stepId") Long stepId) throws IOException {
+        recipeService.stepImage(file, stepId);
+    }
+
+    @ApiOperation(value = "레시피 재료 수정하기", notes = "Request\n" +
+            "                                          - recipeIngredientId: recipe_has_ingredient 인덱스\n" +
+            "                                          - amount: 재료양\n" +
+            "                                          - type: 재료 타입")
+    @PutMapping("/recipe/fix/ingredient")
+    public void fixIngredientRecipe(@RequestBody RecipeIngredientFixDTO recipeIngredientFixDTO) {
+        recipeService.ingredientFix(recipeIngredientFixDTO);
+    }
+
+    @ApiOperation(value = "레시피 삭제")
+    @PutMapping("/recipe/delete/{recipeId}")
+    public void deleteRecipe(@PathVariable Long recipdId){
+        recipeService.deleteRecipe(recipdId);
     }
 
     @ApiOperation(value = "인기레시피")
@@ -59,7 +95,7 @@ public class RecipeController {
         return recipeService.recipeFavor();
     }
 
-    @ApiOperation(value = "취향 기반 레시피 리스트 제공(Ok) 신규유저라면 평가 데이터가 없으므로 인기순, 그 외 평가 데이터가 존재하는 유저는 추천을받는다", notes = "Request\n" +
+    @ApiOperation(value = "취향 기반 레시피 리스트 제공(Ok) S신규유저라면 평가 데이터가 없으므로 인기순, 그 외 평가 데이터가 존재하는 유저는 추천을받는다", notes = "Request\n" +
             "                                                   - userId:협업필터링에 사용될 유저와 비슷한 레시피 추천을 위한 UserId\n" +
             "                                                   - List<String>: 추천받을 재료 리스트\n" +
             "                                                   Response\n" +
