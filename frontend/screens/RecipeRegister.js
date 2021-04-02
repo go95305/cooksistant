@@ -1,16 +1,26 @@
 import React from 'react';
-import { StyleSheet, ImageBackground, Dimensions, Image, Platform } from 'react-native';
+import {
+  StyleSheet,
+  ImageBackground,
+  Dimensions,
+  Platform,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import { Block, Text, Button as GaButton } from 'galio-framework';
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
 import InputSpinner from 'react-native-input-spinner';
+import { MaterialIcons, FontAwesome, Feather } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
 import firebase from 'firebase';
 import axios from 'axios';
 
-import { MaterialIcons } from '@expo/vector-icons';
-import { Input, Select } from '../components';
+import { Input, Select, Button } from '../components';
 import { Images, nowTheme } from '../constants';
+import { Alert } from 'react-native';
 
 const { width, height } = Dimensions.get('screen');
+let stepIdx = 0;
 
 class RecipeRegister extends React.Component {
   constructor(props) {
@@ -18,11 +28,13 @@ class RecipeRegister extends React.Component {
     this.state = {
       userId: null,
       title: '',
-      intro: '',
-      serving: 0,
-      time: 0,
-      stepDTOpostList: [],
-      ingredientDTOpostList: [],
+      desc: '',
+      serving: '',
+      time: '',
+      image: null,
+      stepIdx: 0,
+      stepList: [{ image: null, stepDescription: '', level: 1 }],
+      ingreList: [{ ingredientName: '', amount: '', isType: '재료' }],
     };
   }
 
@@ -41,33 +53,106 @@ class RecipeRegister extends React.Component {
   titleInput = (props) => {
     return <Input {...props} editable maxLength={40} />;
   };
-  introInput = (props) => {
+  descInput = (props) => {
     return <Input {...props} editable maxLength={2000} />;
+  };
+  ingreInput = (props) => {
+    return <Input {...props} editable maxLength={20} />;
   };
 
   onSubmit = () => {
-    // axios
-    //   .put(`http://j4c101.p.ssafy.io:8081/recipe/evaluationUpdate`, {
-    //     userId: this.state.userId,
-    //     evaluationId: this.state.evaluationId,
-    //     recipeId: this.state.recipeId,
-    //     isComplete: true,
-    //     isSampled: true,
-    //     isUpdate: true,
-    //     favor: this.state.starCount,
-    //     keywordList: this.state.selectedTastes.concat(this.state.selectedFeatures),
-    //   })
-    //   .then((response) => {
-    //     if (response.status == 200) {
-    //       Alert.alert('평가가 등록되었습니다.');
-    //     }
-    //   })
-    //   .then(() => {
-    //     this.props.navigation.dispatch(CommonActions.navigate('recipeList'));
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
+    axios
+      .post('http://j4c101.p.ssafy.io:8081/recipe/create', {
+        // uid: String(this.state.userId),
+        // cuisine: this.state.title,
+        // description: this.state.desc,
+        // serving: this.state.serving,
+        // cookingTime: this.state.time,
+        // level: "쉬움",
+        // ingredientDTOpostList: this.state.ingreList,
+        // stepDTOpostList: this.state.stepList
+        cookingTime: 'string',
+        cuisine: 'string',
+        description: 'string',
+        ingredientDTOpostList: [
+          {
+            amount: 'string',
+            ingredientName: 'string',
+            isType: 'string',
+          },
+        ],
+        level: 'string',
+        serving: 'string',
+        stepDTOpostList: [
+          {
+            image: 'string',
+            level: 0,
+            stepDescription: 'string',
+          },
+        ],
+        uid: '1',
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.status == 200) {
+          Alert.alert('레시피가 등록되었습니다.');
+        } 
+      })
+      .then(() => {
+        this.props.navigation.navigate('Profile');
+      })
+      .catch(function (error) {
+        Alert.alert('실패');
+        console.log(error);
+      });
+  };
+
+  ingreInputChange = (text, name, index) => {
+    const list = [...this.state.ingreList];
+    list[index][name] = text;
+    this.setState({
+      ingreList: list,
+    });
+  };
+
+  ingreRemoveClick = (index) => {
+    const list = [...this.state.ingreList];
+    list.splice(index, 1);
+    this.setState({
+      ingreList: list,
+    });
+  };
+
+  ingreAddClick = () => {
+    const list = [...this.state.ingreList];
+    const newlist = [{ ingredientName: '', amount: '', isType: '재료' }];
+    this.setState({
+      ingreList: list.concat(newlist),
+    });
+  };
+
+  stepInputChange = (text, name, index) => {
+    const list = [...this.state.stepList];
+    list[index][name] = text;
+    this.setState({
+      stepList: list,
+    });
+  };
+
+  stepRemoveClick = (index) => {
+    const list = [...this.state.stepList];
+    list.splice(index, 1);
+    this.setState({
+      stepList: list,
+    });
+  };
+
+  stepAddClick = () => {
+    const list = [...this.state.stepList];
+    const newlist = [{ image: null, stepDescription: '', level: 1 }];
+    this.setState({
+      stepList: list.concat(newlist),
+    });
   };
 
   render() {
@@ -86,6 +171,44 @@ class RecipeRegister extends React.Component {
       fontSize: 17,
     };
 
+    // info Image 등록
+    let ImagePickerAsync = async () => {
+      let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+      if (permissionResult.granted === false) {
+        alert('Permission to access camera roll is required!');
+        return;
+      }
+
+      let pickerResult = await ImagePicker.launchImageLibraryAsync();
+
+      if (pickerResult.cancelled === true) {
+        return;
+      }
+      this.setState({ image: pickerResult.uri });
+    };
+
+    let stepImagePickerAsync = async () => {
+      let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+      if (permissionResult.granted === false) {
+        alert('Permission to access camera roll is required!');
+        return;
+      }
+
+      let pickerResult = await ImagePicker.launchImageLibraryAsync();
+
+      if (pickerResult.cancelled === true) {
+        return;
+      }
+
+      const list = [...this.state.stepList];
+      list[stepIdx]['image'] = pickerResult.uri;
+      this.setState({
+        stepList: list,
+      });
+    };
+
     return (
       <Block style={styles.container}>
         <Block flex middle>
@@ -99,7 +222,7 @@ class RecipeRegister extends React.Component {
                 <ProgressSteps {...progressStepsStyle}>
                   <ProgressStep
                     label="설명"
-                    scrollViewProps={{ scrollEnabled: false }}
+                    scrollViewProps={{ scrollEnabled: true }}
                     nextBtnTextStyle={buttonTextStyle}
                     previousBtnTextStyle={buttonTextStyle}
                   >
@@ -138,20 +261,24 @@ class RecipeRegister extends React.Component {
                         <Block
                           row
                           space="between"
-                          width={width * 0.7}
+                          width={Platform.OS == 'android' ? width * 0.78 : width * 0.7}
                           style={{ marginBottom: 8, padding: 1 }}
                         >
                           <Block flex left>
                             <Select
                               default={'인분'}
                               color={'#f18d46'}
-                              options={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+                              options={['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']}
                               onSelect={(opt) => {
-                                this.setState({ serving: opt + 1 });
+                                this.setState({ serving: opt + 1 + '인분' });
                               }}
                             />
                           </Block>
-                          <Block flex center style={{marginLeft: Platform.OS == 'android' ? 10 : 0}}>
+                          <Block
+                            flex
+                            center
+                            style={{ marginLeft: Platform.OS == 'android' ? 0 : 0 }}
+                          >
                             <Block row space="between">
                               <InputSpinner
                                 max={60}
@@ -163,7 +290,7 @@ class RecipeRegister extends React.Component {
                                 skin={'round'}
                                 value={this.state.time}
                                 onChange={(num) => {
-                                  this.setState({ time: num });
+                                  this.setState({ time: num + '분 이내' });
                                 }}
                               />
                               <Text
@@ -183,15 +310,35 @@ class RecipeRegister extends React.Component {
                           </Block>
                         </Block>
                         <Block width={width * 0.7} style={{ marginBottom: 8 }}>
-                          <this.introInput
+                          <this.descInput
                             multiline
                             numberOfLines={10}
                             placeholder="레시피 소개"
-                            style={styles.introInput}
+                            style={styles.descInput}
                             onChangeText={(text) => {
-                              this.setState({ intro: text });
+                              this.setState({ desc: text });
                             }}
                           />
+                        </Block>
+                        <Block center>
+                          <ImageBackground
+                            resizeMode="cover"
+                            source={
+                              this.state.image == null
+                                ? Images.RegisterBackground
+                                : { uri: this.state.image }
+                            }
+                            style={{
+                              height: height * 0.2,
+                              width: width * 0.7,
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                            }}
+                          >
+                            <TouchableOpacity onPress={ImagePickerAsync}>
+                              <MaterialIcons name="photo-camera" size={25} color="#f18d46" />
+                            </TouchableOpacity>
+                          </ImageBackground>
                         </Block>
                       </Block>
                     </Block>
@@ -203,7 +350,72 @@ class RecipeRegister extends React.Component {
                     previousBtnTextStyle={buttonTextStyle}
                     onSubmit={this.onSubmit}
                   >
-                    <Block flex={1}></Block>
+                    <Block flex={1} style={styles.recipeContainer}>
+                      <Block row>
+                        <Text
+                          style={{ padding: 7, marginLeft: 20 }}
+                          size={13}
+                          color={'#f18d46'}
+                          bold
+                        >
+                          재료 등록 방법
+                        </Text>
+                        <Feather
+                          name="info"
+                          size={17}
+                          color={nowTheme.COLORS.PRIMARY}
+                          style={{ margin: 6 }}
+                        />
+                      </Block>
+                      {this.state.ingreList.map((el, idx) => {
+                        return (
+                          <Block
+                            row
+                            space="between"
+                            key={idx}
+                            width={Platform.OS == 'android' ? width * 0.4 : width * 0.7}
+                            style={{ alignItems: 'center', marginLeft: 20 }}
+                          >
+                            <this.ingreInput
+                              placeholder="재료 입력"
+                              numberOfLines={1}
+                              style={styles.ingreInput}
+                              onChangeText={(text) => {
+                                this.ingreInputChange(text, 'ingredientName', idx);
+                              }}
+                            />
+                            <this.ingreInput
+                              placeholder="계량 입력"
+                              numberOfLines={1}
+                              style={styles.amountInput}
+                              onChangeText={(text) => {
+                                this.ingreInputChange(text, 'amount', idx);
+                              }}
+                            />
+                            {this.state.ingreList.length !== 1 && (
+                              <TouchableOpacity onPress={() => this.ingreRemoveClick(idx)}>
+                                <FontAwesome
+                                  name="minus-circle"
+                                  size={24}
+                                  color={nowTheme.COLORS.PRIMARY}
+                                  style={{ marginLeft: 10 }}
+                                />
+                              </TouchableOpacity>
+                            )}
+                            {this.state.ingreList.length - 1 === idx && (
+                              <TouchableOpacity onPress={() => this.ingreAddClick()}>
+                                <FontAwesome
+                                  name="plus-circle"
+                                  size={24}
+                                  color={nowTheme.COLORS.PRIMARY}
+                                  style={{ marginLeft: 10 }}
+                                />
+                              </TouchableOpacity>
+                            )}
+                          </Block>
+                        );
+                      })}
+                    </Block>
                   </ProgressStep>
                   <ProgressStep
                     label="과정"
@@ -212,7 +424,83 @@ class RecipeRegister extends React.Component {
                     previousBtnTextStyle={buttonTextStyle}
                     onSubmit={this.onSubmit}
                   >
-                    <Block flex={1}></Block>
+                    <Block flex={1} style={styles.recipeContainer}>
+                      <Block row>
+                        <Text
+                          style={{ padding: 7, marginLeft: 45 }}
+                          size={13}
+                          color={'#f18d46'}
+                          bold
+                        >
+                          요리과정 등록 방법
+                        </Text>
+                        <Feather
+                          name="info"
+                          size={17}
+                          color={nowTheme.COLORS.PRIMARY}
+                          style={{ margin: 6 }}
+                        />
+                      </Block>
+                      {this.state.stepList.map((el, idx) => {
+                        return (
+                          <Block
+                            center
+                            key={idx}
+                            width={width * 0.7}
+                            style={{ alignItems: 'center', marginLeft: 20 }}
+                          >
+                            <ImageBackground
+                              resizeMode="cover"
+                              source={
+                                el.image == null ? Images.RegisterBackground : { uri: el.image }
+                              }
+                              style={{
+                                height: height * 0.2,
+                                width: width * 0.7,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                              }}
+                            >
+                              <TouchableOpacity onPress={((stepIdx = idx), stepImagePickerAsync)}>
+                                <MaterialIcons name="photo-camera" size={25} color="#f18d46" />
+                              </TouchableOpacity>
+                            </ImageBackground>
+
+                            <this.descInput
+                              placeholder="과정 입력"
+                              numberOfLines={10}
+                              style={styles.stepInput}
+                              onChangeText={(text) => {
+                                this.stepInputChange(text, 'stepDescription', idx);
+                              }}
+                            />
+                            <Block row style={{ marginBottom: 10 }}>
+                              {this.state.stepList.length !== 1 && (
+                                <TouchableOpacity onPress={() => this.stepRemoveClick(idx)}>
+                                  <FontAwesome
+                                    name="minus-circle"
+                                    size={24}
+                                    color={nowTheme.COLORS.PRIMARY}
+                                    style={{ marginLeft: 5 }}
+                                  />
+                                </TouchableOpacity>
+                              )}
+                              {this.state.stepList.length - 1 === idx && (
+                                <TouchableOpacity onPress={() => this.stepAddClick()}>
+                                  <FontAwesome
+                                    name="plus-circle"
+                                    size={24}
+                                    color={nowTheme.COLORS.PRIMARY}
+                                    style={{ marginLeft: 5 }}
+                                  />
+                                </TouchableOpacity>
+                              )}
+                            </Block>
+                          </Block>
+                        );
+                      })}
+                      <Text style={{ marginTop: 20 }}>{JSON.stringify(this.state)}</Text>
+                    </Block>
                   </ProgressStep>
                 </ProgressSteps>
               </Block>
@@ -263,7 +551,7 @@ const styles = StyleSheet.create({
     borderColor: '#E3E3E3',
     borderRadius: 20,
   },
-  introInput: {
+  descInput: {
     height: 180,
     alignItems: 'flex-start',
     paddingTop: Platform.OS == 'android' ? 0 : 20,
@@ -276,67 +564,34 @@ const styles = StyleSheet.create({
     marginRight: 12,
     color: nowTheme.COLORS.ICON_INPUT,
   },
-  tasteContainer: {
-    marginTop: 10,
-    marginLeft: 20,
-  },
-  tag1: {
-    width: width > 350 ? 95 : 80,
-    padding: 10,
-    margin: 3,
+  ingreInput: {
+    height: 50,
+    width: Platform.OS == 'android' ? 100 : 110,
     borderWidth: 1,
-    borderColor: '#f18d46',
-    backgroundColor: '#fff',
-    borderRadius: 18,
-    fontSize: 14,
-    fontFamily: 'montserrat-bold',
-    color: '#f18d46',
-    textAlign: 'center',
-  },
-  tag1Selected: {
-    width: width > 350 ? 95 : 80,
-    padding: 10,
-    margin: 3,
-    borderWidth: 1,
-    borderColor: 'white',
-    backgroundColor: '#f18d46',
+    borderColor: '#E3E3E3',
     borderRadius: 20,
-    fontSize: 14,
-    fontFamily: 'montserrat-bold',
-    color: 'white',
-    textAlign: 'center',
-    overflow: 'hidden',
   },
-  featureContainer: {
+  amountInput: {
+    height: 50,
+    width: Platform.OS == 'android' ? 100 : 110,
+    borderWidth: 1,
+    borderColor: '#E3E3E3',
+    borderRadius: 20,
+    marginLeft: Platform.OS == 'android' ? 5 : 10,
+  },
+  stepInput: {
+    height: 130,
+    alignItems: 'flex-start',
+    paddingTop: Platform.OS == 'android' ? 0 : 20,
+    paddingLeft: 20,
+    borderWidth: 1,
+    borderColor: '#E3E3E3',
+    borderRadius: 20,
+  },
+  createButton: {
+    width: width * 0.5,
     marginTop: 15,
-    marginLeft: width > 340 ? 20 : 15,
-  },
-  tag2: {
-    width: width > 340 ? 90 : 85,
-    padding: 10,
-    margin: 3,
-    borderWidth: 1,
-    borderColor: '#f18d46',
-    backgroundColor: '#fff',
-    borderRadius: 18,
-    fontSize: 12,
-    fontFamily: 'montserrat-bold',
-    color: '#f18d46',
-    textAlign: 'center',
-  },
-  tag2Selected: {
-    width: width > 340 ? 90 : 85,
-    padding: 10,
-    margin: 3,
-    borderWidth: 1,
-    borderColor: 'white',
-    backgroundColor: '#f18d46',
-    borderRadius: 18,
-    fontSize: 12,
-    fontFamily: 'montserrat-bold',
-    color: 'white',
-    textAlign: 'center',
-    overflow: 'hidden',
+    marginBottom: 40,
   },
 });
 

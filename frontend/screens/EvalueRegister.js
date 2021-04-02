@@ -90,8 +90,7 @@ class TasteRegister extends React.Component {
         }
       })
       .then(() => {
-        this.props.navigation.dispatch(
-            CommonActions.navigate('EvalueList'))
+        this.props.navigation.navigate('EvalueList')
       })
       .catch(function (error) {
         console.log(error);
