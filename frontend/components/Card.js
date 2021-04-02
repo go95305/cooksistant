@@ -1,11 +1,12 @@
 import React from 'react';
 import { withNavigation } from '@react-navigation/compat';
 import PropTypes from 'prop-types';
-import { StyleSheet, Image, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Dimensions, Image, TouchableWithoutFeedback } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
-
+import RecipeInfo from '../screens/RecipeInfo';
+import RNUrlPreview from 'react-native-url-preview';
 import { nowTheme } from '../constants';
-
+const { width, height } = Dimensions.get('screen');
 class Card extends React.Component {
   render() {
     const {
@@ -17,7 +18,7 @@ class Card extends React.Component {
       ctaColor,
       imageStyle,
       ctaRight,
-      titleStyle
+      titleStyle,
     } = this.props;
 
     const imageStyles = [full ? styles.fullImage : styles.horizontalImage, imageStyle];
@@ -26,66 +27,36 @@ class Card extends React.Component {
     const imgContainer = [
       styles.imageContainer,
       horizontal ? styles.horizontalStyles : styles.verticalStyles,
-      styles.shadow
     ];
-
+    const title = item.title.split(']');
     return (
-      <Block row={horizontal} card flex style={cardContainer}>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('Pro')}>
+      <Block card flex style={cardContainer}>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('Pro', { id: item.id })}>
           <Block flex style={imgContainer}>
-            <Image resizeMode="cover" source={item.image} style={imageStyles} />
+            <Image resizeMode="contain" center source={{ uri: item.image }} style={imageStyles} />
+            {/* <RNUrlPreview text={item.image} /> */}
           </Block>
         </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('Pro')}>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('Pro', { id: item.id })}>
           <Block flex space="between" style={styles.cardDescription}>
             <Block flex>
+              {/* <Text style={{ height: 0, width: 0 }}>{item.id}</Text> */}
               <Text
                 style={{ fontFamily: 'montserrat-regular' }}
-                size={14}
+                size={height > 800 ? 15 : 12}
                 style={titleStyles}
                 color={nowTheme.COLORS.SECONDARY}
               >
-                {item.title}
+                {item.title.includes(']')
+                  ? title[0] +
+                    ']' +
+                    (title[1].trim().length > 20
+                      ? title[1].trim().substr(0, 20) + ' ⋯'
+                      : title[1].trim())
+                  : item.title.length > 20
+                  ? item.title.substr(0, 20) + ' ⋯'
+                  : item.title}
               </Text>
-              {item.subtitle ? (
-                <Block flex center>
-                  <Text
-                    style={{ fontFamily: 'montserrat-regular' }}
-                    size={32}
-                    color={nowTheme.COLORS.BLACK}
-                  >
-                    {item.subtitle}
-                  </Text>
-                </Block>
-              ) : (
-                  <Block />
-                )}
-              {item.description ? (
-                <Block flex center>
-                  <Text
-                    style={{ fontFamily: 'montserrat-regular', textAlign: 'center', padding: 15 }}
-                    size={14}
-                    color={"#9A9A9A"}
-                  >
-                    {item.description}
-                  </Text>
-                </Block>
-              ) : (
-                  <Block />
-                )}
-              {item.body ? (
-                <Block flex left>
-                  <Text
-                    style={{ fontFamily: 'montserrat-regular' }}
-                    size={12}
-                    color={nowTheme.COLORS.TEXT}
-                  >
-                    {item.body}
-                  </Text>
-                </Block>
-              ) : (
-                  <Block />
-                )}
             </Block>
             <Block right={ctaRight ? true : false}>
               <Text
@@ -113,7 +84,7 @@ Card.propTypes = {
   imageStyle: PropTypes.any,
   ctaRight: PropTypes.bool,
   titleStyle: PropTypes.any,
-  textBodyStyle: PropTypes.any
+  textBodyStyle: PropTypes.any,
 };
 
 const styles = StyleSheet.create({
@@ -122,51 +93,53 @@ const styles = StyleSheet.create({
     marginVertical: theme.SIZES.BASE,
     borderWidth: 0,
     minHeight: 114,
-    marginBottom: 4
+    marginBottom: 4,
   },
   cardTitle: {
     paddingHorizontal: 9,
-    paddingTop: 7,
-    paddingBottom: 15
+    paddingBottom: 15,
   },
   cardDescription: {
-    padding: theme.SIZES.BASE / 2
+    padding: theme.SIZES.BASE / 2,
   },
   imageContainer: {
+    flex: 5,
     borderRadius: 3,
     elevation: 1,
-    overflow: 'hidden'
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   image: {
     // borderRadius: 3,
   },
   horizontalImage: {
-    height: 122,
-    width: 'auto'
+    height: 125,
+    width: 'auto',
   },
   horizontalStyles: {
     borderTopRightRadius: 0,
-    borderBottomRightRadius: 0
+    borderBottomRightRadius: 0,
   },
   verticalStyles: {
     borderBottomRightRadius: 0,
-    borderBottomLeftRadius: 0
+    borderBottomLeftRadius: 0,
   },
   fullImage: {
-    height: 215
+    height: 187,
   },
   shadow: {
     shadowColor: '#8898AA',
     shadowOffset: { width: 0, height: 1 },
     shadowRadius: 6,
     shadowOpacity: 0.1,
-    elevation: 2
+    elevation: 2,
   },
   articleButton: {
     fontFamily: 'montserrat-bold',
     paddingHorizontal: 9,
-    paddingVertical: 7
-  }
+    paddingVertical: 3,
+  },
 });
 
 export default withNavigation(Card);

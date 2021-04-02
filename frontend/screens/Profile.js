@@ -1,91 +1,80 @@
 import React from 'react';
-import { StyleSheet, Dimensions, ScrollView, Image, ImageBackground, Platform } from 'react-native';
+import {
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+  Image,
+  ImageBackground,
+  TouchableWithoutFeedback,
+  Platform,
+} from 'react-native';
 import SegmentedControlTab from 'react-native-segmented-control-tab';
 import { Block, Text, theme, Button as GaButton } from 'galio-framework';
 import { Button } from '../components';
 import { Images, nowTheme, tabs } from '../constants';
 import { HeaderHeight } from '../constants/utils';
 
-const { width, height } = Dimensions.get('screen');
-let and = 0,
-  ios = 0;
-if (height < 800) {
-  and = 35;
-} else {
-  ios = 15;
-}
+import firebase from 'firebase';
+import axios from 'axios';
 
-const ImgSize = (width - 48 - 32) / 3;
+const { width, height } = Dimensions.get('screen');
+
+const iosImg = (width - 48 - 32) / 3;
+const andImg = (width - 48 - 32) / 2.5;
 const RecipeImg = (width - 48 - 32) / 2;
 
-const Info = () => {
-  return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <Block middle style={{ justifyContent: 'flex-start' }}>
-        <Text
-          style={{
-            color: '#2c2c2c',
-            fontWeight: 'bold',
-            fontSize: 19,
-            fontFamily: 'montserrat-bold',
-            marginTop: 20,
-            marginBottom: 30,
-            zIndex: 2,
-          }}
-        >
-          About me
-        </Text>
-        <Text
-          size={16}
-          muted
-          style={{
-            textAlign: 'center',
-            fontFamily: 'montserrat-regular',
-            zIndex: 2,
-            lineHeight: 25,
-            color: '#9A9A9A',
-            paddingHorizontal: 15,
-          }}
-        >
-          An artist of considerable range, named Ryan — the name has taken by Melbourne has raised,
-          Brooklyn-based Nick Murphy — writes, performs and records all of his own music.
-        </Text>
-      </Block>
-    </ScrollView>
-  );
-};
-const Scrap = () => {
-  return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <Block style={{ paddingVertical: 10, paddingHorizontal: 15 }} space="between">
-        <Text
-          bold
-          size={20}
-          color="#2c2c2c"
-          style={{ marginTop: 5, fontFamily: 'montserrat-bold' }}
-        >
-          Scrap
-        </Text>
-      </Block>
-
-      <Block style={{ paddingBottom: -HeaderHeight * 2, paddingHorizontal: 15 }}>
-        <Block row space="between" style={{ flexWrap: 'wrap' }}>
-          {Images.Viewed.map((img, imgIndex) => (
-            <Image source={img} key={`viewed-${img}`} resizeMode="cover" style={styles.thumb} />
-          ))}
-        </Block>
-      </Block>
-    </ScrollView>
-  );
-};
-
 class Profile extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      selectedIndex: 0,
-    };
-  }
+  state = {
+    googleInfo: {
+      nickName: null,
+      email: null,
+      img: null,
+    },
+    Info: {
+      userId: 0,
+      scrapSize: 0,
+      recipeUsedSize: 0,
+      evaluatedSize: 0,
+      scrapList: [],
+    },
+    selectedIndex: 0,
+  };
+
+  componentDidMount = () => {
+    const user = firebase.auth().currentUser;
+    this.setState({
+      googleInfo: {
+        nickName: user.displayName,
+        email: user.email,
+        img: user.photoURL,
+      },
+    });
+    axios
+      .get(`http://j4c101.p.ssafy.io:8081/user/${user.uid}`)
+      .then((result) => {
+        const sList = [];
+        result.data.scrapList.forEach((el) => {
+          sList.push({
+            rId: el.recipeId,
+            title: el.cuisine,
+            description: el.description,
+            image: el.image,
+          });
+        });
+        this.setState({
+          Info: {
+            scrapSize: result.data.scrapSize,
+            recipeUsedSize: result.data.recipeUsedSize,
+            evaluatedSize: result.data.evaluatedSize,
+            userId: result.data.userId,
+            scrapList: sList,
+          },
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   handleIndexChange = (index) => {
     this.setState({
@@ -94,8 +83,123 @@ class Profile extends React.Component {
     });
   };
 
-  render() {
+  Info = () => {
+    return (
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Block middle style={{ justifyContent: 'flex-start' }}>
+          <Text
+            style={{
+              color: '#2c2c2c',
+              fontWeight: 'bold',
+              fontSize: 19,
+              fontFamily: 'montserrat-bold',
+              marginTop: 20,
+              marginBottom: 30,
+              zIndex: 2,
+            }}
+          >
+            {this.state.googleInfo.nickName}
+          </Text>
+          <Text
+            size={16}
+            muted
+            style={{
+              textAlign: 'center',
+              fontFamily: 'montserrat-regular',
+              zIndex: 2,
+              lineHeight: 25,
+              color: '#9A9A9A',
+              paddingHorizontal: 15,
+            }}
+          >
+            {this.state.googleInfo.email}
+          </Text>
+          <Text
+            size={16}
+            muted
+            style={{
+              textAlign: 'center',
+              fontFamily: 'montserrat-regular',
+              zIndex: 2,
+              lineHeight: 25,
+              color: '#9A9A9A',
+              paddingHorizontal: 15,
+            }}
+          >
+            사용자의 정보를 보여주는 공간입니다.
+          </Text>
+        </Block>
+      </ScrollView>
+    );
+  };
+
+  Scrap = () => {
     const { navigation } = this.props;
+    return (
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Block style={{ paddingBottom: -HeaderHeight * 2, paddingHorizontal: 15 }}>
+          <Block center>
+            {this.state.Info.scrapList.map((el, index) => (
+              <TouchableWithoutFeedback key={index} onPress={() => navigation.navigate('Pro', { id: el.rId })}>
+                <Block flex card center shadow style={styles.category}>
+                  <ImageBackground
+                    resizeMode="cover"
+                    source={{ uri: el.image }}
+                    style={[
+                      styles.imageBlock,
+                      { width: width - theme.SIZES.BASE * 5, height: 160 },
+                    ]}
+                    imageStyle={{
+                      width: width - theme.SIZES.BASE * 5,
+                      height: 160,
+                    }}
+                  >
+                    <Block style={styles.categoryTitle}>
+                      <Text
+                        style={{
+                          textAlign: 'center',
+                          fontSize: 13,
+                          fontFamily: 'montserrat-bold',
+                          lineHeight: 25,
+                          zIndex: 2,
+                          color: 'white',
+                          paddingHorizontal: 15,
+                        }}
+                      >
+                        {el.title.includes(']') ? el.title.substr(0, el.title.indexOf(']') + 1) : el.title}
+                      </Text>
+                      <Text
+                        style={{
+                          textAlign: 'center',
+                          fontSize: 15,
+                          fontFamily: 'montserrat-bold',
+                          lineHeight: 25,
+                          zIndex: 2,
+                          color: 'white',
+                          paddingHorizontal: 15,
+                        }}
+                      >
+                        {el.title.includes(']')
+                            ? el.title.substr(el.title.indexOf(']') + 2).trim().length > 26
+                              ? el.title
+                                  .substr(el.title.indexOf(']') + 2)
+                                  .trim()
+                                  .substr(0, 26) + ' ⋯'
+                              : el.title.substr(el.title.indexOf(']') + 2).trim()
+                            : el.title}
+                      </Text>
+                    </Block>
+                  </ImageBackground>
+                </Block>
+              </TouchableWithoutFeedback>
+            ))}
+          </Block>
+        </Block>
+      </ScrollView>
+    );
+  };
+
+  render() {
     return (
       <Block style={styles.container}>
         <Block flex={2}>
@@ -108,11 +212,14 @@ class Profile extends React.Component {
               <Block
                 style={{ position: 'absolute', width: width, zIndex: 5, paddingHorizontal: 50 }}
               >
-                <Block middle style={{ top: height > 800 ? height * 0.13 : height * 0.09 }}>
-                  <Image source={Images.ProfilePicture} style={styles.avatar} />
+                <Block
+                  center
+                  style={{ top: Platform.OS === 'android' ? height * 0.1 : height * 0.135 }}
+                >
+                  <Image source={{ uri: this.state.googleInfo.img }} style={styles.avatar} />
                 </Block>
-                <Block style={{ top: height > 800 ? height * 0.13 : height * 0.09 }}>
-                  <Block middle>
+                <Block style={{ top: Platform.OS === 'android' ? height * 0.1 : height * 0.135 }}>
+                  <Block center>
                     <Text
                       style={{
                         marginTop: 15,
@@ -123,34 +230,45 @@ class Profile extends React.Component {
                       }}
                       color="#ffffff"
                     >
-                      사용자
+                      {this.state.googleInfo.nickName}
                     </Text>
                   </Block>
                   <Block style={styles.info}>
-                    <Block row space="around">
-                      <Block middle>
+                    <Block row space="between">
+                      <Block center>
                         <Text
                           color="white"
-                          size={18}
+                          size={17}
                           style={{ marginBottom: 4, fontFamily: 'montserrat-bold' }}
                         >
-                          26
+                          {this.state.Info.recipeUsedSize}
                         </Text>
                         <Text style={{ fontFamily: 'montserrat-regular' }} size={14} color="white">
-                          Recipe
+                          이용 완료
                         </Text>
                       </Block>
-
-                      <Block middle>
+                      <Block center>
                         <Text
                           color="white"
-                          size={18}
+                          size={17}
                           style={{ marginBottom: 4, fontFamily: 'montserrat-bold' }}
                         >
-                          48
+                          {this.state.Info.evaluatedSize}
                         </Text>
                         <Text style={{ fontFamily: 'montserrat-regular' }} size={14} color="white">
-                          Scrap
+                          평가 완료
+                        </Text>
+                      </Block>
+                      <Block center>
+                        <Text
+                          color="white"
+                          size={17}
+                          style={{ marginBottom: 4, fontFamily: 'montserrat-bold' }}
+                        >
+                          {this.state.Info.scrapSize}
+                        </Text>
+                        <Text style={{ fontFamily: 'montserrat-regular' }} size={14} color="white">
+                          스크랩
                         </Text>
                       </Block>
                     </Block>
@@ -177,8 +295,8 @@ class Profile extends React.Component {
               />
             </Block>
             <Block style={{ marginTop: 20 }}>
-              {this.state.selectedIndex === 0 && <Info />}
-              {this.state.selectedIndex === 1 && <Scrap />}
+              {this.state.selectedIndex === 0 && this.Info(this)}
+              {this.state.selectedIndex === 1 && this.Scrap(this)}
             </Block>
           </Block>
         </Block>
@@ -201,10 +319,10 @@ const styles = StyleSheet.create({
   profileBackground: {
     width,
     height: height * 0.4,
-  }, 
+  },
   info: {
-    marginTop: height > 800 ? 20 : 0,
-    paddingHorizontal: 50,
+    marginTop: 10,
+    paddingHorizontal: 10,
     height: height * 0.8,
   },
   avatarContainer: {
@@ -212,27 +330,24 @@ const styles = StyleSheet.create({
     marginTop: -80,
   },
   avatar: {
-    width: ImgSize,
-    height: ImgSize,
-    borderRadius: 50,
+    width: Platform.OS === 'android' ? andImg : iosImg,
+    height: Platform.OS === 'android' ? andImg : iosImg,
+    borderRadius: Platform.OS === 'android' ? 55 : 50,
     borderWidth: 0,
-  },
-  nameInfo: {
-    marginTop: 35,
   },
   thumb: {
     borderRadius: 3,
     marginVertical: 6,
     alignSelf: 'center',
     width: RecipeImg,
-    height: RecipeImg,
+    height: 100,
   },
   // segment style
   segmentContainer: {
     width,
-    height: height * 0.5 - and,
+    height: height * 0.5,
     padding: theme.SIZES.BASE,
-    marginTop: and + ios,
+    marginTop: Platform.OS === 'android' ? height * 0.04 : height * 0.01,
   },
   tabsContainerStyle: {
     height: 40,
@@ -242,6 +357,21 @@ const styles = StyleSheet.create({
   },
   activeTabStyle: {
     backgroundColor: '#f18d46',
+  },
+  category: {
+    backgroundColor: theme.COLORS.WHITE,
+    marginVertical: theme.SIZES.BASE / 3,
+    borderWidth: 0,
+  },
+  categoryTitle: {
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageBlock: {
+    overflow: 'hidden',
+    borderRadius: 4,
   },
 });
 

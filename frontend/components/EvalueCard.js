@@ -1,10 +1,13 @@
 import React from 'react';
 import { withNavigation } from '@react-navigation/compat';
 import PropTypes from 'prop-types';
-import { StyleSheet, Image, TouchableWithoutFeedback } from 'react-native';
-import { Block, Text, theme } from 'galio-framework';
+import { StyleSheet, Image, TouchableWithoutFeedback, Dimensions } from 'react-native';
+import { Block, Button, Text, theme } from 'galio-framework';
+import { nowTheme } from '../constants';
+import { MaterialIcons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 
-import { Images as check, nowTheme } from '../constants';
+const { width, height } = Dimensions.get('screen');
 
 class Card extends React.Component {
   render() {
@@ -27,61 +30,88 @@ class Card extends React.Component {
       styles.shadow,
     ];
 
+    const title = item.title.split(']');
+    const favor = parseFloat(item.favor).toFixed(1);
     return (
-      <Block row={horizontal} card flex style={cardContainer}>
+      <Block card flex style={cardContainer}>
         <TouchableWithoutFeedback
           onPress={() => {
-            item.isEvalu ? navigation.navigate('Pro') : navigation.navigate('EvalueRegister');
+            item.flag
+              ? item.isEvalu
+                ? navigation.navigate('Pro', { id: item.id })
+                : navigation.navigate('EvalueRegister', {
+                    eId: item.eId,
+                    rId: item.rId,
+                    title: item.title,
+                    image: item.image,
+                  })
+              : navigation.navigate('Pro', { id: item.id });
           }}
         >
           <Block flex style={imgContainer}>
-            <Image resizeMode="cover" source={item.image} style={imageStyles} />
+            <Image resizeMode="cover" source={{ uri: item.image }} style={imageStyles} />
           </Block>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
           onPress={() => {
-            item.isEvalu ? navigation.navigate('Pro') : navigation.navigate('EvalueRegister');
+            item.flag
+              ? item.isEvalu
+                ? navigation.navigate('Pro', { id: item.id })
+                : navigation.navigate('EvalueRegister', {
+                    eId: item.eId,
+                    rId: item.rId,
+                    title: item.title,
+                    image: item.image,
+                  })
+              : navigation.navigate('Pro', { id: item.id });
           }}
         >
           <Block flex space="between" style={styles.cardDescription}>
             <Block flex>
               <Text
-                style={{ fontFamily: 'montserrat-bold', paddingTop: 15, paddingHorizontal: 10 }}
-                size={15}
+                style={{
+                  fontFamily: 'montserrat-bold',
+                  paddingTop: 3,
+                  paddingHorizontal: 8,
+                  lineHeight: 20,
+                }}
+                size={13}
                 color={nowTheme.COLORS.SECONDARY}
               >
-                {item.title}
+                {item.title.includes(']')
+                  ? title[0] +
+                    '] \n' +
+                    (title[1].trim().length > 26
+                      ? title[1].trim().substr(0, 26) + ' ⋯'
+                      : title[1].trim())
+                  : item.title.length > 26
+                  ? item.title.substr(0, 26) + ' ⋯'
+                  : item.title}
               </Text>
-              {item.subtitle ? (
-                <Block flex center>
-                  <Text
-                    style={{ fontFamily: 'montserrat-bold' }}
-                    size={10}
-                    color={nowTheme.COLORS.BLACK}
-                  >
-                    {item.subtitle}
+            </Block>
+            {item.flag ? (
+              <Block row space="between">
+                <Text style={{ padding: 7 }} size={13} muted={!isEvaluColor} color={'#f18d46'} bold>
+                  {item.isEvalu ? '레시피 보러가기' : '레시피 평가하기'}
+                </Text>
+                {item.isEvalu ? (
+                  <MaterialIcons name="check-box" size={30} color="#f18d46" />
+                ) : (
+                  <MaterialIcons name="check-box-outline-blank" size={30} color="#f18d46" />
+                )}
+              </Block>
+            ) : (
+              <Block row flex style={{ marginLeft: 10, marginTop: 15 }}>
+                <Block>
+                  <AntDesign name="star" size={15} color="#f18d46" />
+                </Block>
+                <Block>
+                  <Text style={{ marginLeft: 5 }} size={14} color={'#f18d46'} bold>
+                    {favor === 'NaN' ? '0.0' : favor}
                   </Text>
                 </Block>
-              ) : (
-                <Block />
-              )}
-            </Block>
-            <Block row space="between">
-              <Text
-                style={{ paddingHorizontal: 10, paddingBottom: 5 }}
-                size={13}
-                muted={!isEvaluColor}
-                color={'#f18d46'}
-                bold
-              >
-                {item.isEvalu ? '레시피 보러가기' : '레시피 평가하기'}
-              </Text>
-              {item.isEvalu ? (
-                <Image source={check.isEvalue} style={{ marginRight: 8 }} />
-              ) : (
-                <Image source={check.etc} style={{ marginRight: 8 }} />
-              )}
-            </Block>
+              </Block>
+            )}
           </Block>
         </TouchableWithoutFeedback>
       </Block>
@@ -125,7 +155,7 @@ const styles = StyleSheet.create({
     // borderRadius: 3,
   },
   horizontalImage: {
-    height: 122,
+    height: 125,
     width: 'auto',
   },
   horizontalStyles: {
@@ -137,7 +167,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 0,
   },
   fullImage: {
-    height: 215,
+    height: 187,
   },
   shadow: {
     shadowColor: '#8898AA',

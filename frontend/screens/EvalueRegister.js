@@ -5,57 +5,66 @@ import {
   Dimensions,
   Image,
   Alert,
-  StatusBar,
-  TouchableWithoutFeedback,
 } from 'react-native';
 import { Block, Text, Button as GaButton, theme } from 'galio-framework';
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
 import StarRating from 'react-native-star-rating';
 import TagSelector from 'react-native-tag-selector';
 
-import { Button, Icon, Input } from '../components';
+import firebase from 'firebase';
+import axios from 'axios';
+
 import { Images, nowTheme } from '../constants';
 
 const { width, height } = Dimensions.get('screen');
 
-const recipe = {
-  title: '빨간맛 떡볶이',
-  image: require('../assets/imgs/food1.png'),
-  isEvalu: false,
-};
-
 class TasteRegister extends React.Component {
   Tastes = [
-    { id: 1, name: '달아요' },
-    { id: 2, name: '짜요' },
-    { id: 3, name: '써요' },
-    { id: 4, name: '셔요' },
-    { id: 5, name: '매워요' },
-    { id: 6, name: '싱거워요' },
+    { id: '달다', name: '달아요' },
+    { id: '짜다', name: '짜요' },
+    { id: '쓰다', name: '써요' },
+    { id: '시다', name: '셔요' },
+    { id: '맵다', name: '매워요' },
+    { id: '싱겁다', name: '싱거워요' },
   ];
   Features = [
-    { id: 7, name: '기름져요' },
-    { id: 8, name: '느끼해요' },
-    { id: 9, name: '고소해요' },
-    { id: 10, name: '담백해요' },
-    { id: 11, name: '비려요' },
-    { id: 12, name: '바삭해요' },
-    { id: 13, name: '아삭해요' },
-    { id: 14, name: '쫀득해요' },
-    { id: 15, name: '쫄깃해요' },
-    { id: 16, name: '눅눅해요' },
-    { id: 17, name: '부드러워요' },
-    { id: 18, name: '향이강해요' },
+    { id: '기름지다', name: '기름져요' },
+    { id: '느끼하다', name: '느끼해요' },
+    { id: '고소하다', name: '고소해요' },
+    { id: '담백하다', name: '담백해요' },
+    { id: '비리다', name: '비려요' },
+    { id: '바삭하다', name: '바삭해요' },
+    { id: '아삭하다', name: '아삭해요' },
+    { id: '쫀득쫀득', name: '쫀득해요' },
+    { id: '쫄깃쫄깃', name: '쫄깃해요' },
+    { id: '눅눅하다', name: '눅눅해요' },
+    { id: '부드럽다', name: '부드러워요' },
+    { id: '향이 강하다', name: '향이강해요' },
   ];
 
   constructor(props) {
     super(props);
     this.state = {
+      userId: null,
+      evaluationId: this.props.route.params.eId,
+      recipeId: this.props.route.params.rId,
       starCount: this.starCount == null ? 3 : this.starCount,
       selectedTastes: [],
       selectedFeatures: [],
     };
   }
+
+  componentDidMount = () => {
+    var user = firebase.auth().currentUser;
+    axios
+      .get(`http://j4c101.p.ssafy.io:8081/user/${user.uid}`)
+      .then((result) => {
+        this.setState({ userId: result.data.userId });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   onStarRatingPress(rating) {
     this.setState({
@@ -63,26 +72,36 @@ class TasteRegister extends React.Component {
     });
   }
 
-  onSubmit() {
-    Alert.alert('확인','평가를 등록하시겠습니까?', [
-      {
-        text: '취소',
-        onPress: () => console.log('취소'),
-        style: 'cancel',
-      },
-      {
-        text: '네',
-        onPress: () => {
-          console.log('네');
-          Alert.alert('별점: ', JSON.stringify(this.state.starCount))
-          Alert.alert('맛: ', JSON.stringify(this.state.selectedTastes))
-          Alert.alert('특징: ', JSON.stringify(this.state.selectedFeatures))
-        },
-      },
-    ]);
-  }
+  onSubmit = () => {
+    axios
+      .put(`http://j4c101.p.ssafy.io:8081/recipe/evaluationUpdate`, {
+        userId: this.state.userId,
+        evaluationId: this.state.evaluationId,
+        recipeId: this.state.recipeId,
+        isComplete: true,
+        isSampled: true,
+        isUpdate: true,
+        favor: this.state.starCount,
+        keywordList: this.state.selectedTastes.concat(this.state.selectedFeatures),
+      })
+      .then((response) => {
+        if (response.status == 200) {
+          Alert.alert('평가가 등록되었습니다.');
+        }
+      })
+      .then(() => {
+        this.props.navigation.navigate('EvalueList')
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   render() {
+    const title = this.props.route.params.title;
+    const image = this.props.route.params.image;
+    const tmp = title.split(']');
+
     const progressStepsStyle = {
       labelFontFamily: 'montserrat-bold',
       activeStepIconBorderColor: '#f18d46',
@@ -116,24 +135,27 @@ class TasteRegister extends React.Component {
                     previousBtnTextStyle={buttonTextStyle}
                   >
                     <Block flex={1} style={{ alignItems: 'center' }}>
-                      <Block style={{ marginTop: 10 }}>
+                      <Block center style={{ marginTop: 7 }}>
                         <Text
                           style={{
                             fontFamily: 'montserrat-bold',
                             textAlign: 'center',
-                            marginTop: height > 800 ? 15 : 10,
-                            marginBottom: 15,
+                            lineHeight: 25,
+                            margin: 20,
+                            marginTop: height > 800 ? 0 : -5
                           }}
                           color="#333"
-                          size={19}
+                          size={15}
                         >
-                          {recipe.title}
+                          {title.includes(']') ? tmp[0] + '] \n' + tmp[1].trim() : title} 
                         </Text>
                         <Image
-                          source={recipe.image}
+                          resizeMode="stretch"
+                          source={{ uri: image }}
                           style={{
-                            width: width - theme.SIZES.BASE * (height > 800 ? 6 : 8),
-                            height: height > 800 ? 210 : 180,
+                            borderRadius: 15,
+                            width: width * 0.8,
+                            height: 200,
                           }}
                         />
                       </Block>
@@ -142,7 +164,8 @@ class TasteRegister extends React.Component {
                           style={{
                             fontFamily: 'montserrat-bold',
                             textAlign: 'center',
-                            marginBottom: height > 800 ? 18 : 15,
+                            marginTop: height > 800 ? -5 : -10,
+                            marginBottom: 13,
                           }}
                           color="#333"
                           size={14}
@@ -162,7 +185,7 @@ class TasteRegister extends React.Component {
                         <Text
                           style={{
                             fontFamily: 'montserrat-bold',
-                            textAlign: 'center',
+                            alignItems: 'center',
                             marginTop: height > 800 ? 15 : 10,
                           }}
                         >
@@ -176,7 +199,7 @@ class TasteRegister extends React.Component {
                     scrollViewProps={{ scrollEnabled: false }}
                     nextBtnTextStyle={buttonTextStyle}
                     previousBtnTextStyle={buttonTextStyle}
-                    onSubmit={this.onSubmit.bind(this)}
+                    onSubmit={this.onSubmit}
                   >
                     <Block flex={1}>
                       <Block>
@@ -191,7 +214,7 @@ class TasteRegister extends React.Component {
                         >
                           맛
                         </Text>
-                        <Block flex={1} center style={styles.taste1Container}>
+                        <Block flex={1} center style={styles.tasteContainer}>
                           <TagSelector
                             tagStyle={styles.tag1}
                             selectedTagStyle={styles.tag1Selected}
@@ -264,11 +287,11 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   evalueContainer: {
-    marginTop: Platform.OS === 'android' ? 35 : 45,
+    marginTop: 35,
   },
-  taste1Container: {
+  tasteContainer: {
     marginTop: 10,
-    marginLeft: 25,
+    marginLeft: 20,
   },
   tag1: {
     width: width > 350 ? 95 : 80,
@@ -277,7 +300,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#f18d46',
     backgroundColor: '#fff',
-    borderRadius: 20,
+    borderRadius: 18,
     fontSize: 14,
     fontFamily: 'montserrat-bold',
     color: '#f18d46',
@@ -295,13 +318,14 @@ const styles = StyleSheet.create({
     fontFamily: 'montserrat-bold',
     color: 'white',
     textAlign: 'center',
+    overflow: 'hidden',
   },
   featureContainer: {
     marginTop: 15,
-    marginLeft: 25,
+    marginLeft: width > 340 ? 20 : 15,
   },
   tag2: {
-    width: 90,
+    width: width > 340 ? 90 : 85,
     padding: 10,
     margin: 3,
     borderWidth: 1,
@@ -314,7 +338,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   tag2Selected: {
-    width: 90,
+    width: width > 340 ? 90 : 85,
     padding: 10,
     margin: 3,
     borderWidth: 1,
@@ -325,6 +349,7 @@ const styles = StyleSheet.create({
     fontFamily: 'montserrat-bold',
     color: 'white',
     textAlign: 'center',
+    overflow: 'hidden',
   },
 });
 

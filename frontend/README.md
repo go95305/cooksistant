@@ -16,4 +16,5 @@
 > yarn add react-native-progress-steps
 > yarn add react-native-tag-select
 > yarn add react-native-star-rating
+> yarn add firebase@^7.9.0
 ```

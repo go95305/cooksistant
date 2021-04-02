@@ -1,29 +1,47 @@
 import React from 'react';
-import { withNavigation } from '@react-navigation/compat';
-import { ScrollView, StyleSheet , Dimensions} from 'react-native';
-//galio
+import { ScrollView, StyleSheet, Dimensions, Alert } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
-
-import { articles, nowTheme } from '../constants';
-import { Card } from '../components';
+import { nowTheme } from '../constants';
+import { ECard } from '../components';
+import axios from 'axios';
 
 const { width, height } = Dimensions.get('screen');
 
 class RecipeList extends React.Component {
+  state = {
+    keyword: this.props.route.params.keyword,
+    recipeList: [],
+  };
+
+  componentDidMount = () => {
+    axios
+      .get(`http://j4c101.p.ssafy.io:8081/recipe/search/${this.state.keyword}`)
+      .then((result) => {
+        const arrayList = [];
+        if (result.data && Array.isArray(result.data)) {
+          result.data.forEach((el) => {
+            arrayList.push({
+              rId: el.recipeId,
+              title: el.recipename,
+              image: el.url,
+              favor: el.favor,
+              desc: el.description,
+              flag: false
+            });
+          });
+        }
+        this.setState({ recipeList: arrayList });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   renderCards = () => {
     return (
       <Block style={styles.container}>
-        <Card item={articles[0]} horizontal
-              onPress={() => navigation.navigate('RecipeInfo')} />
-        <Block flex row>
-          <Card item={articles[1]} style={{ marginRight: theme.SIZES.BASE }} />
-          <Card item={articles[2]} />
-        </Block>
-        <Card item={articles[3]} horizontal />
-        <Block flex row>
-          <Card item={articles[4]} style={{ marginRight: theme.SIZES.BASE }} />
-          <Card item={articles[5]} />
-        </Block>
+        {this.state.recipeList.map((el, index) => { 
+          return (<ECard key={index} item={el} full />);
+        })}
       </Block>
     );
   };
@@ -41,8 +59,12 @@ class RecipeList extends React.Component {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: theme.SIZES.BASE,
-  }
+  },
+  title: {
+    fontFamily: 'montserrat-bold',
+    paddingBottom: theme.SIZES.BASE,
+    marginTop: 45,
+    color: nowTheme.COLORS.HEADER,
+  },
 });
-
 export default RecipeList;
-
