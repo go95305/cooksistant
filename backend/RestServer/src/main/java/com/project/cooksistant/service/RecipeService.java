@@ -222,7 +222,7 @@ public class RecipeService {
     public List<RecipeListupDTO> search(String cuisine) {
         List<RecipeListupDTO> recipeListupDTOList = new ArrayList<>();
         List<Recipe> recipeList = recipeRepository.findByCuisineContaining(cuisine);
-        System.out.println(recipeList.size());
+//        System.out.println(recipeList.size());
         for (int i = 0; i < recipeList.size(); i++) {
             RecipeListupDTO recipeListupDTO = new RecipeListupDTO();
             recipeListupDTO.setRecipename(recipeList.get(i).getCuisine());

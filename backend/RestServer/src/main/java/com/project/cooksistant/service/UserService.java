@@ -79,7 +79,7 @@ public class UserService {
                 scrapMypageDTO.setImage(scrapList.get(i).getRecipe().getImage());
                 scrapMypageDTO.setDescription(scrapList.get(i).getRecipe().getDescription());
                 scrapMypageDTO.setCuisine(scrapList.get(i).getRecipe().getCuisine());
-                System.out.println(scrapMypageDTO);
+//                System.out.println(scrapMypageDTO);
                 scrapMypageDTOList.add(scrapMypageDTO);
             }
         }
