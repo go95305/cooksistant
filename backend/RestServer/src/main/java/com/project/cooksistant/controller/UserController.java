@@ -68,7 +68,7 @@ public class UserController {
             "                                       - userid: 유저 인덱스\n" +
             "                                       - recipeId: 레시피 인덱스")
     @PutMapping("/user/deleteScrap/{userId}/{recipeId}")
-    public Boolean deleteScrap(@PathVariable Long userid, @PathVariable Long recipeId) {
-        return userService.deleteScrap(userid, recipeId);
+    public Boolean deleteScrap(@PathVariable Long userId, @PathVariable Long recipeId) {
+        return userService.deleteScrap(userId, recipeId);
     }
 }
