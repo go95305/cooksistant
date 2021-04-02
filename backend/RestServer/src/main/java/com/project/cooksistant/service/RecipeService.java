@@ -106,7 +106,7 @@ public class RecipeService {
             allEvaluationDTO.setIsComplete(evaluationList.get(i).getIsComplete());
             allEvaluationDTO.setIsSampled(evaluationList.get(i).getIsSampled());
             allEvaluationDTO.setRecipe_id(evaluationList.get(i).getRecipe().getRecipeId());
-            allEvaluationDTO.setImage(evaluationList.get(i).getRecipe().getImage());
+            allEvaluationDTO.setImage("https://" + S3Uploader.CLOUD_FRONT_DOMAIN_NAME + "/" + evaluationList.get(i).getRecipe().getImage());
             allEvaluationDTO.setEvaluationId(evaluationList.get(i).getEvalId());
             allEvaluationDTOList.add(allEvaluationDTO);
         }
@@ -230,7 +230,7 @@ public class RecipeService {
         for (int i = 0; i < recipeList.size(); i++) {
             RecipeListupDTO recipeListupDTO = new RecipeListupDTO();
             recipeListupDTO.setRecipename(recipeList.get(i).getCuisine());
-            recipeListupDTO.setUrl(recipeList.get(i).getImage());
+            recipeListupDTO.setUrl("https://" + S3Uploader.CLOUD_FRONT_DOMAIN_NAME + "/" + recipeList.get(i).getImage());
             recipeListupDTO.setRecipeId(recipeList.get(i).getRecipeId());
             recipeListupDTO.setDescription(recipeList.get(i).getDescription());
             Long recipeId = recipeList.get(i).getRecipeId();
