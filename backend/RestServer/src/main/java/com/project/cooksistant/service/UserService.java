@@ -50,9 +50,11 @@ public class UserService {
         personalDTO.setNickname(user.get().getNickname());
 
         //내가 등록한 레시피 검색
+        int recipeSize = 0;
         List<Recipe> recipeList = recipeRepository.findAllByUser(user.get());
         for (int i = 0; i < recipeList.size(); i++) {
             if (recipeList.get(i).getFlag()) {
+                recipeSize++;
                 RecipeMypageDTO recipeMypageDTO = new RecipeMypageDTO();
                 recipeMypageDTO.setRecipeId(recipeList.get(i).getRecipeId());
                 recipeMypageDTO.setCuisine(recipeList.get(i).getCuisine());
@@ -62,6 +64,7 @@ public class UserService {
                 recipeMypageDTOList.add(recipeMypageDTO);
             }
         }
+        personalDTO.setRecipeSize(recipeSize);
         personalDTO.setRecipeList(recipeMypageDTOList);
 
 //        recipeMypageDTOList = modelMapper.map(recipeList, new TypeToken<List<RecipeMypageDTO>>() {

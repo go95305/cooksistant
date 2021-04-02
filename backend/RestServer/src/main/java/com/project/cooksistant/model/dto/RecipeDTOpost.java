@@ -16,7 +16,7 @@ public class RecipeDTOpost {
     private String cuisine;
     private String description;
     private String uid;
-    private MultipartFile image;
+//    private MultipartFile image;
     private String level;
     private String serving;
     private List<StepDTOpost> stepDTOpostList = new ArrayList<>();//레시피의 진행 과정

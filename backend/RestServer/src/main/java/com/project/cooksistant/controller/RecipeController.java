@@ -8,6 +8,7 @@ import com.project.cooksistant.service.RecipeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -42,8 +43,9 @@ public class RecipeController {
             "                                 - amount:재료량\n" +
             "                                 - isType: 재료 구분")
     @PostMapping("/recipe/create")
-    public void newRecipe(@RequestBody RecipeDTOpost recipeDTOpost) throws IOException {
-        recipeService.newRecipe(recipeDTOpost);
+    public void newRecipe(@RequestBody RecipeDTOpost recipeDTOpost, @RequestParam("file") MultipartFile files) throws IOException {
+        System.out.println("레시피를 만들자!!===============");
+        recipeService.newRecipe(recipeDTOpost, files);
 
     }
 
@@ -139,7 +141,7 @@ public class RecipeController {
             "                                          - isUpdate: 새로작성인지 수정인지\n" +
             "                                          - userId: 평가할 유저의 userId")
     @PostMapping("/recipe/evaluation")
-    public String evaluation(@RequestBody EvaluationDTOpost evaluationDTOpost) throws Exception {
+    public String evaluation(@RequestBody EvaluationDTOpost evaluationDTOpost) {
         boolean isEvaluation = recipeService.evaluateRecipe(evaluationDTOpost);
         if (isEvaluation)
             return "success";

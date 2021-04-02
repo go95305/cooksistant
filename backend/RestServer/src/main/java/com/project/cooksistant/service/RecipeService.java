@@ -8,6 +8,7 @@ import com.project.cooksistant.s3.S3Uploader;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.persistence.EntityManager;
@@ -64,7 +65,7 @@ public class RecipeService {
         return evaluationDTO;
     }
 
-    public boolean evaluateRecipe(EvaluationDTOpost evaluationDTOpost) throws Exception {
+    public boolean evaluateRecipe(EvaluationDTOpost evaluationDTOpost) {
         Optional<Recipe> recipe = Optional.ofNullable(recipeRepository.findById(evaluationDTOpost.getRecipeId()).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 레시피는 존재하지 않습니다.")));
         Optional<User> user = Optional.ofNullable(userRepository.findById(evaluationDTOpost.getUserId()).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 유저는 존재하지 않는 유저입니다.")));
         Evaluation evaluation = new Evaluation();
@@ -248,7 +249,7 @@ public class RecipeService {
     }
 
 
-    public void newRecipe(RecipeDTOpost recipeDTOpost) throws IOException {
+    public void newRecipe(RecipeDTOpost recipeDTOpost, MultipartFile files) throws IOException {
         //해당 유저가 존재하는지 확인
         Optional<User> user = Optional.ofNullable(userRepository.findByUid(recipeDTOpost.getUid()).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 유저는 존재하지 않습니다.")));
         //1. recipe 테이블에 등록
@@ -293,7 +294,7 @@ public class RecipeService {
         }
 
         //5.s3에 이미지 업로드 후 recipe image에 set한다.
-        String image = s3Uploader.upload(recipeDTOpost.getImage(), "recipe_pic");
+        String image = s3Uploader.upload(files, "recipe_pic");
         recipe.setImage(image);
     }
 
