@@ -297,9 +297,9 @@ public class RecipeService {
         for (int i = 0; i < stepDTOList.size(); i++) {
             Step step = new Step();
             step.setRecipe(recipe);
-            step.setLevel(stepDTOList.get(i).getLevel());
+            step.setLevel((long) (i + 1));
             step.setDescription(stepDTOList.get(i).getStepDescription());
-            step.setImage(stepDTOList.get(i).getImage());
+//            step.setImage(stepDTOList.get(i).getImage());
             stepRepository.save(step);
         }
         return recipe.getRecipeId();
@@ -334,11 +334,14 @@ public class RecipeService {
         stepRepository.save(step.get());
     }
 
-    public void stepImage(String originalName, MultipartFile file, Long stepId) throws IOException {
-        Optional<Step> step = Optional.ofNullable(stepRepository.findById(stepId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 과정은 존재하지 않습니다.")));
-        String image = s3Uploader.uploadStep(originalName, file, stepId);
-        step.get().setImage(image);
-        stepRepository.save(step.get());
+    public void stepImage(String originalName, MultipartFile file, Long recipeId) throws IOException {
+        Optional<Recipe> recipe = Optional.ofNullable(recipeRepository.findById(recipeId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 레시피는 존재하지 않습니다.")));
+        List<Step> step = stepRepository.findAllByRecipe(recipe);
+        for (int i = 0; i < step.size(); i++) {
+            String image = s3Uploader.uploadStep(originalName, file, step.get(i).getStepId());
+            step.get(i).setImage(image);
+            stepRepository.save(step.get(i));
+        }
     }
 
     public void ingredientFix(RecipeIngredientFixDTO recipeIngredientFixDTO) {

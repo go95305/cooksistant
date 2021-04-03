@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public class StepDTOpost {
     private String stepDescription;
-    private String image;
+//    private String image;
     private Long level;
 }
