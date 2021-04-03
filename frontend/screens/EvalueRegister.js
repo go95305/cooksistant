@@ -1,12 +1,7 @@
-import React, { useState } from 'react';
-import {
-  StyleSheet,
-  ImageBackground,
-  Dimensions,
-  Image,
-  Alert,
-} from 'react-native';
+import React from 'react';
+import { StyleSheet, ImageBackground, Dimensions, Image, Alert} from 'react-native';
 import { Block, Text, Button as GaButton, theme } from 'galio-framework';
+import { CommonActions } from '@react-navigation/native';
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
 import StarRating from 'react-native-star-rating';
 import TagSelector from 'react-native-tag-selector';
@@ -22,10 +17,10 @@ class TasteRegister extends React.Component {
   Tastes = [
     { id: '달다', name: '달아요' },
     { id: '짜다', name: '짜요' },
-    { id: '쓰다', name: '써요' },
-    { id: '시다', name: '셔요' },
     { id: '맵다', name: '매워요' },
+    { id: '쓰다', name: '써요' },
     { id: '싱겁다', name: '싱거워요' },
+    { id: '시다', name: '새콤해요' },
   ];
   Features = [
     { id: '기름지다', name: '기름져요' },
@@ -45,6 +40,7 @@ class TasteRegister extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      errors: true,
       userId: null,
       evaluationId: this.props.route.params.eId,
       recipeId: this.props.route.params.rId,
@@ -72,6 +68,17 @@ class TasteRegister extends React.Component {
     });
   }
 
+  onSubmitStep = () => {
+    console.log(this.state.evaluationId);
+    if (this.state.selectedTastes.length == 0 && this.state.selectedFeatures.length == 0) {
+      Alert.alert('하나 이상의 맛과 특징을 선탹해주세요!');
+      this.setState({ errors: true });
+    } else {
+      this.setState({ errors: false });
+      this.onSubmit();
+    }
+  };
+
   onSubmit = () => {
     axios
       .put(`http://j4c101.p.ssafy.io:8081/recipe/evaluationUpdate`, {
@@ -87,10 +94,13 @@ class TasteRegister extends React.Component {
       .then((response) => {
         if (response.status == 200) {
           Alert.alert('평가가 등록되었습니다.');
+          this.props.navigation.dispatch(
+            CommonActions.reset({
+              index: 1,
+              routes: [{name: 'Profile'},{ name: 'EvalueList' }],
+            })
+          );
         }
-      })
-      .then(() => {
-        this.props.navigation.navigate('EvalueList')
       })
       .catch(function (error) {
         console.log(error);
@@ -142,12 +152,12 @@ class TasteRegister extends React.Component {
                             textAlign: 'center',
                             lineHeight: 25,
                             margin: 20,
-                            marginTop: height > 800 ? 0 : -5
+                            marginTop: height > 800 ? 0 : -5,
                           }}
                           color="#333"
                           size={15}
                         >
-                          {title.includes(']') ? tmp[0] + '] \n' + tmp[1].trim() : title} 
+                          {title.includes(']') ? tmp[0] + '] \n' + tmp[1].trim() : title}
                         </Text>
                         <Image
                           resizeMode="stretch"
@@ -199,22 +209,23 @@ class TasteRegister extends React.Component {
                     scrollViewProps={{ scrollEnabled: false }}
                     nextBtnTextStyle={buttonTextStyle}
                     previousBtnTextStyle={buttonTextStyle}
-                    onSubmit={this.onSubmit}
+                    onSubmit={this.onSubmitStep}
+                    errors={this.state.errors}
                   >
-                    <Block flex={1}>
-                      <Block>
+                    <Block>
+                      <Block row flex={1}>
                         <Text
                           style={{
                             fontFamily: 'montserrat-bold',
-                            marginTop: 10,
+                            marginTop: 40,
                             marginLeft: Platform.OS === 'android' ? 40 : 30,
                           }}
                           color="#333"
-                          size={14}
+                          size={18}
                         >
                           맛
                         </Text>
-                        <Block flex={1} center style={styles.tasteContainer}>
+                        <Block flex={1} style={styles.tasteContainer}>
                           <TagSelector
                             tagStyle={styles.tag1}
                             selectedTagStyle={styles.tag1Selected}
@@ -223,19 +234,19 @@ class TasteRegister extends React.Component {
                           />
                         </Block>
                       </Block>
-                      <Block>
+                      <Block flex={1}>
                         <Text
                           style={{
                             fontFamily: 'montserrat-bold',
-                            marginTop: 25,
+                            marginTop: 10,
                             marginLeft: Platform.OS === 'android' ? 40 : 30,
                           }}
                           color="#333"
-                          size={14}
+                          size={18}
                         >
                           특징
                         </Text>
-                        <Block flex={1} center style={styles.featureContainer}>
+                        <Block style={styles.featureContainer}>
                           <TagSelector
                             tagStyle={styles.tag2}
                             selectedTagStyle={styles.tag2Selected}
@@ -291,7 +302,8 @@ const styles = StyleSheet.create({
   },
   tasteContainer: {
     marginTop: 10,
-    marginLeft: 20,
+    marginLeft: 18,
+    padding: 20,
   },
   tag1: {
     width: width > 350 ? 95 : 80,
@@ -321,8 +333,10 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   featureContainer: {
-    marginTop: 15,
-    marginLeft: width > 340 ? 20 : 15,
+    width: width * 0.9,
+    marginTop: 12,
+    marginLeft: width > 370 ? 15 : 8,
+    padding: 10,
   },
   tag2: {
     width: width > 340 ? 90 : 85,

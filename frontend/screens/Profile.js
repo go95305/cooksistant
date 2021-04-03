@@ -11,7 +11,7 @@ import {
 import SegmentedControlTab from 'react-native-segmented-control-tab';
 import { Block, Text, theme, Button as GaButton } from 'galio-framework';
 import { Button } from '../components';
-import { Images, nowTheme, tabs } from '../constants';
+import { Images, nowTheme } from '../constants';
 import { HeaderHeight } from '../constants/utils';
 
 import firebase from 'firebase';
@@ -34,7 +34,8 @@ class Profile extends React.Component {
       userId: 0,
       scrapSize: 0,
       recipeUsedSize: 0,
-      evaluatedSize: 0,
+      recipeSize: 0,
+      recipeList: [],
       scrapList: [],
     },
     selectedIndex: 0,
@@ -52,6 +53,15 @@ class Profile extends React.Component {
     axios
       .get(`http://j4c101.p.ssafy.io:8081/user/${user.uid}`)
       .then((result) => {
+        const rList = [];
+        result.data.recipeList.forEach((el) => {
+          rList.push({
+            rId: el.recipeId,
+            title: el.cuisine,
+            description: el.description,
+            image: el.image,
+          });
+        });
         const sList = [];
         result.data.scrapList.forEach((el) => {
           sList.push({
@@ -65,8 +75,9 @@ class Profile extends React.Component {
           Info: {
             scrapSize: result.data.scrapSize,
             recipeUsedSize: result.data.recipeUsedSize,
-            evaluatedSize: result.data.evaluatedSize,
+            recipeSize: result.data.recipeSize,
             userId: result.data.userId,
+            recipeList: rList,
             scrapList: sList,
           },
         });
@@ -83,51 +94,21 @@ class Profile extends React.Component {
     });
   };
 
-  Info = () => {
+  Recipe = () => {
+    const { navigation } = this.props;
     return (
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Block middle style={{ justifyContent: 'flex-start' }}>
-          <Text
-            style={{
-              color: '#2c2c2c',
-              fontWeight: 'bold',
-              fontSize: 19,
-              fontFamily: 'montserrat-bold',
-              marginTop: 20,
-              marginBottom: 30,
-              zIndex: 2,
-            }}
-          >
-            {this.state.googleInfo.nickName}
-          </Text>
-          <Text
-            size={16}
-            muted
-            style={{
-              textAlign: 'center',
-              fontFamily: 'montserrat-regular',
-              zIndex: 2,
-              lineHeight: 25,
-              color: '#9A9A9A',
-              paddingHorizontal: 15,
-            }}
-          >
-            {this.state.googleInfo.email}
-          </Text>
-          <Text
-            size={16}
-            muted
-            style={{
-              textAlign: 'center',
-              fontFamily: 'montserrat-regular',
-              zIndex: 2,
-              lineHeight: 25,
-              color: '#9A9A9A',
-              paddingHorizontal: 15,
-            }}
-          >
-            사용자의 정보를 보여주는 공간입니다.
-          </Text>
+        <Block style={{ paddingBottom: -HeaderHeight * 2, paddingHorizontal: 15 }}>
+          <Block row space="between" style={{ flexWrap: 'wrap' }}>
+            {this.state.Info.recipeList.map((el, idx) => (
+              <TouchableWithoutFeedback
+                key={idx}
+                onPress={() => navigation.navigate('Pro', { id: el.rId })}
+              >
+                <Image source={{ uri: el.image }} resizeMode="cover" style={styles.thumb} />
+              </TouchableWithoutFeedback>
+            ))}
+          </Block>
         </Block>
       </ScrollView>
     );
@@ -140,7 +121,10 @@ class Profile extends React.Component {
         <Block style={{ paddingBottom: -HeaderHeight * 2, paddingHorizontal: 15 }}>
           <Block center>
             {this.state.Info.scrapList.map((el, index) => (
-              <TouchableWithoutFeedback key={index} onPress={() => navigation.navigate('Pro', { id: el.rId })}>
+              <TouchableWithoutFeedback
+                key={index}
+                onPress={() => navigation.navigate('Pro', { id: el.rId })}
+              >
                 <Block flex card center shadow style={styles.category}>
                   <ImageBackground
                     resizeMode="cover"
@@ -166,7 +150,9 @@ class Profile extends React.Component {
                           paddingHorizontal: 15,
                         }}
                       >
-                        {el.title.includes(']') ? el.title.substr(0, el.title.indexOf(']') + 1) : el.title}
+                        {el.title.includes(']')
+                          ? el.title.substr(0, el.title.indexOf(']') + 1)
+                          : el.title}
                       </Text>
                       <Text
                         style={{
@@ -180,13 +166,13 @@ class Profile extends React.Component {
                         }}
                       >
                         {el.title.includes(']')
-                            ? el.title.substr(el.title.indexOf(']') + 2).trim().length > 26
-                              ? el.title
-                                  .substr(el.title.indexOf(']') + 2)
-                                  .trim()
-                                  .substr(0, 26) + ' ⋯'
-                              : el.title.substr(el.title.indexOf(']') + 2).trim()
-                            : el.title}
+                          ? el.title.substr(el.title.indexOf(']') + 2).trim().length > 26
+                            ? el.title
+                                .substr(el.title.indexOf(']') + 2)
+                                .trim()
+                                .substr(0, 26) + ' ⋯'
+                            : el.title.substr(el.title.indexOf(']') + 2).trim()
+                          : el.title}
                       </Text>
                     </Block>
                   </ImageBackground>
@@ -244,7 +230,7 @@ class Profile extends React.Component {
                           {this.state.Info.recipeUsedSize}
                         </Text>
                         <Text style={{ fontFamily: 'montserrat-regular' }} size={14} color="white">
-                          이용 완료
+                          이용완료
                         </Text>
                       </Block>
                       <Block center>
@@ -253,10 +239,10 @@ class Profile extends React.Component {
                           size={17}
                           style={{ marginBottom: 4, fontFamily: 'montserrat-bold' }}
                         >
-                          {this.state.Info.evaluatedSize}
+                          {this.state.Info.recipeSize}
                         </Text>
                         <Text style={{ fontFamily: 'montserrat-regular' }} size={14} color="white">
-                          평가 완료
+                          레시피
                         </Text>
                       </Block>
                       <Block center>
@@ -283,19 +269,19 @@ class Profile extends React.Component {
           <Block style={styles.segmentContainer}>
             <Block>
               <SegmentedControlTab
-                values={['사용자 정보', '스크랩']}
+                values={['레시피', '스크랩']}
                 selectedIndex={this.state.selectedIndex}
                 onTabPress={this.handleIndexChange}
                 tabsContainerStyle={styles.tabsContainerStyle}
                 tabStyle={styles.tabStyle}
                 activeTabStyle={styles.activeTabStyle}
-                tabTextStyle={{ color: '#444444', fontFamily: 'montserrat-bold' }}
+                tabTextStyle={{ color: '#474747', fontFamily: 'montserrat-bold' }}
                 borderRadius={15}
                 height={50}
               />
             </Block>
             <Block style={{ marginTop: 20 }}>
-              {this.state.selectedIndex === 0 && this.Info(this)}
+              {this.state.selectedIndex === 0 && this.Recipe(this)}
               {this.state.selectedIndex === 1 && this.Scrap(this)}
             </Block>
           </Block>

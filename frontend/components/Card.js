@@ -32,20 +32,21 @@ class Card extends React.Component {
     return (
       <Block card flex style={cardContainer}>
         <TouchableWithoutFeedback onPress={() => navigation.navigate('Pro', { id: item.id })}>
-          <Block flex style={imgContainer}>
-            <Image resizeMode="contain" center source={{ uri: item.image }} style={imageStyles} />
-            {/* <RNUrlPreview text={item.image} /> */}
+           <Block flex={3} style={imgContainer}>
+            <Image resizeMode="cover" source={{ uri: item.image }} style={imageStyles} />
           </Block>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback onPress={() => navigation.navigate('Pro', { id: item.id })}>
-          <Block flex space="between" style={styles.cardDescription}>
+          <Block flex={1} space="between" style={styles.cardDescription}>
             <Block flex>
-              {/* <Text style={{ height: 0, width: 0 }}>{item.id}</Text> */}
               <Text
-                style={{ fontFamily: 'montserrat-regular' }}
-                size={height > 800 ? 15 : 12}
-                style={titleStyles}
-                color={nowTheme.COLORS.SECONDARY}
+                style={{
+                  fontFamily: 'montserrat-bold',
+                  paddingTop: 3,
+                  lineHeight: 20,
+                }}
+                size={12}
+                color="#474747"
               >
                 {item.title.includes(']')
                   ? title[0] +
@@ -92,23 +93,21 @@ const styles = StyleSheet.create({
     backgroundColor: theme.COLORS.WHITE,
     marginVertical: theme.SIZES.BASE,
     borderWidth: 0,
-    minHeight: 114,
+    minHeight: 120,
     marginBottom: 4,
   },
   cardTitle: {
     paddingHorizontal: 9,
+    paddingTop: 7,
     paddingBottom: 15,
   },
   cardDescription: {
     padding: theme.SIZES.BASE / 2,
   },
   imageContainer: {
-    flex: 5,
     borderRadius: 3,
     elevation: 1,
     overflow: 'hidden',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   image: {
     // borderRadius: 3,
@@ -137,7 +136,6 @@ const styles = StyleSheet.create({
   },
   articleButton: {
     fontFamily: 'montserrat-bold',
-    paddingHorizontal: 9,
     paddingVertical: 3,
   },
 });

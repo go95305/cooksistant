@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Dimensions,
-  ScrollView,
-  Image,
-  state,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 import { nowTheme } from '../constants';
 import { Card, CardTrendy } from '../components';
@@ -20,7 +13,6 @@ class Home extends React.Component {
   constructor() {
     super();
     this.state = {
-      selectedIndex: 0,
       recipePopular: [],
       recipeTrendy: [],
     };
@@ -38,6 +30,7 @@ class Home extends React.Component {
               id: el.recipeId,
               title: el.recipename,
               image: el.url,
+              flag: false,
               cta: '레시피 보러가기',
             });
           });
@@ -74,9 +67,37 @@ class Home extends React.Component {
 
   render() {
     return (
-      <Block style={{ flex: 1 }}>
-        <Block style={{ flex: 1, padding: 10 }}>
-          <Block style={{ flex: height > 800 ? 0.5 : 0.3 }}>
+      <Block flex={1}>
+        <Block flex={2}>
+          <Text
+            style={{
+              fontFamily: 'montserrat-bold',
+              marginTop: height > 800 ? 30 : 10,
+              paddingLeft: height > 800 ? 20 : 10,
+            }}
+          >
+            인기 레시피
+          </Text>
+          <Block flex style={styles.container}>
+            <Swiper style={styles.wrapper} renderPagination={renderPagination} loop={false}>
+              {this.state.recipePopular.map((el, index) => {
+                return <Card key={index} item={el} full />;
+              })}
+            </Swiper>
+          </Block>
+        </Block>
+        <Block flex={0.3}></Block>
+        <Block
+          center
+          style={{
+            borderColor: '#f18d46',
+            width: '90%',
+            borderWidth: StyleSheet.hairlineWidth,
+            marginHorizontal: 10,
+          }}
+        />
+        <Block flex={1.5}>
+          <Block flex>
             <Text
               style={{
                 fontFamily: 'montserrat-bold',
@@ -84,40 +105,26 @@ class Home extends React.Component {
                 paddingLeft: height > 800 ? 20 : 10,
               }}
             >
-              인기 레시피
+              트렌디 레시피
             </Text>
-          </Block>
-          <Block style={{ flex: height > 800 ? 3 : 4 }}>
-            <Swiper style={styles.wrapper} renderPagination={renderPagination} loop={false}>
-              {this.state.recipePopular.map((el, index) => (
-                <Card key={index} item={el} full />
-              ))}
-            </Swiper>
-          </Block>
-        </Block>
-
-        <Block style={{ flex: 1 }}>
-          <Block style={{ flex: 1, padding: 10 }}>
-            <Block style={{ flex: height > 800 ? 0.5 : 0.3 }}>
-              <Text
-                style={{
-                  fontFamily: 'montserrat-bold',
-                  marginTop: height > 800 ? 30 : 10,
-                  paddingLeft: height > 800 ? 20 : 10,
-                }}
-              >
-                트렌디 레시피
-              </Text>
-            </Block>
-            <Block style={{ flex: 3 }}>
-              <Swiper loop timeout={-2.5} renderPagination={renderPagination}>
+            <Block flex style={styles.container}>
+              <Swiper loop renderPagination={renderPagination} autoplay={true} key={this.state.recipeTrendy.length}>
                 {this.state.recipeTrendy.map((el, index) => (
-                  <Block key={index} style={{ flex: 1, padding: 10 }}>
+                  <Block key={index} style={{ padding: 10 }}>
                     <Block>
-                      {/* <Image resizeMode="contain" source={{ uri: el.image }} style={imageStyles} /> */}
                       <RNUrlPreview text={el.image} />
                     </Block>
-                    <Text>{el.title}</Text>
+                    <Text
+                      style={{
+                        fontFamily: 'montserrat-bold',
+                        paddingTop: 3,
+                        lineHeight: 20,
+                      }}
+                      size={11.5}
+                      color="#474747"
+                    >
+                      {el.title}
+                    </Text>
                   </Block>
                 ))}
               </Swiper>
@@ -138,7 +145,10 @@ const renderPagination = (index, total, context) => {
   );
 };
 const styles = StyleSheet.create({
-  wrapper: {},
+  container: {
+    paddingHorizontal: theme.SIZES.BASE,
+    marginTop: 10,
+  },
   slide: {
     flex: 1,
     justifyContent: 'center',

@@ -166,6 +166,7 @@ class RecipeRegister extends React.Component {
       this.setState({ errors: true });
     } else {
       this.setState({ errors: false });
+      this.onSubmit();
     }
   };
 
@@ -494,7 +495,7 @@ class RecipeRegister extends React.Component {
                     scrollViewProps={{ scrollEnabled: true }}
                     nextBtnTextStyle={buttonTextStyle}
                     previousBtnTextStyle={buttonTextStyle}
-                    onSubmit={ this.state.errors ? this.onSubmitStep : this.onSubmit}
+                    onSubmit={this.onSubmitStep}
                     errors={this.state.errors}
                   >
                     <Block flex={1} style={styles.recipeContainer}>
