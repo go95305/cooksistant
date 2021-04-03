@@ -311,6 +311,7 @@ public class RecipeService {
         Optional<Recipe> recipe = recipeRepository.findById(recipeId);
         //5.s3에 이미지 업로드 후 recipe image에 set한다.
         String image = s3Uploader.upload(originalName, file, recipeId);
+        System.out.println(image+"입니다");
         recipe.get().setImage(image);
         recipeRepository.save(recipe.get());
     }
