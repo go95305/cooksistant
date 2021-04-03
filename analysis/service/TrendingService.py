@@ -19,13 +19,14 @@ def getTrend():
         response_body = response.read().decode('utf-8')
         dict = json.loads(response_body)
         dict = dict['items']
-        title = []
-        link = []
+        tmp={}
+        trend=[]
         for i in dict:
             title_tmp = re.sub('(<([^>]+)>)', '', i['title'])
             title_tmp = re.sub('[&quotlg;]', '', title_tmp)
-            title.append(title_tmp)
-            link.append(i['link'])
-        return title,link
+            tmp['title']=title_tmp
+            tmp['link']=i['link']
+            trend.append(tmp)
+        return trend
     else:
         return rescode
