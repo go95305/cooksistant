@@ -19,9 +19,10 @@ def getTrend():
         response_body = response.read().decode('utf-8')
         dict = json.loads(response_body)
         dict = dict['items']
-        tmp={}
+        
         trend=[]
         for i in dict:
+            tmp={}
             title_tmp = re.sub('(<([^>]+)>)', '', i['title'])
             title_tmp = re.sub('[&quotlg;]', '', title_tmp)
             tmp['title']=title_tmp
