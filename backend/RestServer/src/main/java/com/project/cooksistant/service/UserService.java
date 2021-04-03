@@ -73,9 +73,11 @@ public class UserService {
 
         //내가 스크랩한 레시피 검색
         List<Scrap> scrapList = scrapRepository.findAllByUser(user.get());
-        personalDTO.setScrapSize(scrapList.size());
+        int scrapCnt = 0;
+
         for (int i = 0; i < scrapList.size(); i++) {
             if (scrapList.get(i).getFlag()) {
+                scrapCnt++;
                 ScrapMypageDTO scrapMypageDTO = new ScrapMypageDTO();
                 scrapMypageDTO.setNickname(scrapList.get(i).getUser().getNickname());
                 scrapMypageDTO.setRecipeId(scrapList.get(i).getRecipe().getRecipeId());
@@ -86,6 +88,7 @@ public class UserService {
                 scrapMypageDTOList.add(scrapMypageDTO);
             }
         }
+        personalDTO.setScrapSize(scrapCnt);
         personalDTO.setScrapList(scrapMypageDTOList);
 
         //이용완료한 레시피 개수
@@ -106,7 +109,7 @@ public class UserService {
 
         //이미 스크랩한 데이터인지 확인
         Optional<Scrap> isScrap = Optional.ofNullable(scrapRepository.findScrapByRecipeAndUser(recipe, user));
-        if (isScrap.isPresent()) {//이미 존재하는 스크랩 정보면 에러 발생시킨다.
+        if (isScrap.isPresent() && isScrap.get().getFlag()) {//이미 존재하는 스크랩 정보면 에러 발생시킨다.
             throw new RestException(HttpStatus.BAD_REQUEST, "이미 스크랩한 데이터 입니다.");
         } else {
             Scrap scrap = new Scrap();
