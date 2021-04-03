@@ -251,16 +251,12 @@ export default class App extends React.Component {
       console.log('###########################################')
       console.log(responseJson);
       console.log('###########################################')
-      console.log(JSON.stringify(responseJson));
-			console.log(JSON.stringify(JSON.parse(JSON.stringify(responseJson)).responses));
-      console.log('###########################################')
-      console.log('###########################################')
-      console.log('###########################################')
-      
       try {
-        console.log(JSON.stringify(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(responseJson)).responses)).error));
-        console.log(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(responseJson)).responses)).textAnnotations);
-        console.log(JSON.stringify(JSON.parse(JSON.parse(JSON.stringify(responseJson)).responses).textAnnotations));  
+//        console.log(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(responseJson)).responses[0])).textAnnotations);
+        console.log(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(responseJson)).responses[0])).textAnnotations[0].description);
+        let strArray = JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(responseJson)).responses[0])).textAnnotations[0].description.split('\n', ' ');
+        console.log(strArray[0]);
+        //  console.log(JSON.stringify(JSON.parse(JSON.parse(JSON.stringify(responseJson)).responses[0]).textAnnotations).description);  
       } catch (error) {
         console.log("error");
       }
