@@ -47,15 +47,17 @@ class RecipeInfo extends Component {
           `http://j4c101.p.ssafy.io:8081/user/deleteScrap/${this.state.userId}/${this.state.recipeDetail.id}`
         )
         .then((result) => this.setState({ img: require('../assets/imgs/bookmark.png') }))
+        .then(location.reload())
         .catch((error) => {
           console.log(error);
         });
-    } else {
+    } else if (this.state.img == require('../assets/imgs/bookmark.png')) {
       axios
         .post(
           `http://j4c101.p.ssafy.io:8081/user/scrap/${this.state.recipeDetail.id}/${this.state.userId}`
         )
         .then((result) => this.setState({ img: require('../assets/imgs/bookmarkFull.png') }))
+
         .catch((error) => {
           console.log(error);
         });

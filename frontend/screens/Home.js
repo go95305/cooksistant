@@ -30,8 +30,8 @@ class Home extends React.Component {
     axios
       .get(`http://j4c101.p.ssafy.io:8081/recipe/favor`)
       .then((result) => {
-        console.log(result);
         const arrayList = [];
+        console.log(result);
         if (result.data && Array.isArray(result.data)) {
           result.data.forEach((el) => {
             arrayList.push({
@@ -53,17 +53,16 @@ class Home extends React.Component {
     axios
       .get(`http://j4c101.p.ssafy.io:5000/trend`)
       .then((result) => {
-        console.log(result);
         const arrayList1 = [];
-        if (result.data.trendList && Array.isArray(result.data.trendList)) {
-          result.data.trendList.forEach((el) => {
-            arrayList1.push({
-              title: el.title,
-              image: el.link,
-              cta: '레시피 보러가기',
-            });
+        console.log(result);
+        console.log('DDDDDDDDDDDDDDDDDDDDDDD' + result.data.trend);
+
+        result.data.trend.forEach((el) => {
+          arrayList1.push({
+            title: el.title,
+            image: el.link,
           });
-        }
+        });
         this.setState({
           recipeTrendy: arrayList1,
         });
