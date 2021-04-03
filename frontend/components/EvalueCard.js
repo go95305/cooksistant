@@ -1,7 +1,7 @@
 import React from 'react';
 import { withNavigation } from '@react-navigation/compat';
 import PropTypes from 'prop-types';
-import { StyleSheet, Image, TouchableWithoutFeedback, Dimensions } from 'react-native';
+import { StyleSheet, Image, TouchableWithoutFeedback, Dimensions, Modal, Pressable} from 'react-native';
 import { Block, Button, Text, theme } from 'galio-framework';
 import { nowTheme } from '../constants';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -10,6 +10,16 @@ import { AntDesign } from '@expo/vector-icons';
 const { width, height } = Dimensions.get('screen');
 
 class Card extends React.Component {
+  state = {
+    modalVisible: false
+  };
+
+  setModalVisible = (visible) => {
+    this.setState({ modalVisible: visible });
+  }
+
+  
+
   render() {
     const {
       navigation,
@@ -19,7 +29,6 @@ class Card extends React.Component {
       style,
       isEvaluColor,
       imageStyle,
-      titleStyle,
     } = this.props;
 
     const imageStyles = [full ? styles.fullImage : styles.horizontalImage, imageStyle];
@@ -30,6 +39,7 @@ class Card extends React.Component {
       styles.shadow,
     ];
 
+    const { modalVisible } = this.state;
     const title = item.title.split(']');
     const favor = parseFloat(item.favor).toFixed(1);
     return (
@@ -38,14 +48,14 @@ class Card extends React.Component {
           onPress={() => {
             item.flag
               ? item.isEvalu
-                ? navigation.navigate('Pro', { id: item.id })
+                ? this.setModalVisible(true)
                 : navigation.navigate('EvalueRegister', {
                     eId: item.eId,
                     rId: item.rId,
                     title: item.title,
                     image: item.image,
                   })
-              : navigation.navigate('Pro', { id: item.id });
+              : navigation.navigate('Pro', { id: item.rId });
           }}
         >
           <Block flex style={imgContainer}>
@@ -56,14 +66,14 @@ class Card extends React.Component {
           onPress={() => {
             item.flag
               ? item.isEvalu
-                ? navigation.navigate('Pro', { id: item.id })
+                ? this.setModalVisible(true)
                 : navigation.navigate('EvalueRegister', {
                     eId: item.eId,
                     rId: item.rId,
                     title: item.title,
                     image: item.image,
                   })
-              : navigation.navigate('Pro', { id: item.id });
+              : navigation.navigate('Pro', { id: item.rId });
           }}
         >
           <Block flex space="between" style={styles.cardDescription}>
@@ -114,6 +124,31 @@ class Card extends React.Component {
             )}
           </Block>
         </TouchableWithoutFeedback>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+            this.setModalVisible(!modalVisible);
+          }}
+        >
+          <Block style={styles.centeredView}>
+            <Block style={styles.modalView}>
+              <Block flex={9}>
+                <Text style={styles.modalText}>별점 : </Text>
+              </Block>
+              <Block flex={1}>
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => this.setModalVisible(!modalVisible)}
+                >
+                  <Text style={styles.textStyle}>닫기</Text>
+                </Pressable>
+              </Block>
+            </Block>
+          </Block>
+        </Modal>
       </Block>
     );
   }
@@ -180,6 +215,47 @@ const styles = StyleSheet.create({
     fontFamily: 'montserrat-bold',
     paddingHorizontal: 9,
     paddingVertical: 7,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    width: width * 0.7,
+    height: height * 0.5,
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonClose: {
+    backgroundColor: '#f18d46',
+  },
+  textStyle: {
+    color: 'white',
+    fontFamily: 'montserrat-regular',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+    fontFamily: 'montserrat-regular',
   },
 });
 
