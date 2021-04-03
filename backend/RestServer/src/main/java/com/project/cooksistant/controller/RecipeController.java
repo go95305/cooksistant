@@ -49,7 +49,7 @@ public class RecipeController {
             "                                                   - file: 사진\n" +
             "                                                   - recipeId: 레시피 인덱스")
     @PostMapping(value = "/recipe/mainImage")
-    public void mainImage(@RequestParam("file") MultipartFile file) throws IOException {
+    public void mainImage(@RequestParam MultipartFile file) throws IOException {
         System.out.println(file.getOriginalFilename() + "=======================");
 //        recipeService.mainImage(originalName, file, recipeId);
     }
