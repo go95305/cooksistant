@@ -150,7 +150,10 @@ public class RecipeService {
             StepDTO stepDTO = new StepDTO();
             stepDTO.setStepId(stepList.get(j).getStepId());
             stepDTO.setDescription(stepList.get(j).getDescription());
-            stepDTO.setImage(stepList.get(j).getImage());
+            if (stepList.get(j).getImage().contains("http"))
+                stepDTO.setImage(stepList.get(j).getImage());
+            else
+                stepDTO.setImage("https://" + S3Uploader.CLOUD_FRONT_DOMAIN_NAME + "/" + stepList.get(j).getImage());
             stepDTO.setLevel(stepList.get(j).getLevel());
             stepDTOList.add(stepDTO);
         }
@@ -165,7 +168,7 @@ public class RecipeService {
             Optional<Recipe> recipe = recipeRepository.findById(recommendList.get(i));
             recipeListupDTO.setRecipeId(recipe.get().getRecipeId());
             recipeListupDTO.setRecipename(recipe.get().getCuisine());
-            recipeListupDTO.setUrl(recipe.get().getImage());
+            recipeListupDTO.setUrl("https://" + S3Uploader.CLOUD_FRONT_DOMAIN_NAME + "/" + recipe.get().getImage());
             recipeListupDTO.setDescription(recipe.get().getDescription());
             Long recipeId = recipe.get().getRecipeId();
             //평균평점
@@ -186,7 +189,7 @@ public class RecipeService {
             RecipeListupDTO recipeListupDTO = new RecipeListupDTO();
             Optional<Recipe> recipe = recipeRepository.findById(recipeIds.get(i));
             recipeListupDTO.setRecipeId(recipe.get().getRecipeId());
-            recipeListupDTO.setUrl(recipe.get().getImage());
+            recipeListupDTO.setUrl("https://" + S3Uploader.CLOUD_FRONT_DOMAIN_NAME + "/" + recipe.get().getImage());
             recipeListupDTO.setDescription(recipe.get().getDescription());
             recipeListupDTO.setRecipename(recipe.get().getCuisine());
             Long recipeId = recipe.get().getRecipeId();

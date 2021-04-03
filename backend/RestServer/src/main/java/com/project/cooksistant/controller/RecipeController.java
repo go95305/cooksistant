@@ -68,7 +68,7 @@ public class RecipeController {
         recipeService.stepFix(recipeStepFixDTO);
     }
 
-    @ApiOperation(value = "레시피과정 이미지 수정하기")
+    @ApiOperation(value = "레시피과정 이미지 등록")
     @PutMapping("/recipe/stepImage")
     public void stepImage(@RequestParam String originalName, @RequestParam("file") MultipartFile file, @RequestParam("stepId") Long stepId) throws IOException {
         recipeService.stepImage(originalName, file, stepId);
@@ -95,7 +95,7 @@ public class RecipeController {
         return recipeService.recipeFavor();
     }
 
-    @ApiOperation(value = "취향 기반 레시피 리스트 제공(Ok) S신규유저라면 평가 데이터가 없으므로 인기순, 그 외 평가 데이터가 존재하는 유저는 추천을받는다", notes = "Request\n" +
+    @ApiOperation(value = "취향 기반 레시피 리스트 제공(Ok) 신규유저라면 평가 데이터가 없으므로 인기순, 그 외 평가 데이터가 존재하는 유저는 추천을받는다", notes = "Request\n" +
             "                                                   - userId:협업필터링에 사용될 유저와 비슷한 레시피 추천을 위한 UserId\n" +
             "                                                   - List<String>: 추천받을 재료 리스트\n" +
             "                                                   Response\n" +
