@@ -49,8 +49,8 @@ public class RecipeController {
             "                                                   - file: 사진\n" +
             "                                                   - recipeId: 레시피 인덱스")
     @PostMapping(value = "/recipe/mainImage")
-    public void mainImage(@RequestParam String originalName, @RequestParam MultipartFile file, @RequestParam("recipeId") Long recipeId) throws IOException {
-        System.out.println(file.getOriginalFilename()+"=======================");
+    public void mainImage(@RequestParam String originalName, @RequestParam("recipeId") Long recipeId, @RequestParam("file") MultipartFile file) throws IOException {
+        System.out.println(file.getOriginalFilename() + "=======================");
         recipeService.mainImage(originalName, file, recipeId);
     }
 
@@ -71,7 +71,7 @@ public class RecipeController {
 
     @ApiOperation(value = "레시피과정 이미지 등록")
     @PutMapping("/recipe/stepImage")
-    public void stepImage(@RequestParam String originalName, @RequestParam("file") MultipartFile file, @RequestParam("stepId") Long stepId) throws IOException {
+    public void stepImage(@RequestParam String originalName, @RequestParam("stepfile") MultipartFile file, @RequestParam("stepId") Long stepId) throws IOException {
         recipeService.stepImage(originalName, file, stepId);
     }
 
