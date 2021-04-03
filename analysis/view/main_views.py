@@ -34,7 +34,7 @@ class recommend(Resource):
 @ns.route('/trend')
 class trending(Resource):
     def get(self):
-        return {"trendTitle,trendLink":TrendingService.getTrend()}
+        return {"trend":TrendingService.getTrend()}
 
 @ns.route('/konlypy')
 class ocr(Resource):
