@@ -57,6 +57,7 @@
     "react-native-svg": "12.1.0",
     "react-native-swiper": "^1.6.0",
     "react-native-switch-selector": "^2.1.4",
+    "react-native-tag-select": "^2.0.0",
     "react-native-tag-selector": "^0.0.3",
     "react-native-tags-input": "^1.0.10",
     "react-native-tesseract-ocr": "^2.0.1",
