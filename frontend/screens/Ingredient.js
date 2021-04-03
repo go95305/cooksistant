@@ -6,6 +6,8 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
+  ScrollView,
+  Pressable,
 } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 import TagInput from 'react-native-tags-input';
@@ -29,16 +31,12 @@ class Ingredient extends React.Component {
         tag: '',
         tagsArray: [],
       },
+      suggestions: [],
+      suggestionsArr: [],
       tagsColor: '#f18d46',
       tagsText: '#f18d46',
     };
   }
-
-  updateTagState = (state) => {
-    this.setState({
-      tags: state,
-    });
-  };
 
   componentDidMount = () => {
     const user = firebase.auth().currentUser;
@@ -52,6 +50,96 @@ class Ingredient extends React.Component {
       .catch((error) => {
         console.log(error);
       });
+
+    axios
+      .get(`http://j4c101.p.ssafy.io:8081/recipe/ingredient`)
+      .then((result) => {
+        const arrayList = [];
+        if (result.data && Array.isArray(result.data)) {
+          result.data.forEach((el) => {
+            arrayList.push(el);
+          });
+        }
+        this.setState({ suggestionsArr: arrayList });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  updateTagState = (state) => {
+    console.log(state)
+    this.setState(
+      {
+        tags: state
+      },
+      () => {
+        this.updateSuggestionState(state);
+      }
+    );
+  };
+
+  updateSuggestionState = (state) => {
+    if (state.tag === '') {
+      return;
+    }
+
+    let tempSuggestions = [];
+
+    for (let i = 0; i < this.state.suggestionsArr.length; i++) {
+      if (this.state.suggestionsArr[i].includes(state.tag) === true) {
+        tempSuggestions.push(this.state.suggestionsArr[i]);
+      }
+    }
+    if (tempSuggestions.length > 0) {
+      this.setState({
+        suggestions: tempSuggestions,
+      });
+    } else {
+      this.setState({
+        suggestions: [],
+      });
+    }
+  };
+
+  renderSuggestions = () => {
+    if (this.state.suggestions.length > 0) {
+      return this.state.suggestions.map((item, count) => {
+        return (
+          <Pressable key={count} onPress={() => this.onSuggestionClick(item)}>
+            <Text
+              style={{
+                fontFamily: 'montserrat-regular',
+                height: height * 0.07,
+                margin: 5,
+                padding: 15,
+                borderWidth: 1,
+                borderRadius: 20,
+                borderColor: nowTheme.COLORS.BORDER,
+              }}
+            >
+              {item}
+            </Text>
+          </Pressable>
+        );
+      });
+    } else {
+      return null;
+    }
+  };
+
+  onSuggestionClick = (suggestion) => {
+    let state = this.state.tags;
+
+    state.tagsArray.push(suggestion);
+
+    this.setState({
+      tags: {
+        tag: '',
+        tagsArray: state.tagsArray,
+      },
+      suggestions: [],
+    });
   };
 
   render() {
@@ -83,6 +171,12 @@ class Ingredient extends React.Component {
                     <TagInput
                       updateState={this.updateTagState}
                       tags={this.state.tags}
+                      autoCapitalize={'none'}
+                      // customElement={
+                      //   <ScrollView showsVerticalScrollIndicator={false}>
+                      //     <Block style={{ marginTop: 10 }}>{this.renderSuggestions()}</Block>
+                      //   </ScrollView>
+                      // }
                       placeholder="재료 추가"
                       label="정확한 재료를 입력해주세요."
                       labelStyle={{
@@ -109,8 +203,8 @@ class Ingredient extends React.Component {
                       deleteElement={
                         <MaterialIcons name="highlight-remove" size={20} color="white" />
                       }
-                      deleteIconStyles={{ marginLeft: 20 }}
                       autoCorrect={false}
+                      deleteIconStyles={{ marginLeft: 20 }}
                       tagStyle={styles.tag}
                       tagTextStyle={styles.tagText}
                       keysForTag={', '}
@@ -198,6 +292,7 @@ const styles = StyleSheet.create({
     borderColor: '#f18d46',
     borderWidth: 1,
     marginTop: 15,
+    marginBottom: 10,
     borderRadius: 25,
     padding: 3,
   },

@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Alert, Linking } from 'react-native';
-import { CommonActions } from '@react-navigation/native'; 
+import { CommonActions } from '@react-navigation/native';
 import { Block, Text, theme } from 'galio-framework';
 import firebase from 'firebase';
 
@@ -94,7 +94,7 @@ class DrawerItem extends React.Component {
             case '앱 소개':
               Linking.openURL(
                 'https://www.notion.so/SUB3-eddba11b91494c4185c65cec233fa8ac'
-              ).catch((err) => console.error('An error occurred', err))
+              ).catch((err) => console.error('An error occurred', err));
               break;
             case '로그아웃':
               firebase
@@ -103,11 +103,11 @@ class DrawerItem extends React.Component {
                 .then(() => {
                   // Sign-out successful.
                   navigation.dispatch(
-                CommonActions.reset({
-                  index: 0,
-                  routes: [{ name: 'Start' }],
-                })
-              )
+                    CommonActions.reset({
+                      index: 0,
+                      routes: [{ name: 'Start' }],
+                    })
+                  );
                 })
                 .catch((error) => {
                   // An error happened.
@@ -119,10 +119,15 @@ class DrawerItem extends React.Component {
                   index: 0,
                   routes: [{ name: 'Start' }],
                 })
-              )
+              );
               break;
             default:
-              navigation.navigate(title);
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [{ name: title }],
+                })
+              );
           }
         }}
       >

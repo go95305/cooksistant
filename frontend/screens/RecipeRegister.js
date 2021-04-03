@@ -6,6 +6,8 @@ import {
   Platform,
   Image,
   TouchableOpacity,
+  Modal,
+  Pressable,
 } from 'react-native';
 import { Block, Text, Button as GaButton } from 'galio-framework';
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
@@ -18,7 +20,6 @@ import axios from 'axios';
 import { Input, Select, Button } from '../components';
 import { Images, nowTheme } from '../constants';
 import { Alert } from 'react-native';
-
 const { width, height } = Dimensions.get('screen');
 let stepIdx = 0;
 
@@ -26,85 +27,146 @@ class RecipeRegister extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      errors: false,
       userId: null,
       title: '',
       desc: '',
       serving: '',
       time: '',
       image: null,
-      stepIdx: 0,
-      stepList: [{ image: null, stepDescription: '', level: 1 }],
       ingreList: [{ ingredientName: '', amount: '', isType: '재료' }],
+      stepList: [{ stepDescription: '', level: 0 }],
+      imageList: [],
+      modalVisible: false,
     };
   }
 
   componentDidMount = () => {
     var user = firebase.auth().currentUser;
-    axios
-      .get(`http://j4c101.p.ssafy.io:8081/user/${user.uid}`)
-      .then((result) => {
-        this.setState({ userId: result.data.userId });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    this.setState({ userId: user.uid });
   };
 
   titleInput = (props) => {
     return <Input {...props} editable maxLength={40} />;
   };
   descInput = (props) => {
-    return <Input {...props} editable maxLength={2000} />;
+    return <Input {...props} editable maxLength={1024} />;
   };
   ingreInput = (props) => {
     return <Input {...props} editable maxLength={20} />;
   };
 
-  onSubmit = () => {
-    axios
-      .post('http://j4c101.p.ssafy.io:8081/recipe/create', {
-        // uid: String(this.state.userId),
-        // cuisine: this.state.title,
-        // description: this.state.desc,
-        // serving: this.state.serving,
-        // cookingTime: this.state.time,
-        // level: "쉬움",
-        // ingredientDTOpostList: this.state.ingreList,
-        // stepDTOpostList: this.state.stepList
-        cookingTime: 'string',
-        cuisine: 'string',
-        description: 'string',
-        ingredientDTOpostList: [
-          {
-            amount: 'string',
-            ingredientName: 'string',
-            isType: 'string',
-          },
-        ],
-        level: 'string',
-        serving: 'string',
-        stepDTOpostList: [
-          {
-            image: 'string',
-            level: 0,
-            stepDescription: 'string',
-          },
-        ],
-        uid: '1',
-      })
-      .then((response) => {
-        console.log(response);
-        if (response.status == 200) {
-          Alert.alert('레시피가 등록되었습니다.');
-        } 
-      })
-      .then(() => {
-        this.props.navigation.navigate('Profile');
-      })
-      .catch(function (error) {
-        Alert.alert('실패');
-        console.log(error);
+  onSubmit = async () => {
+    try {
+      const response = await axios.post(`http://j4c101.p.ssafy.io:8081/recipe/create`, {
+        uid: this.state.userId,
+        cuisine: this.state.title,
+        description: this.state.desc,
+        serving: this.state.serving,
+        cookingTime: this.state.time,
+        level: '아무나',
+        ingredientDTOpostList: this.state.ingreList,
+        stepDTOpostList: this.state.stepList,
       });
+      console.log(response);
+      if (response.status == 200) {
+        this.props.navigation.navigate('Profile');
+        // 메인 이미지 등록
+        let mainUri = this.state.image;
+        let mainImage = mainUri.split('/').pop();
+
+        let match = /\.(\w+)$/.exec(mainImage);
+        let mainType = match ? `image/${match[1]}` : `image`;
+
+        const formData = new FormData();
+        formData.append('file', { uri: mainUri, name: mainImage, type: mainType });
+        console.log(mainImage + ' ' + mainType);
+        try {
+          const res = await axios.post(
+            `http://j4c101.p.ssafy.io:8081/recipe/mainImage?originalName=aaa&recipeId=${response.data}`,
+            formData,
+            {
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'multipart/form-data',
+              },
+            }
+          );
+          console.log(res.status);
+        } catch (err) {
+          console.log(err);
+        }
+
+        // 각 과정 이미지 등록
+        let uriList = this.state.imageList;
+        uriList.map((el) => {
+          console.log(el);
+          let stepUri = el;
+          let stepImage = stepUri.split('/').pop();
+
+          let stepMatch = /\.(\w+)$/.exec(stepImage);
+          let stepType = stepMatch ? `image/${stepMatch[1]}` : `image`;
+
+          const stepfile = new FormData();
+          stepfile.append('stepfile', { uri: stepUri, name: stepImage, type: stepType });
+          axios
+            .put(
+              `http://j4c101.p.ssafy.io:8081/recipe/stepImage?originalName=aaa&recipeId=${response.data}`,
+              stepfile,
+              {
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'multipart/form-data',
+                },
+              }
+            )
+            .then((res) => {
+              console.log(res.status);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        });
+        Alert.alert('레시피가 등록되었습니다.');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  onNextStep1 = () => {
+    if (
+      this.state.title.length <= 0 ||
+      this.state.serving.length <= 0 ||
+      this.state.time.length <= 0 ||
+      this.state.desc.length <= 0 ||
+      this.state.image == null
+    ) {
+      Alert.alert('올바른 값을 입력해주세요.');
+      this.setState({ errors: true });
+    } else {
+      this.setState({ errors: false });
+    }
+  };
+
+  onNextStep2 = () => {
+    const el = this.state.ingreList;
+    if (el.length == 1 && el[0].ingredientName == '' && el[0].amount == '') {
+      Alert.alert('하나 이상의 재료를 입력해주세요!');
+      this.setState({ errors: true });
+    } else {
+      this.setState({ errors: false });
+    }
+  };
+
+  onSubmitStep = () => {
+    const el = this.state.stepList;
+    if (el.length == 1 && el[0].stepDescription == '') {
+      Alert.alert('하나 이상의 과정을 입력해주세요!');
+      this.setState({ errors: true });
+    } else {
+      this.setState({ errors: false });
+    }
   };
 
   ingreInputChange = (text, name, index) => {
@@ -149,10 +211,14 @@ class RecipeRegister extends React.Component {
 
   stepAddClick = () => {
     const list = [...this.state.stepList];
-    const newlist = [{ image: null, stepDescription: '', level: 1 }];
+    const newlist = [{ stepDescription: '', level: 0 }];
     this.setState({
       stepList: list.concat(newlist),
     });
+  };
+
+  setModalVisible = (visible) => {
+    this.setState({ modalVisible: visible });
   };
 
   render() {
@@ -202,12 +268,14 @@ class RecipeRegister extends React.Component {
         return;
       }
 
-      const list = [...this.state.stepList];
-      list[stepIdx]['image'] = pickerResult.uri;
+      const list = [...this.state.imageList];
+      list[stepIdx] = pickerResult.uri;
       this.setState({
-        stepList: list,
+        imageList: list,
       });
     };
+
+    const { modalVisible } = this.state;
 
     return (
       <Block style={styles.container}>
@@ -225,6 +293,8 @@ class RecipeRegister extends React.Component {
                     scrollViewProps={{ scrollEnabled: true }}
                     nextBtnTextStyle={buttonTextStyle}
                     previousBtnTextStyle={buttonTextStyle}
+                    onNext={this.onNextStep1}
+                    errors={this.state.errors}
                   >
                     <Block style={{ alignItems: 'center' }}>
                       <Block flex={1} middle style={styles.recipeContainer}>
@@ -242,7 +312,7 @@ class RecipeRegister extends React.Component {
                           </Text>
                           <this.titleInput
                             multiline
-                            numberOfLines={4}
+                            numberOfLines={3}
                             placeholder="레시피명"
                             style={styles.titleInput}
                             iconContent={
@@ -281,7 +351,7 @@ class RecipeRegister extends React.Component {
                           >
                             <Block row space="between">
                               <InputSpinner
-                                max={60}
+                                max={90}
                                 min={0}
                                 step={5}
                                 height={47}
@@ -312,7 +382,7 @@ class RecipeRegister extends React.Component {
                         <Block width={width * 0.7} style={{ marginBottom: 8 }}>
                           <this.descInput
                             multiline
-                            numberOfLines={10}
+                            numberOfLines={9}
                             placeholder="레시피 소개"
                             style={styles.descInput}
                             onChangeText={(text) => {
@@ -336,7 +406,7 @@ class RecipeRegister extends React.Component {
                             }}
                           >
                             <TouchableOpacity onPress={ImagePickerAsync}>
-                              <MaterialIcons name="photo-camera" size={25} color="#f18d46" />
+                              <MaterialIcons name="photo-camera" size={30 } color="#f18d46" />
                             </TouchableOpacity>
                           </ImageBackground>
                         </Block>
@@ -348,7 +418,8 @@ class RecipeRegister extends React.Component {
                     scrollViewProps={{ scrollEnabled: true }}
                     nextBtnTextStyle={buttonTextStyle}
                     previousBtnTextStyle={buttonTextStyle}
-                    onSubmit={this.onSubmit}
+                    onNext={this.onNextStep2}
+                    errors={this.state.errors}
                   >
                     <Block flex={1} style={styles.recipeContainer}>
                       <Block row>
@@ -365,6 +436,7 @@ class RecipeRegister extends React.Component {
                           size={17}
                           color={nowTheme.COLORS.PRIMARY}
                           style={{ margin: 6 }}
+                          onPress={() => this.setModalVisible(true)}
                         />
                       </Block>
                       {this.state.ingreList.map((el, idx) => {
@@ -422,7 +494,8 @@ class RecipeRegister extends React.Component {
                     scrollViewProps={{ scrollEnabled: true }}
                     nextBtnTextStyle={buttonTextStyle}
                     previousBtnTextStyle={buttonTextStyle}
-                    onSubmit={this.onSubmit}
+                    onSubmit={ this.state.errors ? this.onSubmitStep : this.onSubmit}
+                    errors={this.state.errors}
                   >
                     <Block flex={1} style={styles.recipeContainer}>
                       <Block row>
@@ -452,7 +525,9 @@ class RecipeRegister extends React.Component {
                             <ImageBackground
                               resizeMode="cover"
                               source={
-                                el.image == null ? Images.RegisterBackground : { uri: el.image }
+                                this.state.imageList[idx] == null
+                                  ? Images.RegisterBackground
+                                  : { uri: this.state.imageList[idx] }
                               }
                               style={{
                                 height: height * 0.2,
@@ -507,6 +582,31 @@ class RecipeRegister extends React.Component {
             </Block>
           </ImageBackground>
         </Block>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+            this.setModalVisible(!modalVisible);
+          }}
+        >
+          <Block style={styles.centeredView}>
+            <Block style={styles.modalView}>
+              <Block flex={4}>
+                <Text style={styles.modalText}>재료: 양파 계량: 1/2개</Text>
+              </Block>
+              <Block flex={1}>
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => this.setModalVisible(!modalVisible)}
+                >
+                  <Text style={styles.textStyle}>닫기</Text>
+                </Pressable>
+              </Block>
+            </Block>
+          </Block>
+        </Modal>
       </Block>
     );
   }
@@ -592,6 +692,46 @@ const styles = StyleSheet.create({
     width: width * 0.5,
     marginTop: 15,
     marginBottom: 40,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    width: height * 0.3,
+    height: height * 0.3,
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonClose: {
+    backgroundColor: '#f18d46',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
 });
 
