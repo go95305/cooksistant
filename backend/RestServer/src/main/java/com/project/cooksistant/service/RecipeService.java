@@ -189,7 +189,10 @@ public class RecipeService {
             RecipeListupDTO recipeListupDTO = new RecipeListupDTO();
             Optional<Recipe> recipe = recipeRepository.findById(recipeIds.get(i));
             recipeListupDTO.setRecipeId(recipe.get().getRecipeId());
-            recipeListupDTO.setUrl("https://" + S3Uploader.CLOUD_FRONT_DOMAIN_NAME + "/" + recipe.get().getImage());
+            if (recipe.get().getImage().contains("http"))
+                recipeListupDTO.setUrl(recipe.get().getImage());
+            else
+                recipeListupDTO.setUrl("https://" + S3Uploader.CLOUD_FRONT_DOMAIN_NAME + "/" + recipe.get().getImage());
             recipeListupDTO.setDescription(recipe.get().getDescription());
             recipeListupDTO.setRecipename(recipe.get().getCuisine());
             Long recipeId = recipe.get().getRecipeId();
@@ -311,7 +314,7 @@ public class RecipeService {
         Optional<Recipe> recipe = recipeRepository.findById(recipeId);
         //5.s3에 이미지 업로드 후 recipe image에 set한다.
         String image = s3Uploader.upload(originalName, file, recipeId);
-        System.out.println(image+"입니다");
+        System.out.println(image + "입니다");
         recipe.get().setImage(image);
         recipeRepository.save(recipe.get());
     }
