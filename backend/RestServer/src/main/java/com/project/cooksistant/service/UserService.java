@@ -11,6 +11,7 @@ import com.project.cooksistant.model.entity.User;
 import com.project.cooksistant.repository.RecipeRepository;
 import com.project.cooksistant.repository.ScrapRepository;
 import com.project.cooksistant.repository.UserRepository;
+import com.project.cooksistant.s3.S3Uploader;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
@@ -59,7 +60,10 @@ public class UserService {
                 recipeMypageDTO.setRecipeId(recipeList.get(i).getRecipeId());
                 recipeMypageDTO.setCuisine(recipeList.get(i).getCuisine());
                 recipeMypageDTO.setDescription(recipeList.get(i).getDescription());
-                recipeMypageDTO.setImage(recipeList.get(i).getImage());
+                if (recipeList.get(i).getImage().contains("https"))
+                    recipeMypageDTO.setImage(recipeList.get(i).getImage());
+                else
+                    recipeMypageDTO.setImage("https://" + S3Uploader.CLOUD_FRONT_DOMAIN_NAME + "/" + recipeList.get(i).getImage());
                 recipeMypageDTO.setUser(recipeList.get(i).getUser());
                 recipeMypageDTOList.add(recipeMypageDTO);
             }
@@ -81,7 +85,10 @@ public class UserService {
                 ScrapMypageDTO scrapMypageDTO = new ScrapMypageDTO();
                 scrapMypageDTO.setNickname(scrapList.get(i).getUser().getNickname());
                 scrapMypageDTO.setRecipeId(scrapList.get(i).getRecipe().getRecipeId());
-                scrapMypageDTO.setImage(scrapList.get(i).getRecipe().getImage());
+                if (scrapList.get(i).getRecipe().getImage().contains("https"))
+                    scrapMypageDTO.setImage(scrapList.get(i).getRecipe().getImage());
+                else
+                    scrapMypageDTO.setImage("https://" + S3Uploader.CLOUD_FRONT_DOMAIN_NAME + "/" + scrapList.get(i).getRecipe().getImage());
                 scrapMypageDTO.setDescription(scrapList.get(i).getRecipe().getDescription());
                 scrapMypageDTO.setCuisine(scrapList.get(i).getRecipe().getCuisine());
 //                System.out.println(scrapMypageDTO);
