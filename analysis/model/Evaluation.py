@@ -3,6 +3,14 @@ import pandas as pd
 
 
 class Evaluation:
+    def getEvaluationById(userId):
+        sql = "select e.user_id, e.recipe_id, r.cuisine, e.favor " \
+              "from recipe r inner join evaluation e on(r.id=e.recipe_id) "\
+            f"where e.user_id={userId}"
+        cursor.execute(sql)
+        result = cursor.fetchall()
+
+        return result
 
     def getEvaluation():
 
@@ -25,9 +33,7 @@ class Evaluation:
             "on(r.id = evk.recipe_id)) as b "\
             "where b.favor is not null "\
             "group by b.recipe_id"
-           
 
         cursor.execute(sql)
         result = cursor.fetchall()
         return pd.DataFrame(result)
-    
