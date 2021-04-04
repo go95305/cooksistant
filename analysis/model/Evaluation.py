@@ -1,4 +1,4 @@
-from utils.database import cursor
+from utils.database import cursor,db
 import pandas as pd
 
 
@@ -17,6 +17,7 @@ class Evaluation:
         # 여기에 keyword도 포함해야하지않나?
         sql = "select e.user_id, e.recipe_id, r.cuisine, e.favor " \
               "from recipe r inner join evaluation e on(r.id=e.recipe_id)"
+        db.ping(reconnect=True)     
         cursor.execute(sql)
         result = cursor.fetchall()
 
@@ -33,7 +34,7 @@ class Evaluation:
             "on(r.id = evk.recipe_id)) as b "\
             "where b.favor is not null "\
             "group by b.recipe_id"
-
+        db.ping(reconnect=True)
         cursor.execute(sql)
         result = cursor.fetchall()
         return pd.DataFrame(result)

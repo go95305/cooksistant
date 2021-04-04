@@ -1,4 +1,4 @@
-from utils.database import cursor
+from utils.database import cursor,db
 import pandas as pd
 
 
@@ -8,12 +8,14 @@ class Recipe:
             "from evaluation "\
             "group by recipe_id "\
             "order by count(recipe_id) desc"
-        cursor.execute(sql)
+        cursor.ping(reconnect=True)
+        db.ping(reconnect=True)
         result = cursor.fetchall()
         return pd.DataFrame(result)
 
     def getRecipe():
         sql = "select id, cuisine from recipe"
+        db.ping(reconnect=True)
         cursor.execute(sql)
         result = cursor.fetchall()
 
@@ -29,6 +31,7 @@ class Recipe:
               f"where i.name in (\"{ingredients_str}\")\n" \
               "group by r.recipe_id"
 
+        db.ping(reconnect=True)
         cursor.execute(sql)
         result = [item['recipe_id'] for item in cursor.fetchall()]
 
