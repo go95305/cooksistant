@@ -339,6 +339,7 @@ public class RecipeService {
         List<Step> step = stepRepository.findAllByRecipe(recipe);
         for (int i = 0; i < step.size(); i++) {
             String image = s3Uploader.uploadStep(originalName, file, step.get(i).getStepId());
+            System.out.println(image);
             step.get(i).setImage(image);
             stepRepository.save(step.get(i));
         }
