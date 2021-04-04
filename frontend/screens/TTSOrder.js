@@ -1,9 +1,10 @@
-import React, {Component} from 'react';
-import { StyleSheet, ImageBackground, Dimensions, TouchableOpacity, Image } from 'react-native';
+import React from 'react';
+import { StyleSheet, Dimensions, TouchableOpacity, Image, Alert } from 'react-native';
 import { Block, Text, Button as GaButton, theme } from 'galio-framework';
 import axios from 'axios';
 import { Button, Icon, Input } from '../components';
-import { Images, nowTheme } from '../constants';
+import { nowTheme } from '../constants';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 import Swiper from 'react-native-swiper';
 import * as Speech from 'expo-speech';
@@ -11,103 +12,119 @@ import * as Speech from 'expo-speech';
 const { width, height } = Dimensions.get('screen');
 
 class TTSOrder extends React.Component {
-  
-  sptx = "";
-
   constructor(props) {
-    // console.log('props' + props.route.params.id);
     super(props);
     this.state = {
       swiperShow: false,
-      id: this.props.route.params.id,
-      recipeDetail: {
-        id: 0,
-        nickname: null,
-        cuisine: null,
-        stepList: [],
-      },
+      rId: this.props.route.params.id,
+      image: null,
+      cuisine: null,
+      nickname: null,
+      stepList: [],
     };
   }
-  componentDidMount = (props) => {
-
+  componentDidMount = () => {
     axios
-      .get(`http://j4c101.p.ssafy.io:8081/recipe/show/${this.state.id}`)
+      .get(`http://j4c101.p.ssafy.io:8081/recipe/show/${this.state.rId}`)
       .then((result) => {
         console.log(result);
-        console.log('result.data.cuisine' + result.data.cuisine);
-        const list = [];
-
+        const sList = [];
         result.data.stepList.forEach((el) => {
-          list.push({
+          sList.push({
+            sId: el.stepId,
             image: el.image,
-            level: el.level,
             description: el.description,
+            level: el.level,
           });
         }),
           this.setState({
-            recipeDetail: {
-              id: result.data.recipeId,
-              nickname: result.data.nickname,
-              cuisine: result.data.cuisine,
-              stepList: list,
-            },
+            nickname: result.data.nickname,
+            cuisine: result.data.cuisine,
+            image: result.data.image,
+            stepList: sList,
           });
+      })
+      .then(() => {
+        Speech.speak(this.state.stepList[0].description);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  _speechText() {
-    //const thingToSay = document.getElementById('speechtext').value;
-    const thingToSay = this.sptx;
-    console.log(thingToSay);
-    Speech.speak(thingToSay);
-  };
+  _speechText(num) {
+    console.log(this.state.stepList[num].description);
+    console.log(num);
+    Speech.speak(this.state.stepList[num].description);
+  }
+
+  btnSpeak(text) {
+    const toSay = text;
+    Speech.speak(toSay);
+  }
+
+  checkEvalu() {
+    const { navigation } = this.props;
+    Alert.alert(                    
+      "레시피 평가하러 갈까유?", " ",                                    
+      [                             
+        {
+          text: "다음에 할게요",                               
+          style: "cancel"
+        },
+        { text: "네", onPress: () => navigation.navigate('EvalueRegister', {
+          rId: this.state.rId,
+          title: this.state.cuisine,
+          image: this.state.image,
+        }) }, 
+      ],
+      { cancelable: false }
+    );
+  }
 
   render() {
-    let thingToSay;
     return (
       <Swiper
-        onMomentumScrollEnd={this._speechText} >
-        {this.state.recipeDetail.stepList.map((idx, index) => (
-          <Block center key={index} style={[styles.registerContainer]}>
-            <Block
-              center
-              style={{
-                marginTop: height > 800 ? 100 : 80,
-                width: width * 0.8,
-                alignItems: 'center',
-              }}
-            >
-              <Text
-                style={{
-                  fontFamily: 'montserrat-bold',
-                  textAlign: 'center',
-                }}
-                color="#333"
-                size={20}
-                bold
-              >
-                Level.
-              </Text>
-              <Text
-                style={{
-                  fontFamily: 'montserrat-bold',
-                  textAlign: 'center',
-                }}
-                color="#333"
-                size={15}
-                bold
-              >
-                {idx.level}
-              </Text>
-            </Block>
-            <Block space="between">
-              <Block center style={{ marginTop: 50, marginBottom: 50 }}>
-                <Image style={{ height: 150, width: 250 }} source={{ uri: idx.image }} />
+        loop={false}
+        showsPagination={false}
+        onIndexChanged={(index) => {
+          this._speechText(index);
+        }}
+      >
+        {this.state.stepList.map((el, index) => (
+          <Block flex center key={index} style={[styles.registerContainer]}>
+            <Block flex={0.1} style={{ marginTop: 55 }}>
+              <Block row space="around">
+                <Text
+                  style={{
+                    fontFamily: 'montserrat-bold',
+                    textAlign: 'center',
+                  }}
+                  color="#474747"
+                  size={20}
+                >
+                  {el.level} &nbsp;
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: 'montserrat-bold',
+                    textAlign: 'center',
+                  }}
+                  color="#474747"
+                  size={20}
+                >
+                  / {this.state.stepList.length}
+                </Text>
               </Block>
+            </Block>
+            <Block flex={0.4}>
+              <Block center style={{ marginTop: 30, marginBottom: 30 }}>
+                <Image style={styles.photo} source={{ uri: el.image }} />
+              </Block>
+            </Block>
+            <Block flex={0.3}>
               <Block
+                center
                 style={{
                   width: width * 0.8,
                   alignItems: 'center',
@@ -116,21 +133,47 @@ class TTSOrder extends React.Component {
                 }}
               >
                 <Text
-                  ref = {(ref) => {this.sptx=ref}}
                   style={{
                     fontFamily: 'montserrat-regular',
                     textAlign: 'center',
                     lineHeight: 25,
                     padding: 10,
                   }}
-                  color="#333"
+                  color="#474747"
                   size={15}
-                  value = {this.speechtext}
+                  value={this.speechtext}
                 >
-                  {idx.description}
+                  {el.description}
                 </Text>
-                
               </Block>
+            </Block>
+            <Block row flex={0.1}>
+              <Button
+                color="primary"
+                round
+                style={styles.button}
+                onPress={() => this.btnSpeak(el.description)}
+              >
+                <FontAwesome5 name="microphone" size={24} color="white" />
+              </Button>
+              {el.level === this.state.stepList.length ? (
+                <Button
+                  color="primary"
+                  round
+                  style={styles.button}
+                  onPress={() => this.checkEvalu()}
+                >
+                  <Text
+                    style={{ fontFamily: 'montserrat-bold' }}
+                    size={14}
+                    color={nowTheme.COLORS.WHITE}
+                  >
+                    레시피 완성
+                  </Text>
+                </Button>
+              ) : (
+                <Block/>
+              )}
             </Block>
           </Block>
         ))}
@@ -180,6 +223,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'red',
     width: width * 0.9,
     height: height / 2,
+  },
+  photo: {
+    borderRadius: 30,
+    height: 185,
+    width: width * 0.85,
+  },
+  button: {
+    height: 50,
+    width: width * 0.3,
   },
 });
 
