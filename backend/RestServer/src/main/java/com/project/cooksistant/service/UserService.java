@@ -115,8 +115,8 @@ public class UserService {
         Optional<User> user = Optional.ofNullable(userRepository.findById(userId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 유저는 존재하지 않습니다.")));
 
         //이미 스크랩한 데이터인지 확인
-        Optional<Scrap> isScrap = Optional.ofNullable(scrapRepository.findScrapByRecipeAndUser(recipe, user));
-        if (isScrap.isPresent() && isScrap.get().getFlag()) {//이미 존재하는 스크랩 정보면 에러 발생시킨다.
+        Optional<Scrap> isScrap = scrapRepository.findScrapByRecipeAndUserAndFlag(recipe, user, true);
+        if (isScrap.isPresent()) {//이미 존재하는 스크랩 정보면 에러 발생시킨다.
             throw new RestException(HttpStatus.BAD_REQUEST, "이미 스크랩한 데이터 입니다.");
         } else {
             Scrap scrap = new Scrap();
