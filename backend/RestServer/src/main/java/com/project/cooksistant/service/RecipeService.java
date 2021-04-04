@@ -69,7 +69,7 @@ public class RecipeService {
         return evaluationDTO;
     }
 
-    public boolean evaluateRecipe(EvaluationDTOpost evaluationDTOpost) {
+    public Long evaluateRecipe(EvaluationDTOpost evaluationDTOpost) {
         Optional<Recipe> recipe = Optional.ofNullable(recipeRepository.findById(evaluationDTOpost.getRecipeId()).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 레시피는 존재하지 않습니다.")));
         Optional<User> user = Optional.ofNullable(userRepository.findById(evaluationDTOpost.getUserId()).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 유저는 존재하지 않는 유저입니다.")));
         Evaluation evaluation = new Evaluation();
@@ -93,7 +93,7 @@ public class RecipeService {
             evaluation.setIsComplete(evaluationDTOpost.getIsComplete());//isComplete를 false로 둔다.
             evaluationRepository.save(evaluation);
         }
-        return true;
+        return evaluation.getEvalId();
 
     }
 

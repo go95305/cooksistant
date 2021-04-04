@@ -176,12 +176,8 @@ public class RecipeController {
             "                                          - isUpdate: 새로작성인지 수정인지\n" +
             "                                          - userId: 평가할 유저의 userId")
     @PostMapping("/recipe/evaluation")
-    public String evaluation(@RequestBody EvaluationDTOpost evaluationDTOpost) {
-        boolean isEvaluation = recipeService.evaluateRecipe(evaluationDTOpost);
-        if (isEvaluation)
-            return "success";
-        else
-            return "fail";
+    public Long evaluation(@RequestBody EvaluationDTOpost evaluationDTOpost) {
+        return recipeService.evaluateRecipe(evaluationDTOpost);
     }
 
     @ApiOperation(value = "평가하지 않은 리뷰 평가하기")
