@@ -25,25 +25,21 @@ public class RecipeService {
     @PersistenceContext
     EntityManager entityManager;
     private final UserRepository userRepository;
-    private final WebClient webClient;
     private final StepRepository stepRepository;
     private final RecipeRepository recipeRepository;
     private final IngredientRepository ingredientRepository;
     private final RecipeIngredientRepository recipeIngredientRepository;
-    private final ModelMapper modelMapper;
     private final EvaluationRepository evaluationRepository;
     private final EvaluationKeywordRepository evaluationKeywordRepository;
     private final KeywordRepository keywordRepository;
     private final S3Uploader s3Uploader;
 
-    public RecipeService(UserRepository userRepository, WebClient.Builder webClientBuilder, StepRepository stepRepository, RecipeRepository recipeRepository, IngredientRepository ingredientRepository, RecipeIngredientRepository recipeIngredientRepository, ModelMapper modelMapper, EvaluationRepository evaluationRepository, EvaluationKeywordRepository evaluationKeywordRepository, KeywordRepository keywordRepository, S3Uploader s3Uploader) {
+    public RecipeService(UserRepository userRepository, StepRepository stepRepository, RecipeRepository recipeRepository, IngredientRepository ingredientRepository, RecipeIngredientRepository recipeIngredientRepository, EvaluationRepository evaluationRepository, EvaluationKeywordRepository evaluationKeywordRepository, KeywordRepository keywordRepository, S3Uploader s3Uploader) {
         this.userRepository = userRepository;
-        this.webClient = webClientBuilder.baseUrl("http://j4c101.p.ssafy.io:8083").build(); // 추후에 flask에 알맞게 변경 // 8083포트로 설정
         this.stepRepository = stepRepository;
         this.recipeRepository = recipeRepository;
         this.ingredientRepository = ingredientRepository;
         this.recipeIngredientRepository = recipeIngredientRepository;
-        this.modelMapper = modelMapper;
         this.evaluationRepository = evaluationRepository;
         this.evaluationKeywordRepository = evaluationKeywordRepository;
         this.keywordRepository = keywordRepository;
@@ -82,13 +78,13 @@ public class RecipeService {
             evaluationRepository.save(evaluation);
 
 
-            for (int i = 0; i < evaluationDTOpost.getKeywordList().size(); i++) {
-                EvaluationKeyword evaluationKeyword = new EvaluationKeyword();
-                Keyword keyword = keywordRepository.findByKeyword(evaluationDTOpost.getKeywordList().get(i));//keyword 테이블에서 해당 키워드 정도 찾기
-                evaluationKeyword.setEvaluation(evaluation); //평가 id는 위에서 저장한 평가데이터의 id로 설정
-                evaluationKeyword.setKeyword(keyword);//각각 키워드는 위에서구한 keyword 객체로 설정
-                evaluationKeywordRepository.save(evaluationKeyword);
-            }
+//            for (int i = 0; i < evaluationDTOpost.getKeywordList().size(); i++) {
+//                EvaluationKeyword evaluationKeyword = new EvaluationKeyword();
+//                Keyword keyword = keywordRepository.findByKeyword(evaluationDTOpost.getKeywordList().get(i));//keyword 테이블에서 해당 키워드 정도 찾기
+//                evaluationKeyword.setEvaluation(evaluation); //평가 id는 위에서 저장한 평가데이터의 id로 설정
+//                evaluationKeyword.setKeyword(keyword);//각각 키워드는 위에서구한 keyword 객체로 설정
+//                evaluationKeywordRepository.save(evaluationKeyword);
+//            }
         } else {
             evaluation.setIsComplete(evaluationDTOpost.getIsComplete());//isComplete를 false로 둔다.
             evaluationRepository.save(evaluation);
@@ -209,7 +205,7 @@ public class RecipeService {
         return recipeListupDTOList;
     }
 
-    public boolean evaluateUpdate(EvaluationDTOpost evaluationDTOpost) {
+    public boolean evaluateUpdate(EvaluationDTOpostUpdate evaluationDTOpost) {
         Optional<Evaluation> evaluation = Optional.ofNullable(evaluationRepository.findById(evaluationDTOpost.getEvaluationId()).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 평가데이터는 존재하지않습니다.")));
         evaluation.get().setIsComplete(evaluationDTOpost.getIsComplete());
         evaluation.get().setFavor(evaluationDTOpost.getFavor());

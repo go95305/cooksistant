@@ -182,7 +182,7 @@ public class RecipeController {
 
     @ApiOperation(value = "평가하지 않은 리뷰 평가하기")
     @PutMapping("/recipe/evaluationUpdate")
-    public String evaluationUpdate(@RequestBody EvaluationDTOpost evaluationDTOpost) {
+    public String evaluationUpdate(@RequestBody EvaluationDTOpostUpdate evaluationDTOpost) {
         boolean isEvaluation = recipeService.evaluateUpdate(evaluationDTOpost);
         if (isEvaluation)
             return "success";
