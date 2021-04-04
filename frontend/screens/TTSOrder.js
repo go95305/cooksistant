@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { StyleSheet, ImageBackground, Dimensions, TouchableOpacity, Image } from 'react-native';
 import { Block, Text, Button as GaButton, theme } from 'galio-framework';
 import axios from 'axios';
@@ -6,9 +6,14 @@ import { Button, Icon, Input } from '../components';
 import { Images, nowTheme } from '../constants';
 
 import Swiper from 'react-native-swiper';
+import * as Speech from 'expo-speech';
+
 const { width, height } = Dimensions.get('screen');
 
 class TTSOrder extends React.Component {
+  
+  sptx = "";
+
   constructor(props) {
     console.log('props' + props.route.params.id);
     super(props);
@@ -24,6 +29,7 @@ class TTSOrder extends React.Component {
     };
   }
   componentDidMount = (props) => {
+
     axios
       .get(`http://j4c101.p.ssafy.io:8081/recipe/show/${this.state.id}`)
       .then((result) => {
@@ -55,9 +61,18 @@ class TTSOrder extends React.Component {
       });
   };
 
+  _speechText() {
+    //const thingToSay = document.getElementById('speechtext').value;
+    const thingToSay = this.sptx;
+    console.log(thingToSay);
+    Speech.speak(thingToSay);
+  };
+
   render() {
+    let thingToSay;
     return (
-      <Swiper>
+      <Swiper
+        onMomentumScrollEnd={this._speechText} >
         {this.state.recipeDetail.stepList.map((idx, index) => (
           <Block center key={index} style={[styles.registerContainer]}>
             <Block
@@ -97,6 +112,7 @@ class TTSOrder extends React.Component {
               </Block>
               <Block style={{ width: width * 0.8, alignItems: 'center' }}>
                 <Text
+                  ref = {(ref) => {this.sptx=ref}}
                   style={{
                     fontFamily: 'montserrat-regular',
                     textAlign: 'center',
@@ -105,9 +121,11 @@ class TTSOrder extends React.Component {
                   }}
                   color="#333"
                   size={15}
+                  value = {this.speechtext}
                 >
                   {idx.description}
                 </Text>
+                
               </Block>
             </Block>
           </Block>
