@@ -3,207 +3,112 @@ import {
   StyleSheet,
   ImageBackground,
   Dimensions,
-  StatusBar,
-  TouchableWithoutFeedback,
-  Keyboard,
   Image,
 } from 'react-native';
-import { Block, Checkbox, Text, Button as GaButton, theme } from 'galio-framework';
-import axios from 'axios';
-import { Button, Icon, Input } from '../components';
+import { Block, Text, Button as GaButton } from 'galio-framework';
+import { Button} from '../components';
 import { Images, nowTheme } from '../constants';
-
-import * as Speech from 'expo-speech';
 
 const { width, height } = Dimensions.get('screen');
 
-const DismissKeyboard = ({ children }) => (
-  <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
-);
-
 class TTS extends React.Component {
-  speak() {
-    const thingToSay = '텍스트 안에서 함수실행은 어떻게 하죠?';
-    Speech.speak(thingToSay);
-  }
   constructor(props) {
-    console.log('props' + props.route.params.id);
     super(props);
     this.state = {
-      id: this.props.route.params.step.id,
-      recipeDetail: {
-        id: 0,
-        nickname: null,
-        cuisine: null,
-        stepList: [],
-      },
+      rId: this.props.route.params.step.id,
+      cuisine: this.props.route.params.step.cuisine,
+      image: this.props.route.params.step.image,
     };
   }
-  componentDidMount = (props) => {
-    axios
-      .get(`http://j4c101.p.ssafy.io:8081/recipe/show/${this.state.id}`)
-      .then((result) => {
-        const IngredientList = [];
-        const stepList = [];
-        const title1 = result.data.cuisine.substr(0, result.data.cuisine.indexOf(']') + 1);
-        const title2 = result.data.cuisine.substr(result.data.cuisine.indexOf(']') + 2);
-
-        result.data.ingredientDTOList.forEach((el) => {
-          const tmp = el.amount.split('(');
-          const tmp1 = el.ingredientName.split('(');
-
-          IngredientList.push({
-            ingredientName: tmp1[0],
-            amount: tmp[0],
-            isType: el.isType,
-          });
-        }),
-          result.data.stepList.forEach((el) => {
-            stepList.push({
-              description: el.description,
-              image: el.image,
-              level: el.level,
-            });
-          }),
-          this.setState({
-            recipeDetail: {
-              id: result.data.recipeId,
-              nickname: result.data.nickname,
-              cuisine: title1,
-              cuisine1: title2,
-              description: result.data.description,
-              cookingTime: result.data.cookingTime,
-              image: result.data.image,
-              level: result.data.level,
-              serving: result.data.serving,
-              ingredientDTOList: IngredientList,
-              stepList: stepList,
-            },
-          });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
   render() {
+    const title = this.state.cuisine;
+    const tmp = title.split(']');
     return (
-      <DismissKeyboard>
-        <Block flex middle>
+      <Block style={styles.container}>
+        <Block>
           <ImageBackground
             source={Images.RegisterBackground}
             style={styles.imageBackgroundContainer}
             imageStyle={styles.imageBackground}
           >
-            <Block flex middle>
+            <Block flex={1} middle>
               <Block style={styles.registerContainer}>
-                <Block flex space="evenly" style={{ marginTop: height > 800 ? 60 : 60 }}>
-                  <Block flex={0.2} middle>
+                <Block flex={0.2} middle style={{marginTop: 30, marginBottom: 20}}>
+                  <Block width={width * 0.8}
+                    style={{ padding: 5, borderWidth: 2, borderRadius: 15, borderColor: '#f18d46' }}
+                  >
                     <Text
                       style={{
                         fontFamily: 'montserrat-bold',
-                        textAlign: 'center',
+                        lineHeight: 27,
+                        margin: 20,
+                        marginTop: 10,
+                        marginBottom: 10,
                       }}
-                      color="#333"
-                      size={20}
-                      bold
+                      color="#474747"
+                      size={17}
                     >
-                      {this.state.recipeDetail.cuisine}
+                      {title.includes(']') ? tmp[0] + '] \n' + tmp[1].trim() : title}
                     </Text>
+                  </Block>
+                </Block>
+                <Block center flex={0.5}>
+                  <Block style={{ overflow: 'hidden' }}>
+                  <Image
+                    resizeMode="cover"
+                    style={styles.photo}
+                    source={{ uri: this.state.image }}
+                  />
+                  </Block>
+                </Block>
+  
+                <Block center flex={0.2}>
+                  <Button
+                    color="primary"
+                    round
+                    style={styles.createButton}
+                    onPress={() =>
+                      this.props.navigation.navigate('TTSOrder', {
+                        id: this.state.rId,
+                      })
+                    }
+                  >
                     <Text
-                      style={{
-                        fontFamily: 'montserrat-bold',
-                        textAlign: 'center',
-                        padding: 20,
-                      }}
-                      color="#333"
-                      size={15}
-                      bold
+                      style={{ fontFamily: 'montserrat-bold' }}
+                      size={14}
+                      color={nowTheme.COLORS.WHITE}
                     >
-                      {this.state.recipeDetail.cuisine1}
+                      같이 요리해볼까요?
                     </Text>
-                  </Block>
-
-                  <Block flex={1} middle space="between">
-                    <Block center flex={0.9}>
-                      <Block flex space="between">
-                        <Block middle>
-                          <Image
-                            resizeMode="contain"
-                            style={styles.photo}
-                            source={{ uri: this.state.recipeDetail.image }}
-                          />
-                        </Block>
-                        <Block flex={0.2} middle>
-                          <Text
-                            style={{
-                              fontFamily: 'montserrat-regular',
-                              textAlign: 'center',
-                              marginTop: 50,
-                              color: 'black',
-                            }}
-                            color="#333"
-                            size={18}
-                          >
-                            같이 요리해볼까요?
-                          </Text>
-                        </Block>
-                        <Block middle>
-                          <Block color="primary" round style={styles.createButton}>
-                            <Button onPress={this.speak}>
-                              <Text>글을 읽어줄게요</Text>
-                            </Button>
-                          </Block>
-                        </Block>
-
-                        <Block center>
-                          <Button
-                            color="primary"
-                            round
-                            style={styles.createButton}
-                            onPress={() =>
-                              this.props.navigation.navigate('TTSOrder', {
-                                id: this.state.recipeDetail.id,
-                              })
-                            }
-                          >
-                            <Text
-                              style={{ fontFamily: 'montserrat-bold' }}
-                              size={14}
-                              color={nowTheme.COLORS.WHITE}
-                            >
-                              START
-                            </Text>
-                          </Button>
-                        </Block>
-                      </Block>
-                    </Block>
-                  </Block>
+                  </Button>
                 </Block>
               </Block>
             </Block>
           </ImageBackground>
         </Block>
-      </DismissKeyboard>
+      </Block>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+  },
   imageBackgroundContainer: {
     width: width,
     height: height,
     padding: 0,
-    zIndex: 1,
   },
   imageBackground: {
     width: width,
     height: height,
   },
   registerContainer: {
-    marginTop: 55,
+    marginTop: height > 800 ? height * 0.12 : 0,
     width: width * 0.9,
-    height: height < 812 ? height * 0.8 : height * 0.8,
+    height: height * 0.8,
     backgroundColor: nowTheme.COLORS.WHITE,
     borderRadius: 4,
     shadowColor: nowTheme.COLORS.BLACK,
@@ -231,21 +136,15 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
   },
   createButton: {
+    height: 50,
     width: width * 0.5,
     marginTop: 25,
     marginBottom: 30,
   },
-  social: {
-    width: theme.SIZES.BASE * 3.5,
-    height: theme.SIZES.BASE * 3.5,
-    borderRadius: theme.SIZES.BASE * 1.75,
-    justifyContent: 'center',
-    marginHorizontal: 10,
-  },
   photo: {
-    borderRadius: 20,
-    height: 230,
-    width: 300,
+    borderRadius: 30,
+    height: 185,
+    width: width * 0.85,
   },
 });
 
