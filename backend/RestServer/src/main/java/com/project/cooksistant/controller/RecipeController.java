@@ -107,9 +107,6 @@ public class RecipeController {
             "                                                   - recipeId: 레시피 아이디")
     @PostMapping("/recipe/recommendation")
     public List<RecipeListupDTO> recommend(@RequestBody RecommendDTO recommendDTO) {
-        System.out.println("before");
-//        int size = recipeService.evaluationExist(recommendDTO.getUserId());
-
         Gson gson = new Gson();
         String jsonArray = (webClient.post()
                 .uri("/evaluation")
@@ -123,7 +120,6 @@ public class RecipeController {
             recommendList.add(Long.parseLong(idx[i]));
         }
         return recipeService.recommendList(recommendList);
-
 
     }
 
