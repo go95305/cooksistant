@@ -16,6 +16,8 @@ import * as Permissions from 'expo-permissions';
 import uuid from 'react-native-uuid';
 import Environment from '../config/environment';
 import firebase from '../config/firebase';
+import axios from 'axios';
+import * as Speech from 'expo-speech';
 
 export default class App extends React.Component {
 	state = {
@@ -254,7 +256,30 @@ export default class App extends React.Component {
       try {
 //        console.log(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(responseJson)).responses[0])).textAnnotations);
         console.log(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(responseJson)).responses[0])).textAnnotations[0].description);
-        let strArray = JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(responseJson)).responses[0])).textAnnotations[0].description.split('\n', ' ');
+        let str = JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(responseJson)).responses[0])).textAnnotations[0].description;
+		const user = firebase.auth().currentUser;
+		console.log("str : " + str);
+		console.log("userid : " + user.uid);
+		axios
+			.post(`http://j4c101.p.ssafy.io:8081/recipe/ocr/`, {
+				ocrscan : str,
+				userId : 1
+			})
+			.then((result) => {
+				//
+
+
+				console.log(result)
+
+				// 작업공간
+
+
+
+				//
+			})
+			.catch((error) => {
+				console.log(error);
+			});
         console.log(strArray[0]);
         //  console.log(JSON.stringify(JSON.parse(JSON.parse(JSON.stringify(responseJson)).responses[0]).textAnnotations).description);  
       } catch (error) {
