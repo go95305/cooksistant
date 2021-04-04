@@ -75,13 +75,13 @@ public class S3Uploader {
         String fileName = file.getOriginalFilename() + "-" + date.format(new Date());
 
         if (!"".equals(currentFilePath) && currentFilePath != null) {
-            boolean isExistObject = s3Client.doesObjectExist(bucket + "/step", currentFilePath);
+            boolean isExistObject = s3Client.doesObjectExist(bucket, currentFilePath);
 
             if (isExistObject) {
-                s3Client.deleteObject(bucket + "/step", currentFilePath);
+                s3Client.deleteObject(bucket, currentFilePath);
             }
         }
-        s3Client.putObject(new PutObjectRequest(bucket + "/step", fileName, file.getInputStream(), null)
+        s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
         return fileName;
     }
