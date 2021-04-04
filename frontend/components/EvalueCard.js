@@ -41,7 +41,7 @@ class Card extends React.Component {
         this.setState({
           recipeid: result.data.recipeid,
           keywords: kList,
-          favor: favor,
+          favor: Number(favor),
           userId: result.data.userId,
         });
         console.log(result);

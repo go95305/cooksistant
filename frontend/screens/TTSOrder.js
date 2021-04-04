@@ -1,13 +1,13 @@
 import React from 'react';
-import { StyleSheet, Dimensions, TouchableOpacity, Image, Alert } from 'react-native';
+import { StyleSheet, Dimensions, Image, Alert } from 'react-native';
 import { Block, Text, Button as GaButton, theme } from 'galio-framework';
-import axios from 'axios';
 import { Button, Icon, Input } from '../components';
-import { nowTheme } from '../constants';
+import { Images, nowTheme } from '../constants';
 import { FontAwesome5 } from '@expo/vector-icons';
-
 import Swiper from 'react-native-swiper';
 import * as Speech from 'expo-speech';
+import firebase from 'firebase';
+import axios from 'axios';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -16,6 +16,7 @@ class TTSOrder extends React.Component {
     super(props);
     this.state = {
       swiperShow: false,
+      userId: 0,
       rId: this.props.route.params.id,
       image: null,
       cuisine: null,
@@ -24,6 +25,18 @@ class TTSOrder extends React.Component {
     };
   }
   componentDidMount = () => {
+    var user = firebase.auth().currentUser;
+    if (user) {
+      axios
+        .get(`http://j4c101.p.ssafy.io:8081/user/${user.uid}`)
+        .then((result) => {
+          this.setState({ userId: result.data.userId });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
     axios
       .get(`http://j4c101.p.ssafy.io:8081/recipe/show/${this.state.rId}`)
       .then((result) => {
@@ -32,7 +45,7 @@ class TTSOrder extends React.Component {
         result.data.stepList.forEach((el) => {
           sList.push({
             sId: el.stepId,
-            image: el.image,
+            sImage: el.image,
             description: el.description,
             level: el.level,
           });
@@ -52,6 +65,49 @@ class TTSOrder extends React.Component {
       });
   };
 
+  checkEvalu() {
+    const { navigation } = this.props;
+    let response;
+    try {
+      response = axios.post(`http://j4c101.p.ssafy.io:8081/recipe/evaluation`, {
+        userId: this.state.userId,
+        evaluationId: 0,
+        favor: 0,
+        isComplete: false,
+        isUpdate: true,
+        recipeId: this.state.recipeId,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+    if (response.status == 200) {
+      console.log(response.status);
+    }
+
+    Alert.alert(
+      '레시피 평가하러 갈까요?',
+      ' ',
+      [
+        {
+          text: '다음에 할게요',
+          style: 'cancel',
+        },
+        {
+          text: '네',
+          onPress: () =>
+            navigation.navigate('EvalueRegister', {
+              eId: response.data,
+              rId: this.state.rId,
+              title: this.state.cuisine,
+              image: this.state.image,
+            }),
+        },
+      ],
+      { cancelable: false }
+    );
+  }
+
   _speechText(num) {
     console.log(this.state.stepList[num].description);
     console.log(num);
@@ -61,26 +117,6 @@ class TTSOrder extends React.Component {
   btnSpeak(text) {
     const toSay = text;
     Speech.speak(toSay);
-  }
-
-  checkEvalu() {
-    const { navigation } = this.props;
-    // Alert.alert(                    
-    //   "레시피 평가하러 갈까요?", " ",                                    
-    //   [                             
-    //     {
-    //       text: "다음에 할게요",                               
-    //       style: "cancel"
-    //     },
-    //     { text: "네", onPress: () => navigation.navigate('EvalueRegister', {
-    //       rId: this.state.rId,
-    //       title: this.state.cuisine,
-    //       image: this.state.image,
-    //       isNew: true
-    //     }) }, 
-    //   ],
-    //   { cancelable: false }
-    // );
   }
 
   render() {
@@ -118,9 +154,10 @@ class TTSOrder extends React.Component {
                 </Text>
               </Block>
             </Block>
+
             <Block flex={0.4}>
-              <Block center style={{ marginTop: 30, marginBottom: 30 }}>
-                <Image style={styles.photo} source={{ uri: el.image }} />
+              <Block center style={{ marginTop: 30, marginBottom: 30, overflow: 'hidden' }}>
+                <Image resizeMode="cover" style={styles.photo} source={{ uri: el.sImage }} />
               </Block>
             </Block>
             <Block flex={0.3}>
@@ -173,7 +210,7 @@ class TTSOrder extends React.Component {
                   </Text>
                 </Button>
               ) : (
-                <Block/>
+                <Block />
               )}
             </Block>
           </Block>

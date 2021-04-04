@@ -2,8 +2,7 @@ import React from 'react';
 import { StyleSheet, Dimensions } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 import { nowTheme } from '../constants';
-import { Card, CardTrendy } from '../components';
-import SegmentedControlTab from 'react-native-segmented-control-tab';
+import { Card } from '../components';
 import axios from 'axios';
 import Swiper from 'react-native-swiper';
 import RNUrlPreview from 'react-native-url-preview';
@@ -76,25 +75,33 @@ class Home extends React.Component {
               marginTop: height > 800 ? 30 : 10,
               paddingLeft: height > 800 ? 20 : 10,
             }}
+            color='#474747'
+            size={15}
           >
             인기 레시피
           </Text>
           <Block flex style={styles.container}>
-            <Swiper style={styles.wrapper} renderPagination={renderPagination} loop={false}>
+            <Swiper
+              loop={true}
+              horizontal={false}
+              renderPagination={renderPagination}
+              autoplay={true}
+              autoplayTimeout={5}
+              key={this.state.recipePopular.length}
+            >
               {this.state.recipePopular.map((el, index) => {
                 return <Card key={index} item={el} full />;
               })}
             </Swiper>
           </Block>
         </Block>
-        <Block flex={0.3}></Block>
+        <Block flex={0.1}></Block>
         <Block
           center
           style={{
             borderColor: '#f18d46',
             width: '90%',
-            borderWidth: StyleSheet.hairlineWidth,
-            marginHorizontal: 10,
+            borderWidth: StyleSheet.hairlineWidth + 1,
           }}
         />
         <Block flex={1.5}>
@@ -105,14 +112,17 @@ class Home extends React.Component {
                 marginTop: height > 800 ? 30 : 10,
                 paddingLeft: height > 800 ? 20 : 10,
               }}
+              color='#474747'
+              size={15}
             >
               트렌디 레시피
             </Text>
             <Block flex style={styles.container}>
               <Swiper
-                loop
+                loop={true}
                 renderPagination={renderPagination}
                 autoplay={true}
+                autoplayTimeout={3.5}
                 key={this.state.recipeTrendy.length}
               >
                 {this.state.recipeTrendy.map((el, index) => (
@@ -126,7 +136,7 @@ class Home extends React.Component {
                         paddingTop: 3,
                         lineHeight: 20,
                       }}
-                      size={11.5}
+                      size={12}
                       color="#474747"
                     >
                       {el.title}
