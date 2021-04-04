@@ -45,7 +45,7 @@ class RecipeInfo extends Component {
       axios
         .get(`http://j4c101.p.ssafy.io:8081/user/isscrap/${this.state.userId}/${this.state.id}`)
         .then((result) => {
-          console.log('result_____________________________' + result.data);
+          // console.log('result_____________________________' + result.data);
           if (result.data == true) {
             axios
               .put(
@@ -71,27 +71,6 @@ class RecipeInfo extends Component {
           console.log(error);
         });
     }
-
-    // if (this.state.img == require('../assets/imgs/bookmarkFull.png')) {
-    //   axios
-    //     .put(
-    //       `http://j4c101.p.ssafy.io:8081/user/deleteScrap/${this.state.userId}/${this.state.recipeDetail.id}`
-    //     )
-    //     .then((result) => this.setState({ img: require('../assets/imgs/bookmark.png') }))
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // } else if (this.state.img == require('../assets/imgs/bookmark.png')) {
-    //   axios
-    //     .post(
-    //       `http://j4c101.p.ssafy.io:8081/user/scrap/${this.state.recipeDetail.id}/${this.state.userId}`
-    //     )
-    //     .then((result) => this.setState({ img: require('../assets/imgs/bookmarkFull.png') }))
-
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // }
   };
 
   componentDidMount = () => {
