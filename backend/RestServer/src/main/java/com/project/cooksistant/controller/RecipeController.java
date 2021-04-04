@@ -71,8 +71,8 @@ public class RecipeController {
 
     @ApiOperation(value = "레시피과정 이미지 등록")
     @PutMapping("/recipe/stepImage")
-    public void stepImage(@RequestParam String originalName, @RequestParam("stepfile") MultipartFile file, @RequestParam("recipeId") Long recipeId) throws IOException {
-        recipeService.stepImage(originalName, file, recipeId);
+    public void stepImage(@RequestParam String originalName, @RequestParam("stepfile") MultipartFile file, @RequestParam("recipeId") Long recipeId, @RequestParam("level") Long level) throws IOException {
+        recipeService.stepImage(originalName, file, recipeId, level);
     }
 
     @ApiOperation(value = "레시피 재료 수정하기", notes = "Request\n" +

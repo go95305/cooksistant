@@ -334,9 +334,10 @@ public class RecipeService {
         stepRepository.save(step.get());
     }
 
-    public void stepImage(String originalName, MultipartFile file, Long recipeId) throws IOException {
+    public void stepImage(String originalName, MultipartFile file, Long recipeId, Long level) throws IOException {
         Optional<Recipe> recipe = Optional.ofNullable(recipeRepository.findById(recipeId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 레시피는 존재하지 않습니다.")));
-        Step step = stepRepository.findByRecipe(recipe);
+        Step step = stepRepository.findAllByRecipeAndLevel(recipe, level);
+
         String image = s3Uploader.uploadStep(originalName, file, step.getStepId());
         step.setImage(image);
         stepRepository.save(step);
