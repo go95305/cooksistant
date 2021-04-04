@@ -14,4 +14,6 @@ public interface ScrapRepository extends JpaRepository<Scrap, Long> {
 
 
     Scrap findScrapByRecipeAndUser(Optional<Recipe> recipe, Optional<User> user);
+
+    Optional<Scrap> findScrapByRecipeAndUserAndFlag(Optional<Recipe> recipe, Optional<User> user, boolean b);
 }

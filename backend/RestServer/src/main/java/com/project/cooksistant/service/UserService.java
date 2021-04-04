@@ -151,11 +151,8 @@ public class UserService {
     public Boolean myScrapData(Long userId, Long recipeId) {
         Optional<User> user = Optional.ofNullable(userRepository.findById(userId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 유저는 존재하지 않습니다.")));
         Optional<Recipe> recipe = Optional.ofNullable(recipeRepository.findById(recipeId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 레시피는 존재하지 않습니다.")));
-        Optional<Scrap> scrap = Optional.ofNullable(scrapRepository.findScrapByRecipeAndUser(recipe, user));
-        if (scrap.isPresent() && scrap.get().getFlag())
-            return true;
-        else
-            return false;
+        Optional<Scrap> scrap = Optional.ofNullable(scrapRepository.findScrapByRecipeAndUserAndFlag(recipe, user, true).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 유저가 스크랩한 레시피는 존재하지 않습니다.")));
+        return true;
     }
 
     public Boolean deleteScrap(Long userid, Long recipeId) {
