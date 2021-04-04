@@ -336,13 +336,10 @@ public class RecipeService {
 
     public void stepImage(String originalName, MultipartFile file, Long recipeId) throws IOException {
         Optional<Recipe> recipe = Optional.ofNullable(recipeRepository.findById(recipeId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 레시피는 존재하지 않습니다.")));
-        List<Step> step = stepRepository.findAllByRecipe(recipe);
-        for (int i = 0; i < step.size(); i++) {
-            String image = s3Uploader.uploadStep(originalName, file, step.get(i).getStepId());
-            System.out.println(image+" "+(i+1)+"번째 이미지");
-            step.get(i).setImage(image);
-            stepRepository.save(step.get(i));
-        }
+        Step step = stepRepository.findByRecipe(recipe);
+        String image = s3Uploader.uploadStep(originalName, file, step.getStepId());
+        step.setImage(image);
+        stepRepository.save(step);
     }
 
     public void ingredientFix(RecipeIngredientFixDTO recipeIngredientFixDTO) {

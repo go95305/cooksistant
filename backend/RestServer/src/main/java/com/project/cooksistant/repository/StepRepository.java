@@ -10,4 +10,6 @@ import java.util.Optional;
 
 public interface StepRepository extends JpaRepository<Step,Long> {
     List<Step> findAllByRecipe(Optional<Recipe> recipe);
+
+    Step findByRecipe(Optional<Recipe> recipe);
 }
