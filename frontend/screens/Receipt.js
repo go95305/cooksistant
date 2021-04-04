@@ -1,250 +1,364 @@
 import React from 'react';
 import {
-  StyleSheet,
-  ImageBackground,
-  Dimensions,
-  StatusBar,
-  TouchableWithoutFeedback,
-  Keyboard,
+	ActivityIndicator,
+	Button,
+	Clipboard,
+	FlatList,
+	Image,
+	Share,
+	StyleSheet,
+	Text,
+	ScrollView,
+	View
 } from 'react-native';
-import { Block, Checkbox, Text, Button as GaButton, theme } from 'galio-framework';
-
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
-import { Image } from 'react-native';
+import uuid from 'react-native-uuid';
+import Environment from '../config/environment';
+import firebase from '../config/firebase';
+import axios from 'axios';
+//import * as Speech from 'expo-speech';
 
-import { Button, Icon, Input } from '../components';
-import { Images, nowTheme } from '../constants';
+export default class App extends React.Component {
+	state = {
+		image: null,
+		uploading: false,
+		googleResponse: null
+	};
 
-const { width, height } = Dimensions.get('screen');
+	async componentDidMount() {
+		await Permissions.askAsync(Permissions.CAMERA_ROLL);
+		await Permissions.askAsync(Permissions.CAMERA);
+	}
 
-const DismissKeyboard = ({ children }) => (
-  <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
-);
+	render() {
+		let { image } = this.state;
 
-class Receipt extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hasCameraPermission: null,
-      image: null,
-    };
-  }
+		return (
+			<View style={styles.container}>
+				<ScrollView
+					style={styles.container}
+					contentContainerStyle={styles.contentContainer}
+				>
+					
 
-  async componentDidMount() {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-    this.setState({ hasCameraPermission: status === 'granted' });
-  }
+					<View style={styles.helpContainer}>
+						<Button
+							onPress={this._pickImage}
+							title="갤러리에서 영수증등록"
+						/>
 
-  _getPhotoLibrary = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      aspect: [4, 3],
-    });
-    if (!result.cancelled) {
-      this.setState({ image: result.uri });
-    }
-  };
+						<Button onPress={this._takePhoto} title="카메라로 영수증등록" />
+						{this.state.googleResponse && (
+							<FlatList
+								data={this.state.googleResponse.responses[0].labelAnnotations}
+								extraData={this.state}
+								keyExtractor={this._keyExtractor}
+								renderItem={({ item }) => <Text>Item: {item.description}</Text>}
+							/>
+						)}
+						{this._maybeRenderImage()}
+						{this._maybeRenderUploadingOverlay()}
+					</View>
+				</ScrollView>
+			</View>
+		);
+	}
 
-  render() {
-    const { image, hasCameraPermission } = this.state;
-    if (hasCameraPermission === null) {
-      return <Block />;
-    } else if (hasCameraPermission === false) {
-      return <Text>Access to camera has been denied.</Text>;
-    } else {
-      return (
-        <DismissKeyboard>
-          <Block flex middle>
-            <ImageBackground
-              source={Images.RegisterBackground}
-              style={styles.imageBackgroundContainer}
-              imageStyle={styles.imageBackground}
-            >
-              <Block flex middle>
-                <Block style={styles.registerContainer}>
-                  <Block flex space="evenly">
-                    <Block flex={0.2} middle>
-                      <Text
-                        style={{
-                          fontFamily: 'montserrat-regular',
-                          textAlign: 'center',
-                        }}
-                        color="#333"
-                        size={18}
-                      >
-                        영수증 사진 등록
-                      </Text>
-                    </Block>
+	organize = array => {
+		return array.map(function(item, i) {
+			return (
+				<View key={i}>
+					<Text>{item}</Text>
+				</View>
+			);
+		});
+	};
 
-                    <Block flex={1} middle space="between">
-                      <Block center>
-                        <Block flex space="between">
-                          <Block style={{ flex: 1 }}>
-                            <Block style={styles.activeImageContainer}>
-                              {image ? (
-                                <Image source={{ uri: image }} style={{ flex: 1 }} />
-                              ) : (
-                                <Block />
-                              )}
-                            </Block>
-                            <Block style={{ alignItems: 'center', justifyContent: 'center' }}>
-                              <Button color="primary" round style={styles.createButton}>
-                                <Text
-                                  style={{ fontFamily: 'montserrat-bold' }}
-                                  size={14}
-                                  color={nowTheme.COLORS.WHITE}
-                                  onPress={this._getPhotoLibrary.bind(this)}
-                                  title="Photo Picker Screen!"
-                                >
-                                  사진 등록
-                                </Text>
-                              </Button>
-                            </Block>
-                          </Block>
-                          <Block center width={width * 0.8}>
-                            <Block row>
-                              <Text
-                                style={{
-                                  color: '#2c2c2c',
-                                  fontWeight: 'bold',
-                                  fontSize: 19,
-                                  fontFamily: 'montserrat-bold',
-                                  marginBottom: 10,
-                                  zIndex: 2,
-                                }}
-                              >
-                                재료
-                              </Text>
-                            </Block>
-                            <Block row>
-                              <Button
-                                right
-                                style={{
-                                  width: '30%',
-                                  height: 30,
-                                  marginHorizontal: 10,
-                                  elevation: 0,
-                                }}
-                                textStyle={{ fontSize: 15, color: 'white' }}
-                                color="Primary"
-                                round
-                              >
-                                하늘
-                              </Button>
-                              <Button
-                                right
-                                style={{
-                                  width: '30%',
-                                  height: 30,
-                                  marginHorizontal: 10,
-                                  elevation: 0,
-                                }}
-                                textStyle={{ fontSize: 15, color: 'white' }}
-                                color="Primary"
-                                round
-                              >
-                                부히
-                              </Button>
-                            </Block>
-                            <Block row>
-                              <Button
-                                right
-                                style={{
-                                  width: '30%',
-                                  height: 30,
-                                  marginHorizontal: 10,
-                                  elevation: 0,
-                                }}
-                                textStyle={{ fontSize: 15, color: 'white' }}
-                                color="Primary"
-                                round
-                              >
-                                지현
-                              </Button>
-                              <Button
-                                right
-                                style={{
-                                  width: '30%',
-                                  height: 30,
-                                  marginHorizontal: 10,
-                                  elevation: 0,
-                                }}
-                                textStyle={{ fontSize: 15, color: 'white' }}
-                                color="Primary"
-                                round
-                              >
-                                유창
-                              </Button>
-                            </Block>
-                          </Block>
-                        </Block>
-                        <Block center>
-                          <Button color="primary" round style={styles.createButton}>
-                            <Text
-                              style={{ fontFamily: 'montserrat-bold' }}
-                              size={14}
-                              color={nowTheme.COLORS.WHITE}
-                            >
-                              다음 단계
-                            </Text>
-                          </Button>
-                        </Block>
-                      </Block>
-                    </Block>
-                  </Block>
-                </Block>
-              </Block>
-            </ImageBackground>
-          </Block>
-        </DismissKeyboard>
-      );
-    }
-  }
+	_maybeRenderUploadingOverlay = () => {
+		if (this.state.uploading) {
+			return (
+				<View
+					style={[
+						StyleSheet.absoluteFill,
+						{
+							backgroundColor: 'rgba(0,0,0,0.4)',
+							alignItems: 'center',
+							justifyContent: 'center'
+						}
+					]}
+				>
+					<ActivityIndicator color="#fff" animating size="large" />
+				</View>
+			);
+		}
+	};
+
+	_maybeRenderImage = () => {
+		let { image, googleResponse } = this.state;
+		if (!image) {
+			return;
+		}
+
+		return (
+			<View
+				style={{
+					marginTop: 20,
+					width: 250,
+					borderRadius: 3,
+					elevation: 2
+				}}
+			>
+				<Button
+					style={{ marginBottom: 10 }}
+					onPress={() => this.submitToGoogle()}
+					title="광학 문자 추출!"
+				/>
+
+				<View
+					style={{
+						borderTopRightRadius: 3,
+						borderTopLeftRadius: 3,
+						shadowColor: 'rgba(0,0,0,1)',
+						shadowOpacity: 0.2,
+						shadowOffset: { width: 4, height: 4 },
+						shadowRadius: 5,
+						overflow: 'hidden'
+					}}
+				>
+					<Image source={{ uri: image }} style={{ width: 250, height: 250 }} />
+				</View>
+        <Text>Raw JSON:</Text>
+				<Text
+					onPress={this._copyToClipboard}
+					onLongPress={this._share}
+					style={{ paddingVertical: 10, paddingHorizontal: 10 }}
+				/>
+
+				
+
+				{googleResponse && (
+					<Text
+						onPress={this._copyToClipboard}
+						onLongPress={this._share}
+						style={{ paddingVertical: 10, paddingHorizontal: 10 }}
+					>
+						JSON.stringify(googleResponse.responses)
+					</Text>
+				)}
+			</View>
+		);
+	};
+
+	_keyExtractor = (item, index) => item.id;
+
+	_renderItem = item => {
+		<Text>response: {JSON.stringify(item)}</Text>;
+	};
+
+	_share = () => {
+		Share.share({
+			message: JSON.stringify(this.state.googleResponse.responses),
+			title: 'Check it out',
+			url: this.state.image
+		});
+	};
+
+	_copyToClipboard = () => {
+		Clipboard.setString(this.state.image);
+		alert('Copied to clipboard');
+	};
+
+	_takePhoto = async () => {
+		let pickerResult = await ImagePicker.launchCameraAsync({
+			allowsEditing: true,
+			aspect: [4, 3]
+		});
+
+		this._handleImagePicked(pickerResult);
+	};
+
+	_pickImage = async () => {
+		let pickerResult = await ImagePicker.launchImageLibraryAsync({
+			allowsEditing: true,
+			aspect: [4, 3]
+		});
+
+		this._handleImagePicked(pickerResult);
+	};
+
+	_handleImagePicked = async pickerResult => {
+		try {
+			this.setState({ uploading: true });
+
+			if (!pickerResult.cancelled) {
+				uploadUrl = await uploadImageAsync(pickerResult.uri);
+				this.setState({ image: uploadUrl });
+        //this.setState({ image: pickerResult.uri });
+			}
+		} catch (e) {
+			console.log(e);
+			alert('Upload failed, sorry :(');
+		} finally {
+			this.setState({ uploading: false });
+		}
+	};
+
+  
+	submitToGoogle = async () => {
+		try {
+			this.setState({ uploading: true });
+			let { image } = this.state;
+			let body = JSON.stringify({
+				requests: [
+					{
+						features: [
+							// { type: 'LABEL_DETECTION', maxResults: 10 },
+							//{ type: 'LANDMARK_DETECTION', maxResults: 5 },
+							//{ type: 'FACE_DETECTION', maxResults: 5 },
+							//{ type: 'LOGO_DETECTION', maxResults: 5 },
+							{ type: 'TEXT_DETECTION'},
+							// { type: 'DOCUMENT_TEXT_DETECTION', maxResults: 5 },
+							// { type: 'SAFE_SEARCH_DETECTION', maxResults: 5 },
+							//{ type: 'IMAGE_PROPERTIES', maxResults: 5 },
+							//{ type: 'CROP_HINTS', maxResults: 5 },
+							// { type: 'WEB_DETECTION', maxResults: 5 }
+						],
+						image: {
+							source: {
+								imageUri: image
+							}
+						},
+            imageContext:{
+              languageHints : ['ko-t-i0-handwrit']
+            }
+					}
+				]
+			});
+
+			let response = await fetch(
+				'https://vision.googleapis.com/v1/images:annotate?key=' +
+					Environment['GOOGLE_CLOUD_VISION_API_KEY'],
+				{
+					headers: {
+						Accept: 'application/json',
+						'Content-Type': 'application/json;charset=UTF-8'
+					},
+					method: 'POST',
+					// body: body
+          body: body
+				}
+			);
+			let responseJson = await response.json();
+      console.log('###########################################')
+      console.log(responseJson);
+      console.log('###########################################')
+      try {
+//        console.log(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(responseJson)).responses[0])).textAnnotations);
+        console.log(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(responseJson)).responses[0])).textAnnotations[0].description);
+        let str = JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(responseJson)).responses[0])).textAnnotations[0].description;
+		const user = firebase.auth().currentUser;
+		console.log("str : " + str);
+		console.log("userid : " + user.uid);
+		axios
+			.post(`http://j4c101.p.ssafy.io:8081/recipe/ocr/`, {
+				ocrscan : str,
+				userId : 1
+			})
+			.then((result) => {
+				//
+
+
+				console.log(result)
+
+				// 작업공간
+
+
+
+				//
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+        console.log(strArray[0]);
+        //  console.log(JSON.stringify(JSON.parse(JSON.parse(JSON.stringify(responseJson)).responses[0]).textAnnotations).description);  
+      } catch (error) {
+        console.log("error");
+      }
+      
+        
+
+			this.setState({
+				googleResponse: responseJson,
+				uploading: false
+			});
+      
+		} catch (error) {
+			console.log(error);
+		}
+	};
+}
+
+async function uploadImageAsync(uri) {
+  
+	const blob = await new Promise((resolve, reject) => {
+    
+		const xhr = new XMLHttpRequest();
+		xhr.onload = function() {
+			resolve(xhr.response);
+		};
+    
+		xhr.onerror = function(e) {
+			console.log(e);
+			reject(new TypeError('Network request failed'));
+		};
+		xhr.responseType = 'blob';
+		xhr.open('GET', uri, true);
+		xhr.send(null);
+	});
+
+	const ref = firebase
+		.storage()
+		.ref()
+		.child(uuid.v4());
+	const snapshot = await ref.put(blob);
+
+	blob.close();
+
+	return await snapshot.ref.getDownloadURL();
 }
 
 const styles = StyleSheet.create({
-  imageBackgroundContainer: {
-    width: width,
-    height: height,
-    padding: 0,
-    zIndex: 1,
-  },
-  imageBackground: {
-    width: width,
-    height: height,
-  },
-  registerContainer: {
-    marginTop: 55,
-    width: width * 0.9,
-    height: height < 812 ? height * 0.8 : height * 0.8,
-    backgroundColor: nowTheme.COLORS.WHITE,
-    borderRadius: 4,
-    shadowColor: nowTheme.COLORS.BLACK,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowRadius: 8,
-    shadowOpacity: 0.1,
-    elevation: 1,
-    overflow: 'hidden',
-  },
-  createButton: {
-    width: width * 0.5,
-    marginTop: 25,
-    marginBottom: 40,
-  },
-  activeImageContainer: {
-    flex: 0.9,
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
-    backgroundColor: '#eee',
-    borderBottomWidth: 0.5,
-    borderColor: '#fff',
-  },
+	container: {
+		flex: 1,
+		backgroundColor: '#fff',
+		paddingBottom: 10
+	},
+	developmentModeText: {
+		marginBottom: 20,
+		color: 'rgba(0,0,0,0.4)',
+		fontSize: 14,
+		lineHeight: 19,
+		textAlign: 'center'
+	},
+	contentContainer: {
+		paddingTop: 30
+	},
+
+	getStartedContainer: {
+		alignItems: 'center',
+		marginHorizontal: 50
+	},
+
+	getStartedText: {
+		fontSize: 17,
+		color: 'rgba(96,100,109, 1)',
+		lineHeight: 24,
+		textAlign: 'center'
+	},
+
+	helpContainer: {
+		marginTop: 80,
+		alignItems: 'center'
+	}
 });
-
-export default Receipt;
-
-
