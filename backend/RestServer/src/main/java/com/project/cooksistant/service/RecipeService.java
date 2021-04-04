@@ -57,6 +57,11 @@ public class RecipeService {
 //        evaluationDTO.setComplete(true);
         evaluationDTO.setSampled(evaluation.get().getIsSampled());
         evaluationDTO.setRecipeId(evaluation.get().getRecipe().getRecipeId());
+        Optional<Recipe> recipe = recipeRepository.findById(evaluation.get().getRecipe().getRecipeId());
+        Long recipeId = recipe.get().getRecipeId();
+        String jpql = "select avg(e.favor) from Evaluation e where e.recipe.recipeId = :recipeId";
+        Double avgFavor = entityManager.createQuery(jpql, Double.class).setParameter("recipeId", recipeId).getSingleResult();
+        evaluationDTO.setFavor(avgFavor);
         evaluationDTO.setUserId(evaluation.get().getUser().getUserId());
         for (int i = 0; i < evaluationKeywordList.size(); i++) {
             evaluationDTO.getKeywords().add(evaluationKeywordList.get(i).getKeyword().getKeyword());
