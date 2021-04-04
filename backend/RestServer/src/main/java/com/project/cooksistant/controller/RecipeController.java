@@ -107,25 +107,23 @@ public class RecipeController {
             "                                                   - recipeId: 레시피 아이디")
     @PostMapping("/recipe/recommendation")
     public List<RecipeListupDTO> recommend(@RequestBody RecommendDTO recommendDTO) {
-        int size = recipeService.evaluationExist(recommendDTO.getUserId());
-        if (size == 1) {
-            Gson gson = new Gson();
-            String jsonArray = (webClient.post()
-                    .uri("/evaluation")
-                    .body(Mono.just(recommendDTO), RecommendDTO.class)
-                    .retrieve()
-                    .bodyToMono(String.class).block());
-            JsonObject jsonObject = gson.fromJson(jsonArray, JsonObject.class);
-            String[] idx = gson.fromJson(jsonObject.getAsJsonArray("result"), String[].class);
-            List<Long> recommendList = new ArrayList<>();
-            for (int i = 0; i < idx.length; i++) {
-                recommendList.add(Long.parseLong(idx[i]));
-            }
-            return recipeService.recommendList(recommendList);
-        } else {
-            //해당 유저의 평가데이터가 존재하지않으면 인기순으로 리턴
-            return recipeService.recipeFavor();
+        System.out.println("before");
+//        int size = recipeService.evaluationExist(recommendDTO.getUserId());
+
+        Gson gson = new Gson();
+        String jsonArray = (webClient.post()
+                .uri("/evaluation")
+                .body(Mono.just(recommendDTO), RecommendDTO.class)
+                .retrieve()
+                .bodyToMono(String.class).block());
+        JsonObject jsonObject = gson.fromJson(jsonArray, JsonObject.class);
+        String[] idx = gson.fromJson(jsonObject.getAsJsonArray("result"), String[].class);
+        List<Long> recommendList = new ArrayList<>();
+        for (int i = 0; i < idx.length; i++) {
+            recommendList.add(Long.parseLong(idx[i]));
         }
+        return recipeService.recommendList(recommendList);
+
 
     }
 

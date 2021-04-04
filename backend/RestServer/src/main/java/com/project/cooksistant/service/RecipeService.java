@@ -14,6 +14,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -178,30 +179,6 @@ public class RecipeService {
             String query = "select avg(e.favor) from Evaluation e where e.recipe.recipeId= :recipeId";
             Double avg_favor = entityManager.createQuery(query, Double.class).setParameter("recipeId", recipeId).getSingleResult();
 
-            recipeListupDTO.setFavor(avg_favor);
-            recipeListupDTOList.add(recipeListupDTO);
-        }
-        return recipeListupDTOList;
-    }
-
-    public List<RecipeListupDTO> recipeFavor() {
-        List<RecipeListupDTO> recipeListupDTOList = new ArrayList<>();
-        String jpql = "select distinct(e.recipe.recipeId) from Evaluation e where e.recipe.flag=true order by e.favor desc";
-        List<Long> recipeIds = entityManager.createQuery(jpql, Long.class).getResultList();
-        for (int i = 0; i < recipeIds.size(); i++) {
-            RecipeListupDTO recipeListupDTO = new RecipeListupDTO();
-            Optional<Recipe> recipe = recipeRepository.findById(recipeIds.get(i));
-            recipeListupDTO.setRecipeId(recipe.get().getRecipeId());
-            if (recipe.get().getImage().contains("http"))
-                recipeListupDTO.setUrl(recipe.get().getImage());
-            else
-                recipeListupDTO.setUrl("https://" + S3Uploader.CLOUD_FRONT_DOMAIN_NAME + "/" + recipe.get().getImage());
-            recipeListupDTO.setDescription(recipe.get().getDescription());
-            recipeListupDTO.setRecipename(recipe.get().getCuisine());
-            Long recipeId = recipe.get().getRecipeId();
-            //평균평점
-            String query = "select avg(e.favor) from Evaluation e where e.recipe.recipeId= :recipeId";
-            Double avg_favor = entityManager.createQuery(query, Double.class).setParameter("recipeId", recipeId).getSingleResult();
             recipeListupDTO.setFavor(avg_favor);
             recipeListupDTOList.add(recipeListupDTO);
         }
