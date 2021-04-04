@@ -49,13 +49,14 @@ class Home extends React.Component {
         const arrayList1 = [];
         console.log(result);
         console.log('DDDDDDDDDDDDDDDDDDDDDDD' + result.data.trend);
-
-        result.data.trend.forEach((el) => {
-          arrayList1.push({
-            title: el.title,
-            image: el.link,
+        if (result.data.trend && Array.isArray(result.data.trend)) {
+          result.data.trend.forEach((el) => {
+            arrayList1.push({
+              title: el.title,
+              image: el.link,
+            });
           });
-        });
+        }
         this.setState({
           recipeTrendy: arrayList1,
         });
@@ -108,7 +109,12 @@ class Home extends React.Component {
               트렌디 레시피
             </Text>
             <Block flex style={styles.container}>
-              <Swiper loop renderPagination={renderPagination} autoplay={true} key={this.state.recipeTrendy.length}>
+              <Swiper
+                loop
+                renderPagination={renderPagination}
+                autoplay={true}
+                key={this.state.recipeTrendy.length}
+              >
                 {this.state.recipeTrendy.map((el, index) => (
                   <Block key={index} style={{ padding: 10 }}>
                     <Block>
