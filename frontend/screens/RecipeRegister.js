@@ -575,7 +575,7 @@ class RecipeRegister extends React.Component {
                           </Block>
                         );
                       })}
-                      <Text style={{ marginTop: 20 }}>{JSON.stringify(this.state)}</Text>
+                      {/* <Text style={{ marginTop: 20 }}>{JSON.stringify(this.state)}</Text> */}
                     </Block>
                   </ProgressStep>
                 </ProgressSteps>

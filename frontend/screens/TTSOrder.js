@@ -65,22 +65,22 @@ class TTSOrder extends React.Component {
 
   checkEvalu() {
     const { navigation } = this.props;
-    Alert.alert(                    
-      "레시피 평가하러 갈까유?", " ",                                    
-      [                             
-        {
-          text: "다음에 할게요",                               
-          style: "cancel"
-        },
-        { text: "네", onPress: () => navigation.navigate('EvalueRegister', {
-          rId: this.state.rId,
-          title: this.state.cuisine,
-          image: this.state.image,
-          isNew: true
-        }) }, 
-      ],
-      { cancelable: false }
-    );
+    // Alert.alert(                    
+    //   "레시피 평가하러 갈까요?", " ",                                    
+    //   [                             
+    //     {
+    //       text: "다음에 할게요",                               
+    //       style: "cancel"
+    //     },
+    //     { text: "네", onPress: () => navigation.navigate('EvalueRegister', {
+    //       rId: this.state.rId,
+    //       title: this.state.cuisine,
+    //       image: this.state.image,
+    //       isNew: true
+    //     }) }, 
+    //   ],
+    //   { cancelable: false }
+    // );
   }
 
   render() {

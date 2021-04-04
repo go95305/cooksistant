@@ -15,30 +15,34 @@ class RecommList extends React.Component {
   };
 
   componentDidMount = () => {
-    axios
-      .post(`http://j4c101.p.ssafy.io:8081/recipe/recommendation`, {
-        ingredients: this.state.ingreList,
-        userId: this.state.userId,
-      })
-      .then((result) => {
-        const arrayList = [];
-        if (result.data && Array.isArray(result.data)) {
-          result.data.forEach((el) => {
-            arrayList.push({
-              rId: el.recipeId,
-              title: el.recipename,
-              image: el.url,
-              favor: el.favor,
-              desc: el.description,
-              flag: false
+    if (this.props.route.params.recipeList == undefined) {
+      axios
+        .post(`http://j4c101.p.ssafy.io:8081/recipe/recommendation`, {
+          ingredients: this.state.ingreList,
+          userId: this.state.userId,
+        })
+        .then((result) => {
+          const arrayList = [];
+          if (result.data && Array.isArray(result.data)) {
+            result.data.forEach((el) => {
+              arrayList.push({
+                rId: el.recipeId,
+                title: el.recipename,
+                image: el.url,
+                favor: el.favor,
+                desc: el.description,
+                flag: false
+              });
             });
-          });
-        }
-        this.setState({ recipeList: arrayList });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+          }
+          this.setState({ recipeList: arrayList });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      this.setState({ recipeList: this.props.route.params.recipeList });
+    }
   };
   renderCards = () => {
     return (

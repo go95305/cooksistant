@@ -6,6 +6,7 @@ import {
   Image,
   ImageBackground,
   TouchableOpacity,
+  Alert
 } from 'react-native';
 import { Block, Text, theme, Button as GaButton } from 'galio-framework';
 import { Button } from '../components';
@@ -257,7 +258,7 @@ class RecipeInfo extends Component {
             textStyle={{ fontSize: 15, color: '#F18D46', fontFamily: 'montserrat-bold' }}
             color="Primary"
             round
-            onPress={() => this.props.navigation.navigate('TTS', { step: this.state.recipeDetail })}
+            onPress={() => this.state.userId == null ? Alert.alert("서비스를 이용하려면 로그인하세요."): this.props.navigation.navigate('TTS', { step: this.state.recipeDetail })}
           >
             요리시작
           </Button>

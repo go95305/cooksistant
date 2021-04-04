@@ -76,6 +76,7 @@ class Header extends React.Component {
       case '레시피 검색':
       case '레시피 등록':
       case '레시피 상세정보':
+      case '영수증':  
       case '요리 과정':
         return [<HomeBtn key="home-btn" navigation={navigation} />];
       default:
