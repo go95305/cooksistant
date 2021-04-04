@@ -41,27 +41,57 @@ class RecipeInfo extends Component {
   changeImage = () => {
     if (this.state.userId == null) {
       alert('로그인 후 이용해 주세요!');
-    } else if (this.state.img == require('../assets/imgs/bookmarkFull.png')) {
+    } else {
       axios
-        .put(
-          `http://j4c101.p.ssafy.io:8081/user/deleteScrap/${this.state.userId}/${this.state.recipeDetail.id}`
-        )
-        .then((result) => this.setState({ img: require('../assets/imgs/bookmark.png') }))
-        .then(location.reload())
-        .catch((error) => {
-          console.log(error);
-        });
-    } else if (this.state.img == require('../assets/imgs/bookmark.png')) {
-      axios
-        .post(
-          `http://j4c101.p.ssafy.io:8081/user/scrap/${this.state.recipeDetail.id}/${this.state.userId}`
-        )
-        .then((result) => this.setState({ img: require('../assets/imgs/bookmarkFull.png') }))
+        .get(`http://j4c101.p.ssafy.io:8081/user/isscrap/${this.state.userId}/${this.state.id}`)
+        .then((result) => {
+          console.log('result_____________________________' + result.data);
+          if (result.data == true) {
+            axios
+              .put(
+                `http://j4c101.p.ssafy.io:8081/user/deleteScrap/${this.state.userId}/${this.state.recipeDetail.id}`
+              )
+              .then((result) => this.setState({ img: require('../assets/imgs/bookmark.png') }))
+              .catch((error) => {
+                console.log(error);
+              });
+          } else if (result.data == false) {
+            axios
+              .post(
+                `http://j4c101.p.ssafy.io:8081/user/scrap/${this.state.recipeDetail.id}/${this.state.userId}`
+              )
+              .then((result) => this.setState({ img: require('../assets/imgs/bookmarkFull.png') }))
 
+              .catch((error) => {
+                console.log(error);
+              });
+          }
+        })
         .catch((error) => {
           console.log(error);
         });
     }
+
+    // if (this.state.img == require('../assets/imgs/bookmarkFull.png')) {
+    //   axios
+    //     .put(
+    //       `http://j4c101.p.ssafy.io:8081/user/deleteScrap/${this.state.userId}/${this.state.recipeDetail.id}`
+    //     )
+    //     .then((result) => this.setState({ img: require('../assets/imgs/bookmark.png') }))
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // } else if (this.state.img == require('../assets/imgs/bookmark.png')) {
+    //   axios
+    //     .post(
+    //       `http://j4c101.p.ssafy.io:8081/user/scrap/${this.state.recipeDetail.id}/${this.state.userId}`
+    //     )
+    //     .then((result) => this.setState({ img: require('../assets/imgs/bookmarkFull.png') }))
+
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // }
   };
 
   componentDidMount = () => {
@@ -72,12 +102,12 @@ class RecipeInfo extends Component {
       axios
         .get(`http://j4c101.p.ssafy.io:8081/user/${user.uid}`)
         .then((result) => {
-          console.log(result.data.userId);
+          // console.log(result.data.userId);
           this.setState({ userId: result.data.userId });
+          // 로그인된 회원이 스크랩한 레시피 인가?
           axios
             .get(`http://j4c101.p.ssafy.io:8081/user/isscrap/${this.state.userId}/${this.state.id}`)
             .then((result) => {
-              console.log('rerere' + result);
               if (result.data == true) {
                 this.setState({ img: require('../assets/imgs/bookmarkFull.png') });
               }
@@ -132,9 +162,6 @@ class RecipeInfo extends Component {
       .catch((error) => {
         console.log(error);
       });
-    // 로그인된 회원이 스크랩한 레시피 인가?
-    if (user) {
-    }
   };
 
   renderDetail = () => {
@@ -251,9 +278,7 @@ class RecipeInfo extends Component {
             textStyle={{ fontSize: 15, color: '#F18D46', fontFamily: 'montserrat-bold' }}
             color="Primary"
             round
-            onPress={() =>
-              this.props.navigation.navigate('TTS', { id: this.state.recipeDetail.id })
-            }
+            onPress={() => this.props.navigation.navigate('TTS', { step: this.state.recipeDetail })}
           >
             요리시작
           </Button>
