@@ -1,6 +1,6 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Dimensions, Alert } from 'react-native';
-import { Block, Text, theme } from 'galio-framework';
+import { ScrollView, StyleSheet, Dimensions, RefreshControl, fetchData } from 'react-native';
+import { Block, theme } from 'galio-framework';
 import { nowTheme } from '../constants';
 import { ECard } from '../components';
 import axios from 'axios';
@@ -10,11 +10,16 @@ const { width, height } = Dimensions.get('screen');
 
 class EvalueList extends React.Component {
   state = {
-    apiResult: []
+    refreshing: false,
+    apiResult: [],
   };
 
   componentDidMount = () => {
-     var user = firebase.auth().currentUser;
+    this.getEvaluList();
+  };
+
+  getEvaluList = () => {
+    var user = firebase.auth().currentUser;
     axios
       .post(`http://j4c101.p.ssafy.io:8081/recipe/review/${user.uid}`)
       .then((result) => {
@@ -27,22 +32,28 @@ class EvalueList extends React.Component {
               rId: el.recipe_id,
               image: el.image,
               isEvalu: el.isComplete,
-              flag: true
+              flag: true,
             });
           });
         }
-        this.setState({ apiResult: arrayList })
+        this.setState({ apiResult: arrayList });
+        this.setState({ refreshing: false });
       })
       .catch((error) => {
         console.log(error);
       });
-  };
-  
+  }
+
+  _onRefresh() {
+    this.setState({ refreshing: true });
+    this.getEvaluList();
+  }
+
   renderCards = () => {
     return (
       <Block style={styles.container}>
-        {this.state.apiResult.map((el, index) => { 
-          return (<ECard key={index} item={el} full />);
+        {this.state.apiResult.map((el, index) => {
+          return <ECard key={index} item={el} full />;
         })}
       </Block>
     );
@@ -52,7 +63,17 @@ class EvalueList extends React.Component {
     return (
       <Block flex={1} style={{ marginTop: height > 800 ? 80 : 50 }}>
         <Block style={{ marginTop: 20 }}></Block>
-        <ScrollView showsVerticalScrollIndicator={false}>{this.renderCards()}</ScrollView>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh.bind(this)}
+            />
+          }
+        >
+          {this.renderCards()}
+        </ScrollView>
       </Block>
     );
   }

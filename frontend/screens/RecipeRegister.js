@@ -83,7 +83,7 @@ class RecipeRegister extends React.Component {
         console.log(mainImage + ' ' + mainType);
         try {
           const res = await axios.post(
-            `http://j4c101.p.ssafy.io:8081/recipe/mainImage?originalName=aaa&recipeId=${response.data}`,
+            `http://j4c101.p.ssafy.io:8081/recipe/mainImage?originalName=main&recipeId=${response.data}`,
             formData,
             {
               headers: {
@@ -99,19 +99,21 @@ class RecipeRegister extends React.Component {
 
         // 각 과정 이미지 등록
         let uriList = this.state.imageList;
-        uriList.map((el) => {
+        uriList.map((el, idx) => {
           console.log(el);
+          let num = idx + 1;
           let stepUri = el;
           let stepImage = stepUri.split('/').pop();
 
           let stepMatch = /\.(\w+)$/.exec(stepImage);
           let stepType = stepMatch ? `image/${stepMatch[1]}` : `image`;
 
-          const stepfile = new FormData();
+          let stepfile = new FormData();
           stepfile.append('stepfile', { uri: stepUri, name: stepImage, type: stepType });
+          console.log(num);
           axios
             .put(
-              `http://j4c101.p.ssafy.io:8081/recipe/stepImage?originalName=aaa&recipeId=${response.data}`,
+              `http://j4c101.p.ssafy.io:8081/recipe/stepImage?originalName=step${num}&recipeId=${response.data}&level=${num}`,
               stepfile,
               {
                 headers: {
@@ -575,7 +577,7 @@ class RecipeRegister extends React.Component {
                           </Block>
                         );
                       })}
-                      {/* <Text style={{ marginTop: 20 }}>{JSON.stringify(this.state)}</Text> */}
+                      <Text style={{ marginTop: 20 }}>{JSON.stringify(this.state)}</Text> 
                     </Block>
                   </ProgressStep>
                 </ProgressSteps>

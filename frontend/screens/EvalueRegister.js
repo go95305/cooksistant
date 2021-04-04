@@ -96,12 +96,7 @@ class TasteRegister extends React.Component {
       .then((response) => {
         if (response.status == 200) {
           Alert.alert('평가가 등록되었습니다.');
-          this.props.navigation.dispatch(
-            CommonActions.reset({
-              index: 1,
-              routes: [{name: 'Profile'},{ name: 'EvalueList' }],
-            })
-          );
+          this.props.navigation.goBack();
         }
       })
       .catch(function (error) {

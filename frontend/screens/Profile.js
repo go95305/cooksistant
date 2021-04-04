@@ -94,6 +94,20 @@ class Profile extends React.Component {
     });
   };
 
+  onDelete = () => {
+    Alert.alert(                    
+      "삭제하시겠습니까?", " ",                                    
+      [                             
+        {
+          text: "취소",                               
+          style: "cancel"
+        },
+        { text: "네", onPress: () => ''}
+      ],
+      { cancelable: false }
+    );
+  }
+
   Recipe = () => {
     const { navigation } = this.props;
     return (
