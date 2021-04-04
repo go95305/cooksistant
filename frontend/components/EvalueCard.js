@@ -23,7 +23,7 @@ class Card extends React.Component {
   state = {
     modalVisible: false,
     recipeid: 0,
-    favor: 3.5,
+    favor: 0,
     keywords: [],
     userId: 0,
   };
@@ -36,9 +36,12 @@ class Card extends React.Component {
         result.data.keywords.forEach((el) => {
           kList.push(el);
         });
+
+        const favor = parseFloat(result.data.favor).toFixed(1);
         this.setState({
           recipeid: result.data.recipeid,
           keywords: kList,
+          favor: favor,
           userId: result.data.userId,
         });
         console.log(result);
@@ -198,7 +201,7 @@ class Card extends React.Component {
                   fullStarColor={'#f18d46'}
                   rating={this.state.favor}
                 />
-                <Block row style={{marginTop: 15}}>
+                <Block row style={{ marginTop: 15 }}>
                   {this.state.keywords.map((el, idx) => (
                     <Text key={idx} style={styles.keyword}>
                       {el}
@@ -206,12 +209,21 @@ class Card extends React.Component {
                   ))}
                 </Block>
               </Block>
-              <Block flex={1}>
+              <Block row center flex={1}>
                 <Pressable
                   style={[styles.button, styles.buttonClose]}
                   onPress={() => this.setModalVisible(!modalVisible)}
                 >
                   <Text style={styles.textStyle}>닫기</Text>
+                </Pressable>
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => {
+                    this.setModalVisible(!modalVisible);
+                    navigation.navigate('Pro', { id: item.rId });
+                  }}
+                >
+                  <Text style={styles.textStyle}>이동</Text>
                 </Pressable>
               </Block>
             </Block>
@@ -308,6 +320,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   button: {
+    marginLeft: 10,
     borderRadius: 20,
     padding: 10,
     elevation: 2,
@@ -327,7 +340,7 @@ const styles = StyleSheet.create({
     fontFamily: 'montserrat-regular',
   },
   keyword: {
-    height:50,
+    height: 50,
     width: 55,
     padding: 10,
     margin: 3,

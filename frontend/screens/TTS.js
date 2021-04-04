@@ -30,7 +30,7 @@ class TTS extends React.Component {
     console.log('props' + props.route.params.id);
     super(props);
     this.state = {
-      id: this.props.route.params.id,
+      id: this.props.route.params.step.id,
       recipeDetail: {
         id: 0,
         nickname: null,
