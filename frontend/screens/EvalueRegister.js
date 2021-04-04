@@ -52,7 +52,8 @@ class TasteRegister extends React.Component {
 
   componentDidMount = () => {
     var user = firebase.auth().currentUser;
-    axios
+    if (user) {
+      axios
       .get(`http://j4c101.p.ssafy.io:8081/user/${user.uid}`)
       .then((result) => {
         this.setState({ userId: result.data.userId });
@@ -60,6 +61,7 @@ class TasteRegister extends React.Component {
       .catch((error) => {
         console.log(error);
       });
+    }
   };
 
   onStarRatingPress(rating) {

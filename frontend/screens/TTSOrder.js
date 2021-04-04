@@ -76,6 +76,7 @@ class TTSOrder extends React.Component {
           rId: this.state.rId,
           title: this.state.cuisine,
           image: this.state.image,
+          isNew: true
         }) }, 
       ],
       { cancelable: false }

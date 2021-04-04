@@ -17,7 +17,7 @@ import uuid from 'react-native-uuid';
 import Environment from '../config/environment';
 import firebase from '../config/firebase';
 import axios from 'axios';
-import * as Speech from 'expo-speech';
+//import * as Speech from 'expo-speech';
 
 export default class App extends React.Component {
 	state = {
@@ -143,7 +143,7 @@ export default class App extends React.Component {
 						onLongPress={this._share}
 						style={{ paddingVertical: 10, paddingHorizontal: 10 }}
 					>
-						JSON.stringify(googleResponse.responses)}
+						JSON.stringify(googleResponse.responses)
 					</Text>
 				)}
 			</View>
