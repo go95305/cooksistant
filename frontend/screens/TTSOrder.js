@@ -177,7 +177,7 @@ class TTSOrder extends React.Component {
                       fontFamily: 'montserrat-regular',
                       textAlign: 'center',
                       lineHeight: 25,
-                      padding: 10,
+                      padding: 20,
                     }}
                     color="#474747"
                     size={15}
