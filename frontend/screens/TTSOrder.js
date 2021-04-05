@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Dimensions, Image, Alert } from 'react-native';
+import { StyleSheet, Dimensions, Image, Alert, ScrollView } from 'react-native';
 import { Block, Text, Button as GaButton, theme } from 'galio-framework';
 import { Button, Icon, Input } from '../components';
 import { Images, nowTheme } from '../constants';
@@ -79,7 +79,7 @@ class TTSOrder extends React.Component {
       })
       .then((response) => {
         if (response.status == 200) {
-          this.setState({eId : response.data})
+          this.setState({ eId: response.data });
         }
       })
       .catch((error) => {
@@ -156,35 +156,37 @@ class TTSOrder extends React.Component {
               </Block>
             </Block>
 
-            <Block flex={0.4}>
-              <Block center style={{ marginTop: 30, marginBottom: 30, overflow: 'hidden' }}>
+            <Block flex={0.35}>
+              <Block center style={{ marginBottom: 30, overflow: 'hidden' }}>
                 <Image resizeMode="cover" style={styles.photo} source={{ uri: el.sImage }} />
               </Block>
             </Block>
             <Block flex={0.3}>
-              <Block
-                center
-                style={{
-                  width: width * 0.8,
-                  alignItems: 'center',
-                  borderRadius: 20,
-                  backgroundColor: '#FFDEAD',
-                }}
-              >
-                <Text
+              <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 30 }}>
+                <Block
+                  center
                   style={{
-                    fontFamily: 'montserrat-regular',
-                    textAlign: 'center',
-                    lineHeight: 25,
-                    padding: 10,
+                    width: width * 0.8,
+                    alignItems: 'center',
+                    borderRadius: 20,
+                    backgroundColor: '#FFDEAD',
                   }}
-                  color="#474747"
-                  size={15}
-                  value={this.speechtext}
                 >
-                  {el.description}
-                </Text>
-              </Block>
+                  <Text
+                    style={{
+                      fontFamily: 'montserrat-regular',
+                      textAlign: 'center',
+                      lineHeight: 25,
+                      padding: 10,
+                    }}
+                    color="#474747"
+                    size={15}
+                    value={this.speechtext}
+                  >
+                    {el.description}
+                  </Text>
+                </Block>
+              </ScrollView>
             </Block>
             <Block row flex={0.1}>
               <Button

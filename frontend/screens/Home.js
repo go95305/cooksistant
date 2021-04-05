@@ -22,7 +22,7 @@ class Home extends React.Component {
       .get(`http://j4c101.p.ssafy.io:8081/recipe/favor`)
       .then((result) => {
         const arrayList = [];
-        console.log(result);
+        // console.log(result);
         if (result.data && Array.isArray(result.data)) {
           result.data.forEach((el) => {
             arrayList.push({
@@ -37,28 +37,27 @@ class Home extends React.Component {
         this.setState({
           recipePopular: arrayList,
         });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    axios
-      .get(`http://j4c101.p.ssafy.io:5000/trend`)
-      .then((result) => {
-        const arrayList1 = [];
-        console.log(result);
-        console.log('DDDDDDDDDDDDDDDDDDDDDDD' + result.data.trend);
-        if (result.data.trend && Array.isArray(result.data.trend)) {
-          result.data.trend.forEach((el) => {
-            arrayList1.push({
-              title: el.title,
-              image: el.link,
+        axios
+          .get(`http://j4c101.p.ssafy.io:5000/trend`)
+          .then((result) => {
+            const arrayList1 = [];
+            console.log(result);
+            console.log('DDDDDDDDDDDDDDDDDDDDDDD' + result.data.trend);
+            if (result.data.trend && Array.isArray(result.data.trend)) {
+              result.data.trend.forEach((el) => {
+                arrayList1.push({
+                  title: el.title,
+                  image: el.link,
+                });
+              });
+            }
+            this.setState({
+              recipeTrendy: arrayList1,
             });
+          })
+          .catch((error) => {
+            console.log(error);
           });
-        }
-        this.setState({
-          recipeTrendy: arrayList1,
-        });
       })
       .catch((error) => {
         console.log(error);
@@ -75,7 +74,7 @@ class Home extends React.Component {
               marginTop: height > 800 ? 30 : 10,
               paddingLeft: height > 800 ? 20 : 10,
             }}
-            color='#474747'
+            color="#474747"
             size={15}
           >
             인기 레시피
@@ -112,7 +111,7 @@ class Home extends React.Component {
                 marginTop: height > 800 ? 30 : 10,
                 paddingLeft: height > 800 ? 20 : 10,
               }}
-              color='#474747'
+              color="#474747"
               size={15}
             >
               트렌디 레시피
