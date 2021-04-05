@@ -300,6 +300,8 @@ export default class App extends React.Component {
         );
         let str = JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(responseJson)).responses[0]))
           .textAnnotations[0].description;
+
+        str = str.replace(/\n/g, '');
         console.log('str : ' + str);
 
         axios
