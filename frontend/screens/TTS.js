@@ -33,12 +33,13 @@ class TTS extends React.Component {
           >
             <Block flex={1} middle>
               <Block style={styles.registerContainer}>
-                <Block flex={0.2} middle style={{marginTop: 30, marginBottom: 20}}>
+                <Block flex={0.3} middle style={{marginTop: 30, marginBottom: 20}}>
                   <Block width={width * 0.8}
                     style={{ padding: 5, borderWidth: 2, borderRadius: 15, borderColor: '#f18d46' }}
                   >
                     <Text
                       style={{
+                        textAlign:'center',
                         fontFamily: 'montserrat-bold',
                         lineHeight: 27,
                         margin: 20,
@@ -46,13 +47,13 @@ class TTS extends React.Component {
                         marginBottom: 10,
                       }}
                       color="#474747"
-                      size={17}
+                      size={16.5}
                     >
                       {title.includes(']') ? tmp[0] + '] \n' + tmp[1].trim() : title}
                     </Text>
                   </Block>
                 </Block>
-                <Block center flex={0.5}>
+                <Block center flex={0.4} >
                   <Block style={{ overflow: 'hidden' }}>
                   <Image
                     resizeMode="cover"
@@ -62,7 +63,7 @@ class TTS extends React.Component {
                   </Block>
                 </Block>
   
-                <Block center flex={0.2}>
+                <Block center flex={0.3}>
                   <Button
                     color="primary"
                     round
@@ -120,20 +121,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     elevation: 1,
     overflow: 'hidden',
-  },
-  inputIcons: {
-    marginRight: 12,
-    color: nowTheme.COLORS.ICON_INPUT,
-  },
-  inputs: {
-    borderWidth: 1,
-    borderColor: '#E3E3E3',
-    borderRadius: 21.5,
-  },
-  passwordCheck: {
-    paddingLeft: 2,
-    paddingTop: 6,
-    paddingBottom: 15,
   },
   createButton: {
     height: 50,

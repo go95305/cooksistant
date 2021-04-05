@@ -6,7 +6,7 @@ import {
   Image,
   ImageBackground,
   TouchableOpacity,
-  Alert
+  Alert,
 } from 'react-native';
 import { Block, Text, theme, Button as GaButton } from 'galio-framework';
 import { Button } from '../components';
@@ -153,62 +153,58 @@ class RecipeInfo extends Component {
             style={styles.imageBackgroundContainer}
             imageStyle={styles.imageBackground}
           >
-            <Block flex={1}>
+            <Block flex={1} center>
               <Block center style={styles.infoContainer}>
-                <Block style={{ alignItems: 'center' }}>
+                <Block>
                   <ScrollView showsVerticalScrollIndicator={false}>
                     <Block>
                       <Image
-                        resizeMode="contain"
+                        resizeMode="cover"
                         source={{ uri: this.state.recipeDetail.image }}
                         style={{
                           width: width * 0.9,
-                          height: 252,
+                          height: 200,
                         }}
                       />
                     </Block>
-                    <Block
-                      row
-                      style={{
-                        width: width * 0.65,
-                        marginTop: 20,
-                        marginLeft: 20,
-                        marginBottom: 8,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: 'montserrat-bold',
-                          fontSize: 15,
-                          lineHeight: 18,
-                        }}
-                        color="black"
-                      >
-                        {this.state.recipeDetail.cuisine}
-                      </Text>
+                    <Block row left style={{ marginTop: 20, marginLeft: 15, marginBottom: 10 }}>
+                      <Block style={{ width: width * 0.69 }}>
+                        <Text
+                          style={{
+                            fontFamily: 'montserrat-bold',
+                            fontSize: 15,
+                            lineHeight: 18,
+                          }}
+                          color="#474747"
+                        >
+                          {this.state.recipeDetail.cuisine}
+                        </Text>
+                      </Block>
                       <TouchableOpacity activeOpacity={0.5} onPress={this.changeImage}>
-                        <Image source={this.state.img} style={{ marginLeft: 10 }} />
+                        <Image source={this.state.img} style={{ marginLeft: 15 }} />
                       </TouchableOpacity>
                     </Block>
-                    <Block row style={{ marginLeft: 25, marginBottom: 4 }}>
-                      <Text color="black" size={13} style={{ fontFamily: 'montserrat-regular' }}>
+
+                    <Block row style={{ marginLeft: 15, marginBottom: 4 }}>
+                      <Text color="#474747" size={13} style={{ fontFamily: 'montserrat-regular' }}>
                         {this.state.recipeDetail.serving}
                       </Text>
                       <Text size={13}> | </Text>
-                      <Text color="black" size={13} style={{ fontFamily: 'montserrat-regular' }}>
+                      <Text color="#474747" size={13} style={{ fontFamily: 'montserrat-regular' }}>
                         {this.state.recipeDetail.cookingTime}
                       </Text>
                     </Block>
-                    <Block center style={{ width: width * 0.8, alignItems: 'center' }}>
+                    <Block center style={{ width: width * 0.8, alignItems: 'center',marginTop: 5 }}>
                       <Text
                         size={16}
                         muted
                         style={{
                           textAlign: 'center',
+                          fontFamily: 'montserrat-regular',
                           color: '#2c2c2c',
-                          fontWeight: 'bold',
-                          fontSize: 13,
-                          padding: 10,
+                          lineHeight: 15,
+                          fontSize: 11,
+                          padding: 8,
                         }}
                       >
                         {this.state.recipeDetail.description}
@@ -220,6 +216,7 @@ class RecipeInfo extends Component {
                         width: '90%',
                         borderWidth: StyleSheet.hairlineWidth,
                         marginHorizontal: 10,
+                        marginTop: 15,
                       }}
                     />
                     <Block style={{ width: width * 0.9 }}>
@@ -258,7 +255,11 @@ class RecipeInfo extends Component {
             textStyle={{ fontSize: 15, color: '#F18D46', fontFamily: 'montserrat-bold' }}
             color="Primary"
             round
-            onPress={() => this.state.userId == null ? Alert.alert("서비스를 이용하려면 로그인하세요."): this.props.navigation.navigate('TTS', { step: this.state.recipeDetail })}
+            onPress={() =>
+              this.state.userId == null
+                ? Alert.alert('서비스를 이용하려면 로그인하세요.')
+                : this.props.navigation.navigate('TTS', { step: this.state.recipeDetail })
+            }
           >
             요리시작
           </Button>
