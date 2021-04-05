@@ -5,14 +5,15 @@ import {
   ScrollView,
   Image,
   ImageBackground,
-  TouchableWithoutFeedback,
   Platform,
+  RefreshControl
 } from 'react-native';
 import SegmentedControlTab from 'react-native-segmented-control-tab';
 import { Block, Text, theme, Button as GaButton } from 'galio-framework';
-import { Button } from '../components';
+import { Card } from '../components';
 import { Images, nowTheme } from '../constants';
 import { HeaderHeight } from '../constants/utils';
+import { FontAwesome } from '@expo/vector-icons'; 
 
 import firebase from 'firebase';
 import axios from 'axios';
@@ -25,6 +26,7 @@ const RecipeImg = (width - 48 - 32) / 2;
 
 class Profile extends React.Component {
   state = {
+    refreshing: false,
     googleInfo: {
       nickName: null,
       email: null,
@@ -42,33 +44,45 @@ class Profile extends React.Component {
   };
 
   componentDidMount = () => {
+    this.getRecipeScrapList();
+  };
+
+  getRecipeScrapList = () => {
     const user = firebase.auth().currentUser;
     this.setState({
+      uid: user.uid,
       googleInfo: {
         nickName: user.displayName,
         email: user.email,
         img: user.photoURL,
       },
     });
+
     axios
       .get(`http://j4c101.p.ssafy.io:8081/user/${user.uid}`)
       .then((result) => {
         const rList = [];
         result.data.recipeList.forEach((el) => {
           rList.push({
-            rId: el.recipeId,
+            id: el.recipeId,
             title: el.cuisine,
             description: el.description,
             image: el.image,
+            isMy: true,
+            isMyRecipe: true,
+            cta: '레시피 보러가기',
           });
         });
         const sList = [];
         result.data.scrapList.forEach((el) => {
           sList.push({
-            rId: el.recipeId,
+            id: el.recipeId,
             title: el.cuisine,
             description: el.description,
             image: el.image,
+            isMy: true,
+            isMyRecipe :false,
+            cta: '레시피 보러가기',
           });
         });
         this.setState({
@@ -81,11 +95,17 @@ class Profile extends React.Component {
             scrapList: sList,
           },
         });
+        this.setState({ refreshing: false });
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
+  _onRefresh() {
+    this.setState({ refreshing: true });
+    this.getRecipeScrapList();
+  }
 
   handleIndexChange = (index) => {
     this.setState({
@@ -94,34 +114,35 @@ class Profile extends React.Component {
     });
   };
 
-  onDelete = () => {
-    Alert.alert(                    
-      "삭제하시겠습니까?", " ",                                    
-      [                             
-        {
-          text: "취소",                               
-          style: "cancel"
-        },
-        { text: "네", onPress: () => ''}
-      ],
-      { cancelable: false }
-    );
-  }
-
   Recipe = () => {
-    const { navigation } = this.props;
     return (
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh.bind(this)}
+            />
+          }
+        >
         <Block style={{ paddingBottom: -HeaderHeight * 2, paddingHorizontal: 15 }}>
-          <Block row space="between" style={{ flexWrap: 'wrap' }}>
-            {this.state.Info.recipeList.map((el, idx) => (
-              <TouchableWithoutFeedback
-                key={idx}
-                onPress={() => navigation.navigate('Pro', { id: el.rId })}
-              >
-                <Image source={{ uri: el.image }} resizeMode="cover" style={styles.thumb} />
-              </TouchableWithoutFeedback>
-            ))}
+          <Block center style={{ width: width * 0.85 }}>
+            {this.state.Info.recipeList.map(
+              (el, i) =>
+                i % 2 == 0 && (
+                  <Block flex row key={i}>
+                    <Card
+                      item={this.state.Info.recipeList[i]}
+                      style={{ marginRight: theme.SIZES.BASE }}
+                    />
+                    {Number(i + 1) < this.state.Info.recipeSize ? (
+                      <Card item={this.state.Info.recipeList[Number(i + 1)]} />
+                    ) : (
+                      <Card item={{ title: '', image: null, id: 0 }} />
+                    )}
+                  </Block>
+                )
+            )}
           </Block>
         </Block>
       </ScrollView>
@@ -129,70 +150,34 @@ class Profile extends React.Component {
   };
 
   Scrap = () => {
-    const { navigation } = this.props;
     return (
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh.bind(this)}
+            />
+          }
+        >
         <Block style={{ paddingBottom: -HeaderHeight * 2, paddingHorizontal: 15 }}>
-          <Block center>
-            {this.state.Info.scrapList.map((el, index) => (
-              <TouchableWithoutFeedback
-                key={index}
-                onPress={() => navigation.navigate('Pro', { id: el.rId })}
-              >
-                <Block flex card center shadow style={styles.category}>
-                  <ImageBackground
-                    resizeMode="cover"
-                    source={{ uri: el.image }}
-                    style={[
-                      styles.imageBlock,
-                      { width: width - theme.SIZES.BASE * 5, height: 160 },
-                    ]}
-                    imageStyle={{
-                      width: width - theme.SIZES.BASE * 5,
-                      height: 160,
-                    }}
-                  >
-                    <Block style={styles.categoryTitle}>
-                      <Text
-                        style={{
-                          textAlign: 'center',
-                          fontSize: 13,
-                          fontFamily: 'montserrat-bold',
-                          lineHeight: 25,
-                          zIndex: 2,
-                          color: 'white',
-                          paddingHorizontal: 15,
-                        }}
-                      >
-                        {el.title.includes(']')
-                          ? el.title.substr(0, el.title.indexOf(']') + 1)
-                          : el.title}
-                      </Text>
-                      <Text
-                        style={{
-                          textAlign: 'center',
-                          fontSize: 15,
-                          fontFamily: 'montserrat-bold',
-                          lineHeight: 25,
-                          zIndex: 2,
-                          color: 'white',
-                          paddingHorizontal: 15,
-                        }}
-                      >
-                        {el.title.includes(']')
-                          ? el.title.substr(el.title.indexOf(']') + 2).trim().length > 26
-                            ? el.title
-                                .substr(el.title.indexOf(']') + 2)
-                                .trim()
-                                .substr(0, 26) + ' ⋯'
-                            : el.title.substr(el.title.indexOf(']') + 2).trim()
-                          : el.title}
-                      </Text>
-                    </Block>
-                  </ImageBackground>
-                </Block>
-              </TouchableWithoutFeedback>
-            ))}
+          <Block center style={{ width: width * 0.85 }}>
+            {this.state.Info.scrapList.map(
+              (el, i) =>
+                i % 2 == 0 && (
+                  <Block flex row key={i}>
+                    <Card
+                      item={this.state.Info.scrapList[i]}
+                      style={{ marginRight: theme.SIZES.BASE }}
+                    />
+                    {Number(i + 1) < this.state.Info.scrapSize ? (
+                      <Card item={this.state.Info.scrapList[Number(i + 1)]} />
+                    ) : (
+                      <Card item={{ title: '', image: null, id: 0 }} />
+                    )}
+                  </Block>
+                )
+            )}
           </Block>
         </Block>
       </ScrollView>
@@ -219,12 +204,13 @@ class Profile extends React.Component {
                   <Image source={{ uri: this.state.googleInfo.img }} style={styles.avatar} />
                 </Block>
                 <Block style={{ top: Platform.OS === 'android' ? height * 0.1 : height * 0.135 }}>
-                  <Block center>
+                  <Block center row>
                     <Text
                       style={{
                         marginTop: 15,
                         fontFamily: 'montserrat-bold',
                         marginBottom: theme.SIZES.BASE / 2,
+                        marginRight : 10,
                         fontWeight: '900',
                         fontSize: 26,
                       }}
@@ -232,6 +218,7 @@ class Profile extends React.Component {
                     >
                       {this.state.googleInfo.nickName}
                     </Text>
+                    {/* <FontAwesome name="refresh" size={30} color="white" onPress={() => this._onRefresh.bind(true)}/> */}
                   </Block>
                   <Block style={styles.info}>
                     <Block row space="between">

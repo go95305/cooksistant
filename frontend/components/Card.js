@@ -1,13 +1,48 @@
 import React from 'react';
 import { withNavigation } from '@react-navigation/compat';
 import PropTypes from 'prop-types';
-import { StyleSheet, Dimensions, Image, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Dimensions, Image, TouchableWithoutFeedback, Alert } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
-import RecipeInfo from '../screens/RecipeInfo';
-import RNUrlPreview from 'react-native-url-preview';
-import { nowTheme } from '../constants';
+import { Images, nowTheme } from '../constants';
+import { AntDesign } from '@expo/vector-icons';
+import axios from 'axios';
+
 const { width, height } = Dimensions.get('screen');
+
 class Card extends React.Component {
+  state = {
+    rId: this.props.item.id,
+  };
+
+  onDelete = () => {
+    console.log(this.state.rId);
+    axios
+      .put(`http://j4c101.p.ssafy.io:8081/recipe/delete/${this.state.rId}`)
+      .then((response) => {
+        if (response.status == 200) {
+          Alert.alert("레시피가 삭제되었습니다.");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  onCheckDelete = () => {
+    Alert.alert(
+      '정말 삭제하시겠습니까?',
+      ' ',
+      [
+        {
+          text: '취소',
+          style: 'cancel',
+        },
+        { text: '네', onPress: () => this.onDelete() },
+      ],
+      { cancelable: false }
+    );
+  };
+
   render() {
     const {
       navigation,
@@ -15,7 +50,6 @@ class Card extends React.Component {
       horizontal,
       full,
       style,
-      ctaColor,
       imageStyle,
       ctaRight,
       titleStyle,
@@ -28,16 +62,25 @@ class Card extends React.Component {
       styles.imageContainer,
       horizontal ? styles.horizontalStyles : styles.verticalStyles,
     ];
+
     const title = item.title.split(']');
     return (
       <Block card flex style={cardContainer}>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('Pro', { id: item.id })}>
-           <Block flex={3} style={imgContainer}>
-            <Image resizeMode="cover" source={{ uri: item.image }} style={imageStyles} />
+        <TouchableWithoutFeedback
+          onPress={() => (item.id == 0 ? '' : navigation.navigate('Pro', { id: item.id }))}
+        >
+          <Block flex={3} style={imgContainer}>
+            <Image
+              resizeMode="cover"
+              source={item.image == null ? Images.RegisterBackground : { uri: item.image }}
+              style={imageStyles}
+            />
           </Block>
         </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('Pro', { id: item.id })}>
-          <Block flex={1} space="between" style={styles.cardDescription}>
+        <Block flex={1} space="between" style={styles.cardDescription}>
+          <TouchableWithoutFeedback
+            onPress={() => (item.id == 0 ? '' : navigation.navigate('Pro', { id: item.id }))}
+          >
             <Block flex>
               <Text
                 style={{
@@ -45,10 +88,12 @@ class Card extends React.Component {
                   paddingTop: 3,
                   lineHeight: 20,
                 }}
-                size={12}
+                size={item.isMy ? 10.5 : 12.5}
                 color="#474747"
               >
-                {item.title.includes(']')
+                {item.isMy
+                  ? item.title
+                  : item.title.includes(']')
                   ? title[0] +
                     ']' +
                     (title[1].trim().length > 20
@@ -59,19 +104,28 @@ class Card extends React.Component {
                   : item.title}
               </Text>
             </Block>
+          </TouchableWithoutFeedback>
+          <Block row space="between" style={{ marginTop: 10 }}>
             <Block right={ctaRight ? true : false}>
-              <Text
-                style={styles.articleButton}
-                size={12}
-                muted={!ctaColor}
-                color={ctaColor || nowTheme.COLORS.ACTIVE}
-                bold
+              <TouchableWithoutFeedback
+                onPress={() => (item.id == 0 ? '' : navigation.navigate('Pro', { id: item.id }))}
               >
-                {item.cta}
-              </Text>
+                <Text style={styles.articleButton} size={12} color="#f18d46" bold>
+                  {item.cta}
+                </Text>
+              </TouchableWithoutFeedback>
             </Block>
+            {item.isMyRecipe ? (
+              <Block right style={{ marginTop: 2 }}>
+                <TouchableWithoutFeedback onPress={() => (item.id == 0 ? '' : this.onCheckDelete())}>
+                  <AntDesign name="delete" size={15} color="#f18d46" />
+                </TouchableWithoutFeedback>
+              </Block>
+            ) : (
+              <Block />
+            )}
           </Block>
-        </TouchableWithoutFeedback>
+        </Block>
       </Block>
     );
   }

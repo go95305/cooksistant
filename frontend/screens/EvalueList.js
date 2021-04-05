@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Dimensions, RefreshControl, fetchData } from 'react-native';
+import { ScrollView, StyleSheet, Dimensions, RefreshControl} from 'react-native';
 import { Block, theme } from 'galio-framework';
 import { nowTheme } from '../constants';
 import { ECard } from '../components';
