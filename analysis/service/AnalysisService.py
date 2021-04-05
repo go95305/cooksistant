@@ -47,8 +47,8 @@ def CF(user_id, ingredients):
 
         # 뽑아온 레시피 중에서 해당 재료가 포함됬는지
         filteredRecipeId = Recipe.getRecipeByIngredient(ingredients)
+        print(filteredRecipeId)
         cf_filtered_recipeId = []
-        cf_nfiltered_recipeId = []
         for item in contents_filtered["recipe_id"].tolist():
             if item in filteredRecipeId:
                 cf_filtered_recipeId.append(item)

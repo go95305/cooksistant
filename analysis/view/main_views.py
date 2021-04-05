@@ -43,6 +43,7 @@ class ocr(Resource):
         data = request.get_json()
         user_id=data["userId"]
         ocr = data['ocrscan']
+        print(ocr)
         ingredients = Ocr.getIngredients(ocr)
         print(ingredients)
         
