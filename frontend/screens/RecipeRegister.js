@@ -56,6 +56,25 @@ class RecipeRegister extends React.Component {
     return <Input {...props} editable maxLength={20} />;
   };
 
+  onCheck = () => {
+    Alert.alert(
+      '레시피를 등록하시겠습니까?',
+      ' ',
+      [
+        {
+          text: '취소',
+          style: 'cancel',
+        },
+        {
+          text: '네',
+          onPress: () =>
+          this.onSubmit()
+        },
+      ],
+      { cancelable: false }
+    );
+  }
+
   onSubmit = async () => {
     try {
       const response = await axios.post(`http://j4c101.p.ssafy.io:8081/recipe/create`, {
@@ -168,7 +187,7 @@ class RecipeRegister extends React.Component {
       this.setState({ errors: true });
     } else {
       this.setState({ errors: false });
-      this.onSubmit();
+      this.onCheck();
     }
   };
 
@@ -583,7 +602,7 @@ class RecipeRegister extends React.Component {
                           </Block>
                         );
                       })}
-                      <Text style={{ marginTop: 20 }}>{JSON.stringify(this.state)}</Text> 
+                      {/* <Text style={{ marginTop: 20 }}>{JSON.stringify(this.state)}</Text>  */}
                     </Block>
                   </ProgressStep>
                 </ProgressSteps>
