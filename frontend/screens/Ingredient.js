@@ -8,6 +8,7 @@ import {
   Alert,
   ScrollView,
   Pressable,
+  FlatList,
 } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 import TagInput from 'react-native-tags-input';
@@ -68,10 +69,10 @@ class Ingredient extends React.Component {
   };
 
   updateTagState = (state) => {
-    console.log(state)
+    console.log(state);
     this.setState(
       {
-        tags: state
+        tags: state,
       },
       () => {
         this.updateSuggestionState(state);
@@ -130,7 +131,7 @@ class Ingredient extends React.Component {
 
   onSuggestionClick = (suggestion) => {
     let state = this.state.tags;
-
+    state.tagsArray.pop();
     state.tagsArray.push(suggestion);
 
     this.setState({
@@ -172,11 +173,14 @@ class Ingredient extends React.Component {
                       updateState={this.updateTagState}
                       tags={this.state.tags}
                       autoCapitalize={'none'}
-                      // customElement={
-                      //   <ScrollView showsVerticalScrollIndicator={false}>
-                      //     <Block style={{ marginTop: 10 }}>{this.renderSuggestions()}</Block>
-                      //   </ScrollView>
-                      // }
+                      customElement={
+                        <ScrollView
+                          showsVerticalScrollIndicator={false}
+                          style={{ height: this.state.suggestions.length > 0 ? 250 : 0 }}
+                        >
+                          <Block style={{ marginTop: 10 }}>{this.renderSuggestions()}</Block>
+                        </ScrollView>
+                      }
                       placeholder="재료 추가"
                       label="정확한 재료를 입력해주세요."
                       labelStyle={{
