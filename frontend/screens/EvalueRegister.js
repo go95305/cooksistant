@@ -77,7 +77,7 @@ class TasteRegister extends React.Component {
       this.setState({ errors: true });
     } else {
       this.setState({ errors: false });
-      this.onSubmit();
+      this.onCheck();
     }
   };
 
@@ -108,6 +108,25 @@ class TasteRegister extends React.Component {
         console.log(error);
       });
   };
+
+  onCheck = () => {
+    Alert.alert(
+      '평가를 등록하시겠습니까?',
+      ' ',
+      [
+        {
+          text: '취소',
+          style: 'cancel',
+        },
+        {
+          text: '네',
+          onPress: () =>
+          this.onSubmit()
+        },
+      ],
+      { cancelable: false }
+    );
+  }
 
   render() {
     const title = this.props.route.params.title;
