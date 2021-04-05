@@ -6,14 +6,14 @@ import {
   Image,
   ImageBackground,
   Platform,
-  RefreshControl
+  RefreshControl,
 } from 'react-native';
 import SegmentedControlTab from 'react-native-segmented-control-tab';
 import { Block, Text, theme, Button as GaButton } from 'galio-framework';
 import { Card } from '../components';
 import { Images, nowTheme } from '../constants';
 import { HeaderHeight } from '../constants/utils';
-import { FontAwesome } from '@expo/vector-icons'; 
+import { FontAwesome } from '@expo/vector-icons';
 
 import firebase from 'firebase';
 import axios from 'axios';
@@ -81,7 +81,7 @@ class Profile extends React.Component {
             description: el.description,
             image: el.image,
             isMy: true,
-            isMyRecipe :false,
+            isMyRecipe: false,
             cta: '레시피 보러가기',
           });
         });
@@ -117,31 +117,37 @@ class Profile extends React.Component {
   Recipe = () => {
     return (
       <ScrollView
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl
-              refreshing={this.state.refreshing}
-              onRefresh={this._onRefresh.bind(this)}
-            />
-          }
-        >
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh.bind(this)}
+          />
+        }
+      >
         <Block style={{ paddingBottom: -HeaderHeight * 2, paddingHorizontal: 15 }}>
           <Block center style={{ width: width * 0.85 }}>
-            {this.state.Info.recipeList.map(
-              (el, i) =>
-                i % 2 == 0 && (
-                  <Block flex row key={i}>
-                    <Card
-                      item={this.state.Info.recipeList[i]}
-                      style={{ marginRight: theme.SIZES.BASE }}
-                    />
-                    {Number(i + 1) < this.state.Info.recipeSize ? (
-                      <Card item={this.state.Info.recipeList[Number(i + 1)]} />
-                    ) : (
-                      <Card item={{ title: '', image: null, id: 0 }} />
-                    )}
-                  </Block>
-                )
+            {this.state.Info.recipeSize === 0 ? (
+              <Block flex row>
+                <Card item={{ title: '아직 등록한 레시피가 없어요.', image: null, id: 0 }} full/>
+              </Block>
+            ) : (
+              this.state.Info.recipeList.map(
+                (el, i) =>
+                  i % 2 == 0 && (
+                    <Block flex row key={i}>
+                      <Card
+                        item={this.state.Info.recipeList[i]}
+                        style={{ marginRight: theme.SIZES.BASE }}
+                      />
+                      {Number(i + 1) < this.state.Info.recipeSize ? (
+                        <Card item={this.state.Info.recipeList[Number(i + 1)]} />
+                      ) : (
+                        <Card item={{ title: '', image: null, id: 0 }} />
+                      )}
+                    </Block>
+                  )
+              )
             )}
           </Block>
         </Block>
@@ -151,7 +157,8 @@ class Profile extends React.Component {
 
   Scrap = () => {
     return (
-      <ScrollView
+      <Block>
+        <ScrollView
           showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl
@@ -160,27 +167,34 @@ class Profile extends React.Component {
             />
           }
         >
-        <Block style={{ paddingBottom: -HeaderHeight * 2, paddingHorizontal: 15 }}>
-          <Block center style={{ width: width * 0.85 }}>
-            {this.state.Info.scrapList.map(
-              (el, i) =>
-                i % 2 == 0 && (
-                  <Block flex row key={i}>
-                    <Card
-                      item={this.state.Info.scrapList[i]}
-                      style={{ marginRight: theme.SIZES.BASE }}
-                    />
-                    {Number(i + 1) < this.state.Info.scrapSize ? (
-                      <Card item={this.state.Info.scrapList[Number(i + 1)]} />
-                    ) : (
-                      <Card item={{ title: '', image: null, id: 0 }} />
-                    )}
-                  </Block>
+          <Block style={{ paddingBottom: -HeaderHeight * 2, paddingHorizontal: 15 }}>
+            <Block center style={{ width: width * 0.85 }}>
+              {this.state.Info.scrapSize === 0 ? (
+                <Block flex row>
+                  <Card item={{ title: '아직 스크랩한 레시피가 없어요.', image: null, id: 0 }} horizontal/>
+                </Block>
+              ) : (
+                this.state.Info.scrapList.map(
+                  (el, i) =>
+                    i % 2 == 0 && (
+                      <Block flex row key={i}>
+                        <Card
+                          item={this.state.Info.scrapList[i]}
+                          style={{ marginRight: theme.SIZES.BASE }}
+                        />
+                        {Number(i + 1) < this.state.Info.scrapSize ? (
+                          <Card item={this.state.Info.scrapList[Number(i + 1)]} />
+                        ) : (
+                          <Card item={{ title: '', image: null, id: 0 }} />
+                        )}
+                      </Block>
+                    )
                 )
-            )}
+              )}
+            </Block>
           </Block>
-        </Block>
-      </ScrollView>
+        </ScrollView>
+      </Block>
     );
   };
 
@@ -210,7 +224,7 @@ class Profile extends React.Component {
                         marginTop: 15,
                         fontFamily: 'montserrat-bold',
                         marginBottom: theme.SIZES.BASE / 2,
-                        marginRight : 10,
+                        marginRight: 10,
                         fontWeight: '900',
                         fontSize: 26,
                       }}
