@@ -17,7 +17,10 @@ def getIngredients(ocr):
     #추출한 명사가 전체 재료에 있으면 재료리스트에 추가
     ingredients =[]
     for item in ocr_couldbe_ingredients:
-        if item in array_ingredients:
-            ingredients.append(item)
-    print(ingredients)
+        for ing in array_ingredients:
+            exist = item.find(ing)
+            if exist !=-1:
+                if ing not in ingredients:
+                    ingredients.append(ing)
+    
     return ingredients

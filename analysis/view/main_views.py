@@ -44,6 +44,6 @@ class ocr(Resource):
         user_id=data["userId"]
         ocr = data['ocrscan']
         ingredients = Ocr.getIngredients(ocr)
-        
+        print(ingredients)
         
         return {"result" : AnalysisService.CF(str(user_id), ingredients) }
