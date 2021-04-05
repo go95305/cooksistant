@@ -82,21 +82,26 @@ class TasteRegister extends React.Component {
   };
 
   onSubmit = () => {
+    console.log(this.state.userId)
+    console.log(this.state.evaluationId)
+    console.log(this.state.recipeId)
+    console.log(this.state.starCount)
     axios
       .put(`http://j4c101.p.ssafy.io:8081/recipe/evaluationUpdate`, {
         userId: this.state.userId,
         evaluationId: this.state.evaluationId,
         recipeId: this.state.recipeId,
         isComplete: true,
-        isSampled: true,
         isUpdate: true,
         favor: this.state.starCount,
         keywordList: this.state.selectedTastes.concat(this.state.selectedFeatures),
       })
       .then((response) => {
+        console.log(response);
         if (response.status == 200) {
           Alert.alert('평가가 등록되었습니다.');
-          this.props.navigation.goBack();
+          //this.props.navigation.goBack();
+          this.props.navigation.navigate('EvalueList');
         }
       })
       .catch(function (error) {

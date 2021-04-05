@@ -17,6 +17,7 @@ class TTSOrder extends React.Component {
     this.state = {
       swiperShow: false,
       userId: 0,
+      eId: 0,
       rId: this.props.route.params.id,
       image: null,
       cuisine: null,
@@ -67,23 +68,23 @@ class TTSOrder extends React.Component {
 
   checkEvalu() {
     const { navigation } = this.props;
-    let response;
-    try {
-      response = axios.post(`http://j4c101.p.ssafy.io:8081/recipe/evaluation`, {
+    axios
+      .post(`http://j4c101.p.ssafy.io:8081/recipe/evaluation`, {
         userId: this.state.userId,
         evaluationId: 0,
         favor: 0,
         isComplete: false,
         isUpdate: true,
-        recipeId: this.state.recipeId,
+        recipeId: this.state.rId,
+      })
+      .then((response) => {
+        if (response.status == 200) {
+          this.setState({eId : response.data})
+        }
+      })
+      .catch((error) => {
+        console.log(error);
       });
-    } catch (error) {
-      console.log(error);
-    }
-
-    if (response.status == 200) {
-      console.log(response.status);
-    }
 
     Alert.alert(
       '레시피 평가하러 갈까요?',
@@ -97,7 +98,7 @@ class TTSOrder extends React.Component {
           text: '네',
           onPress: () =>
             navigation.navigate('EvalueRegister', {
-              eId: response.data,
+              eId: this.state.eId,
               rId: this.state.rId,
               title: this.state.cuisine,
               image: this.state.image,
