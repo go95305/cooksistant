@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "859478845487",
+    "firebase_url": "https://cooksistant-308615-default-rtdb.firebaseio.com",
+    "project_id": "cooksistant-308615",
+    "storage_bucket": "cooksistant-308615.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:859478845487:android:9bc347bb12fc3e5e22feda",
+        "android_client_info": {
+          "package_name": "host.exp.exponent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "859478845487-jcv9o4p9h80ns35pe642p4558nvu402o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlTObRL0DZbTD73gOgOKicvuM8cq451dk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "859478845487-jcv9o4p9h80ns35pe642p4558nvu402o.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "859478845487-23l78jo7evj2rdr9gkaupqauqq67d0o1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "host.exp.exponent"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

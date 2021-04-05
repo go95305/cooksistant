@@ -1,8 +1,8 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Dimensions, RefreshControl} from 'react-native';
+import { ScrollView, StyleSheet, Dimensions, RefreshControl } from 'react-native';
 import { Block, theme } from 'galio-framework';
 import { nowTheme } from '../constants';
-import { ECard } from '../components';
+import { ECard, Card } from '../components';
 import axios from 'axios';
 import firebase from 'firebase';
 
@@ -10,6 +10,7 @@ const { width, height } = Dimensions.get('screen');
 
 class EvalueList extends React.Component {
   state = {
+    size: null,
     refreshing: false,
     apiResult: [],
   };
@@ -36,13 +37,14 @@ class EvalueList extends React.Component {
             });
           });
         }
-        this.setState({ apiResult: arrayList });
+
+        this.setState({ apiResult: arrayList, size: arrayList.length });
         this.setState({ refreshing: false });
       })
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
 
   _onRefresh() {
     this.setState({ refreshing: true });
@@ -52,9 +54,16 @@ class EvalueList extends React.Component {
   renderCards = () => {
     return (
       <Block style={styles.container}>
-        {this.state.apiResult.map((el, index) => {
-          return <ECard key={index} item={el} full />;
-        })}
+        {this.state.size === 0 ? (
+          <Card
+            item={{ title: '아직 이용완료한 레시피가 없어요', image: null, id: 0 }}
+            horizontal
+          />
+        ) : (
+          this.state.apiResult.map((el, index) => {
+            return <ECard key={index} item={el} full />;
+          })
+        )}
       </Block>
     );
   };

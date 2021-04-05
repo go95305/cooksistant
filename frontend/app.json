@@ -21,7 +21,6 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
       "bundleIdentifier": "host.exp.exponent",
       "config": {
         "googleSignIn": {
@@ -30,7 +29,13 @@
       }
     },
     "android": {
-      "package": "host.exp.exponent"
+      "package": "host.exp.exponent",
+      "googleServicesFile": "./google-services.json",
+      "config": {
+        "googleSignIn": {
+          "certificateHash": "E81A1BBB7DBDD61AD8B6672639D6FE8285713D31"
+        }
+      }
     },
     "description": "CookSistant"
   }

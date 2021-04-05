@@ -72,7 +72,7 @@ class Card extends React.Component {
           <Block flex={3} style={imgContainer}>
             <Image
               resizeMode="cover"
-              source={item.image == null ? Images.RegisterBackground : { uri: item.image }}
+              source={item.image == null ? Images.white : { uri: item.image }}
               style={imageStyles}
             />
           </Block>

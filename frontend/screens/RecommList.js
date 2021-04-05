@@ -2,13 +2,14 @@ import React from 'react';
 import { ScrollView, StyleSheet, Dimensions, Alert } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 import { nowTheme } from '../constants';
-import { ECard } from '../components';
+import { ECard, Card } from '../components';
 import axios from 'axios';
 
 const { width, height } = Dimensions.get('screen');
 
 class RecommList extends React.Component {
   state = {
+    size: null,
     userId: this.props.route.params.userId,
     ingreList: this.props.route.params.ingredients,
     recipeList: [],
@@ -31,11 +32,11 @@ class RecommList extends React.Component {
                 image: el.url,
                 favor: el.favor,
                 desc: el.description,
-                flag: false
+                flag: false,
               });
             });
           }
-          this.setState({ recipeList: arrayList });
+          this.setState({ recipeList: arrayList, size: arrayList.length });
         })
         .catch((error) => {
           console.log(error);
@@ -47,9 +48,16 @@ class RecommList extends React.Component {
   renderCards = () => {
     return (
       <Block style={styles.container}>
-        {this.state.recipeList.map((el, index) => { 
-          return (<ECard key={index} item={el} full />);
-        })}
+        {this.state.size === 0 ? (
+          <Card
+            item={{ title: '추천받은 레시피가 없어요ㅠ', image: null, id: 0 }}
+            horizontal
+          />
+        ) : (
+          this.state.recipeList.map((el, index) => {
+            return <ECard key={index} item={el} full />;
+          })
+        )}
       </Block>
     );
   };
