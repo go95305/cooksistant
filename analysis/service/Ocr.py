@@ -19,5 +19,5 @@ def getIngredients(ocr):
     for item in ocr_couldbe_ingredients:
         if item in array_ingredients:
             ingredients.append(item)
-
+    print(ingredients)
     return ingredients
