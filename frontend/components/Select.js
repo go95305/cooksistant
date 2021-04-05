@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import PropTypes from 'prop-types';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { Block, Text } from 'galio-framework';
@@ -41,17 +41,17 @@ class DropDown extends React.Component {
         style={modalStyles}
         onSelect={this.handleOnSelect}
         dropdownStyle={styles.dropdown}
-        dropdownTextStyle={{ paddingLeft: 30, fontSize: 14 , height: 45}}
+        dropdownTextStyle={textStyles, { paddingLeft: 30, fontSize: 14, height: 40}}
         {...props}
       >
         <Block flex row middle space="between">
-          <Text size={12} style={textStyles}>
+          <Text size={Platform.OS == 'android' ? 11 : 14} style={textStyles}>
             {this.state.value}
           </Text>
           <Icon
             name={iconName || 'minimal-down2x'}
             family={iconFamily || 'NowExtra'}
-            size={iconSize || 14}
+            size={iconSize || 15}
             color={iconColor || nowTheme.COLORS.WHITE}
           />
         </Block>
@@ -71,7 +71,7 @@ DropDown.propTypes = {
 
 const styles = StyleSheet.create({
   qty: {
-    width: 80,
+    width: 83,
     backgroundColor: nowTheme.COLORS.DEFAULT,
     paddingHorizontal: 15,
     paddingTop: 15,
@@ -79,8 +79,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   text: {
+    fontFamily: 'montserrat-regular',
     color: nowTheme.COLORS.WHITE,
-    fontWeight: '600',
     padding: 5
   },
   dropdown: {

@@ -67,13 +67,12 @@ class RecipeRegister extends React.Component {
         },
         {
           text: '네',
-          onPress: () =>
-          this.onSubmit()
+          onPress: () => this.onSubmit(),
         },
       ],
       { cancelable: false }
     );
-  }
+  };
 
   onSubmit = async () => {
     try {
@@ -357,7 +356,7 @@ class RecipeRegister extends React.Component {
                           width={Platform.OS == 'android' ? width * 0.78 : width * 0.7}
                           style={{ marginBottom: 8, padding: 1 }}
                         >
-                          <Block flex left>
+                          <Block center>
                             <Select
                               default={'인분'}
                               value={this.state.serving}
@@ -368,17 +367,13 @@ class RecipeRegister extends React.Component {
                               }}
                             />
                           </Block>
-                          <Block
-                            flex
-                            center
-                            style={{ marginLeft: Platform.OS == 'android' ? 0 : 0 }}
-                          >
+                          <Block center style={{ marginLeft: 10 }}>
                             <Block row space="between">
                               <InputSpinner
                                 max={90}
                                 min={0}
                                 step={5}
-                                height={47}
+                                height={50}
                                 style={{ minWidth: 130, shadowOpacity: 0, borderRadius: 11 }}
                                 color={'#f18d46'}
                                 skin={'round'}
@@ -431,7 +426,7 @@ class RecipeRegister extends React.Component {
                             }}
                           >
                             <TouchableOpacity onPress={ImagePickerAsync}>
-                              <MaterialIcons name="photo-camera" size={30 } color="#f18d46" />
+                              <MaterialIcons name="photo-camera" size={30} color="#f18d46" />
                             </TouchableOpacity>
                           </ImageBackground>
                         </Block>
@@ -621,10 +616,39 @@ class RecipeRegister extends React.Component {
         >
           <Block style={styles.centeredView}>
             <Block style={styles.modalView}>
-              <Block flex={4}>
-                <Text style={styles.modalText}>재료: 양파 계량: 1/2개</Text>
+            <Block flex={0.2} style={{ marginTop: 10 }}>
+              <Text center style={styles.modalText4} color="lightgray">
+                더하기, 빼기 버튼을 클릭하면
+              </Text>
+              <Text style={styles.modalText4} color="lightgray">
+                  재료와 과정을 추가 & 삭제 할 수 있어요.
+              </Text>
+                </Block>
+              <Block flex={0.35} style={{ marginTop: 5, marginLeft: 10 }}>
+                <Block row>
+                  <Text style={styles.modalText1} color={nowTheme.COLORS.PRIMARY}>
+                    재료
+                  </Text>
+                  <Text style={styles.modalText3} color="#474747">
+                    (예시)
+                  </Text>
+                </Block>
+                <Text style={styles.modalText2}>재료: 양파 | 계량: 1/2개</Text>
+                <Text style={styles.modalText2}>재료: 간장 | 계량: 3숟 or 3T</Text>
               </Block>
-              <Block flex={1}>
+              <Block flex={0.35} style={{ marginTop: 5, marginLeft: 10 }}>
+                <Block row>
+                  <Text style={styles.modalText1} color={nowTheme.COLORS.PRIMARY}>
+                    과정
+                  </Text>
+                  <Text style={styles.modalText3} color="#474747">
+                    (레시피의 각 과정에 맞는)
+                  </Text>
+                </Block>
+                <Text style={styles.modalText2}>사진 등록(선택)</Text>
+                <Text style={styles.modalText2}>설명 등록(필수)</Text>
+              </Block>
+              <Block flex={0.2} style={{ alignItems: 'center' }}>
                 <Pressable
                   style={[styles.button, styles.buttonClose]}
                   onPress={() => this.setModalVisible(!modalVisible)}
@@ -729,12 +753,12 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: height * 0.3,
-    height: height * 0.3,
+    height: height * 0.45,
     margin: 20,
     backgroundColor: 'white',
     borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
+    padding: 30,
+
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -757,9 +781,29 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
+  modalText1: {
+    fontSize: 13,
+    fontFamily: 'montserrat-bold',
+    lineHeight: 20,
+    marginBottom: 8,
+  },
+  modalText2: {
+    fontSize: 12,
+    fontFamily: 'montserrat-regular',
+    lineHeight: 20,
+  },
+  modalText3: {
+    fontSize: 10,
+    fontFamily: 'montserrat-bold',
+    lineHeight: 20,
+    marginBottom: 8,
+    marginLeft: 4
+  },
+  modalText4: {
+    fontSize: 10,
+    fontFamily: 'montserrat-bold',
+    lineHeight: 10,
+    marginBottom: 8,
   },
 });
 

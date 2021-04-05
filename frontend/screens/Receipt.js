@@ -7,7 +7,8 @@ import {
   Image,
   Share,
   StyleSheet,
-  ScrollView,
+  Modal,
+  Pressable,
   Dimensions,
   Alert,
 } from 'react-native';
@@ -20,7 +21,7 @@ import { Images, nowTheme } from '../constants';
 import Environment from '../config/environment';
 import firebase from '../config/firebase';
 import axios from 'axios';
-import { FontAwesome5, AntDesign } from '@expo/vector-icons';
+import { FontAwesome5, AntDesign, Feather } from '@expo/vector-icons';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -30,6 +31,7 @@ export default class App extends React.Component {
     image: null,
     uploading: false,
     googleResponse: null,
+    modalVisible: false,
     recipeList: [],
   };
 
@@ -49,8 +51,12 @@ export default class App extends React.Component {
       });
   }
 
+  setModalVisible = (visible) => {
+    this.setState({ modalVisible: visible });
+  };
+
   render() {
-    let { image } = this.state;
+    const { modalVisible } = this.state;
 
     return (
       <Block style={styles.container}>
@@ -62,7 +68,7 @@ export default class App extends React.Component {
           >
             <Block flex={1} middle>
               <Block style={styles.receiptContainer}>
-                <Block center style={{ marginTop: 30 }}>
+                <Block row center style={{ marginTop: 30 }}>
                   <Text
                     style={{
                       fontFamily: 'montserrat-regular',
@@ -71,8 +77,15 @@ export default class App extends React.Component {
                     color="#474747"
                     size={18}
                   >
-                    영수증 사진을 등록해주세요.
+                    영수증 사진을 등록해주세요
                   </Text>
+                  <Feather
+                          name="info"
+                          size={23}
+                          color={nowTheme.COLORS.PRIMARY}
+                          style={{ margin: 3}}
+                          onPress={() => this.setModalVisible(true)}
+                        />
                 </Block>
                 <Block
                   center
@@ -107,6 +120,41 @@ export default class App extends React.Component {
             </Block>
           </ImageBackground>
         </Block>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert('==Modal has been closed.==');
+            this.setModalVisible(!modalVisible);
+          }}
+        >
+          <Block style={styles.centeredView}>
+            <Block style={styles.modalView}>
+              <Block flex={0.45} style={{marginTop: 10}}>
+                <Text style={styles.modalText}>사진을 등록 후 '재료 추출하기' </Text>
+                <Text style={styles.modalText}>버튼을 지시사항대로 클릭해주세요.</Text>
+                <Text style={styles.modalText}>↓</Text>
+                <Text style={styles.modalText}>재료 추출이 완료되었다면 </Text>
+                <Text style={styles.modalText}>'레시피 추천받기' 버튼이 생성돼요.</Text>
+              </Block>
+              <Block flex={0.35}>
+                <Text style={styles.modalText} color={nowTheme.COLORS.PRIMARY}>만약, 버튼이 생성되지 않았다면</Text>
+                <Text style={styles.modalText} color={nowTheme.COLORS.PRIMARY}>추출된 재료로 추천받을 수 없거나</Text>
+                <Text style={styles.modalText} color={nowTheme.COLORS.PRIMARY}>글씨가 잘 보이는 사진으로</Text>
+                <Text style={styles.modalText} color={nowTheme.COLORS.PRIMARY}>다시 등록해보세요.</Text>
+              </Block>
+              <Block flex={0.2}>
+                <Pressable
+                  style={[styles.mbutton, styles.buttonClose]}
+                  onPress={() => this.setModalVisible(!modalVisible)}
+                >
+                  <Text style={styles.textStyle}>닫기</Text>
+                </Pressable>
+              </Block>
+            </Block>
+          </Block>
+        </Modal>
       </Block>
     );
   }
@@ -153,10 +201,10 @@ export default class App extends React.Component {
             <Image source={{ uri: image }} style={{ width: 250, height: 250 }} />
           </Block>
           <Block center row style={{ marginTop: 15, marginBottom: 10, alignItems: 'center' }}>
-            <Text style={{ marginRight: 5 }} size={15} color={'#f18d46'} bold>
-              두번 이상 클릭해주세요.
+            <Text style={{ marginRight: 5 }} size={13} color={'#f18d46'} bold>
+              재료추출을 위해 두세번 이상 클릭해주세요.
             </Text>
-            <AntDesign name="warning" size={20} color={'#f18d46'} />
+            <AntDesign name="warning" size={17} color={'#f18d46'} />
           </Block>
           <Block row center>
             <Button
@@ -226,7 +274,7 @@ export default class App extends React.Component {
       allowsEditing: true,
       aspect: [4, 3],
     });
-
+    this.setState({ recipeList: [] });
     this._handleImagePicked(pickerResult);
   };
 
@@ -235,7 +283,7 @@ export default class App extends React.Component {
       allowsEditing: true,
       aspect: [4, 3],
     });
-
+    this.setState({ recipeList: [] });
     this._handleImagePicked(pickerResult);
   };
 
@@ -420,5 +468,47 @@ const styles = StyleSheet.create({
   button: {
     height: 50,
     width: width * 0.3,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    width: height * 0.3,
+    height: height * 0.4,
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 30,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  mbutton: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonClose: {
+    backgroundColor: '#f18d46',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    fontSize: 12,
+    fontFamily: 'montserrat-regular',
+    lineHeight: 20,
+    textAlign: 'center',
   },
 });
