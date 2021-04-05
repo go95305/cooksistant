@@ -41,8 +41,8 @@ class Home extends React.Component {
           .get(`http://j4c101.p.ssafy.io:5000/trend`)
           .then((result) => {
             const arrayList1 = [];
-            console.log(result);
-            console.log('DDDDDDDDDDDDDDDDDDDDDDD' + result.data.trend);
+            // console.log(result);
+            // console.log('DDDDDDDDDDDDDDDDDDDDDDD' + result.data.trend);
             if (result.data.trend && Array.isArray(result.data.trend)) {
               result.data.trend.forEach((el) => {
                 arrayList1.push({
