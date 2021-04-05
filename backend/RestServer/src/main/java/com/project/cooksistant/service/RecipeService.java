@@ -70,12 +70,12 @@ public class RecipeService {
         Optional<User> user = Optional.ofNullable(userRepository.findById(evaluationDTOpost.getUserId()).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 유저는 존재하지 않는 유저입니다.")));
         Evaluation evaluation = new Evaluation();
         evaluation.setUser(user.get());
-//        evaluation.setIsSampled(true);
+        evaluation.setIsSampled(true);
         evaluation.setRecipe(recipe.get());
         evaluation.setIsComplete(evaluationDTOpost.getIsComplete());//isComplete를 true로 둔다.
-        if (evaluationDTOpost.getIsComplete()) {
-            evaluation.setFavor(evaluationDTOpost.getFavor());
-            evaluationRepository.save(evaluation);
+        evaluation.setFavor(evaluationDTOpost.getFavor());
+//        if (evaluationDTOpost.getIsComplete()) {
+//            evaluationRepository.save(evaluation);
 
 
 //            for (int i = 0; i < evaluationDTOpost.getKeywordList().size(); i++) {
@@ -85,10 +85,10 @@ public class RecipeService {
 //                evaluationKeyword.setKeyword(keyword);//각각 키워드는 위에서구한 keyword 객체로 설정
 //                evaluationKeywordRepository.save(evaluationKeyword);
 //            }
-        } else {
-            evaluation.setIsComplete(evaluationDTOpost.getIsComplete());//isComplete를 false로 둔다.
-            evaluationRepository.save(evaluation);
-        }
+//        } else {
+//        evaluation.setIsComplete(evaluationDTOpost.getIsComplete());//isComplete를 false로 둔다.
+        evaluationRepository.save(evaluation);
+//        }
         return evaluation.getEvalId();
 
     }
