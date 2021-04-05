@@ -317,6 +317,7 @@ class RecipeRegister extends React.Component {
                             multiline
                             numberOfLines={3}
                             placeholder="레시피명"
+                            value={this.state.title}
                             style={styles.titleInput}
                             iconContent={
                               <MaterialIcons
@@ -340,6 +341,7 @@ class RecipeRegister extends React.Component {
                           <Block flex left>
                             <Select
                               default={'인분'}
+                              value={this.state.serving}
                               color={'#f18d46'}
                               options={['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']}
                               onSelect={(opt) => {
@@ -387,6 +389,7 @@ class RecipeRegister extends React.Component {
                             multiline
                             numberOfLines={9}
                             placeholder="레시피 소개"
+                            value={this.state.desc}
                             style={styles.descInput}
                             onChangeText={(text) => {
                               this.setState({ desc: text });
@@ -454,6 +457,7 @@ class RecipeRegister extends React.Component {
                             <this.ingreInput
                               placeholder="재료 입력"
                               numberOfLines={1}
+                              value={el.ingredientName}
                               style={styles.ingreInput}
                               onChangeText={(text) => {
                                 this.ingreInputChange(text, 'ingredientName', idx);
@@ -462,6 +466,7 @@ class RecipeRegister extends React.Component {
                             <this.ingreInput
                               placeholder="계량 입력"
                               numberOfLines={1}
+                              value={el.amount}
                               style={styles.amountInput}
                               onChangeText={(text) => {
                                 this.ingreInputChange(text, 'amount', idx);
@@ -547,6 +552,7 @@ class RecipeRegister extends React.Component {
                             <this.descInput
                               placeholder="과정 입력"
                               numberOfLines={10}
+                              value={el.stepDescription}
                               style={styles.stepInput}
                               onChangeText={(text) => {
                                 this.stepInputChange(text, 'stepDescription', idx);
