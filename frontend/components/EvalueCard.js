@@ -112,29 +112,29 @@ class Card extends React.Component {
                   paddingHorizontal: 8,
                   lineHeight: 20,
                 }}
-                size={13}
+                size={14.5}
                 color="#474747"
               >
                 {item.title.includes(']')
                   ? title[0] +
                     '] \n' +
-                    (title[1].trim().length > 26
-                      ? title[1].trim().substr(0, 26) + ' ⋯'
+                    (title[1].trim().length > 23
+                      ? title[1].trim().substr(0, 23) + ' ⋯'
                       : title[1].trim())
-                  : item.title.length > 26
-                  ? item.title.substr(0, 26) + ' ⋯'
+                  : item.title.length > 23
+                  ? item.title.substr(0, 23) + ' ⋯'
                   : item.title}
               </Text>
             </Block>
             {item.flag ? (
               <Block row space="between">
-                <Text style={{ padding: 7 }} size={13} muted={!isEvaluColor} color={'#f18d46'} bold>
+                <Text  style={styles.articleButton} size={13} color={'#f18d46'} bold>
                   {item.isEvalu ? '레시피 보러가기' : '레시피 평가하기'}
                 </Text>
                 {item.isEvalu ? (
-                  <MaterialIcons name="check-box" size={30} color="#f18d46" />
+                  <MaterialIcons style={{margin :8}} name="check-box" size={30} color="#f18d46" />
                 ) : (
-                  <MaterialIcons name="check-box-outline-blank" size={30} color="#f18d46" />
+                  <MaterialIcons style={{margin :8}} name="check-box-outline-blank" size={30} color="#f18d46" />
                 )}
               </Block>
             ) : (
@@ -352,6 +352,11 @@ const styles = StyleSheet.create({
     fontFamily: 'montserrat-bold',
     color: '#f18d46',
     textAlign: 'center',
+  },
+  articleButton: {
+    fontFamily: 'montserrat-bold',
+    margin: 8,
+    paddingVertical: 8,
   },
 });
 

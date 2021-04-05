@@ -29,7 +29,8 @@ class Home extends React.Component {
               id: el.recipeId,
               title: el.recipename,
               image: el.url,
-              flag: false,
+              isMy: false,
+              isMyRecipe :false,
               cta: '레시피 보러가기',
             });
           });
