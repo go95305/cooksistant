@@ -86,8 +86,8 @@ public class RecipeController {
 
     @ApiOperation(value = "레시피 삭제")
     @PutMapping("/recipe/delete/{recipeId}")
-    public void deleteRecipe(@PathVariable Long recipdId) {
-        recipeService.deleteRecipe(recipdId);
+    public void deleteRecipe(@PathVariable Long recipeId) {
+        recipeService.deleteRecipe(recipeId);
     }
 
     @ApiOperation(value = "인기레시피")

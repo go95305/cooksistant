@@ -350,8 +350,8 @@ public class RecipeService {
         recipeIngredientRepository.save(recipeIngredient.get());
     }
 
-    public void deleteRecipe(Long recipdId) {
-        Optional<Recipe> recipe = Optional.ofNullable(recipeRepository.findById(recipdId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 레시피는 존재하지 않습니다.")));
+    public void deleteRecipe(Long recipeId) {
+        Optional<Recipe> recipe = Optional.ofNullable(recipeRepository.findById(recipeId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 레시피는 존재하지 않습니다.")));
         recipe.get().setFlag(false);
         recipeRepository.save(recipe.get());
     }
