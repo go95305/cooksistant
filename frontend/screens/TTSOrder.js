@@ -93,6 +93,7 @@ class TTSOrder extends React.Component {
         {
           text: '다음에 할게요',
           style: 'cancel',
+          onPress: () => navigation.navigate('Pro'),
         },
         {
           text: '네',
