@@ -73,7 +73,7 @@ class TasteRegister extends React.Component {
   onSubmitStep = () => {
     console.log(this.state.evaluationId);
     if (this.state.selectedTastes.length == 0 && this.state.selectedFeatures.length == 0) {
-      Alert.alert('하나 이상의 맛과 특징을 선탹해주세요!');
+      Alert.alert('하나 이상의 맛과 특징을 선택해주세요!');
       this.setState({ errors: true });
     } else {
       this.setState({ errors: false });
@@ -176,7 +176,7 @@ class TasteRegister extends React.Component {
                             marginTop: height > 800 ? 0 : -5,
                           }}
                           color="#333"
-                          size={15}
+                          size={Platform.OS == 'android' ? 12 : 15}
                         >
                           {title.includes(']') ? tmp[0] + '] \n' + tmp[1].trim() : title}
                         </Text>
@@ -186,7 +186,7 @@ class TasteRegister extends React.Component {
                           style={{
                             borderRadius: 15,
                             width: width * 0.8,
-                            height: 200,
+                            height: Platform.OS == 'android' ? 180 : 200,
                           }}
                         />
                       </Block>
@@ -195,18 +195,18 @@ class TasteRegister extends React.Component {
                           style={{
                             fontFamily: 'montserrat-bold',
                             textAlign: 'center',
-                            marginTop: height > 800 ? -5 : -10,
+                            marginTop: height > 800 ? -2 : -8,
                             marginBottom: 13,
                           }}
                           color="#333"
-                          size={14}
+                          size={Platform.OS == 'android' ? 12 : 14}
                         >
                           레시피에 대해 평가해주세요!
                         </Text>
                         <StarRating
                           disabled={false}
                           maxStars={5}
-                          starSize={45}
+                          starSize={Platform.OS == 'android' ? 40 : 45}
                           halfStarEnabled={true}
                           emptyStarColor={'#f18d46'}
                           fullStarColor={'#f18d46'}
@@ -219,6 +219,7 @@ class TasteRegister extends React.Component {
                             alignItems: 'center',
                             marginTop: height > 800 ? 15 : 10,
                           }}
+                          size={Platform.OS == 'android' ? 12 : 14}
                         >
                           {this.state.starCount} / 5
                         </Text>
@@ -242,7 +243,7 @@ class TasteRegister extends React.Component {
                             marginLeft: Platform.OS === 'android' ? 40 : 30,
                           }}
                           color="#333"
-                          size={18}
+                          size={Platform.OS == 'android' ? 15 : 18}
                         >
                           맛
                         </Text>
@@ -259,11 +260,11 @@ class TasteRegister extends React.Component {
                         <Text
                           style={{
                             fontFamily: 'montserrat-bold',
-                            marginTop: 10,
+                            marginTop: Platform.OS == 'android' ? 5 : 10,
                             marginLeft: Platform.OS === 'android' ? 40 : 30,
                           }}
                           color="#333"
-                          size={18}
+                          size={Platform.OS == 'android' ? 15 : 18}
                         >
                           특징
                         </Text>
@@ -334,7 +335,7 @@ const styles = StyleSheet.create({
     borderColor: '#f18d46',
     backgroundColor: '#fff',
     borderRadius: 18,
-    fontSize: 14,
+    fontSize: Platform.OS == 'android' ? 12 : 14,
     fontFamily: 'montserrat-bold',
     color: '#f18d46',
     textAlign: 'center',
@@ -347,7 +348,7 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     backgroundColor: '#f18d46',
     borderRadius: 20,
-    fontSize: 14,
+    fontSize: Platform.OS == 'android' ? 12 : 14,
     fontFamily: 'montserrat-bold',
     color: 'white',
     textAlign: 'center',
@@ -355,8 +356,8 @@ const styles = StyleSheet.create({
   },
   featureContainer: {
     width: width * 0.9,
-    marginTop: 12,
-    marginLeft: width > 370 ? 15 : 8,
+    marginTop: Platform.OS == 'android' ? 5 : 10,
+    marginLeft: width > 370 ? 17 : 8,
     padding: 10,
   },
   tag2: {
@@ -367,7 +368,7 @@ const styles = StyleSheet.create({
     borderColor: '#f18d46',
     backgroundColor: '#fff',
     borderRadius: 18,
-    fontSize: 12,
+    fontSize: Platform.OS == 'android' ? 10 : 12,
     fontFamily: 'montserrat-bold',
     color: '#f18d46',
     textAlign: 'center',
@@ -380,7 +381,7 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     backgroundColor: '#f18d46',
     borderRadius: 18,
-    fontSize: 12,
+    fontSize: Platform.OS == 'android' ? 10 : 12,
     fontFamily: 'montserrat-bold',
     color: 'white',
     textAlign: 'center',

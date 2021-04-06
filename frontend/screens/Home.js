@@ -6,6 +6,7 @@ import { Card } from '../components';
 import axios from 'axios';
 import Swiper from 'react-native-swiper';
 import RNUrlPreview from 'react-native-url-preview';
+import { FontAwesome5 } from '@expo/vector-icons';
 const { width, height } = Dimensions.get('screen');
 
 class Home extends React.Component {
@@ -30,7 +31,7 @@ class Home extends React.Component {
               title: el.recipename,
               image: el.url,
               isMy: false,
-              isMyRecipe :false,
+              isMyRecipe: false,
               cta: '레시피 보러가기',
             });
           });
@@ -68,7 +69,7 @@ class Home extends React.Component {
   render() {
     return (
       <Block flex={1}>
-        <Block flex={2}>
+        <Block flex={0.6}>
           <Text
             style={{
               fontFamily: 'montserrat-bold',
@@ -95,16 +96,17 @@ class Home extends React.Component {
             </Swiper>
           </Block>
         </Block>
-        <Block flex={0.1}></Block>
+        <Block flex={0.05}></Block>
         <Block
           center
           style={{
             borderColor: '#f18d46',
             width: '90%',
             borderWidth: StyleSheet.hairlineWidth + 1,
+            marginBottom: 5,
           }}
         />
-        <Block flex={1.5}>
+        <Block flex={0.25}>
           <Block flex>
             <Text
               style={{
@@ -127,8 +129,16 @@ class Home extends React.Component {
               >
                 {this.state.recipeTrendy.map((el, index) => (
                   <Block key={index} style={{ padding: 10 }}>
-                    <Block>
-                      <RNUrlPreview text={el.image} />
+                    <Block >
+                      <RNUrlPreview
+                        titleStyle={{
+                          lineHeight: 20,
+                          fontFamily: 'montserrat-bold',
+                          fontSize: Platform.OS == 'android' ? 12 : 14,
+                        }}
+                        
+                        text={el.image}
+                      />
                     </Block>
                     <Text
                       style={{
@@ -136,7 +146,7 @@ class Home extends React.Component {
                         paddingTop: 3,
                         lineHeight: 20,
                       }}
-                      size={12}
+                      size={Platform.OS == 'android' ? 10 : 12}
                       color="#474747"
                     >
                       {el.title}

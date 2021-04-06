@@ -86,9 +86,9 @@ class Card extends React.Component {
                 style={{
                   fontFamily: 'montserrat-bold',
                   paddingTop: 3,
-                  lineHeight: 20,
+                  lineHeight: Platform.OS == 'android' ? 15 : 20
                 }}
-                size={item.isMy ? 10.5 : 12.5}
+                size={item.isMy ? (Platform.OS == 'android' ? 9 : 10.5) : 12.5}
                 color="#474747"
               >
                 {item.isMy
@@ -110,7 +110,7 @@ class Card extends React.Component {
               <TouchableWithoutFeedback
                 onPress={() => (item.id == 0 ? '' : navigation.navigate('Pro', { id: item.id }))}
               >
-                <Text style={styles.articleButton} size={12} color="#f18d46" bold>
+                <Text style={styles.articleButton} size={Platform.OS == 'android' ? 10 : 12} color="#f18d46" bold>
                   {item.cta}
                 </Text>
               </TouchableWithoutFeedback>
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     borderRadius: 3,
-    elevation: 1,
+    elevation: 0,
     overflow: 'hidden',
   },
   image: {
