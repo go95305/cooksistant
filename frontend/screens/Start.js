@@ -153,8 +153,8 @@ export default class Onboarding extends React.Component {
                   shadowless
                   style={styles.button}
                   color={nowTheme.COLORS.PRIMARY}
-                  //onPress={() => this.signInWithGoogle()}
-                  onPress={() => this.signInAsync()}
+                  onPress={() => this.signInWithGoogle()}
+                  //onPress={() => this.signInAsync()}
                 > 
                   <Text
                     style={{ fontFamily: 'montserrat-bold', fontSize: 15 }}

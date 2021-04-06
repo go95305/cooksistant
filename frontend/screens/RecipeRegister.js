@@ -455,7 +455,7 @@ class RecipeRegister extends React.Component {
                           name="info"
                           size={17}
                           color={nowTheme.COLORS.PRIMARY}
-                          style={{ margin: 6 }}
+                          style={{ margin: Platform.OS == 'android' ? 8 : 6 }}
                           onPress={() => this.setModalVisible(true)}
                         />
                       </Block>
@@ -618,10 +618,7 @@ class RecipeRegister extends React.Component {
             <Block style={styles.modalView}>
             <Block flex={0.2} style={{ marginTop: 10 }}>
               <Text center style={styles.modalText4} color="lightgray">
-                더하기, 빼기 버튼을 클릭하면
-              </Text>
-              <Text style={styles.modalText4} color="lightgray">
-                  재료와 과정을 추가 & 삭제 할 수 있어요.
+                더하기, 빼기 버튼을 클릭하면 재료와 과정을 추가 & 삭제 할 수 있어요.
               </Text>
                 </Block>
               <Block flex={0.35} style={{ marginTop: 5, marginLeft: 10 }}>
@@ -753,7 +750,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: height * 0.3,
-    height: height * 0.45,
+    height: Platform.OS == 'android' ? height * 0.5 : height * 0.45,
     margin: 20,
     backgroundColor: 'white',
     borderRadius: 20,
@@ -800,10 +797,10 @@ const styles = StyleSheet.create({
     marginLeft: 4
   },
   modalText4: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: 'montserrat-bold',
-    lineHeight: 10,
     marginBottom: 8,
+    lineHeight: 15
   },
 });
 

@@ -75,13 +75,13 @@ export default class App extends React.Component {
                       textAlign: 'center',
                     }}
                     color="#474747"
-                    size={18}
+                    size={Platform.OS == 'android' ? 15 : 18}
                   >
                     영수증 사진을 등록해주세요
                   </Text>
                   <Feather
                           name="info"
-                          size={23}
+                          size={Platform.OS == 'android' ?  20 : 24}
                           color={nowTheme.COLORS.PRIMARY}
                           style={{ margin: 3}}
                           onPress={() => this.setModalVisible(true)}
@@ -479,7 +479,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: height * 0.3,
-    height: height * 0.4,
+    height: height * 0.45,
     margin: 20,
     backgroundColor: 'white',
     borderRadius: 20,
@@ -508,7 +508,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   modalText: {
-    fontSize: 12,
+    fontSize: Platform.OS == 'android' ? 10 : 12,
     fontFamily: 'montserrat-regular',
     lineHeight: 20,
     textAlign: 'center',

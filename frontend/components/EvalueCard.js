@@ -112,17 +112,17 @@ class Card extends React.Component {
                   paddingHorizontal: 8,
                   lineHeight: 20,
                 }}
-                size={14.5}
+                size={Platform.OS == 'android' ? 12.5 : 14.5}
                 color="#474747"
               >
                 {item.title.includes(']')
                   ? title[0] +
                     '] \n' +
-                    (title[1].trim().length > 23
-                      ? title[1].trim().substr(0, 23) + ' ⋯'
+                    (title[1].trim().length > 24
+                      ? title[1].trim().substr(0, 24) + ' ⋯'
                       : title[1].trim())
-                  : item.title.length > 23
-                  ? item.title.substr(0, 23) + ' ⋯'
+                  : item.title.length > 24
+                  ? item.title.substr(0, 24) + ' ⋯'
                   : item.title}
               </Text>
             </Block>

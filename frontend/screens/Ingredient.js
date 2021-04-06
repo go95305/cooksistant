@@ -231,7 +231,7 @@ class Ingredient extends React.Component {
                   >
                     <Text
                       style={{ fontFamily: 'montserrat-bold' }}
-                      size={14}
+                      size={Platform.OS == 'android' ? 12 : 14}
                       color={nowTheme.COLORS.WHITE}
                     >
                       있는 재료로 레시피 추천받기
@@ -309,6 +309,7 @@ const styles = StyleSheet.create({
   tagText: {
     color: '#fff',
     fontFamily: 'montserrat-bold',
+    fontSize: Platform.OS == 'android' ? 12 : 14,
   },
 });
 
