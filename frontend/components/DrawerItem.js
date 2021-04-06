@@ -2,12 +2,17 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, Alert, Linking } from 'react-native';
 import { CommonActions } from '@react-navigation/native';
 import { Block, Text, theme } from 'galio-framework';
+import * as GoogleSignIn from 'expo-google-sign-in';
 import firebase from 'firebase';
 
 import Icon from './Icon';
 import nowTheme from '../constants/Theme';
 
 class DrawerItem extends React.Component {
+  signOutAsync = async () => {
+    await GoogleSignIn.signOutAsync();
+  };
+
   renderIcon = () => {
     const { title, focused } = this.props;
 
@@ -112,6 +117,7 @@ class DrawerItem extends React.Component {
                 .catch((error) => {
                   // An error happened.
                 });
+              this.signOutAsync();
               break;
             case '로그인':
               navigation.dispatch(
