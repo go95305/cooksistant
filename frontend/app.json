@@ -36,7 +36,7 @@
       "googleServicesFile": "./google-services.json",
       "config": {
         "googleSignIn": {
-          "certificateHash": "be920e68c479a8dfb546426edd6f89bdcff4ae06"
+          "certificateHash": "b28a5bfd62f177bd5e47f4cc0bf745c86553d311"
         }
       }
     },
