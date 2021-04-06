@@ -2,7 +2,7 @@ import React from 'react';
 import { ImageBackground, Alert, StyleSheet, StatusBar, Dimensions, Platform, AsyncStorag} from 'react-native';
 import { Block, Button, Text, theme } from 'galio-framework';
 import * as Google from 'expo-google-app-auth';
-//import * as GoogleSignIn from 'expo-google-sign-in';
+import * as GoogleSignIn from 'expo-google-sign-in';
 import firebase from 'firebase';
 import axios from "axios";
 
@@ -26,6 +26,41 @@ if (!firebase.apps.length) {
 }
 
 export default class Onboarding extends React.Component {
+  state = { user: null };
+
+  // 배포용 ==============================================
+  componentDidMount() {
+    this.initAsync();
+  }
+
+  initAsync = async () => {
+    await GoogleSignIn.initAsync({
+      // You may ommit the clientId when the firebase `googleServicesFile` is configured
+      clientId: '859478845487-23l78jo7evj2rdr9gkaupqauqq67d0o1.apps.googleusercontent.com',
+    });
+    this._syncUserWithStateAsync();
+  };
+
+  _syncUserWithStateAsync = async () => {
+    const googleuser = await GoogleSignIn.signInSilentlyAsync();
+    this.setState({ googleuser });
+  };
+
+  signInAsync = async () => {
+    try {
+      await GoogleSignIn.askForPlayServicesAsync();
+      const { type, user } = await GoogleSignIn.signInAsync();
+      if (type === 'success') {
+        this._syncUserWithStateAsync();
+        this.onSignIn(user);
+        this.props.navigation.navigate('App');
+      }
+    } catch ({ message }) {
+      alert('login: Error:' + message);
+    }
+  };
+  
+  // 로컬용 ==============================================
   isUserEqual = (googleUser, firebaseUser) => {
     if (firebaseUser) {
       var providerData = firebaseUser.providerData;
@@ -118,8 +153,9 @@ export default class Onboarding extends React.Component {
                   shadowless
                   style={styles.button}
                   color={nowTheme.COLORS.PRIMARY}
-                  onPress={() => this.signInWithGoogle()}
-                >
+                  //onPress={() => this.signInWithGoogle()}
+                  onPress={() => this.signInAsync()}
+                > 
                   <Text
                     style={{ fontFamily: 'montserrat-bold', fontSize: 15 }}
                     color={theme.COLORS.WHITE}
