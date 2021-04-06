@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "CookSistant",
-    "slug": "CookSistant",
+    "name": "cooksistant",
+    "icon": "./assets/imgs/home.png",
+    "slug": "cooksistant",
     "privacy": "public",
     "platforms": [
       "ios",
@@ -22,6 +23,7 @@
     ],
     "ios": {
       "bundleIdentifier": "host.exp.exponent",
+      "buildNumber": "1.0.0",
       "config": {
         "googleSignIn": {
           "reservedClientId": "com.googleusercontent.apps.859478845487-23l78jo7evj2rdr9gkaupqauqq67d0o1"
@@ -30,13 +32,14 @@
     },
     "android": {
       "package": "host.exp.exponent",
+      "versionCode": 1,
       "googleServicesFile": "./google-services.json",
       "config": {
         "googleSignIn": {
-          "certificateHash": "E81A1BBB7DBDD61AD8B6672639D6FE8285713D31"
+          "certificateHash": "be920e68c479a8dfb546426edd6f89bdcff4ae06"
         }
       }
     },
-    "description": "CookSistant"
+    "description": "cooksistant"
   }
 }
