@@ -129,11 +129,13 @@ class RecipeInfo extends Component {
               id: result.data.recipeId,
               nickname: result.data.nickname,
               cuisine: result.data.cuisine,
-              description: result.data.description,
+              description:
+                result.data.description == 'None' ? '소개글이 없습니다.' : result.data.description,
               cookingTime: result.data.cookingTime,
               image: result.data.image,
               level: result.data.level,
-              serving: result.data.serving,
+              serving:
+                result.data.serving.length > 0 ? result.data.serving + ' |' : result.data.serving,
               ingredientDTOList: IngredientList,
               stepList: stepList,
             },
@@ -189,12 +191,15 @@ class RecipeInfo extends Component {
                       <Text color="#474747" size={13} style={{ fontFamily: 'montserrat-regular' }}>
                         {this.state.recipeDetail.serving}
                       </Text>
-                      <Text size={13}> | </Text>
+                      <Text size={13}> </Text>
                       <Text color="#474747" size={13} style={{ fontFamily: 'montserrat-regular' }}>
                         {this.state.recipeDetail.cookingTime}
                       </Text>
                     </Block>
-                    <Block center style={{ width: width * 0.8, alignItems: 'center',marginTop: 5 }}>
+                    <Block
+                      center
+                      style={{ width: width * 0.8, alignItems: 'center', marginTop: 5 }}
+                    >
                       <Text
                         size={16}
                         muted
@@ -226,10 +231,40 @@ class RecipeInfo extends Component {
                         {this.state.recipeDetail.ingredientDTOList.map((idx, index) => (
                           <Block key={index} style={styles.ingreBtn}>
                             <Block row>
-                              <Text style={styles.ingreTxt}>{idx.ingredientName}</Text>
-                              <Block style={styles.amoutBtn}>
-                                <Text style={styles.amoutTxt}>{idx.amount}</Text>
-                              </Block>
+                              <Text
+                                style={{
+                                  fontSize: Platform.OS === 'android' ? 11 : 13,
+                                  color: 'white',
+                                  margin: 5,
+                                  fontFamily: 'montserrat-bold',
+                                }}
+                              >
+                                {idx.ingredientName}
+                              </Text>
+                            </Block>
+                            <Block
+                              row
+                              style={{
+                                width: idx.amount.length == 0 ? 0 : 50,
+                                height: idx.amount.length == 0 ? 0 : 21,
+                                borderRadius: 20,
+                                borderColor: '#F18D46',
+                                backgroundColor: 'white',
+                                borderWidth: 1,
+                                overflow: 'hidden',
+                                padding: 5,
+                                justifyContent: 'center',
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  fontSize: 8,
+                                  fontFamily: 'montserrat-bold',
+                                  textAlign: 'center',
+                                }}
+                              >
+                                {idx.amount}
+                              </Text>
                             </Block>
                           </Block>
                         ))}
@@ -311,21 +346,11 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
   ingreTxt: {
-    fontSize: 13,
     color: 'white',
     margin: 5,
     fontFamily: 'montserrat-bold',
   },
-  amoutBtn: {
-    width: 53,
-    borderRadius: 20,
-    borderColor: 'white',
-    backgroundColor: 'white',
-    borderWidth: 1,
-    overflow: 'hidden',
-    padding: 5,
-    justifyContent: 'center',
-  },
+  amoutBtn: {},
   amoutTxt: {
     fontSize: 10,
     fontFamily: 'montserrat-bold',
