@@ -134,6 +134,7 @@ public class RecipeController {
             "                                                   - recipeId: 레시피 아이디")
     @PostMapping("/recipe/ocr/")
     public List<RecipeListupDTO> ocrIngredient(@RequestBody OcrDTO ocrDTO) {
+        System.out.println(ocrDTO.getOcrscan());
         Gson gson = new Gson();
         String jsonArray = (webClient.post()
                 .uri("/konlypy")
