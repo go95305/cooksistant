@@ -112,7 +112,6 @@ class TTSOrder extends React.Component {
 
   _speechText(num) {
     console.log(this.state.stepList[num].description);
-    console.log(num);
     Speech.speak(this.state.stepList[num].description);
   }
 

@@ -71,7 +71,6 @@ class TasteRegister extends React.Component {
   }
 
   onSubmitStep = () => {
-    console.log(this.state.evaluationId);
     if (this.state.selectedTastes.length == 0 && this.state.selectedFeatures.length == 0) {
       Alert.alert('하나 이상의 맛과 특징을 선택해주세요!');
       this.setState({ errors: true });
@@ -82,10 +81,7 @@ class TasteRegister extends React.Component {
   };
 
   onSubmit = () => {
-    console.log(this.state.userId)
-    console.log(this.state.evaluationId)
-    console.log(this.state.recipeId)
-    console.log(this.state.starCount)
+    const { navigation } = this.props;
     axios
       .put(`http://j4c101.p.ssafy.io:8081/recipe/evaluationUpdate`, {
         userId: this.state.userId,
@@ -97,11 +93,9 @@ class TasteRegister extends React.Component {
         keywordList: this.state.selectedTastes.concat(this.state.selectedFeatures),
       })
       .then((response) => {
-        console.log(response);
         if (response.status == 200) {
           Alert.alert('평가가 등록되었습니다.');
-          //this.props.navigation.goBack();
-          this.props.navigation.navigate('EvalueList');
+          navigation.navigate('EvalueList');
         }
       })
       .catch(function (error) {
@@ -120,8 +114,7 @@ class TasteRegister extends React.Component {
         },
         {
           text: '네',
-          onPress: () =>
-          this.onSubmit()
+          onPress: () => this.onSubmit()
         },
       ],
       { cancelable: false }

@@ -96,8 +96,10 @@ export default class Onboarding extends React.Component {
         if (!this.isUserEqual(googleUser, firebaseUser)) {
           // Build Firebase credential with the Google ID token.
           var credential = firebase.auth.GoogleAuthProvider.credential(
-            googleUser.auth.idToken, // googleUser.idToken
-            googleUser.auth.accessToken // googleUser.accessToken
+            // googleUser.idToken,
+            // googleUser.accessToken
+            googleUser.auth.idToken, 
+            googleUser.auth.accessToken 
           );
           // Sign in with credential from the Google user.
           firebase

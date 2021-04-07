@@ -69,7 +69,6 @@ class Ingredient extends React.Component {
   };
 
   updateTagState = (state) => {
-    console.log(state);
     this.setState(
       {
         tags: state,

@@ -86,7 +86,7 @@ class RecipeRegister extends React.Component {
         ingredientDTOpostList: this.state.ingreList,
         stepDTOpostList: this.state.stepList,
       });
-      console.log(response);
+      
       if (response.status == 200) {
         this.props.navigation.navigate('Profile');
         // 메인 이미지 등록

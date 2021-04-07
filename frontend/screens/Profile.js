@@ -8,12 +8,11 @@ import {
   Platform,
   RefreshControl,
 } from 'react-native';
-import SegmentedControlTab from 'react-native-segmented-control-tab';
 import { Block, Text, theme, Button as GaButton } from 'galio-framework';
 import { Card } from '../components';
 import { Images, nowTheme } from '../constants';
 import { HeaderHeight } from '../constants/utils';
-
+import { SegmentedControlTab } from 'react-native-segmented-control-tab';
 import firebase from 'firebase';
 import axios from 'axios';
 
