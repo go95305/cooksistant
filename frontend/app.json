@@ -1,7 +1,6 @@
 {
   "expo": {
     "name": "cooksistant",
-    "icon": "./assets/icon.png",
     "slug": "cooksistant",
     "privacy": "public",
     "platforms": [
