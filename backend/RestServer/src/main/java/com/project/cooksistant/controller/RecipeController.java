@@ -134,6 +134,8 @@ public class RecipeController {
             "                                                   - recipeId: 레시피 아이디")
     @PostMapping("/recipe/ocr/")
     public List<RecipeListupDTO> ocrIngredient(@RequestBody OcrDTO ocrDTO) {
+        if (ocrDTO.getOcrscan().contains("물품"))
+            ocrDTO.setOcrscan(ocrDTO.getOcrscan().replaceAll("물품", ""));
         System.out.println(ocrDTO.getOcrscan());
         Gson gson = new Gson();
         String jsonArray = (webClient.post()
