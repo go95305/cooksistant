@@ -13,7 +13,6 @@ import { Block, Text, theme, Button as GaButton } from 'galio-framework';
 import { Card } from '../components';
 import { Images, nowTheme } from '../constants';
 import { HeaderHeight } from '../constants/utils';
-import { FontAwesome } from '@expo/vector-icons';
 
 import firebase from 'firebase';
 import axios from 'axios';
@@ -22,7 +21,6 @@ const { width, height } = Dimensions.get('screen');
 
 const iosImg = (width - 48 - 32) / 3;
 const andImg = (width - 48 - 32) / 2.5;
-const RecipeImg = (width - 48 - 32) / 2;
 
 class Profile extends React.Component {
   state = {
@@ -232,7 +230,6 @@ class Profile extends React.Component {
                     >
                       {this.state.googleInfo.nickName}
                     </Text>
-                    {/* <FontAwesome name="refresh" size={30} color="white" onPress={() => this._onRefresh.bind(true)}/> */}
                   </Block>
                   <Block style={styles.info}>
                     <Block row space="between">
@@ -310,7 +307,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'space-between',
   },
   profileContainer: {
     width,
@@ -326,22 +322,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     height: height * 0.8,
   },
-  avatarContainer: {
-    position: 'relative',
-    marginTop: -80,
-  },
   avatar: {
     width: Platform.OS === 'android' ? andImg : iosImg,
     height: Platform.OS === 'android' ? andImg : iosImg,
     borderRadius: Platform.OS === 'android' ? 55 : 50,
     borderWidth: 0,
-  },
-  thumb: {
-    borderRadius: 3,
-    marginVertical: 6,
-    alignSelf: 'center',
-    width: RecipeImg,
-    height: 100,
   },
   // segment style
   segmentContainer: {

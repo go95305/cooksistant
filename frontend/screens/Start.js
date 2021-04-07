@@ -29,27 +29,36 @@ export default class Onboarding extends React.Component {
   state = { user: null };
 
   // 배포용 ==============================================
-  componentDidMount() {
-    this.initAsync();
-  }
+  // componentDidMount() {
+  //   this.initAsync();
+  // }
 
-  initAsync = async () => {
-    await GoogleSignIn.initAsync({
-      // You may ommit the clientId when the firebase `googleServicesFile` is configured
-      clientId: '859478845487-23l78jo7evj2rdr9gkaupqauqq67d0o1.apps.googleusercontent.com',
-    });
-    this._syncUserWithStateAsync();
-  };
+  // initAsync = async () => {
+  //   await GoogleSignIn.initAsync({
+  //     // You may ommit the clientId when the firebase `googleServicesFile` is configured
+  //     clientId: Platform.OS == 'android' ? '859478845487-45haal7m8fhirhsrsm66ndv2gmtu6p1h.apps.googleusercontent.com' :
+  //       '859478845487-u55e018p49kijao11a0s8e2tdvk3gibc.apps.googleusercontent.com'
+  //   });
+  //   this._syncUserWithStateAsync();
+  // };
 
+  // 재인증
   _syncUserWithStateAsync = async () => {
     const googleuser = await GoogleSignIn.signInSilentlyAsync();
-    this.setState({ googleuser });
+    this.setState({ user: googleuser });
   };
 
   signInAsync = async () => {
     try {
+      await GoogleSignIn.initAsync({
+        // You may ommit the clientId when the firebase `googleServicesFile` is configured
+        clientId: Platform.OS == 'android' ? '859478845487-45haal7m8fhirhsrsm66ndv2gmtu6p1h.apps.googleusercontent.com' :
+          '859478845487-u55e018p49kijao11a0s8e2tdvk3gibc.apps.googleusercontent.com'
+      });
+
       await GoogleSignIn.askForPlayServicesAsync();
       const { type, user } = await GoogleSignIn.signInAsync();
+    
       if (type === 'success') {
         this._syncUserWithStateAsync();
         this.onSignIn(user);
@@ -66,8 +75,8 @@ export default class Onboarding extends React.Component {
       var providerData = firebaseUser.providerData;
       for (var i = 0; i < providerData.length; i++) {
         if (
-          providerData[i].providerId === firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
-          providerData[i].uid === googleUser.user.id
+          providerData[i].providerId === firebase.auth.GoogleAuthProvider.PROVIDER_ID
+          //&&providerData[i].uid === googleUser.uid
         ) {
           // We don't need to reauth the Firebase connection.
           return true;
@@ -87,18 +96,18 @@ export default class Onboarding extends React.Component {
         if (!this.isUserEqual(googleUser, firebaseUser)) {
           // Build Firebase credential with the Google ID token.
           var credential = firebase.auth.GoogleAuthProvider.credential(
-            googleUser.idToken,
-            googleUser.accessToken
+            googleUser.auth.idToken, // googleUser.idToken
+            googleUser.auth.accessToken // googleUser.accessToken
           );
           // Sign in with credential from the Google user.
           firebase
             .auth()
             .signInWithCredential(credential)
             .then(() => {
-              var user = firebase.auth().currentUser;
+              //var user = firebase.auth().currentUser;
               axios.post(`http://j4c101.p.ssafy.io:8081/user`, {
-                nickname: user.displayName,
-                uid: user.uid
+                nickname: googleUser.displayName,
+                uid: googleUser.uid
               })
               .then(()=> {
                 console.log("success");
@@ -121,11 +130,11 @@ export default class Onboarding extends React.Component {
   signInWithGoogle = async() => {
     try {
       const result = await Google.logInAsync({
-        androidClientId: '859478845487-c6kjb564m0kff49e50o9u2m8epil50nb.apps.googleusercontent.com',
+        androidClientId: '859478845487-45haal7m8fhirhsrsm66ndv2gmtu6p1h.apps.googleusercontent.com',
         iosClientId: '859478845487-u55e018p49kijao11a0s8e2tdvk3gibc.apps.googleusercontent.com',
         scopes: ['profile', 'email'],
       });
-
+    
       if (result.type === 'success') {
         await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
         this.onSignIn(result);

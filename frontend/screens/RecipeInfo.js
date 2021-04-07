@@ -17,61 +17,24 @@ import firebase from 'firebase';
 const { width, height } = Dimensions.get('screen');
 
 class RecipeInfo extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      userId: null,
+  state = {
+    userId: null,
 
-      img: require('../assets/imgs/bookmark.png'),
-      id: this.props.route.params.id,
+    img: require('../assets/imgs/bookmark.png'),
+    id: this.props.route.params.id,
 
-      recipeDetail: {
-        id: 0,
-        nickname: null,
-        cuisine: null,
-        description: null,
-        cookingTime: null,
-        image: null,
-        level: null,
-        serving: null,
-        ingredientDTOList: [],
-        stepList: [],
-      },
-    };
-  }
-  changeImage = () => {
-    if (this.state.userId == null) {
-      alert('로그인 후 이용해 주세요!');
-    } else {
-      axios
-        .get(`http://j4c101.p.ssafy.io:8081/user/isscrap/${this.state.userId}/${this.state.id}`)
-        .then((result) => {
-          // console.log('result_____________________________' + result.data);
-          if (result.data == true) {
-            axios
-              .put(
-                `http://j4c101.p.ssafy.io:8081/user/deleteScrap/${this.state.userId}/${this.state.recipeDetail.id}`
-              )
-              .then((result) => this.setState({ img: require('../assets/imgs/bookmark.png') }))
-              .catch((error) => {
-                console.log(error);
-              });
-          } else if (result.data == false) {
-            axios
-              .post(
-                `http://j4c101.p.ssafy.io:8081/user/scrap/${this.state.recipeDetail.id}/${this.state.userId}`
-              )
-              .then((result) => this.setState({ img: require('../assets/imgs/bookmarkFull.png') }))
-
-              .catch((error) => {
-                console.log(error);
-              });
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+    recipeDetail: {
+      id: 0,
+      nickname: null,
+      cuisine: null,
+      description: null,
+      cookingTime: null,
+      image: null,
+      level: null,
+      serving: null,
+      ingredientDTOList: [],
+      stepList: [],
+    },
   };
 
   componentDidMount = () => {
@@ -146,6 +109,41 @@ class RecipeInfo extends Component {
       });
   };
 
+  changeImage = () => {
+    if (this.state.userId == null) {
+      Alert.alert('로그인 후 이용해주세요');
+    } else {
+      axios
+        .get(`http://j4c101.p.ssafy.io:8081/user/isscrap/${this.state.userId}/${this.state.id}`)
+        .then((result) => {
+          // console.log('result_____________________________' + result.data);
+          if (result.data == true) {
+            axios
+              .put(
+                `http://j4c101.p.ssafy.io:8081/user/deleteScrap/${this.state.userId}/${this.state.recipeDetail.id}`
+              )
+              .then((result) => this.setState({ img: require('../assets/imgs/bookmark.png') }))
+              .catch((error) => {
+                console.log(error);
+              });
+          } else if (result.data == false) {
+            axios
+              .post(
+                `http://j4c101.p.ssafy.io:8081/user/scrap/${this.state.recipeDetail.id}/${this.state.userId}`
+              )
+              .then((result) => this.setState({ img: require('../assets/imgs/bookmarkFull.png') }))
+
+              .catch((error) => {
+                console.log(error);
+              });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
   renderDetail = () => {
     return (
       <Block style={styles.container}>
@@ -193,12 +191,12 @@ class RecipeInfo extends Component {
                       </Text>
                       <Text size={13}> </Text>
                       <Text color="#474747" size={13} style={{ fontFamily: 'montserrat-regular' }}>
-                        {this.state.recipeDetail.cookingTime}
+                        {this.state.recipeDetail.cookingTime} 
                       </Text>
                     </Block>
                     <Block
                       center
-                      style={{ width: width * 0.8, alignItems: 'center', marginTop: 5 }}
+                      style={{ width: width * 0.9, alignItems: 'center', marginTop: 5 }}
                     >
                       <Text
                         size={16}
@@ -207,12 +205,12 @@ class RecipeInfo extends Component {
                           textAlign: 'center',
                           fontFamily: 'montserrat-regular',
                           color: '#2c2c2c',
-                          lineHeight: 15,
+                          lineHeight: 20,
                           fontSize: 11,
-                          padding: 8,
+                          padding: 0,
                         }}
                       >
-                        {this.state.recipeDetail.description}
+                        {this.state.recipeDetail.description} 
                       </Text>
                     </Block>
                     <Block
@@ -245,8 +243,8 @@ class RecipeInfo extends Component {
                             <Block
                               row
                               style={{
-                                width: idx.amount.length == 0 ? 0 : 50,
-                                height: idx.amount.length == 0 ? 0 : 21,
+                                width: idx.amount.length == 0 ? 0 : 55,
+                                height: idx.amount.length == 0 ? 0 : 25,
                                 borderRadius: 20,
                                 borderColor: '#F18D46',
                                 backgroundColor: 'white',
@@ -258,7 +256,7 @@ class RecipeInfo extends Component {
                             >
                               <Text
                                 style={{
-                                  fontSize: 8,
+                                  fontSize: 10,
                                   fontFamily: 'montserrat-bold',
                                   textAlign: 'center',
                                 }}
@@ -292,7 +290,7 @@ class RecipeInfo extends Component {
             round
             onPress={() =>
               this.state.userId == null
-                ? Alert.alert('서비스를 이용하려면 로그인하세요.')
+                ? Alert.alert('로그인 후 이용해주세요')
                 : this.props.navigation.navigate('TTS', { step: this.state.recipeDetail })
             }
           >
@@ -338,7 +336,7 @@ const styles = StyleSheet.create({
 
   ingreBtn: {
     width: width * 0.4,
-    height: 45,
+    height: 52,
     margin: 5,
     backgroundColor: '#F18D46',
     alignItems: 'center',
@@ -350,7 +348,6 @@ const styles = StyleSheet.create({
     margin: 5,
     fontFamily: 'montserrat-bold',
   },
-  amoutBtn: {},
   amoutTxt: {
     fontSize: 10,
     fontFamily: 'montserrat-bold',

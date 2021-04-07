@@ -1,3 +1,6 @@
+
+import Constants from "expo-constants";
+
 var environments = {
 	staging: {
 		FIREBASE_API_KEY: 'AIzaSyDtRsbW_ubheql31bq7Tz5-3KZicpi-aJs',
@@ -14,7 +17,7 @@ var environments = {
 };
 
 function getReleaseChannel() {
-	let releaseChannel = Expo.Constants.manifest.releaseChannel;
+	let releaseChannel = Constants.manifest.releaseChannel;
 	if (releaseChannel === undefined) {
 		return 'staging';
 	} else if (releaseChannel === 'staging') {

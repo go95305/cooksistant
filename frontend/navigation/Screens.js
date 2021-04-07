@@ -525,8 +525,6 @@ function AppStack(props) {
       <Drawer.Screen name="프로필" component={ProfileStack} />
       <Drawer.Screen name="재료" component={IngredientStack} />
       <Drawer.Screen name="영수증" component={ReceiptStack} />
-      <Drawer.Screen name="STT" component={STTStack} />
-      <Drawer.Screen name="OCR" component={OCRStack} />
     </Drawer.Navigator>
   );
 }
