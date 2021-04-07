@@ -122,7 +122,7 @@ export default class Onboarding extends React.Component {
     try {
       const result = await Google.logInAsync({
         androidClientId: '859478845487-c6kjb564m0kff49e50o9u2m8epil50nb.apps.googleusercontent.com',
-        iosClientId: '859478845487-23l78jo7evj2rdr9gkaupqauqq67d0o1.apps.googleusercontent.com',
+        iosClientId: '859478845487-u55e018p49kijao11a0s8e2tdvk3gibc.apps.googleusercontent.com',
         scopes: ['profile', 'email'],
       });
 
