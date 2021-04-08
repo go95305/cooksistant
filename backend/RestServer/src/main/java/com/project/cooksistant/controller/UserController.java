@@ -52,8 +52,8 @@ public class UserController {
             "                                              - uid:인증키?\n" +
             "                                              - nickname: 닉네임")
     @PostMapping("/user")
-    public void signup(@RequestBody SignupDTO signupDTO) {
-        userService.signup(signupDTO);
+    public Boolean signup(@RequestBody SignupDTO signupDTO) {
+        return userService.signup(signupDTO);
     }
 
     @ApiOperation(value = "해당 유저가 해당 레시피를스크랩했는지 여부", notes = "Request\n" +
@@ -64,7 +64,7 @@ public class UserController {
         return userService.myScrapData(userId, recipeId);
     }
 
-    @ApiOperation(value = "레시피 스크랩 해제",notes = "Reques\n" +
+    @ApiOperation(value = "레시피 스크랩 해제", notes = "Reques\n" +
             "                                       - userid: 유저 인덱스\n" +
             "                                       - recipeId: 레시피 인덱스")
     @PutMapping("/user/deleteScrap/{userId}/{recipeId}")

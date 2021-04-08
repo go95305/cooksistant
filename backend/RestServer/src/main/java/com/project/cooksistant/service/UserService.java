@@ -135,17 +135,17 @@ public class UserService {
         }
     }
 
-    public RestException signup(SignupDTO signupDTO) {
+    public Boolean signup(SignupDTO signupDTO) {
         Optional<User> user = userRepository.findByUid(signupDTO.getUid());
         if (user.isPresent()) {
-            return new RestException(HttpStatus.NOT_FOUND, "이미 존재하는 유저입니다.");
+            return false;
         }
         User newuser = new User();
         newuser.setUid(signupDTO.getUid());
         newuser.setNickname(signupDTO.getNickname());
         userRepository.save(newuser);
 
-        return null;
+        return true;
     }
 
     public Boolean myScrapData(Long userId, Long recipeId) {
