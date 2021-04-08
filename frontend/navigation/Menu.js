@@ -11,8 +11,7 @@ import { Block, Text, theme } from "galio-framework";
 import { useSafeArea } from "react-native-safe-area-context";
 import Images from "../constants/Images";
 import { DrawerItem as DrawerCustomItem, Icon } from "../components";
-
-import nowTheme from "../constants/Theme";
+import firebase from 'firebase';
 
 const { width } = Dimensions.get("screen");
 
@@ -25,13 +24,20 @@ function CustomDrawerContent({
   ...rest
 }) {
   const insets = useSafeArea();
-  const screens = [
-    "Home",
-    "Components",
-    "Articles",
-    "Profile",
-    "Account",
-  ];
+  const user = firebase.auth().currentUser;
+  let screens = [];
+  if (user) {
+    screens = [
+      "쿡시스턴트",
+      "프로필",
+      "재료",
+      "영수증",
+    ];
+  } else {
+    screens = [
+      "쿡시스턴트",
+    ];
+  }
   return (
     <Block
       style={styles.container}
@@ -43,8 +49,9 @@ function CustomDrawerContent({
           <Icon
             name="align-left-22x"
             family="NowExtra"
-            size={15}
+            size={20}
             color={"white"}
+            onPress={() => navigation.goBack()}
           />
         </Block>
       </Block>
@@ -65,8 +72,8 @@ function CustomDrawerContent({
             style={{ borderColor: 'white', width: '93%', borderWidth: StyleSheet.hairlineWidth, marginHorizontal: 10}}
           />
         </Block>
-        <DrawerCustomItem title="GETTING STARTED" navigation={navigation}/>
-        <DrawerCustomItem title="LOGOUT" navigation={navigation}/>
+        <DrawerCustomItem title="앱 소개" navigation={navigation}/>
+        {user ?  <DrawerCustomItem title="로그아웃" navigation={navigation} /> : <DrawerCustomItem title="로그인" navigation={navigation} />}
         </ScrollView>
       </Block>
     </Block>
@@ -80,7 +87,7 @@ const styles = StyleSheet.create({
   header: {
     paddingHorizontal: 28,
     paddingBottom: theme.SIZES.BASE * 2.5,
-    paddingTop: theme.SIZES.BASE * 4,
+    paddingTop: Platform.OS === 'android' ? theme.SIZES.BASE : theme.SIZES.BASE * 4,
     justifyContent: "center"
   },
   headerIcon: {
@@ -93,3 +100,4 @@ const styles = StyleSheet.create({
 });
 
 export default CustomDrawerContent;
+

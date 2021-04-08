@@ -1,157 +1,127 @@
 import React from 'react';
 import { withNavigation } from '@react-navigation/compat';
-import { TouchableOpacity, StyleSheet, Platform, Dimensions, Keyboard } from 'react-native';
+import {CommonActions} from '@react-navigation/native';
+import { TouchableOpacity, StyleSheet, Platform, Dimensions, Image } from 'react-native';
 import { Button, Block, NavBar, Text, theme, Button as GaButton } from 'galio-framework';
-
+import { Images, nowTheme } from '../constants';
 import Icon from './Icon';
 import Input from './Input';
-import Tabs from './Tabs';
-import nowTheme from '../constants/Theme';
 
 const { height, width } = Dimensions.get('window');
-const iPhoneX = () =>
-  Platform.OS === 'ios' && (height === 812 || width === 812 || height === 896 || width === 896);
 
-const BellButton = ({ isWhite, style, navigation }) => (
+const HomeBtn = ({ style, navigation }) => (
   <TouchableOpacity
     style={[styles.button, style]}
-    onPress={() => navigation.navigate('Pro')}
+    onPress={() =>
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [{ name: 'App' }],
+        })
+      )
+    }
   >
-    <Icon
-      family="NowExtra"
-      size={16}
-      name="bulb"
-      color={nowTheme.COLORS[isWhite ? 'WHITE' : 'ICON']}
-    />
-    <Block middle style={[styles.notify, { backgroundColor: nowTheme.COLORS[isWhite ? 'WHITE' : 'PRIMARY'] }]} />
+    <Image source={Images.HomeLogo} style={styles.logo} />
   </TouchableOpacity>
 );
 
-const BasketButton = ({ isWhite, style, navigation }) => (
-  <TouchableOpacity style={[styles.button, style]} onPress={() => navigation.navigate('Pro')}>
-    <Icon
-      family="NowExtra"
-      size={16}
-      name="basket2x"
-      color={nowTheme.COLORS[isWhite ? 'WHITE' : 'ICON']}
-    />
-  </TouchableOpacity>
+const RecipeRegisterBtn = ({ navigation }) => (
+  <Button
+    style={{ width: 80, height: 40, marginHorizontal: 8, elevation: 0 }}
+    textStyle={{ fontFamily: 'montserrat-bold', color: nowTheme.COLORS.PRIMARY, fontSize: 12 }}
+    color="white"
+    round
+    onPress={() => navigation.navigate('RecipeRegister')}
+  >
+    레시피 등록
+  </Button>
 );
 
-
+const EvalueListBtn = ({ navigation }) => (
+  <Button
+    style={{ width: 80, height: 40, marginHorizontal: 5, elevation: 0 }}
+    textStyle={{ fontFamily: 'montserrat-bold', color: nowTheme.COLORS.PRIMARY, fontSize: 12 }}
+    color="white"
+    round
+    onPress={() => navigation.navigate('EvalueList')}
+  >
+    레시피 평가
+  </Button>
+);
 
 class Header extends React.Component {
+  state = {
+    keyword: '',
+  };
+
+  // 메뉴바
   handleLeftPress = () => {
     const { back, navigation } = this.props;
-    return back ? navigation.goBack() : navigation.openDrawer();
+    return back ? navigation.dispatch(CommonActions.goBack()) : navigation.openDrawer();
   };
-  renderRight = () => {
-    const { white, title, navigation } = this.props;
-    
 
-    if (title === 'Title') {
-      return [
-        <BellButton key="chat-title" navigation={navigation} isWhite={white} />,
-        <BasketButton key="basket-title" navigation={navigation} isWhite={white} />
-      ];
-    }
+  // 오른쪽 상단의 헤더 : 마이페이지(프로필)에만 존재
+  renderRight = () => {
+    const { title, navigation } = this.props;
 
     switch (title) {
-      case 'Profile':
+      case '프로필':
         return [
-          <BellButton key="chat-profile" navigation={navigation} isWhite={white} />,
-          <BasketButton key="basket-deals" navigation={navigation} isWhite={white} />
+          <RecipeRegisterBtn key="recipe-register" navigation={navigation} />,
+          <EvalueListBtn key="evalu-list" navigation={navigation} />,
         ];
-      case 'Search':
-        return [
-          <BellButton key="chat-search" navigation={navigation} isWhite={white} />,
-          <BasketButton key="basket-search" navigation={navigation} isWhite={white} />
-        ];
+      case '레시피 평가 리스트':
+      case '레시피 평가':
+      case '레시피 추천':
+      case '레시피 검색':
+      case '레시피 등록':
+      case '레시피 상세정보':  
+      case '요리 과정':
+        return [<HomeBtn key="home-btn" navigation={navigation} />];
       default:
         break;
     }
   };
+
+  // 검색창
   renderSearch = () => {
     const { navigation } = this.props;
     return (
       <Input
         right
+        value={this.state.keyword}
         color="black"
         style={styles.search}
-        placeholder="음식 검색"
+        placeholder="레시피 입력  →  돋보기 클릭"
         placeholderTextColor={'#8898AA'}
-        onFocus={() => {Keyboard.dismiss(); navigation.navigate('Pro')}}
         iconContent={
-          <Icon size={16} color={theme.COLORS.MUTED} name="zoom-bold2x" family="NowExtra" />
+          <Icon
+            size={22}
+            color={theme.COLORS.MUTED}
+            name="zoom-bold2x"
+            family="NowExtra"
+            onPress={() => {
+              this.setState({keyword: ''})
+              navigation.navigate('RecipeList', { keyword: this.state.keyword })
+            }}
+          />
+        }
+        onChangeText={(e) =>
+          this.setState({
+            keyword: e,
+          })
         }
       />
     );
   };
-  renderOptions = () => {
-    const { navigation, optionLeft, optionRight } = this.props;
 
-    return (
-      <Block row style={styles.options}>
-        <Button
-          shadowless
-          style={[styles.tab, styles.divider]} onPress={() => console.log(navigation.navigate('Home'))}>
-          <Block row middle>
-            <Icon
-              name="bulb"
-              family="NowExtra"
-              size={18}
-              style={{ paddingRight: 8 }}
-              color={nowTheme.COLORS.HEADER}
-            />
-            <Text style={{ fontFamily: 'montserrat-regular' }} size={16} style={styles.tabTitle}>
-              {optionLeft || '인기'}
-            </Text>
-          </Block>
-        </Button>
-        <Button shadowless style={styles.tab} onPress={() => navigation.navigate('Home')}>
-          <Block row middle>
-            <Icon
-              size={18}
-              name="bag-162x"
-              family="NowExtra"
-              style={{ paddingRight: 8 }}
-              color={nowTheme.COLORS.HEADER}
-            />
-            <Text style={{ fontFamily: 'montserrat-regular' }} size={16} style={styles.tabTitle}>
-              {optionRight || '트랜디'}
-            </Text>
-          </Block>
-        </Button>
-      </Block>
-    );
-  };
-
-  renderTabs = () => {
-    const { tabs, tabIndex, navigation } = this.props;
-    const defaultTab = tabs && tabs[0] && tabs[0].id;
-
-    if (!tabs) return null;
-
-    return (
-      <Tabs
-        data={tabs || []}
-        initialIndex={tabIndex || defaultTab}
-        onChange={id => navigation.setParams({ tabId: id })}
-      />
-    );
-  };
   renderHeader = () => {
-    const { search, options, tabs } = this.props;
-    if (search || tabs || options) {
-      return (
-        <Block center>
-          {search ? this.renderSearch() : null}
-          {options ? this.renderOptions() : null}
-          {tabs ? this.renderTabs() : null}
-        </Block>
-      );
+    const { search } = this.props;
+    if (search) {
+      return <Block center>{search ? this.renderSearch() : null}</Block>;
     }
   };
+
   render() {
     const {
       back,
@@ -165,10 +135,10 @@ class Header extends React.Component {
       ...props
     } = this.props;
 
-    const noShadow = ['Search', 'Categories', 'Deals', 'Pro', 'Profile'].includes(title);
+    const noShadow = ['Search', 'Categories', 'Deals', 'Profile'].includes(title);
     const headerStyles = [
       !noShadow ? styles.shadow : null,
-      transparent ? { backgroundColor: 'rgba(0,0,0,0)' } : null
+      transparent ? { backgroundColor: 'rgba(0,0,0,0)' } : null,
     ];
 
     const navbarStyles = [styles.navbar, bgColor && { backgroundColor: bgColor }];
@@ -181,21 +151,21 @@ class Header extends React.Component {
           style={navbarStyles}
           transparent={transparent}
           right={this.renderRight()}
-          rightStyle={{ alignItems: 'center' }}
+          rightStyle={{ justifyContent: 'flex-end' }}
           left={
             <Icon
               name={back ? 'minimal-left2x' : 'align-left-22x'}
               family="NowExtra"
-              size={16}
+              size={26}
               onPress={this.handleLeftPress}
               color={iconColor || (white ? nowTheme.COLORS.WHITE : nowTheme.COLORS.ICON)}
             />
           }
-          leftStyle={{ paddingVertical: 12, flex: 0.2 }}
+          leftStyle={{ paddingVertical: 12, flex: 0.3 }}
           titleStyle={[
             styles.title,
             { color: nowTheme.COLORS[white ? 'WHITE' : 'HEADER'] },
-            titleColor && { color: titleColor }
+            titleColor && { color: titleColor },
           ]}
           {...props}
         />
@@ -208,19 +178,21 @@ class Header extends React.Component {
 const styles = StyleSheet.create({
   button: {
     padding: 12,
-    position: 'relative'
+    position: 'relative',
   },
   title: {
     width: '100%',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
-    fontFamily: 'montserrat-regular'
+    fontFamily: 'montserrat-bold',
+  },
+  logo: {
+    height: 40,
+    width: 37,
   },
   navbar: {
-    paddingVertical: 0,
     paddingBottom: theme.SIZES.BASE * 1.5,
-    paddingTop: iPhoneX ? theme.SIZES.BASE * 4 : theme.SIZES.BASE,
-    zIndex: 5
+    paddingTop: Platform.OS === 'android' ? theme.SIZES.BASE * 2 : theme.SIZES.BASE * 4.5,
   },
   shadow: {
     backgroundColor: theme.COLORS.WHITE,
@@ -228,55 +200,23 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 6,
     shadowOpacity: 0.2,
-    elevation: 3
-  },
-  notify: {
-    backgroundColor: nowTheme.COLORS.SUCCESS,
-    borderRadius: 4,
-    height: theme.SIZES.BASE / 2,
-    width: theme.SIZES.BASE / 2,
-    position: 'absolute',
-    top: 9,
-    right: 12
+    elevation: 3,
   },
   header: {
-    backgroundColor: theme.COLORS.WHITE
+    backgroundColor: theme.COLORS.WHITE,
   },
   divider: {
     borderRightWidth: 0.3,
-    borderRightColor: theme.COLORS.ICON
+    borderRightColor: theme.COLORS.ICON,
   },
   search: {
-    height: 48,
+    height: 50,
     width: width - 32,
     marginHorizontal: 16,
     borderWidth: 1,
     borderRadius: 30,
-    borderColor: nowTheme.COLORS.BORDER
-  },
-  options: {
-    marginBottom: 24,
-    marginTop: 10,
-    elevation: 4
-  },
-  tab: {
-    backgroundColor: theme.COLORS.TRANSPARENT,
-    width: width * 0.35,
-    borderRadius: 0,
-    borderWidth: 0,
-    height: 24,
-    elevation: 0
-  },
-  tabTitle: {
-    lineHeight: 19,
-    fontWeight: '400',
-    color: nowTheme.COLORS.HEADER
-  },
-  social: {
-    width: theme.SIZES.BASE * 3.5,
-    height: theme.SIZES.BASE * 3.5,
-    borderRadius: theme.SIZES.BASE * 1.75,
-    justifyContent: 'center'
+    borderColor: nowTheme.COLORS.BORDER,
+    marginBottom: 5,
   },
 });
 

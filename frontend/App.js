@@ -5,7 +5,6 @@ import * as Font from 'expo-font';
 import { Asset } from 'expo-asset';
 import { Block, GalioProvider } from 'galio-framework';
 import { NavigationContainer } from '@react-navigation/native';
-
 import Screens from './navigation/Screens';
 import { Images, articles, nowTheme } from './constants';
 

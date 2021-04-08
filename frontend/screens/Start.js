@@ -1,12 +1,151 @@
 import React from 'react';
-import { ImageBackground, Image, StyleSheet, StatusBar, Dimensions, Platform } from 'react-native';
+import { ImageBackground, Alert, StyleSheet, StatusBar, Dimensions, Platform, AsyncStorag} from 'react-native';
 import { Block, Button, Text, theme } from 'galio-framework';
+import * as Google from 'expo-google-app-auth';
+import * as GoogleSignIn from 'expo-google-sign-in';
+import firebase from 'firebase';
+import axios from "axios";
 
 const { height, width } = Dimensions.get('screen');
 import { Images, nowTheme } from '../constants';
 import { HeaderHeight } from '../constants/utils';
 
+const firebaseConfig = {
+  apiKey: 'AIzaSyC8PjQAKy-gaLJ960SIFn2Bc-4PVG2dcXc',
+  authDomain: 'cooksistant-308615.firebaseapp.com',
+  databaseURL: 'https://cooksistant-308615-default-rtdb.firebaseio.com',
+  projectId: 'cooksistant-308615',
+  storageBucket: 'cooksistant-308615.appspot.com',
+  messagingSenderId: '859478845487',
+  appId: '1:859478845487:web:68ebbc76dfad6cdf22feda',
+  measurementId: 'G-2NQFW6NDY4',
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
 export default class Onboarding extends React.Component {
+  state = { user: null };
+
+  // 배포용 ==============================================
+  // componentDidMount() {
+  //   this.initAsync();
+  // }
+
+  // initAsync = async () => {
+  //   await GoogleSignIn.initAsync({
+  //     // You may ommit the clientId when the firebase `googleServicesFile` is configured
+  //     clientId: Platform.OS == 'android' ? '859478845487-45haal7m8fhirhsrsm66ndv2gmtu6p1h.apps.googleusercontent.com' :
+  //       '859478845487-u55e018p49kijao11a0s8e2tdvk3gibc.apps.googleusercontent.com'
+  //   });
+  //   this._syncUserWithStateAsync();
+  // };
+
+  // 재인증
+  _syncUserWithStateAsync = async () => {
+    const googleuser = await GoogleSignIn.signInSilentlyAsync();
+    this.setState({ user: googleuser });
+  };
+
+  signInAsync = async () => {
+    try {
+      await GoogleSignIn.initAsync({
+        // You may ommit the clientId when the firebase `googleServicesFile` is configured
+        clientId: Platform.OS == 'android' ? '859478845487-q185e53pi79jl2ge3lfgovmv9q15roml.apps.googleusercontent.com' :
+          '859478845487-8c7i5klln2oe45lqs4lm9phlt81qg20e.apps.googleusercontent.com'
+      });
+
+      await GoogleSignIn.askForPlayServicesAsync();
+      const { type, user } = await GoogleSignIn.signInAsync();
+    
+      if (type === 'success') {
+        this._syncUserWithStateAsync();
+        this.onSignIn(user);
+        this.props.navigation.navigate('App');
+      }
+    } catch ({ message }) {
+      alert('login: Error:' + message);
+    }
+  };
+  
+  // 로컬용 ==============================================
+  isUserEqual = (googleUser, firebaseUser) => {
+    if (firebaseUser) {
+      var providerData = firebaseUser.providerData;
+      for (var i = 0; i < providerData.length; i++) {
+        if (
+          providerData[i].providerId === firebase.auth.GoogleAuthProvider.PROVIDER_ID
+          //&&providerData[i].uid === googleUser.uid
+        ) {
+          // We don't need to reauth the Firebase connection.
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
+  onSignIn = (googleUser) => {
+    console.log('Google Auth Response', googleUser);
+    // We need to register an Observer on Firebase Auth to make sure auth is initialized.
+    var unsubscribe = firebase.auth().onAuthStateChanged(
+      function (firebaseUser) {
+        unsubscribe();
+        // Check if we are already signed-in Firebase with the correct user.
+        if (!this.isUserEqual(googleUser, firebaseUser)) {
+          // Build Firebase credential with the Google ID token.
+          var credential = firebase.auth.GoogleAuthProvider.credential(
+             // googleUser.idToken,
+             // googleUser.accessToken
+             googleUser.auth.idToken, 
+             googleUser.auth.accessToken 
+          );
+          // Sign in with credential from the Google user.
+          firebase
+            .auth()
+            .signInWithCredential(credential)
+            .then(() => {
+              var fuser = firebase.auth().currentUser;
+              axios.post(`http://j4c101.p.ssafy.io:8081/user`, {
+                nickname: fuser.displayName,
+                uid: fuser.uid
+              })
+              .then(()=> {
+                console.log("success");
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          console.log('User already signed-in Firebase.');
+        }
+      }.bind(this)
+    );
+  };
+
+
+  signInWithGoogle = async() => {
+    try {
+      const result = await Google.logInAsync({
+        androidClientId: '859478845487-q185e53pi79jl2ge3lfgovmv9q15roml.apps.googleusercontent.com',
+        iosClientId: '859478845487-8c7i5klln2oe45lqs4lm9phlt81qg20e.apps.googleusercontent.com',
+        scopes: ['profile', 'email'],
+      });
+    
+      if (result.type === 'success') {
+        await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+        this.onSignIn(result);
+        this.props.navigation.navigate('App');
+      }
+    } catch ({ message }) {
+      console.log(message);
+    }
+  }
   render() {
     const { navigation } = this.props;
 
@@ -16,17 +155,18 @@ export default class Onboarding extends React.Component {
         <Block flex>
           <ImageBackground
             source={Images.Start}
-            style={{ flex: 1, height: height, width, zIndex: 1 }}
+            style={{ flex: 1, height: height * 1.05, width, zIndex: 1 }}
           />
-          <Block space="between" style={styles.padded}>
+          <Block center space="between" style={styles.padded}>
             <Block>
               <Block>
                 <Button
                   shadowless
                   style={styles.button}
                   color={nowTheme.COLORS.PRIMARY}
-                  onPress={() => navigation.navigate('App')}
-                >
+                  // onPress={() => this.signInWithGoogle()}
+                  onPress={() => this.signInAsync()}
+                > 
                   <Text
                     style={{ fontFamily: 'montserrat-bold', fontSize: 15 }}
                     color={theme.COLORS.WHITE}
@@ -61,27 +201,27 @@ export default class Onboarding extends React.Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: theme.COLORS.BLACK,
-    marginTop: Platform.OS === 'android' ? -HeaderHeight : 0
+    marginTop: Platform.OS === 'android' ? -HeaderHeight : 0,
   },
   padded: {
     paddingHorizontal: theme.SIZES.BASE * 2,
     zIndex: 3,
     position: 'absolute',
-    bottom: Platform.OS === 'android' ? theme.SIZES.BASE * 2 : theme.SIZES.BASE * 3
+    bottom: Platform.OS === 'android' ? theme.SIZES.BASE * 4.5 : theme.SIZES.BASE * 5,
   },
   button: {
     width: width - theme.SIZES.BASE * 4,
     height: theme.SIZES.BASE * 3,
     shadowRadius: 0,
-    shadowOpacity: 0
+    shadowOpacity: 0,
   },
-
   gradient: {
     zIndex: 1,
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    height: 66
-  }
+    height: 66,
+  },
 });
+

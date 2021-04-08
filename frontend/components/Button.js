@@ -18,7 +18,7 @@ class ArButton extends React.Component {
         : color && { backgroundColor: colorStyle },
       round && { borderRadius: nowTheme.SIZES.BASE * 2 },
       !shadowless && styles.shadow,
-      { ...style }
+      { ...style },
     ];
 
     return (
@@ -47,16 +47,16 @@ ArButton.propTypes = {
       'success',
       'warning',
       'simple',
-      'neutral'
-    ])
-  ])
+      'neutral',
+    ]),
+  ]),
 };
 
 const styles = StyleSheet.create({
   smallButton: {
     width: 75,
-    height: 28
-  }
+    height: 28,
+  },
 });
 
 export default ArButton;
