@@ -136,6 +136,7 @@ public class UserService {
     }
 
     public Boolean signup(SignupDTO signupDTO) {
+        System.out.println("가입할 유저의 uid는:" + signupDTO.getUid());
         Optional<User> user = userRepository.findByUid(signupDTO.getUid());
         if (user.isPresent()) {
             return false;
