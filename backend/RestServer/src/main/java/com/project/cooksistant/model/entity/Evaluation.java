@@ -19,36 +19,22 @@ public class Evaluation {
     private Long evalId;
 
     @ManyToOne
-    @JoinColumn(name = "userId",nullable = false)
+    @JoinColumn(name = "userId", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "recipeId",nullable = false)
+    @JoinColumn(name = "recipeId", nullable = false)
     private Recipe recipe;
 
-    @Column(name = "sweetness")
-    private Long sweetness;
 
-    @Column(name = "saltiness")
-    private Long saltiness;
+    @Column(name = "favor")
+    private float favor;
 
-    @Column(name = "spiciness")
-    private Long spiciness;
+    @Column(name = "is_complete", columnDefinition = "TINYINT(1)")
+    private Boolean isComplete;
 
-    @Column(name = "bitterness")
-    private Long bitterness;
-
-    @Column(name = "sourness")
-    private Long sourness;
-
-    @Column(name = "favor",columnDefinition = "TINYINT(1)")
-    private boolean favor;
-
-    @Column(name = "is_complete",columnDefinition = "TINYINT(1)")
-    private boolean isComplete;
-
-    @Column(name = "is_sampled",columnDefinition = "TINYINT(1)")
-    private boolean isSampled;
+    @Column(name = "is_sampled", columnDefinition = "TINYINT(1)") //레시피를 단순히 클릭하여 데이터 분석에 활용(레시피를 클릭했으면 1)
+    private Boolean isSampled;
 
 
 }

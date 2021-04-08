@@ -3,10 +3,10 @@ package com.project.cooksistant.model.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
 @Setter
-public class IngredientDTOpost {
-    private String ingredientName;
+@Getter
+public class RecipeIngredientFixDTO {
+    private Long recipeIngredientId;
     private String amount;
-    private String isType;
+    private String type;
 }

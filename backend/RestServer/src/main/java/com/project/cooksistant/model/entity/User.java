@@ -18,25 +18,11 @@ public class User {
     @Column(name = "id")
     private Long userId;
 
-    @Column(name = "auth_key",nullable = false)
-    private String authKey;
+    @Column(name = "uid",nullable = false)
+    private String uid;
 
     @Column(name = "nickname",nullable = false)
     private String nickname;
 
-    @Column(name = "sweetness",nullable = false)
-    private Long sweetness;
-
-    @Column(name = "saltiness",nullable = false)
-    private Long saltiness;
-
-    @Column(name = "spiciness",nullable = false)
-    private Long spiciness;
-
-    @Column(name = "bitterness",nullable = false)
-    private Long bitterness;
-
-    @Column(name = "sourness",nullable = false)
-    private Long sourness;
 
 }
