@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, ImageBackground, Dimensions, Image, Alert} from 'react-native';
+import { StyleSheet, ImageBackground, Dimensions, Image, Alert } from 'react-native';
 import { Block, Text, Button as GaButton, theme } from 'galio-framework';
 import { CommonActions } from '@react-navigation/native';
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
@@ -54,13 +54,13 @@ class TasteRegister extends React.Component {
     var user = firebase.auth().currentUser;
     if (user) {
       axios
-      .get(`http://j4c101.p.ssafy.io:8081/user/${user.uid}`)
-      .then((result) => {
-        this.setState({ userId: result.data.userId });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        .get(`http://j4c101.p.ssafy.io:8081/user/${user.uid}`)
+        .then((result) => {
+          this.setState({ userId: result.data.userId });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
 
@@ -95,7 +95,13 @@ class TasteRegister extends React.Component {
       .then((response) => {
         if (response.status == 200) {
           Alert.alert('평가가 등록되었습니다.');
-          navigation.navigate('EvalueList');
+          // navigation.reset({ routes: [{ name: 'EvalueList' }] });
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 1,
+              routes: [{ name: 'Profile' }, { name: 'EvalueList' }],
+            })
+          );
         }
       })
       .catch(function (error) {
@@ -111,15 +117,16 @@ class TasteRegister extends React.Component {
         {
           text: '취소',
           style: 'cancel',
+          onPress: () => navigation.navigate('Pro'),
         },
         {
           text: '네',
-          onPress: () => this.onSubmit()
+          onPress: () => this.onSubmit(),
         },
       ],
       { cancelable: false }
     );
-  }
+  };
 
   render() {
     const title = this.props.route.params.title;
