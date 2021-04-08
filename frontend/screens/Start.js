@@ -106,10 +106,10 @@ export default class Onboarding extends React.Component {
             .auth()
             .signInWithCredential(credential)
             .then(() => {
-              //var user = firebase.auth().currentUser;
+              var fuser = firebase.auth().currentUser;
               axios.post(`http://j4c101.p.ssafy.io:8081/user`, {
-                nickname: googleUser.displayName,
-                uid: googleUser.uid
+                nickname: fuser.displayName,
+                uid: fuser.uid
               })
               .then(()=> {
                 console.log("success");
