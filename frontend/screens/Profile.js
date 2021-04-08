@@ -12,7 +12,7 @@ import { Block, Text, theme, Button as GaButton } from 'galio-framework';
 import { Card } from '../components';
 import { Images, nowTheme } from '../constants';
 import { HeaderHeight } from '../constants/utils';
-import { SegmentedControlTab } from 'react-native-segmented-control-tab';
+import SegmentedControlTab from 'react-native-segmented-control-tab';
 import firebase from 'firebase';
 import axios from 'axios';
 
@@ -342,21 +342,6 @@ const styles = StyleSheet.create({
   },
   activeTabStyle: {
     backgroundColor: '#f18d46',
-  },
-  category: {
-    backgroundColor: theme.COLORS.WHITE,
-    marginVertical: theme.SIZES.BASE / 3,
-    borderWidth: 0,
-  },
-  categoryTitle: {
-    height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  imageBlock: {
-    overflow: 'hidden',
-    borderRadius: 4,
   },
 });
 
