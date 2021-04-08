@@ -11,8 +11,7 @@ import { Block, Text, theme } from "galio-framework";
 import { useSafeArea } from "react-native-safe-area-context";
 import Images from "../constants/Images";
 import { DrawerItem as DrawerCustomItem, Icon } from "../components";
-
-import nowTheme from "../constants/Theme";
+import firebase from 'firebase';
 
 const { width } = Dimensions.get("screen");
 
@@ -25,14 +24,20 @@ function CustomDrawerContent({
   ...rest
 }) {
   const insets = useSafeArea();
-  const screens = [
-    "Home",
-    "Components",
-    "레시피 리스트",
-    "프로필",
-    "재료",
-    "영수증"
-  ];
+  const user = firebase.auth().currentUser;
+  let screens = [];
+  if (user) {
+    screens = [
+      "쿡시스턴트",
+      "프로필",
+      "재료",
+      "영수증",
+    ];
+  } else {
+    screens = [
+      "쿡시스턴트",
+    ];
+  }
   return (
     <Block
       style={styles.container}
@@ -67,8 +72,8 @@ function CustomDrawerContent({
             style={{ borderColor: 'white', width: '93%', borderWidth: StyleSheet.hairlineWidth, marginHorizontal: 10}}
           />
         </Block>
-        <DrawerCustomItem title="GETTING STARTED" navigation={navigation}/>
-        <DrawerCustomItem title="LOGOUT" navigation={navigation}/>
+        <DrawerCustomItem title="앱 소개" navigation={navigation}/>
+        {user ?  <DrawerCustomItem title="로그아웃" navigation={navigation} /> : <DrawerCustomItem title="로그인" navigation={navigation} />}
         </ScrollView>
       </Block>
     </Block>
@@ -95,3 +100,4 @@ const styles = StyleSheet.create({
 });
 
 export default CustomDrawerContent;
+

@@ -1,64 +1,138 @@
 import React from 'react';
-import {
-  StyleSheet,
-  ImageBackground,
-  Dimensions,
-  Image,
-  StatusBar,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import { StyleSheet, ImageBackground, Dimensions, Image, Alert } from 'react-native';
+import { Block, Text, Button as GaButton, theme } from 'galio-framework';
+import { CommonActions } from '@react-navigation/native';
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
-import SwitchSelector from 'react-native-switch-selector';
-import { Block, Checkbox, Text, Button as GaButton, theme } from 'galio-framework';
+import StarRating from 'react-native-star-rating';
+import TagSelector from 'react-native-tag-selector';
 
-import { Button, Icon, Input } from '../components';
+import firebase from 'firebase';
+import axios from 'axios';
+
 import { Images, nowTheme } from '../constants';
 
 const { width, height } = Dimensions.get('screen');
 
-const recipe = {
-  title: '빨간맛 떡볶이',
-  image: require('../assets/imgs/food1.png'),
-  isEvalu: false,
-};
-
-const isLike = [
-  { label: '좋아요', value: 0 },
-  { label: '싫어요', value: 1 },
-];
-
-const isTaste = [
-  { label: '1', value: 1 },
-  { label: '2', value: 2 },
-  { label: '3', value: 3 },
-  { label: '4', value: 4 },
-  { label: '5', value: 5 },
-];
-
 class TasteRegister extends React.Component {
-  static navigationOptions = {
-    header: null,
+  Tastes = [
+    { id: '달다', name: '달아요' },
+    { id: '짜다', name: '짜요' },
+    { id: '맵다', name: '매워요' },
+    { id: '쓰다', name: '써요' },
+    { id: '싱겁다', name: '싱거워요' },
+    { id: '시다', name: '새콤해요' },
+  ];
+  Features = [
+    { id: '기름지다', name: '기름져요' },
+    { id: '느끼하다', name: '느끼해요' },
+    { id: '고소하다', name: '고소해요' },
+    { id: '담백하다', name: '담백해요' },
+    { id: '비리다', name: '비려요' },
+    { id: '바삭하다', name: '바삭해요' },
+    { id: '아삭하다', name: '아삭해요' },
+    { id: '쫀득쫀득', name: '쫀득해요' },
+    { id: '쫄깃쫄깃', name: '쫄깃해요' },
+    { id: '눅눅하다', name: '눅눅해요' },
+    { id: '부드럽다', name: '부드러워요' },
+    { id: '향이 강하다', name: '향이강해요' },
+  ];
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      errors: true,
+      userId: null,
+      evaluationId: this.props.route.params.eId,
+      recipeId: this.props.route.params.rId,
+      starCount: this.starCount == null ? 3 : this.starCount,
+      selectedTastes: [],
+      selectedFeatures: [],
+    };
+  }
+
+  componentDidMount = () => {
+    var user = firebase.auth().currentUser;
+    if (user) {
+      axios
+        .get(`http://j4c101.p.ssafy.io:8081/user/${user.uid}`)
+        .then((result) => {
+          this.setState({ userId: result.data.userId });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
-  defaultScrollViewProps = {
-    scrollEnabled: false,
-    contentContainerStyle: {
-      flex: 1,
-      justifyContent: 'center',
-    },
+  onStarRatingPress(rating) {
+    this.setState({
+      starCount: rating,
+    });
+  }
+
+  onSubmitStep = () => {
+    if (this.state.selectedTastes.length == 0 && this.state.selectedFeatures.length == 0) {
+      Alert.alert('하나 이상의 맛과 특징을 선택해주세요!');
+      this.setState({ errors: true });
+    } else {
+      this.setState({ errors: false });
+      this.onCheck();
+    }
   };
 
-  onPrevStep = () => {
-    console.log('called previous step');
+  onSubmit = () => {
+    const { navigation } = this.props;
+    axios
+      .put(`http://j4c101.p.ssafy.io:8081/recipe/evaluationUpdate`, {
+        userId: this.state.userId,
+        evaluationId: this.state.evaluationId,
+        recipeId: this.state.recipeId,
+        isComplete: true,
+        isUpdate: true,
+        favor: this.state.starCount,
+        keywordList: this.state.selectedTastes.concat(this.state.selectedFeatures),
+      })
+      .then((response) => {
+        if (response.status == 200) {
+          Alert.alert('평가가 등록되었습니다.');
+          // navigation.reset({ routes: [{ name: 'EvalueList' }] });
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 1,
+              routes: [{ name: 'Profile' }, { name: 'EvalueList' }],
+            })
+          );
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
-  onNextStep = () => {
-    console.log('called next step');
-  };
-  onSubmitSteps = () => {
-    console.log('called on submit step.');
+
+  onCheck = () => {
+    Alert.alert(
+      '평가를 등록하시겠습니까?',
+      ' ',
+      [
+        {
+          text: '취소',
+          style: 'cancel',
+          onPress: () => navigation.navigate('Pro'),
+        },
+        {
+          text: '네',
+          onPress: () => this.onSubmit(),
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   render() {
+    const title = this.props.route.params.title;
+    const image = this.props.route.params.image;
+    const tmp = title.split(']');
+
     const progressStepsStyle = {
       labelFontFamily: 'montserrat-bold',
       activeStepIconBorderColor: '#f18d46',
@@ -86,192 +160,122 @@ class TasteRegister extends React.Component {
               <Block style={styles.registerContainer}>
                 <ProgressSteps {...progressStepsStyle}>
                   <ProgressStep
-                    label="좋아요"
-                    onNext={this.onNextStep}
-                    scrollViewProps={this.defaultScrollViewProps}
+                    label="평가"
+                    scrollViewProps={{ scrollEnabled: false }}
                     nextBtnTextStyle={buttonTextStyle}
                     previousBtnTextStyle={buttonTextStyle}
                   >
                     <Block flex={1} style={{ alignItems: 'center' }}>
-                      <Block style={{ marginTop: 10 }}>
+                      <Block center style={{ marginTop: 7 }}>
                         <Text
                           style={{
                             fontFamily: 'montserrat-bold',
                             textAlign: 'center',
-                            marginTop: 10,
-                            marginBottom: 15,
+                            lineHeight: 25,
+                            margin: 20,
+                            marginTop: height > 800 ? 0 : -5,
                           }}
                           color="#333"
-                          size={19}
+                          size={Platform.OS == 'android' ? 12 : 15}
                         >
-                          {recipe.title}
+                          {title.includes(']') ? tmp[0] + '] \n' + tmp[1].trim() : title}
                         </Text>
                         <Image
-                          source={recipe.image}
+                          resizeMode="stretch"
+                          source={{ uri: image }}
                           style={{
-                            width: width - theme.SIZES.BASE * 6,
-                            height: 200,
+                            borderRadius: 15,
+                            width: width * 0.8,
+                            height: Platform.OS == 'android' ? 180 : 200,
                           }}
                         />
                       </Block>
-                      <Block flex={1} center style={styles.likeContainer}>
+                      <Block flex={1} center style={styles.evalueContainer}>
                         <Text
                           style={{
                             fontFamily: 'montserrat-bold',
                             textAlign: 'center',
-                            marginBottom: Platform.OS === 'android' ? 20 : 15,
+                            marginTop: height > 800 ? -2 : -8,
+                            marginBottom: 13,
                           }}
                           color="#333"
-                          size={15}
+                          size={Platform.OS == 'android' ? 12 : 14}
                         >
-                          레시피가 마음에 들었나요?
+                          레시피에 대해 평가해주세요!
                         </Text>
-                        <SwitchSelector
-                          options={isLike}
-                          initial={1}
-                          fontSize={15}
-                          textColor="#f18d46"
-                          textStyle={{ fontFamily: 'montserrat-regular' }}
-                          selectedTextStyle={{ fontFamily: 'montserrat-regular' }}
-                          selectedColor="white"
-                          buttonColor="#f18d46"
-                          borderColor="#f18d46"
-                          hasPadding
-                          onPress={(value) => {
-                            console.log(`Call onPress with value: ${value}`);
-                          }}
+                        <StarRating
+                          disabled={false}
+                          maxStars={5}
+                          starSize={Platform.OS == 'android' ? 40 : 45}
+                          halfStarEnabled={true}
+                          emptyStarColor={'#f18d46'}
+                          fullStarColor={'#f18d46'}
+                          rating={this.state.starCount}
+                          selectedStar={(rating) => this.onStarRatingPress(rating)}
                         />
+                        <Text
+                          style={{
+                            fontFamily: 'montserrat-bold',
+                            alignItems: 'center',
+                            marginTop: height > 800 ? 15 : 10,
+                          }}
+                          size={Platform.OS == 'android' ? 12 : 14}
+                        >
+                          {this.state.starCount} / 5
+                        </Text>
                       </Block>
                     </Block>
                   </ProgressStep>
                   <ProgressStep
-                    label="맛"
-                    onPrevious={this.onPrevStep}
-                    onSubmit={this.onSubmitSteps}
-                    scrollViewProps={this.defaultScrollViewProps}
+                    label="맛 & 특징"
+                    scrollViewProps={{ scrollEnabled: false }}
                     nextBtnTextStyle={buttonTextStyle}
                     previousBtnTextStyle={buttonTextStyle}
+                    onSubmit={this.onSubmitStep}
+                    errors={this.state.errors}
                   >
                     <Block>
-                      <Block center style={styles.tasteContainer}>
+                      <Block row flex={1}>
                         <Text
                           style={{
                             fontFamily: 'montserrat-bold',
-                            textAlign: 'center',
-                            marginBottom: Platform.OS === 'android' ? 10 : 15,
+                            marginTop: 40,
+                            marginLeft: Platform.OS === 'android' ? 40 : 30,
                           }}
                           color="#333"
-                          size={13}
+                          size={Platform.OS == 'android' ? 15 : 18}
                         >
-                          매운 맛
+                          맛
                         </Text>
-                        <SwitchSelector
-                          options={isTaste}
-                          initial={2}
-                          fontSize={15}
-                          textColor="#f18d46"
-                          selectedColor="white"
-                          buttonColor="#f18d46"
-                          borderColor="#f18d46"
-                          hasPadding
-                          onPress={(value) => console.log(`Call onPress with value: ${value}`)}
-                        />
+                        <Block flex={1} style={styles.tasteContainer}>
+                          <TagSelector
+                            tagStyle={styles.tag1}
+                            selectedTagStyle={styles.tag1Selected}
+                            tags={this.Tastes}
+                            onChange={(selected) => this.setState({ selectedTastes: selected })}
+                          />
+                        </Block>
                       </Block>
-                      <Block center style={styles.tasteContainer}>
+                      <Block flex={1}>
                         <Text
                           style={{
                             fontFamily: 'montserrat-bold',
-                            textAlign: 'center',
-                            marginBottom: Platform.OS === 'android' ? 10 : 15,
+                            marginTop: Platform.OS == 'android' ? 5 : 10,
+                            marginLeft: Platform.OS === 'android' ? 40 : 30,
                           }}
                           color="#333"
-                          size={13}
+                          size={Platform.OS == 'android' ? 15 : 18}
                         >
-                          짠 맛
+                          특징
                         </Text>
-                        <SwitchSelector
-                          options={isTaste}
-                          initial={2}
-                          fontSize={15}
-                          textColor="#f18d46"
-                          selectedColor="white"
-                          buttonColor="#f18d46"
-                          borderColor="#f18d46"
-                          hasPadding
-                          onPress={(value) => console.log(`Call onPress with value: ${value}`)}
-                        />
-                      </Block>
-                      <Block center style={styles.tasteContainer}>
-                        <Text
-                          style={{
-                            fontFamily: 'montserrat-bold',
-                            textAlign: 'center',
-                            marginBottom: Platform.OS === 'android' ? 10 : 15,
-                          }}
-                          color="#333"
-                          size={13}
-                        >
-                          단 맛
-                        </Text>
-                        <SwitchSelector
-                          options={isTaste}
-                          initial={2}
-                          fontSize={15}
-                          textColor="#f18d46"
-                          selectedColor="white"
-                          buttonColor="#f18d46"
-                          borderColor="#f18d46"
-                          hasPadding
-                          onPress={(value) => console.log(`Call onPress with value: ${value}`)}
-                        />
-                      </Block>
-                      <Block center style={styles.tasteContainer}>
-                        <Text
-                          style={{
-                            fontFamily: 'montserrat-bold',
-                            textAlign: 'center',
-                            marginBottom: Platform.OS === 'android' ? 10 : 15,
-                          }}
-                          color="#333"
-                          size={13}
-                        >
-                          신 맛
-                        </Text>
-                        <SwitchSelector
-                          options={isTaste}
-                          initial={2}
-                          fontSize={15}
-                          textColor="#f18d46"
-                          selectedColor="white"
-                          buttonColor="#f18d46"
-                          borderColor="#f18d46"
-                          hasPadding
-                          onPress={(value) => console.log(`Call onPress with value: ${value}`)}
-                        />
-                      </Block>
-                      <Block center style={styles.tasteContainer}>
-                        <Text
-                          style={{
-                            fontFamily: 'montserrat-bold',
-                            textAlign: 'center',
-                            marginBottom: Platform.OS === 'android' ? 10 : 15,
-                          }}
-                          color="#333"
-                          size={13}
-                        >
-                          쓴 맛
-                        </Text>
-                        <SwitchSelector
-                          options={isTaste}
-                          initial={2}
-                          fontSize={15}
-                          textColor="#f18d46"
-                          selectedColor="white"
-                          buttonColor="#f18d46"
-                          borderColor="#f18d46"
-                          hasPadding
-                          onPress={(value) => console.log(`Call onPress with value: ${value}`)}
-                        />
+                        <Block style={styles.featureContainer}>
+                          <TagSelector
+                            tagStyle={styles.tag2}
+                            selectedTagStyle={styles.tag2Selected}
+                            tags={this.Features}
+                            onChange={(selected) => this.setState({ selectedFeatures: selected })}
+                          />
+                        </Block>
                       </Block>
                     </Block>
                   </ProgressStep>
@@ -315,13 +319,73 @@ const styles = StyleSheet.create({
     elevation: 1,
     overflow: 'hidden',
   },
-  tasteContainer: {
-    width: width * 0.7,
-    marginBottom: 10,
+  evalueContainer: {
+    marginTop: 35,
   },
-  likeContainer: {
-    width: width * 0.7,
-    marginTop: Platform.OS === 'android' ? 30 : 40,
+  tasteContainer: {
+    marginTop: 10,
+    marginLeft: 18,
+    padding: 20,
+  },
+  tag1: {
+    width: width > 350 ? 95 : 80,
+    padding: 10,
+    margin: 3,
+    borderWidth: 1,
+    borderColor: '#f18d46',
+    backgroundColor: '#fff',
+    borderRadius: 18,
+    fontSize: Platform.OS == 'android' ? 12 : 14,
+    fontFamily: 'montserrat-bold',
+    color: '#f18d46',
+    textAlign: 'center',
+  },
+  tag1Selected: {
+    width: width > 350 ? 95 : 80,
+    padding: 10,
+    margin: 3,
+    borderWidth: 1,
+    borderColor: 'white',
+    backgroundColor: '#f18d46',
+    borderRadius: 20,
+    fontSize: Platform.OS == 'android' ? 12 : 14,
+    fontFamily: 'montserrat-bold',
+    color: 'white',
+    textAlign: 'center',
+    overflow: 'hidden',
+  },
+  featureContainer: {
+    width: width * 0.9,
+    marginTop: Platform.OS == 'android' ? 5 : 10,
+    marginLeft: width > 370 ? 17 : 8,
+    padding: 10,
+  },
+  tag2: {
+    width: width > 340 ? 90 : 85,
+    padding: 10,
+    margin: 3,
+    borderWidth: 1,
+    borderColor: '#f18d46',
+    backgroundColor: '#fff',
+    borderRadius: 18,
+    fontSize: Platform.OS == 'android' ? 10 : 12,
+    fontFamily: 'montserrat-bold',
+    color: '#f18d46',
+    textAlign: 'center',
+  },
+  tag2Selected: {
+    width: width > 340 ? 90 : 85,
+    padding: 10,
+    margin: 3,
+    borderWidth: 1,
+    borderColor: 'white',
+    backgroundColor: '#f18d46',
+    borderRadius: 18,
+    fontSize: Platform.OS == 'android' ? 10 : 12,
+    fontFamily: 'montserrat-bold',
+    color: 'white',
+    textAlign: 'center',
+    overflow: 'hidden',
   },
 });
 

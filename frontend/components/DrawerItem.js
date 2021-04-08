@@ -1,104 +1,81 @@
-import React from "react";
-import { StyleSheet, TouchableOpacity, Linking } from "react-native";
-import { Block, Text, theme } from "galio-framework";
+import React from 'react';
+import { StyleSheet, TouchableOpacity, Alert, Linking } from 'react-native';
+import { CommonActions } from '@react-navigation/native';
+import { Block, Text, theme } from 'galio-framework';
+import * as GoogleSignIn from 'expo-google-sign-in';
+import firebase from 'firebase';
 
-import Icon from "./Icon";
-import nowTheme from "../constants/Theme";
+import Icon from './Icon';
+import nowTheme from '../constants/Theme';
 
 class DrawerItem extends React.Component {
+  signOutAsync = async () => {
+    await GoogleSignIn.signOutAsync();
+  };
+
   renderIcon = () => {
     const { title, focused } = this.props;
 
     switch (title) {
-      case "Home":
+      case '쿡시스턴트':
         return (
           <Icon
             name="app2x"
             family="NowExtra"
             size={18}
-            color={focused ? nowTheme.COLORS.PRIMARY : "white"}
+            color={focused ? nowTheme.COLORS.PRIMARY : 'white'}
             style={{ opacity: 0.5 }}
           />
         );
-      case "Components":
-        return (
-          <Icon
-            name="atom2x"
-            family="NowExtra"
-            size={18}
-            color={focused ? nowTheme.COLORS.PRIMARY : "white"}
-            style={{ opacity: 0.5 }}
-          />
-        );
-      case "레시피 리스트":
-        return (
-          <Icon
-            name="paper"
-            family="NowExtra"
-            size={18}
-            color={focused ? nowTheme.COLORS.PRIMARY : "white"}
-            style={{ opacity: 0.5 }}
-          />
-        );
-      case "프로필":
+      case '프로필':
         return (
           <Icon
             name="profile-circle"
             family="NowExtra"
             size={18}
-            color={focused ? nowTheme.COLORS.PRIMARY : "white"}
+            color={focused ? nowTheme.COLORS.PRIMARY : 'white'}
             style={{ opacity: 0.5 }}
           />
         );
-      case "재료":
-      case "영수증":
+      case '재료':
+        return (
+          <Icon
+            name="atom2x"
+            family="NowExtra"
+            size={18}
+            color={focused ? nowTheme.COLORS.PRIMARY : 'white'}
+            style={{ opacity: 0.5 }}
+          />
+        );
+      case '영수증':
         return (
           <Icon
             name="badge2x"
             family="NowExtra"
             size={18}
-            color={focused ? nowTheme.COLORS.PRIMARY : "white"}
+            color={focused ? nowTheme.COLORS.PRIMARY : 'white'}
             style={{ opacity: 0.5 }}
           />
         );
-        
-      case "Settings":
-        return (
-          <Icon
-            name="settings-gear-642x"
-            family="NowExtra"
-            size={18}
-            color={focused ? nowTheme.COLORS.PRIMARY : "white"}
-            style={{ opacity: 0.5 }}
-          />
-        );
-      case "Examples":
-        return (
-          <Icon
-            name="album"
-            family="NowExtra"
-            size={14}
-            color={focused ? nowTheme.COLORS.PRIMARY : "white"}
-          />
-        );
-      case "GETTING STARTED":
+      case '앱 소개':
         return (
           <Icon
             name="spaceship2x"
             family="NowExtra"
             size={18}
-            style={{ borderColor: "rgba(0,0,0,0.5)", opacity: 0.5 }}
-            color={focused ? nowTheme.COLORS.PRIMARY : "white"}
+            style={{ borderColor: 'rgba(0,0,0,0.5)', opacity: 0.5 }}
+            color={focused ? nowTheme.COLORS.PRIMARY : 'white'}
           />
         );
-      case "LOGOUT":
+      case '로그아웃':
+      case '로그인':
         return (
           <Icon
             name="share"
             family="NowExtra"
             size={18}
-            style={{ borderColor: "rgba(0,0,0,0.5)", opacity: 0.5 }}
-            color={focused ? nowTheme.COLORS.PRIMARY : "white"}
+            style={{ borderColor: 'rgba(0,0,0,0.5)', opacity: 0.5 }}
+            color={focused ? nowTheme.COLORS.PRIMARY : 'white'}
           />
         );
       default:
@@ -111,19 +88,54 @@ class DrawerItem extends React.Component {
 
     const containerStyles = [
       styles.defaultStyle,
-      focused ? [styles.activeStyle, styles.shadow] : null
+      focused ? [styles.activeStyle, styles.shadow] : null,
     ];
 
     return (
       <TouchableOpacity
         style={{ height: 60 }}
-        onPress={() =>
-          title == "GETTING STARTED"
-            ? Linking.openURL(
-                "https://demos.creative-tim.com/now-ui-pro-react-native/docs/"
-              ).catch(err => console.error("An error occurred", err))
-            : navigation.navigate(title == 'LOGOUT' ? 'Onboarding' : title)
-        }
+        onPress={() => {
+          switch (title) {
+            case '앱 소개':
+              Linking.openURL(
+                'https://www.notion.so/SUB3-eddba11b91494c4185c65cec233fa8ac'
+              ).catch((err) => console.error('An error occurred', err));
+              break;
+            case '로그아웃':
+              firebase
+                .auth()
+                .signOut()
+                .then(() => {
+                  // Sign-out successful.
+                  navigation.dispatch(
+                    CommonActions.reset({
+                      index: 0,
+                      routes: [{ name: 'Start' }],
+                    })
+                  );
+                })
+                .catch((error) => {
+                  // An error happened.
+                });
+              this.signOutAsync();
+              break;
+            case '로그인':
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [{ name: 'Start' }],
+                })
+              );
+              break;
+            default:
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [{ name: title }],
+                })
+              );
+          }
+        }}
       >
         <Block flex row style={containerStyles}>
           <Block middle flex={0.1} style={{ marginRight: 5 }}>
@@ -132,13 +144,13 @@ class DrawerItem extends React.Component {
           <Block row center flex={0.9}>
             <Text
               style={{
-                fontFamily: "montserrat-regular",
-                textTransform: "uppercase",
-                fontWeight: "300"
+                fontFamily: 'montserrat-regular',
+                textTransform: 'uppercase',
+                fontWeight: '300',
               }}
               size={14}
               bold={focused ? true : false}
-              color={focused ? nowTheme.COLORS.PRIMARY : "white"}
+              color={focused ? nowTheme.COLORS.PRIMARY : 'white'}
             >
               {title}
             </Text>
@@ -153,22 +165,22 @@ const styles = StyleSheet.create({
   defaultStyle: {
     paddingVertical: 15,
     paddingHorizontal: 14,
-    color: "white"
+    color: 'white',
   },
   activeStyle: {
     backgroundColor: nowTheme.COLORS.WHITE,
     borderRadius: 30,
-    color: "white"
+    color: 'white',
   },
   shadow: {
     shadowColor: theme.COLORS.BLACK,
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowRadius: 8,
-    shadowOpacity: 0.1
-  }
+    shadowOpacity: 0.1,
+  },
 });
 
 export default DrawerItem;

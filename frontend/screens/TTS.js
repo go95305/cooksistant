@@ -3,106 +3,113 @@ import {
   StyleSheet,
   ImageBackground,
   Dimensions,
-  StatusBar,
-  TouchableWithoutFeedback,
-  Keyboard,
   Image,
 } from 'react-native';
-import { Block, Checkbox, Text, Button as GaButton, theme } from 'galio-framework';
-
-import { Button, Icon, Input } from '../components';
+import { Block, Text, Button as GaButton } from 'galio-framework';
+import { Button} from '../components';
 import { Images, nowTheme } from '../constants';
 
 const { width, height } = Dimensions.get('screen');
 
-const DismissKeyboard = ({ children }) => (
-  <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
-);
-
 class TTS extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      rId: this.props.route.params.step.id,
+      cuisine: this.props.route.params.step.cuisine,
+      image: this.props.route.params.step.image,
+    };
+  }
   render() {
+    const title = this.state.cuisine;
+    const tmp = title.split(']');
     return (
-      <DismissKeyboard>
-        <Block flex middle>
+      <Block style={styles.container}>
+        <Block>
           <ImageBackground
             source={Images.RegisterBackground}
             style={styles.imageBackgroundContainer}
             imageStyle={styles.imageBackground}
           >
-            <Block flex middle>
+            <Block flex={1} middle>
               <Block style={styles.registerContainer}>
-                <Block flex space="evenly">
-                  <Block flex={0.2} middle>
+                <Block flex={0.3} middle style={{marginTop: 30, marginBottom: 20}}>
+                  <Block width={width * 0.8}
+                    style={{ padding: 5, borderWidth: 2, borderRadius: 15, borderColor: '#f18d46' }}
+                  >
                     <Text
                       style={{
-                        fontFamily: 'montserrat-regular',
-                        textAlign: 'center',
+                        textAlign:'center',
+                        fontFamily: 'montserrat-bold',
+                        lineHeight: 27,
+                        margin: 20,
+                        marginTop: 10,
+                        marginBottom: 10,
                       }}
-                      color="#333"
-                      size={25}
-                      bold
+                      color="#474747"
+                      size={16.5}
                     >
-                      가지 볶음
+                      {title.includes(']') ? tmp[0] + '] \n' + tmp[1].trim() : title}
                     </Text>
                   </Block>
-
-                  <Block flex={1} middle space="between">
-                    <Block center flex={0.9}>
-                      <Block flex space="between">
-                        <Block middle>
-                          <Image style={styles.photo} source={Images.eggplant} />
-                        </Block>
-                        <Block flex={0.2} middle>
-                          <Text
-                            style={{
-                              fontFamily: 'montserrat-regular',
-                              textAlign: 'center',
-                            }}
-                            color="#333"
-                            size={18}
-                          >
-                            같이 요리해볼까요?
-                          </Text>
-                        </Block>
-                        <Block center>
-                          <Button color="primary" round style={styles.createButton}>
-                            <Text
-                              style={{ fontFamily: 'montserrat-bold' }}
-                              size={14}
-                              color={nowTheme.COLORS.WHITE}
-                            >
-                              START
-                            </Text>
-                          </Button>
-                        </Block>
-                      </Block>
-                    </Block>
+                </Block>
+                <Block center flex={0.4} >
+                  <Block style={{ overflow: 'hidden' }}>
+                  <Image
+                    resizeMode="cover"
+                    style={styles.photo}
+                    source={{ uri: this.state.image }}
+                  />
                   </Block>
+                </Block>
+  
+                <Block center flex={0.3}>
+                  <Button
+                    color="primary"
+                    round
+                    style={styles.createButton}
+                    onPress={() =>
+                      this.props.navigation.navigate('TTSOrder', {
+                        id: this.state.rId,
+                      })
+                    }
+                  >
+                    <Text
+                      style={{ fontFamily: 'montserrat-bold' }}
+                      size={14}
+                      color={nowTheme.COLORS.WHITE}
+                    >
+                      같이 요리해볼까요?
+                    </Text>
+                  </Button>
                 </Block>
               </Block>
             </Block>
           </ImageBackground>
         </Block>
-      </DismissKeyboard>
+      </Block>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+  },
   imageBackgroundContainer: {
     width: width,
     height: height,
     padding: 0,
-    zIndex: 1,
   },
   imageBackground: {
     width: width,
     height: height,
   },
   registerContainer: {
-    marginTop: 55,
+    marginTop: height > 800 ? height * 0.12 : 0,
     width: width * 0.9,
-    height: height < 812 ? height * 0.8 : height * 0.8,
+    height: height * 0.8,
     backgroundColor: nowTheme.COLORS.WHITE,
     borderRadius: 4,
     shadowColor: nowTheme.COLORS.BLACK,
@@ -115,35 +122,16 @@ const styles = StyleSheet.create({
     elevation: 1,
     overflow: 'hidden',
   },
-  inputIcons: {
-    marginRight: 12,
-    color: nowTheme.COLORS.ICON_INPUT,
-  },
-  inputs: {
-    borderWidth: 1,
-    borderColor: '#E3E3E3',
-    borderRadius: 21.5,
-  },
-  passwordCheck: {
-    paddingLeft: 2,
-    paddingTop: 6,
-    paddingBottom: 15,
-  },
   createButton: {
+    height: 50,
     width: width * 0.5,
     marginTop: 25,
-    marginBottom: 40,
-  },
-  social: {
-    width: theme.SIZES.BASE * 3.5,
-    height: theme.SIZES.BASE * 3.5,
-    borderRadius: theme.SIZES.BASE * 1.75,
-    justifyContent: 'center',
-    marginHorizontal: 10,
+    marginBottom: 30,
   },
   photo: {
-    height: 230,
-    width: 300,
+    borderRadius: 30,
+    height: 185,
+    width: width * 0.85,
   },
 });
 

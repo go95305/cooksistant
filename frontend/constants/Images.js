@@ -5,15 +5,17 @@ const ProfileBackground = require('../assets/imgs/profile-bg.png');
 const RegisterBackground = require('../assets/imgs/register-bg.png');
 const Pro = require('../assets/imgs/bg.png');
 const CookLogo = require('../assets/imgs/cooking.png');
+const HomeLogo = require('../assets/imgs/home.png');
 const iOSLogo = require('../assets/imgs/ios.png');
 const androidLogo = require('../assets/imgs/android.png');
-const ProfilePicture = require('../assets/imgs/profile-img.jpg');
+const ProfilePicture = require('../assets/imgs/profile-img.png');
 const InvisionLogo = require('../assets/imgs/invision-white-slim.png');
 const eggplant = require('../assets/imgs/가지볶음.jpg');
+const cutEggplant = require('../assets/imgs/가지썰기.jpg');
+const mic = require('../assets/imgs/mic.png');
 const bookmark = require('../assets/imgs/bookmark.png');
 const bookmarkFull = require('../assets/imgs/bookmarkFull.png');
-const isEvalue = require('../assets/imgs/isEvalue.png');
-const etc = require('../assets/imgs/etc.png');
+const white = require('../assets/imgs/white.jpg');
 
 const Viewed = [
   require('../assets/imgs/food1.png'),
@@ -39,12 +41,14 @@ export default {
   Pro,
   Products,
   NowLogo: CookLogo,
+  HomeLogo,
   iOSLogo,
   androidLogo,
   InvisionLogo,
   eggplant,
   bookmark,
   bookmarkFull,
-  isEvalue,
-  etc
+  cutEggplant,
+  mic,
+  white
 };
