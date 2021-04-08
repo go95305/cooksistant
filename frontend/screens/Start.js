@@ -52,8 +52,8 @@ export default class Onboarding extends React.Component {
     try {
       await GoogleSignIn.initAsync({
         // You may ommit the clientId when the firebase `googleServicesFile` is configured
-        clientId: Platform.OS == 'android' ? '859478845487-45haal7m8fhirhsrsm66ndv2gmtu6p1h.apps.googleusercontent.com' :
-          '859478845487-u55e018p49kijao11a0s8e2tdvk3gibc.apps.googleusercontent.com'
+        clientId: Platform.OS == 'android' ? '859478845487-q185e53pi79jl2ge3lfgovmv9q15roml.apps.googleusercontent.com' :
+          '859478845487-8c7i5klln2oe45lqs4lm9phlt81qg20e.apps.googleusercontent.com'
       });
 
       await GoogleSignIn.askForPlayServicesAsync();
@@ -96,10 +96,10 @@ export default class Onboarding extends React.Component {
         if (!this.isUserEqual(googleUser, firebaseUser)) {
           // Build Firebase credential with the Google ID token.
           var credential = firebase.auth.GoogleAuthProvider.credential(
-            // googleUser.idToken,
-            // googleUser.accessToken
-            googleUser.auth.idToken, 
-            googleUser.auth.accessToken 
+             // googleUser.idToken,
+             // googleUser.accessToken
+             googleUser.auth.idToken, 
+             googleUser.auth.accessToken 
           );
           // Sign in with credential from the Google user.
           firebase
@@ -132,8 +132,8 @@ export default class Onboarding extends React.Component {
   signInWithGoogle = async() => {
     try {
       const result = await Google.logInAsync({
-        androidClientId: '859478845487-45haal7m8fhirhsrsm66ndv2gmtu6p1h.apps.googleusercontent.com',
-        iosClientId: '859478845487-u55e018p49kijao11a0s8e2tdvk3gibc.apps.googleusercontent.com',
+        androidClientId: '859478845487-q185e53pi79jl2ge3lfgovmv9q15roml.apps.googleusercontent.com',
+        iosClientId: '859478845487-8c7i5klln2oe45lqs4lm9phlt81qg20e.apps.googleusercontent.com',
         scopes: ['profile', 'email'],
       });
     
@@ -164,7 +164,7 @@ export default class Onboarding extends React.Component {
                   shadowless
                   style={styles.button}
                   color={nowTheme.COLORS.PRIMARY}
-                  //onPress={() => this.signInWithGoogle()}
+                  // onPress={() => this.signInWithGoogle()}
                   onPress={() => this.signInAsync()}
                 > 
                   <Text

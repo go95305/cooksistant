@@ -22,16 +22,16 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "host.exp.exponent",
+      "bundleIdentifier": "com.cooksistant.cooksistant",
       "buildNumber": "1.0.0",
       "config": {
         "googleSignIn": {
-          "reservedClientId": "com.googleusercontent.apps.859478845487-u55e018p49kijao11a0s8e2tdvk3gibc"
+          "reservedClientId": "com.googleusercontent.apps.859478845487-8c7i5klln2oe45lqs4lm9phlt81qg20e"
         }
       }
     },
     "android": {
-      "package": "host.exp.exponent",
+      "package": "com.cooksistant.cooksistant",
       "versionCode": 2,
       "googleServicesFile": "./google-services.json",
       "config": {
