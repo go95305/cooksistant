@@ -128,6 +128,23 @@ function HomeStack(props) {
           headerTransparent: true,
         }}
       />
+      <Stack.Screen
+        name="EvalueList"
+        component={EvalueList}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header
+              title="레시피 평가 리스트"
+              back
+              black
+              transparent
+              navigation={navigation}
+              scene={scene}
+            />
+          ),
+          headerTransparent: true,
+        }}
+      />
     </Stack.Navigator>
   );
 }
