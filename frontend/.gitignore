@@ -3,7 +3,6 @@ node_modules/**/*
 npm-debug.*
 package-lock.json
 yarn.lock
-*.jks
 *.p12
 *.key
 *.mobileprovision
