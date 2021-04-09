@@ -299,7 +299,10 @@ public class RecipeService {
             step.setRecipe(recipe);
             step.setLevel((long) (i + 1));
             step.setDescription(stepDTOList.get(i).getStepDescription());
-//            step.setImage(stepDTOList.get(i).getImage());
+            if (stepDTOList.get(i).getImage() == null)
+                step.setImage("no image");
+            else
+                step.setImage(stepDTOList.get(i).getImage());
             stepRepository.save(step);
         }
         return recipe.getRecipeId();
