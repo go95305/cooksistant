@@ -1,6 +1,7 @@
 # CookSistant [레시피 추천서비스]
 
 ### 기능
+
     1. 재료 기반과 사용자 취향에 맞는 레시피 추천
     2. 영수증을 읽어 재료들을 파악한 후 관련 레시피 추천 (OCR 광학 문자 인식)
     3. 사용자 취향에 맞게 '레시피의 좋아요&싫어요 or  레시피 조회' 수에 따라 인기 레시피 추천
@@ -15,15 +16,32 @@
 
 
 ### Notion Link
+
 - https://www.notion.so/543132e41a604f42bb025e566e64d479?v=67dc21bdb5ff4e04a541ac8719874793
 - __WireFrame__  : https://www.notion.so/2-133edde3ee8f4e408b19ac8b36616525
 - __요구사항정의__ : https://docs.google.com/document/d/1Bkhzf-KjG0XCGEeLpWBcVIxRqQZ3psmlEWlFFhw9OOE/edit
 
-
-### 데이터 분석
-크롤링 페이지(만개의 레시피): 'https://www.10000recipe.com/recipe/list.html?q=%EC%9E%90%EC%B7%A8&order=reco&page='
-Bootstrap Sampling : https://m.blog.naver.com/PostView.nhn?blogId=mathnstat&logNo=221404758083&proxyReferer=https:%2F%2Fwww.google.com%2F
+<br/>
 
 
+## 데이터 분석 + 백엔드 서버
 
+### 데이터 크롤링
 
+- <strong>만개의 레시피</strong>
+
+<br/>
+
+### 추천 알고리즘
+
+- <strong>Latent Factor Collaborative Filtering(잠재 요인 협업 필터링)</strong>
+- <strong>Contents Based Filtering(내용 기반 필터링)</strong>
+
+<br/>
+
+### Backend Server
+
+- <strong>Spring Boot</strong>
+- <strong>Flask</strong>
+
+<br/>
