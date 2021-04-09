@@ -15,7 +15,7 @@
     7. 음식에 필요한 재료의 최저가를 알려줄 오픈마켓 (추가기능)
 
 
-### Notion Link
+## :notebook_with_decorative_cover: Notion Link
 
 - https://www.notion.so/CookSistant-eddba11b91494c4185c65cec233fa8ac
 - __WireFrame__  : https://www.notion.so/2-133edde3ee8f4e408b19ac8b36616525
@@ -24,7 +24,7 @@
 <br/>
 
 
-## 데이터 분석 + 백엔드 서버
+## :chart_with_upwards_trend:   데이터 분석 + 백엔드 서버
 
 ### 데이터 크롤링
 
