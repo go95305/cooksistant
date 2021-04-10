@@ -1,9 +1,9 @@
 import pymysql
 
 db = pymysql.connect(
-    host='j4c101.p.ssafy.io',
-    user='root',
-    passwd='root',
+    host='host',
+    user='user',
+    passwd='passwd',
     db='cooksistant',
     charset='utf8'
 )
