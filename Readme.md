@@ -1,25 +1,22 @@
 # CookSistant [레시피 추천서비스]
 
-### 기능
+기획 배경
+===
 
-    1. 재료 기반과 사용자 취향에 맞는 레시피 추천
-    2. 영수증을 읽어 재료들을 파악한 후 관련 레시피 추천 (OCR 광학 문자 인식)
-    3. 사용자 취향에 맞게 '레시피의 좋아요&싫어요 or  레시피 조회' 수에 따라 인기 레시피 추천
-    4. 요즘 핫한 음식 추천 → 네이버 데이터랩
-    5. '달다', '맵다', '짜다' 등 맛 표현을 수치화하여 방사형그래프로 통계하여 제공
-        - 요리한 레시피에 대한 맛을 **'달다', '맵다', '짜다' ,'쓰다','시다' 수치로 평가 
-        (배민리뷰처럼 자신이 완료한 레시피 한에서 평가할 수 있도록)
-        - 평가를 할 수 있도록 유도할 필요성 있음
-    6. 레시피 등록 
-        - '종이컵' 같은 계량 기준도 등록 → 같은 재료가 사용되는 레시피라도 계량에 따라 맛이 다르므로 사용자마다 레시피에 대한 선호도가 달라질 수 있다.
-    7. 음식에 필요한 재료의 최저가를 알려줄 오픈마켓 (추가기능)
+바쁜 일상속에서 자취생들의 식생활에 도움을 줄 수 있는 서비스를 구상해 보았습니다.
+코로나 팬데믹인 현재, 자취생 입장에서 '건강', '식습관'이 매우 중요한 키워드라고 판단하였습니다.
+Cooksistant는 <strong>React Native</strong>언어를 통해 애플리케이션환경에서 간단히 동작가능하도록 구현하였고 사용자가 사용한 레시피 평가 데이터를 기반으로 <strong>Latent Factor Collaborative Filtering</strong>과 <strong>Contents Based Filtering</strong>을 통해 최적의 레시피를 추천해줍니다. 추가적으로 자취생들이 현재 소유하고 있는 재료를 기반으로 필터링 또한 수행합니다.
 
 
-## :notebook_with_decorative_cover: Notion Link
+### Notion Link
 
 - https://www.notion.so/CookSistant-eddba11b91494c4185c65cec233fa8ac
-- __WireFrame__  : https://www.notion.so/2-133edde3ee8f4e408b19ac8b36616525
-- __요구사항정의__ : https://docs.google.com/document/d/1Bkhzf-KjG0XCGEeLpWBcVIxRqQZ3psmlEWlFFhw9OOE/edit
+
+<br/>
+
+## :atom_symbol: 프런트 엔드
+
+- <strong>React Native</strong>
 
 <br/>
 
