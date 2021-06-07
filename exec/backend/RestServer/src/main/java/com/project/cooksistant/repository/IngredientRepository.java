@@ -10,10 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
-
-
     Ingredient findByIngredientId(Long ingredientId);
-
-
     Ingredient findByIngredientName(String ingredientName);
 }

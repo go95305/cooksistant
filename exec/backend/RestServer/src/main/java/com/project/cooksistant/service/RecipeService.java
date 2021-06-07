@@ -5,7 +5,6 @@ import com.project.cooksistant.model.dto.*;
 import com.project.cooksistant.model.entity.*;
 import com.project.cooksistant.repository.*;
 import com.project.cooksistant.s3.S3Uploader;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -74,26 +73,11 @@ public class RecipeService {
         evaluation.setRecipe(recipe.get());
         evaluation.setIsComplete(evaluationDTOpost.getIsComplete());//isComplete를 true로 둔다.
         evaluation.setFavor(evaluationDTOpost.getFavor());
-//        if (evaluationDTOpost.getIsComplete()) {
-//            evaluationRepository.save(evaluation);
 
-
-//            for (int i = 0; i < evaluationDTOpost.getKeywordList().size(); i++) {
-//                EvaluationKeyword evaluationKeyword = new EvaluationKeyword();
-//                Keyword keyword = keywordRepository.findByKeyword(evaluationDTOpost.getKeywordList().get(i));//keyword 테이블에서 해당 키워드 정도 찾기
-//                evaluationKeyword.setEvaluation(evaluation); //평가 id는 위에서 저장한 평가데이터의 id로 설정
-//                evaluationKeyword.setKeyword(keyword);//각각 키워드는 위에서구한 keyword 객체로 설정
-//                evaluationKeywordRepository.save(evaluationKeyword);
-//            }
-//        } else {
-//        evaluation.setIsComplete(evaluationDTOpost.getIsComplete());//isComplete를 false로 둔다.
         evaluationRepository.save(evaluation);
-//        }
         return evaluation.getEvalId();
 
     }
-
-    //isComplete이 0이든 1이든 전부 리턴
     public List<AllEvaluationDTO> findAllEvaluation(String uid) {
         Optional<User> user = Optional.ofNullable(userRepository.findByUid(uid).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 유저 존재하지않습니다.")));
         List<Evaluation> evaluationList = evaluationRepository.findAllByUserOrderByIsCompleteAscEvalIdDesc(user.get()); // 유저가 사용한 모든 레시피 평가했든 안했든
@@ -115,8 +99,7 @@ public class RecipeService {
 
 
     public RecipeDTO getRecommendation(Long recipeId) {
-//        AmazonS3Client s3Client = (AmazonS3Client) AmazonS3ClientBuilder.defaultClient();
-        //recipe_id가 유효한지 확인
+
         Optional<Recipe> recipe = Optional.ofNullable(recipeRepository.findById(recipeId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 레시피는 존재하지 않습니다.")));
         RecipeDTO recipeDTO = new RecipeDTO();
         recipeDTO.setRecipeId(recipe.get().getRecipeId());
@@ -220,19 +203,9 @@ public class RecipeService {
         return true;
     }
 
-//    public void recipeClick(RecipeClickDTO recipeClickDTO) {
-//        Optional<User> user = Optional.ofNullable(userRepository.findById(recipeClickDTO.getUserId()).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당유저는 존재하지않습니다.")));
-//        Optional<Recipe> recipe = Optional.ofNullable(recipeRepository.findById(recipeClickDTO.getRecipeId()).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 레시피는 존재하지 않습니다.")));
-//        Evaluation evaluation = new Evaluation();
-//        evaluation.setIsSampled(true);
-//        evaluation.setUser(user.get());
-//        evaluation.setRecipe(recipe.get());
-//    }
-
     public List<RecipeListupDTO> search(String cuisine) {
         List<RecipeListupDTO> recipeListupDTOList = new ArrayList<>();
         List<Recipe> recipeList = recipeRepository.findByCuisineContaining(cuisine);
-//        System.out.println(recipeList.size());
         for (int i = 0; i < recipeList.size(); i++) {
             RecipeListupDTO recipeListupDTO = new RecipeListupDTO();
             recipeListupDTO.setRecipename(recipeList.get(i).getCuisine());

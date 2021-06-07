@@ -12,8 +12,6 @@ import com.project.cooksistant.repository.RecipeRepository;
 import com.project.cooksistant.repository.ScrapRepository;
 import com.project.cooksistant.repository.UserRepository;
 import com.project.cooksistant.s3.S3Uploader;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,15 +28,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final RecipeRepository recipeRepository;
     private final ScrapRepository scrapRepository;
-    private final ModelMapper modelMapper;
     @PersistenceContext
     EntityManager entityManager;
 
-    public UserService(UserRepository userRepository, RecipeRepository recipeRepository, ScrapRepository scrapRepository, ModelMapper modelMapper) {
+    public UserService(UserRepository userRepository, RecipeRepository recipeRepository, ScrapRepository scrapRepository) {
         this.userRepository = userRepository;
         this.recipeRepository = recipeRepository;
         this.scrapRepository = scrapRepository;
-        this.modelMapper = modelMapper;
     }
 
     @Transactional
@@ -71,9 +67,6 @@ public class UserService {
         personalDTO.setRecipeSize(recipeSize);
         personalDTO.setRecipeList(recipeMypageDTOList);
 
-//        recipeMypageDTOList = modelMapper.map(recipeList, new TypeToken<List<RecipeMypageDTO>>() {
-//        }.getType());
-//        personalDTO.setRecipeList(recipeMypageDTOList);
 
         //내가 스크랩한 레시피 검색
         List<Scrap> scrapList = scrapRepository.findAllByUser(user.get());
@@ -91,7 +84,6 @@ public class UserService {
                     scrapMypageDTO.setImage("https://" + S3Uploader.CLOUD_FRONT_DOMAIN_NAME + "/" + scrapList.get(i).getRecipe().getImage());
                 scrapMypageDTO.setDescription(scrapList.get(i).getRecipe().getDescription());
                 scrapMypageDTO.setCuisine(scrapList.get(i).getRecipe().getCuisine());
-//                System.out.println(scrapMypageDTO);
                 scrapMypageDTOList.add(scrapMypageDTO);
             }
         }

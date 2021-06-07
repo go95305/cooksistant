@@ -222,11 +222,6 @@ public class RecipeController {
         return recipeService.findAllEvaluation(uid);
     }
 
-//    @ApiOperation(value = "레시피 클릭시 추천 데이터로 포함")
-//    @PostMapping("/recipe/click")
-//    public void recipeClick(@RequestBody RecipeClickDTO recipeClickDTO) {
-//        recipeService.recipeClick(recipeClickDTO);
-//    }
 
     @ApiOperation(value = "레시피 검색", notes = "Request\n" +
             "                                  - Cuisine: 레시피 명\n" +
