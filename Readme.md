@@ -1,3 +1,9 @@
+## 소개
+
+Cooksistant는 만개의 레시피에서 자취생 데이터 960개와 협업 필터링+콘텐츠 기반 필터링을 수행하여 자취생들을 위한 레시피 추천 서비스 제공. 나랑 비슷한 평가를 한 유저들의 평가를 기반으로 추천 서비스 진행.
+
+<br>
+
 ## **시스템 구조도**
 
 <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/4479017c-4c6b-4666-babd-d8fbc694c932/_2021-04-09__9.26.18.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210608%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210608T044616Z&X-Amz-Expires=86400&X-Amz-Signature=957be62fb21f3ae04c20ddf72bee8e338c1dd124328510422bc9bac2292db48f&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22_2021-04-09__9.26.18.png%22"  width="700" height="370">
