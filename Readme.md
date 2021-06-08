@@ -1,44 +1,25 @@
-# CookSistant [레시피 추천서비스]
+## **시스템 구조도**
 
-기획 배경
-===
+<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/4479017c-4c6b-4666-babd-d8fbc694c932/_2021-04-09__9.26.18.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210608%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210608T044616Z&X-Amz-Expires=86400&X-Amz-Signature=957be62fb21f3ae04c20ddf72bee8e338c1dd124328510422bc9bac2292db48f&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22_2021-04-09__9.26.18.png%22"  width="700" height="370">
 
-바쁜 일상속에서 자취생들의 식생활에 도움을 줄 수 있는 서비스를 구상해 보았습니다.
-코로나 팬데믹인 현재, 자취생 입장에서 '건강', '식습관'이 매우 중요한 키워드라고 판단하였습니다.
-Cooksistant는 <strong>React Native</strong>언어를 통해 애플리케이션환경에서 간단히 동작가능하도록 구현하였고 사용자가 사용한 레시피 평가 데이터를 기반으로 <strong>Latent Factor Collaborative Filtering</strong>과 <strong>Contents Based Filtering</strong>을 통해 최적의 레시피를 추천해줍니다. 추가적으로 자취생들이 현재 소유하고 있는 재료를 기반으로 필터링 또한 수행합니다.
+## 테이블 구조도
 
+<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/40383b28-dfe8-467c-bdda-33ec7802f75e/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210608%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210608T044736Z&X-Amz-Expires=86400&X-Amz-Signature=2e03680b235b87895f5971b2af69a44a696e216161006725f5317ddb40d7ffc9&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22"  width="700" height="370">
 
-### Notion Link
+## Cooksistant 화면
 
-- https://www.notion.so/CookSistant-eddba11b91494c4185c65cec233fa8ac
+<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/e84503b8-5556-4a40-92ee-45776439e187/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210608%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210608T044802Z&X-Amz-Expires=86400&X-Amz-Signature=09c05c27ccc45ceb1b8021032aef8a99fb58f9add86e8c7f819cb30fce7066f2&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22"  width="300" height="600">
 
-<br/>
+메인 화면
 
-## :atom_symbol: 프런트 엔드
+<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/62cf9ecf-fd47-4b5d-bc35-c4ed15d22d06/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210608%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210608T044923Z&X-Amz-Expires=86400&X-Amz-Signature=d7b430f22e4858f751addfc3424cac91f0d79fa1b1c9e706404f93ea1c1b6687&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22"  width="300" height="600">
 
-- <strong>React Native</strong>
+OCR기능
 
-<br/>
+<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/d95456c3-be70-4622-8d40-e9cfc18eb71f/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210608%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210608T045030Z&X-Amz-Expires=86400&X-Amz-Signature=07453f71d9b48c78ff8afccafccaf6cc7f251ff1326eee66ec4e5efc2122efc7&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22"  width="300" height="600">
 
+추천 화면
 
-## :chart_with_upwards_trend:   데이터 분석 + 백엔드 서버
+<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/21407dcb-98cb-42bf-a2bc-2db2247b95a3/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210608%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210608T045058Z&X-Amz-Expires=86400&X-Amz-Signature=d5bbbfa2fa73c35d8b425f51013ea0f7a5c84ce97e33f7ba1795b660adee94ef&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22"  width="300" height="600">
 
-### 데이터 크롤링
-
-- <strong>만개의 레시피</strong>
-
-<br/>
-
-### 추천 알고리즘
-
-- <strong>Latent Factor Collaborative Filtering(잠재 요인 협업 필터링)</strong>
-- <strong>Contents Based Filtering(내용 기반 필터링)</strong>
-
-<br/>
-
-### Backend Server
-
-- <strong>Spring Boot</strong>
-- <strong>Flask</strong>
-
-<br/>
+추천을 위한 재료 입력
