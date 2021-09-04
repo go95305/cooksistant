@@ -8,7 +8,6 @@ Cooksistant는 만개의 레시피에서 자취생 데이터 960개와 협업 �
 
 ![architecture](./img/architecture.png)
 
-출처: https://zeddios.tistory.com/34 [ZeddiOS]
 
 ## 테이블 구조도
 
